@@ -34,7 +34,7 @@ int main()
 
             kernel void add(global float* values, global float* results) {
 
-                int cache[10]
+                int cache[10];
 
                 for (int i = 1; i < 10; i++) {
 
