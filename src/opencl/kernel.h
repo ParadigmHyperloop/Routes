@@ -25,16 +25,21 @@ class Kernel {
          * @param program
          * The program to be compiled as a string.
          *
+         * @param name
+         * The name of the kernel function inside the program
          */
-        Kernel(const std::string& program);
+        Kernel(const std::string& program, const std::string name);
 
         /**
          * An already compiled program to use for this kernel.
          *
          * @param program
          * The compiled program.
+         *
+         * @param name
+         * The name of the kernel function inside the program
          */
-        Kernel(const boost::compute::program& program);
+        Kernel(const boost::compute::program& program, const std::string name);
 
         /**
          * Sets the arguments on the kernel.
@@ -49,8 +54,9 @@ class Kernel {
         template<class... T>
         void setArgs(T&&... args) {
 
-
-
+            // Make sure to check if the program was valid or not
+            if (_opencl_program_valid)
+                _opencl_kernel.set_args(args...);
         }
 
         /**
@@ -64,9 +70,13 @@ class Kernel {
          * Final index will be start_index + num_iterations - 1
          *
          * @param work_size
-         * The size of each work group to be iterated over
+         * The size of each work group to be iterated over. When not specified,
+         * OpenCL will do it's best to figure out what it should use.
          */
-        void execute1D(size_t start_index, size_t num_iterations, size_t work_size);
+        void execute1D(size_t start_index, size_t num_iterations, size_t work_size = 0);
+
+        inline static const boost::compute::context& getContext() { return _opencl_context; }
+        inline static boost::compute::command_queue& getQueue()   { return _opencl_queue; }
 
         /**
          * Gets a const reference to the program that was compiled to create this kernel.
