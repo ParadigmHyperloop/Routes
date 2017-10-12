@@ -16,7 +16,7 @@ else
 
 fi
 
-if [ -f ./include ]
+if [ -f include ]
 then
 
 	echo "Include directory already exists"
@@ -27,6 +27,11 @@ else
 
 fi
 
-git clone https://github.com/boostorg/compute.git
-cp -r ./compute/include/boost ./include/boost
-rm -rf compute
+# Download boost
+curl https://superb-sea2.dl.sourceforge.net/project/boost/boost/1.65.1/boost_1_65_1.tar.gz --output boost.tar.gz
+tar -xvzf boost.tar.gz
+
+# Copy libraries
+cp -r boost_1_65_1/boost/ include/boost/
+rm -rf boost_1_65_1
+rm -rf boost.tar.gz
