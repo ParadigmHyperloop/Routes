@@ -30,14 +30,20 @@ int main()
 
     std::string source = BOOST_COMPUTE_STRINGIZE_SOURCE(
 
-            kernel void add(global float* values, global float* results)
-            {
-                size_t index = get_global_id(0);
-                for (int i = 0; i < 2; i++) {
+            kernel void add(global float* values, global float* results) {
 
-                    results[index] += values[index] + values[index + 1];
+                int cache[10];
+
+                for (int i = 1; i < 10; i++) {
+
+                    cache[i] = cache[i - 1] + 1;
 
                 }
+
+                size_t index = get_global_id(0);
+
+                results[index] = cache[9];
+
             }
 
     );
