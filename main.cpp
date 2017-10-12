@@ -35,5 +35,8 @@ int main()
         device_vector.begin(), device_vector.end(), host_vector.begin(), queue
     );
 
+    for (int i = 0; i < host_vector.size(); i++)
+        std::cout << host_vector[i] << std::endl;
+
     return 0;
 }
