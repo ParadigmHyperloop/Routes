@@ -1,6 +1,7 @@
 #include <vector>
 #include <algorithm>
 #include <boost/compute.hpp>
+#include <gdal.h>
 
 namespace compute = boost::compute;
 
@@ -28,11 +29,12 @@ int main()
         host_vector.begin(), host_vector.end(), device_vector.begin(), queue
     );
 
+
     std::string source = BOOST_COMPUTE_STRINGIZE_SOURCE(
 
             kernel void add(global float* values, global float* results) {
 
-                int cache[10];
+                int cache[10]
 
                 for (int i = 1; i < 10; i++) {
 
@@ -52,7 +54,16 @@ int main()
     std::string options;
     std::string key = "__iwocl16_saxpy";
 
-    boost::compute::program program = global_cache->get_or_build(key, options, source, ctx);
+    boost::compute::program program;
+
+    try {
+         program = global_cache->get_or_build(key, options, source, ctx);
+    } catch (boost::compute::opencl_error error) {
+
+        std::cout << "Error: " << error.what() << std::endl;
+        return 0;
+
+    }
 
     boost::compute::kernel kernel = program.create_kernel("add"); kernel.set_args(device_vector.get_buffer(), result_vector.get_buffer());
     queue.enqueue_1d_range_kernel(kernel, 0, device_vector.size() - 1, 0);

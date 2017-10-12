@@ -13,8 +13,16 @@ add_executable(Routes ${HPPS}
                       ${HS}
                       ${SOURCES})
 
+# Find GDAL and link it
+FIND_PACKAGE(GDAL REQUIRED)
+
 # Find OpenCL and link it
 FIND_PATH(OPENCL_INCLUDE_DIR CL/cl.h ~/NVIDIA_GPU_Computing_SDK/OpenCL/common/inc/)
 FIND_LIBRARY(OPENCL_LIBRARIES OpenCL ENV LD_LIBRARY_PATH )
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
-target_link_libraries(Routes ${OPENCL_LIBRARIES})
+
+# Link libraries
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include
+                    ${GDAL_INCLUDE_DIR})
+
+target_link_libraries(Routes ${OPENCL_LIBRARIES}
+                             ${GDAL_LIBRARY})
