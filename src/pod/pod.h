@@ -7,30 +7,28 @@
 
 #include <math.h>
 
-class Pod {
-    public:
-
-        /**
+/**
          * @return
          * Returns the acceleration due to gravity (g) at the Earth's surface in m/s^2
          */
-        static float g()
-        {return 9.81;}
+#define g 9.81
 
-        /**
+/**
          * @return
          * Returns the maximum slope grade (6%) that the track will have
          */
-        float maxSlopeGrade()
-        {return 0.06;}
+#define MAX_SLOPE_GRADE 0.06
 
-        /**
+/**
          * @return
          * Returns the maximum depth that a hyperloop track can go underground where
          * basic excavation with suffice.
          */
-        static float excavationDepth()
-        {return 10.0;}
+#define EXCAVATION_DEPTH 10.0
+
+
+
+class Pod {
 
         /**
         * Void -> Double
@@ -40,7 +38,7 @@ class Pod {
         * @return
         */
         float minCurveRadius()
-        {return pow (maxSpeed(), 2) / 2*g(); }
+        {return pow (maxSpeed(), 2) / 2*g; }
 
         Pod(float max_speed);
 
