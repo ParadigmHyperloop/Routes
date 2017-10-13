@@ -11,7 +11,7 @@ Currently we have no automated build script for Windows, but looking in setup.sh
 
 Run these commands
 ```
-git clone https://github.ccs.neu.edu/ParadiggumHyperloop/Routes.git
+git clone https://github.com/BlueSpud/Routes
 cd Routes
 sudo ./setup.sh
 ```
