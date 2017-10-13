@@ -10,11 +10,9 @@
 /** */
 
 /**
- *
  *  Kernel is a class that will create and retain an OpenCL kernel.
  *  Given a std::string, it will automatically compile the program.
  *  Kernel statically manages the OpenCL context.
- *
  */
 class Kernel {
 

@@ -36,3 +36,8 @@ tar -xvzf boost.tar.gz
 cp -r boost_1_65_1/boost/ include/boost/
 rm -rf boost_1_65_1
 rm -rf boost.tar.gz
+
+# Download GLM
+git clone https://github.com/g-truc/glm.git
+cp -r glm/glm/ include/glm/
+rm -rf glm
