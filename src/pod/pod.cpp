@@ -3,3 +3,6 @@
 //
 
 #include "pod.h"
+
+Pod::Pod(float max_speed)
+{max_speed = maxSpeed();}
