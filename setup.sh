@@ -24,6 +24,7 @@ then
 else
 
 	mkdir include
+	sudo chmod 777 include
 
 fi
 

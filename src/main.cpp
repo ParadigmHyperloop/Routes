@@ -1,7 +1,6 @@
 #include <vector>
 #include <algorithm>
 #include "opencl/kernel.h"
-#include <gdal.h>
 
 namespace compute = boost::compute;
 

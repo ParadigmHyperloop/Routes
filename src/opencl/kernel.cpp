@@ -67,6 +67,7 @@ Kernel::Kernel(const boost::compute::program& program, const std::string name) {
 void Kernel::execute1D(size_t start_index, size_t num_iterations, size_t work_size) {
 
     // Add a work order onto the kernel with the parameters that were given
-    _opencl_queue.enqueue_1d_range_kernel(_opencl_kernel, start_index, num_iterations, work_size);
+    if (_opencl_program_valid)
+        _opencl_queue.enqueue_1d_range_kernel(_opencl_kernel, start_index, num_iterations, work_size);
 
 }
