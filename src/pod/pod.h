@@ -39,7 +39,7 @@ class Pod {
         * @return
         * The minimum radius of curvature that should be allowed for human comfort on the track.
         */
-        float minCurveRadius();
+        float minCurveRadius() const;
 
     private:
 

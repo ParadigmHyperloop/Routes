@@ -184,9 +184,9 @@ void ElevationData::calcMinMax() {
     );
 
     // Create a temporary kernel and execute it
-    Kernel test_kernel = Kernel(source, "computeMinMax");
-    test_kernel.setArgs(_opencl_image, min_max_device.get_buffer(), _width, _height);
-    test_kernel.execute1D(0, _width * _height);
+    static Kernel kernel = Kernel(source, "computeMinMax");
+    kernel.setArgs(_opencl_image, min_max_device.get_buffer(), _width, _height);
+    kernel.execute1D(0, _width * _height);
 
     boost::compute::copy(min_max_device.begin(), min_max_device.end(), min_max_host.begin(), queue);
 

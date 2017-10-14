@@ -11,4 +11,4 @@ Pod::Pod(float max_speed) {
 
 }
 
-float Pod::minCurveRadius() { return pow (_max_speed, 2.0) / 2.0 * g; }
+float Pod::minCurveRadius() const { return pow (_max_speed, 2.0) / 2.0 * g; }

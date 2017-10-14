@@ -46,7 +46,7 @@ int main() {
 //
 //    std::cout << "Output " << host_vector[6000] << std::endl;
 
-    Population pop = Population(100, 3, data);
+    Population pop = Population(100, 6, data);
 
     return 0;
 }

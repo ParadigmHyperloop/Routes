@@ -9,6 +9,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/random.hpp>
 #include "../elevation/elevation.h"
+#include "../pod/pod.h"
 
 /** */
 
@@ -108,6 +109,23 @@ class Population {
          */
         void breedIndividuals();
 
+        /**
+         * This function is what makes the genetic algorithm work.
+         * For every individual a cost is evaluated. This represents how good their genome is as a solution.
+         * This function performs this, using OpenCL.
+         *
+         * @param start
+         * The start location of the path. X, Y and Z are measured in meters.
+         *
+         * @param dest
+         * The destination of the path. X, Y and Z are measured in meters.
+         *
+         * @param pod
+         * The pod object containing the specs of the pod. Right now just uses max speed.
+         *
+         */
+        void evaluateCost(glm::vec3 start, glm::vec3 dest, const Pod& pod);
+
     private:
 
         /**
@@ -134,6 +152,16 @@ class Population {
          */
         glm::vec4* crossoverIndividual(int a, int b);
 
+        /**
+         * To evaluate the bezier curve, binomial coefficients are required.
+         * These need factorials, so it would be slow to compute them. Instead we do it once, offline because
+         * all paths have the same degree. This computes those coefficients.
+         */
+        void calcBinomialCoefficients();
+
+        /** Calculate one binomial coefficient */
+        int calcBinomialCoefficient(int n, int i);
+
         /** An array of glm::vec4s that's the size of _genome_size. Used to avoid repetitive heap allocations. */
         glm::vec4* dummy_genome;
 
@@ -148,6 +176,14 @@ class Population {
 
         /** The GPU uploaded version of the individual data */
         boost::compute::vector<glm::vec4> _opencl_individuals;
+
+        /**
+         * To evaluate the bezier curve, binomial coefficients are required.
+         * These need factorials, so it would be slow to compute them. Instead we do it once, offline because
+         * all paths have the same degree.
+         * This stores the compute coefficients on the GPU.
+         */
+        boost::compute::vector<int> _opencl_binomials;
 
         /**
          * The reference to the elevation data that this population operates on.
