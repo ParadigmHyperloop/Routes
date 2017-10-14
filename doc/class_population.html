@@ -82,6 +82,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a6ae5934795f9ec9ee1f6c320828d4f03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad7c26bf974a26a3d12e882386c87aad4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#ad7c26bf974a26a3d12e882386c87aad4">breedIndividuals</a> ()</td></tr>
 <tr class="separator:ad7c26bf974a26a3d12e882386c87aad4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae65c4db23314bd300ae2c6ea10de657c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#ae65c4db23314bd300ae2c6ea10de657c">evaluateCost</a> (glm::vec4 start, glm::vec4 dest, const <a class="el" href="class_pod.html">Pod</a> &amp;pod)</td></tr>
+<tr class="separator:ae65c4db23314bd300ae2c6ea10de657c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -89,6 +91,10 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:ae3a4c2457d9276367f242330d8497cb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a94a73718ff797a1420aa28a7018779b0"><td class="memItemLeft" align="right" valign="top">glm::vec4 *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a94a73718ff797a1420aa28a7018779b0">crossoverIndividual</a> (int a, int b)</td></tr>
 <tr class="separator:a94a73718ff797a1420aa28a7018779b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af11b90b5e90c7d41126702d5292cffac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#af11b90b5e90c7d41126702d5292cffac">calcBinomialCoefficients</a> ()</td></tr>
+<tr class="separator:af11b90b5e90c7d41126702d5292cffac"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af7b072eb93ad3a60077fdf5fe841f2b2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#af7b072eb93ad3a60077fdf5fe841f2b2">calcBinomialCoefficient</a> (int n, int i)</td></tr>
+<tr class="separator:af7b072eb93ad3a60077fdf5fe841f2b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -102,6 +108,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:aeac36ea8d0adf5d86de7b450854020c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa1127116cf92d9ca43796cd834aa1b50"><td class="memItemLeft" align="right" valign="top">boost::compute::vector&lt; glm::vec4 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#aa1127116cf92d9ca43796cd834aa1b50">_opencl_individuals</a></td></tr>
 <tr class="separator:aa1127116cf92d9ca43796cd834aa1b50"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a74a1237b5e1fc78e9a1267fac07ad350"><td class="memItemLeft" align="right" valign="top">boost::compute::vector&lt; int &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a74a1237b5e1fc78e9a1267fac07ad350">_opencl_binomials</a></td></tr>
+<tr class="separator:a74a1237b5e1fc78e9a1267fac07ad350"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a38141fe6b682fc55d396cc4d781d1228"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_elevation_data.html">ElevationData</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a38141fe6b682fc55d396cc4d781d1228">_data</a></td></tr>
 <tr class="separator:a38141fe6b682fc55d396cc4d781d1228"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -191,6 +199,69 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="af7b072eb93ad3a60077fdf5fe841f2b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af7b072eb93ad3a60077fdf5fe841f2b2">&#9670;&nbsp;</a></span>calcBinomialCoefficient()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Population::calcBinomialCoefficient </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>n</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>i</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Calculate one binomial coefficient </p>
+
+</div>
+</div>
+<a id="af11b90b5e90c7d41126702d5292cffac"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af11b90b5e90c7d41126702d5292cffac">&#9670;&nbsp;</a></span>calcBinomialCoefficients()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Population::calcBinomialCoefficients </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>To evaluate the bezier curve, binomial coefficients are required. These need factorials, so it would be slow to compute them. Instead we do it once, offline because all paths have the same degree. This computes those coefficients. </p>
+
+</div>
+</div>
 <a id="a94a73718ff797a1420aa28a7018779b0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a94a73718ff797a1420aa28a7018779b0">&#9670;&nbsp;</a></span>crossoverIndividual()</h2>
 
@@ -234,6 +305,49 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The new genome, a random mix of individual a and individual b. Does not contain an individual header. </dd></dl>
+
+</div>
+</div>
+<a id="ae65c4db23314bd300ae2c6ea10de657c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae65c4db23314bd300ae2c6ea10de657c">&#9670;&nbsp;</a></span>evaluateCost()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Population::evaluateCost </td>
+          <td>(</td>
+          <td class="paramtype">glm::vec4&#160;</td>
+          <td class="paramname"><em>start</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">glm::vec4&#160;</td>
+          <td class="paramname"><em>dest</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="class_pod.html">Pod</a> &amp;&#160;</td>
+          <td class="paramname"><em>pod</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>This function is what makes the genetic algorithm work. For every individual a cost is evaluated. This represents how good their genome is as a solution. This function performs this, using OpenCL.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">start</td><td>The start location of the path. X, Y and Z are measured in meters.</td></tr>
+    <tr><td class="paramname">dest</td><td>The destination of the path. X, Y and Z are measured in meters.</td></tr>
+    <tr><td class="paramname">pod</td><td>The pod object containing the specs of the pod. Right now just uses max speed. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -374,6 +488,29 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>The CPU storage of the individuals. </p>
+
+</div>
+</div>
+<a id="a74a1237b5e1fc78e9a1267fac07ad350"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74a1237b5e1fc78e9a1267fac07ad350">&#9670;&nbsp;</a></span>_opencl_binomials</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::compute::vector&lt;int&gt; Population::_opencl_binomials</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>To evaluate the bezier curve, binomial coefficients are required. These need factorials, so it would be slow to compute them. Instead we do it once, offline because all paths have the same degree. This stores the compute coefficients on the GPU. </p>
 
 </div>
 </div>

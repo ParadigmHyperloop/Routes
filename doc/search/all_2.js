@@ -1,5 +1,7 @@
 var searchData=
 [
+  ['calcbinomialcoefficient',['calcBinomialCoefficient',['../class_population.html#af7b072eb93ad3a60077fdf5fe841f2b2',1,'Population']]],
+  ['calcbinomialcoefficients',['calcBinomialCoefficients',['../class_population.html#af11b90b5e90c7d41126702d5292cffac',1,'Population']]],
   ['calcconversions',['calcConversions',['../class_elevation_data.html#a865b3c7320ebfb61b609622e053e2798',1,'ElevationData']]],
   ['calcminmax',['calcMinMax',['../class_elevation_data.html#a6f9c909fb67abc1caf9c77c0ca739191',1,'ElevationData']]],
   ['calcstats',['calcStats',['../class_elevation_data.html#a40fde2e11dbefbb7a585742a7895307a',1,'ElevationData']]],

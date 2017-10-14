@@ -13,6 +13,7 @@ var searchData=
   ['_5findividuals',['_individuals',['../class_population.html#aeac36ea8d0adf5d86de7b450854020c5',1,'Population']]],
   ['_5fis_5finitialized',['_is_initialized',['../class_elevation_data.html#ab4d1b8834657e3ff3c020b5cd0654a32',1,'ElevationData::_is_initialized()'],['../class_kernel.html#ad3ec114105efa539756f02af36ad8749',1,'Kernel::_is_initialized()']]],
   ['_5fmax_5fspeed',['_max_speed',['../class_pod.html#acca59281981c944e3159eba166106083',1,'Pod']]],
+  ['_5fopencl_5fbinomials',['_opencl_binomials',['../class_population.html#a74a1237b5e1fc78e9a1267fac07ad350',1,'Population']]],
   ['_5fopencl_5fcontext',['_opencl_context',['../class_kernel.html#af36376db1e88980e0983523c8d7002a6',1,'Kernel']]],
   ['_5fopencl_5fdevice',['_opencl_device',['../class_kernel.html#adcad4bb48d013dfc37289b432e7f7dc5',1,'Kernel']]],
   ['_5fopencl_5fimage',['_opencl_image',['../class_elevation_data.html#a0d3cd4b9f30f762503835da6f16c01af',1,'ElevationData']]],
