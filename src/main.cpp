@@ -46,7 +46,9 @@ int main() {
 //
 //    std::cout << "Output " << host_vector[6000] << std::endl;
 
+    Pod pod = Pod(339.0);
     Population pop = Population(100, 6, data);
+    pop.evaluateCost(glm::vec4(0.0, 0.0, 550.0, 0.0), glm::vec4(70000.0, 80000.0, 1300.0, 0.0), pod);
 
     return 0;
 }

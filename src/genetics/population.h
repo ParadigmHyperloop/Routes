@@ -124,7 +124,7 @@ class Population {
          * The pod object containing the specs of the pod. Right now just uses max speed.
          *
          */
-        void evaluateCost(glm::vec3 start, glm::vec3 dest, const Pod& pod);
+        void evaluateCost(glm::vec4 start, glm::vec4 dest, const Pod& pod);
 
     private:
 

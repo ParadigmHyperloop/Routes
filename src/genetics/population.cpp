@@ -115,7 +115,7 @@ void Population::breedIndividuals() {
 
 }
 
-void Population::evaluateCost(glm::vec3 start, glm::vec3 dest, const Pod& pod) {
+void Population::evaluateCost(glm::vec4 start, glm::vec4 dest, const Pod& pod) {
 
     // Get stuff we need to execute a kernel on
     const boost::compute::context& ctx =   Kernel::getContext();
@@ -124,39 +124,116 @@ void Population::evaluateCost(glm::vec3 start, glm::vec3 dest, const Pod& pod) {
     // Generate the program sounds
     static const std::string source = BOOST_COMPUTE_STRINGIZE_SOURCE(
 
-            float4 evaluateBezierCurve(float4* controls, int degree, float s, int* binomial_coeffs) {
+            // Evaluates the bezier curve made by the given control points and start and dest at parametric value s
+            float4 evaluateBezierCurve(__global float4* controls, int offset, int points, float s, float4 start, float4 dest, __global int* binomial_coeffs) {
 
-                float4 out_point;
                 float one_minus_s = 1.0 - s;
 
-                for (int i = 0; i < degree; i++) {
+                // Account for start and dest, so only add 1
+                int degree = points + 1;
+
+                // First term
+                float4 out_point = start * pown(one_minus_s, degree);
+
+                // Middle terms, iterate for num points
+                for (int i = 1; i < points + 1; i++) {
 
                     // Evaluate for x y and z
                     float multiplier = pown(one_minus_s, degree - i) * pown(s, i);
-                    out_point += controls[i] * multiplier * (float)binomial_coeffs[i];
+                    out_point += controls[i + offset] * multiplier * (float)binomial_coeffs[i];
+
+                }
+
+                // Last term
+                return out_point + dest * pown(s, degree);
+
+            }
+
+            // Computes the curvature implied by 3 control points of a bezier curve
+            float curvature(float4 p0, float4 p1, float4 p2) {
+
+                // Get the triangle side lengths
+                float a = distance(p0, p1);
+                float b = distance(p1, p2);
+                float c = distance(p2, p0);
+
+                // Fake check, this has never actually been a problem even though the paper includes it
+                // Error if a + b == c || b + c == a || a + c == b
+
+                // Do the curvature calculation
+                float num = a * b * c;
+                float denom = (a + b + c) * (b + c - a) * (a - b + c) * (a + b - c);
+
+                return num / denom;
+
+            }
+
+            // Computes the cost of a path
+            __kernel void cost(__read_only image2d_t image, __global float4* individuals, int genome_size,
+                               float max_grade, float min_curve_allowed, float width, float height, __global int* binomial_coeffs,
+                               float4 start, float4 dest) {
+
+                const sampler_t sampler = CLK_NORMALIZED_COORDS_TRUE | CLK_ADDRESS_CLAMP_TO_EDGE | CLK_FILTER_NEAREST;
+                const float pylon_cost = 116.0;
+                const float tunnel_cost = 310000.0;
+                const float num_points = 3700.0;
+
+                // Get an offset to the gnome
+                size_t i = get_global_id(0);
+                int genome = i * (genome_size + 1) + 1;
+
+                float4 _start = individuals[0];
+
+                // Calculate the min curve
+                // Start is special
+                float min_curve = curvature(_start, individuals[genome], individuals[genome + 1]);
+                for (int p = 0; p < genome_size - 2; p++)
+                    min_curve = min(min_curve, curvature(individuals[genome + p],
+                                                         individuals[genome + p + 1],
+                                                         individuals[genome + p + 2]));
+
+                // Curvature for last
+                min_curve = min(min_curve, curvature(individuals[genome + genome_size - 2],
+                                                     individuals[genome + genome_size - 1],
+                                                     dest));
+
+                float curve_cost = (min_curve_allowed - min_curve + fabs(min_curve_allowed - min_curve)) + 1.0;
+
+                float4 last_point = start;
+
+                for (int p = 0; p <= num_points; p++) {
+
+                    float4 bezier_point;
+
+                    if (p == 0)
+                        bezier_point = start;
+                    else if (p == num_points)
+                        bezier_point = dest;
+                    else bezier_point = evaluateBezierCurve(individuals, genome, genome_size, 0.0,
+                                                            start, dest, binomial_coeffs);
+
+                    // Get pylon height with a sample from the image
+                    float2 nrm_device = (float2)(individuals[genome + p].x / width, individuals[genome + p].y / height);
+                    float height = read_imagef(image, sampler, nrm_device).x;
+
 
                 }
 
             }
 
-            __kernel void cost(__read_only image2d_t image, float4* individuals, int geneone_size,
-                               float max_grade, float min_curve, float width, float height, int* binomial_coeffs) {
-
-                const sampler_t sampler = CLK_NORMALIZED_COORDS_FALSE | CLK_ADDRESS_CLAMP_TO_EDGE | CLK_FILTER_NEAREST;
-                const float pylon_cost = 116.0;
-                const float tunnel_cost = 310000.0;
-
-                size_t i = get_global_id(0);
-
-            }
-
     );
+
+    // Convert start and dest to float4
+    boost::compute::float4_ start_4 = boost::compute::float4_(start.x, start.y, start.z, 0.0);
+    boost::compute::float4_ dest_4 =  boost::compute::float4_(dest.x,  dest.y,  dest.z,  0.0);
 
     // Create a temporary kernel and execute it
     static Kernel kernel = Kernel(source, "cost");
     kernel.setArgs(_data.getOpenCLImage(), _opencl_individuals.get_buffer(), _genome_size,
-                   MAX_SLOPE_GRADE, pod.minCurveRadius(), _data.getWidthInMeters(), _data.getHeightInMeters());
+                   MAX_SLOPE_GRADE, pod.minCurveRadius(), _data.getWidthInMeters(), _data.getHeightInMeters(),
+                   _opencl_binomials.get_buffer(), start_4, dest_4);
     kernel.execute1D(0, _pop_size);
+    std::cout << "Finished computing cost\n";
 
 }
 
