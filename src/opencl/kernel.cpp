@@ -25,8 +25,6 @@ bool Kernel::initOpenCL() {
     // Get the cache
     _global_cache = boost::compute::program_cache::get_global_cache(_opencl_context);
 
-    std::cout << "Successfully created an OpenCL context!\n";
-
     return true;
 
 }

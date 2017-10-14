@@ -5,11 +5,17 @@
 #ifndef ROUTES_ELEVATION_H
 #define ROUTES_ELEVATION_H
 
-#import <boost/compute.hpp>
 #import <glm/glm.hpp>
-#import <gdal.h>
+#import <gdal_priv.h>
+#import "../opencl/kernel.h"
 
 /** */
+
+/**
+ * The radius of the Earth in meters.
+ * Data pulled from NASA https://nssdc.gsfc.nasa.gov/planetary/factsheet/earthfact.html
+ */
+#define EARTH_RADIUS 6378137.0
 
 /**
  * ElevationData is a class that converts elevation data from GDAL into
@@ -28,6 +34,12 @@ class ElevationData {
          */
         ElevationData(const std::string& file_path);
 
+        /**
+         * GDAL obejects are created on the heap so these are de-allocated here.
+         * Also deletes the texture so it doesnt run away.
+         */
+        ~ElevationData();
+
         /** Gets the width of the raster image in pixels */
         int getWidth() const;
 
@@ -45,6 +57,9 @@ class ElevationData {
 
         /** Gets the maximum height found in the raster image in meters */
         float getMaxElevation() const;
+
+        /** Gets the uploaded OpenCL data */
+        const boost::compute::image2d& getOpenCLImage() const;
 
         /**
          * Takes in a location inside the raster image (measured in pixels) and converts that
@@ -68,7 +83,7 @@ class ElevationData {
          * @return
          * The output position in pixels
          */
-        glm::ivec2 convertMetersToPixels(const glm::vec2& pos_meters) const;
+        glm::ivec2 metersToPixels(const glm::vec2 &pos_meters) const;
 
         /**
          * Takes in a location inside the raster image (measured in meters) and converts that
@@ -126,6 +141,30 @@ class ElevationData {
 
     private:
 
+        /** Calculate the conversion factors to translate GDAL pixels to meters */
+        void calcConversions();
+
+        /** Construction helper function for calculating the min, max and width an height */
+        void calcStats();
+
+        /** Translate the GDAL data into an OpenCL texture */
+        void createOpenCLImage();
+
+        /**
+         * The GDAL data that is loaded from the disk.
+         * This contains all of the elevation data including how to interpret it.
+         */
+        GDALDataset* _gdal_dataset;
+
+        /**
+         * The location where GDAL stores all of its actual data.
+         * In the data downloaded from USGS, there is only one raster band
+         */
+        GDALRasterBand* _gdal_raster_band;
+
+        /** The information about the pixel size and location of the GDAL data */
+        double _gdal_transform[6];
+
         /** The width in pixels of the image */
         int _width;
 
@@ -148,12 +187,12 @@ class ElevationData {
          * Two conversions factors that translate pixels to meters for this particular image.
          * pixelToMeterConversions[0] corresponds to X, pixelToMeterConversions[1] corresponds to y.
          */
-        double pixelToMeterConversions[2];
-
-    private:
+        float pixelToMeterConversions[2];
 
         /** The OpenCL image that is created once the data is loaded up from GDAL */
         boost::compute::image2d _opencl_image;
+
+    private:
 
         /**
         *  Statically initializes GDAL.
