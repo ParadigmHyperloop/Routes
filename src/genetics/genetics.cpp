@@ -13,13 +13,13 @@ void Genetics::solve(Population& pop, Pod& pod, glm::vec4 start, glm::vec4 dest,
         pop.evaluateCost(start, dest, pod);
 
         // Sort the individuals by cost
-        //pop.sortIndividuals();
+        pop.sortIndividuals();
 
         // Print out the cost of the most fit
         std::cout << "Most fit cost: " << pop.getIndividual(0).header->x << std::endl;
 
         // Generate a new population with the most fit being the mothers and father
-        //pop.breedIndividuals();
+        pop.breedIndividuals();
 
     }
 

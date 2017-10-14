@@ -33,7 +33,7 @@ Individual Population::getIndividual(int index) {
     ind.num_genes = _genome_size;
 
     // Calculate the location of the parts of the individual
-    glm::vec4* header_loc = &_individuals[index * (_genome_size + 1)];
+    glm::vec4* header_loc = _individuals.data() + index * (_genome_size + 1);
     ind.header = header_loc;
     ind.genome = header_loc + 1;
 
@@ -61,7 +61,7 @@ void Population::sortIndividuals() {
     for (int i = 0; i < _pop_size; i++) {
 
         // Copy the sorted individual into the new array
-        memcpy(&sorted_individuals[i * (_genome_size + 1)], individuals_s[i].header, sizeof(glm::vec4) * (_genome_size + 1));
+        memcpy(sorted_individuals.data() + i * (_genome_size + 1), individuals_s[i].header, sizeof(glm::vec4) * (_genome_size + 1));
 
     }
 
@@ -77,19 +77,19 @@ void Population::breedIndividuals() {
     int mothers = glm::linearRand(1, (int)(_pop_size * 0.2));
     int fathers = glm::linearRand(1, (int)(_pop_size * 0.2));
 
-    std::vector<glm::vec4> new_population = std::vector<glm::vec4>(_pop_size);
+    std::vector<glm::vec4> new_population = std::vector<glm::vec4>(_individuals.size());
 
     // Breed 80% of the population from the mother and father
     int i;
     for (i = 0; i < (_pop_size * 0.8); i++) {
 
         glm::vec4* bred = crossoverIndividual(glm::linearRand(0, mothers), glm::linearRand(0, fathers));
-        memcpy(&new_population[i * (_genome_size + 1) + 1], bred, sizeof(glm::vec4) * _genome_size);
+        memcpy(new_population.data() + (i * (_genome_size + 1) + 1), bred, sizeof(glm::vec4) * _genome_size);
 
     }
 
     // Generate new individuals (20%)
-    for (int i = i; i < _pop_size; i++) {
+    for (; i < _pop_size; i++) {
 
         // Adds + 1 to ignore the header
         int individual_start = i * (_genome_size + 1) + 1;
@@ -111,7 +111,7 @@ void Population::breedIndividuals() {
     _individuals = new_population;
 
     // Copy to GPU
-    boost::compute::copy(_individuals.begin(), _individuals.end(), _opencl_individuals.begin(), Kernel::getQueue());
+    boost::compute::copy(new_population.begin(), new_population.end(), _opencl_individuals.begin(), Kernel::getQueue());
 
 }
 
@@ -252,7 +252,7 @@ void Population::evaluateCost(glm::vec4 start, glm::vec4 dest, const Pod& pod) {
                 float total_cost = grade_cost * track_cost * curve_cost;
 
                 // Set the individual's header to contain its cost
-                individuals[genome - 1].x = min_curve;
+                individuals[genome - 1].x = total_cost;
 
             }
 
@@ -271,9 +271,6 @@ void Population::evaluateCost(glm::vec4 start, glm::vec4 dest, const Pod& pod) {
 
     // Download the data
     boost::compute::copy(_opencl_individuals.begin(), _opencl_individuals.end(), _individuals.begin(), queue);
-
-    for (int i = 0; i < _pop_size; i++)
-        std::cout << _individuals[i * (_genome_size + 1)].x << std::endl;
 
 }
 
@@ -308,15 +305,15 @@ void Population::generatePopulation() {
 glm::vec4* Population::crossoverIndividual(int a, int b) {
 
     // Get memory location of a's genom
-    glm::vec4* a_genome = &_individuals[a * (_genome_size + 1) + 1];
-    glm::vec4* b_genome = &_individuals[b * (_genome_size + 1) + 1];
+    glm::vec4* a_genome = _individuals.data() + (a * (_genome_size + 1) + 1);
+    glm::vec4* b_genome = _individuals.data() + (b * (_genome_size + 1) + 1);
 
     // Cross over each gene
     for (int i = 0; i < _genome_size; i++) {
 
         // Get a random amount to cross the two by
         float random_mix = glm::linearRand(0.0, 1.0);
-        dummy_genome[i] = glm::mix(*(a_genome + i), *(b_genome + i), random_mix);
+        dummy_genome[i] = glm::mix(a_genome[i], b_genome[i], random_mix);
 
     }
 
