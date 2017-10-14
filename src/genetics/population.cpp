@@ -182,11 +182,9 @@ void Population::evaluateCost(glm::vec4 start, glm::vec4 dest, const Pod& pod) {
                 size_t i = get_global_id(0);
                 int genome = i * (genome_size + 1) + 1;
 
-                float4 _start = individuals[0];
-
                 // Calculate the min curve
                 // Start is special
-                float min_curve = curvature(_start, individuals[genome], individuals[genome + 1]);
+                float min_curve = curvature(start, individuals[genome], individuals[genome + 1]);
                 for (int p = 0; p < genome_size - 2; p++)
                     min_curve = min(min_curve, curvature(individuals[genome + p],
                                                          individuals[genome + p + 1],
@@ -202,6 +200,7 @@ void Population::evaluateCost(glm::vec4 start, glm::vec4 dest, const Pod& pod) {
                 float steepest_grade = 0.0;
 
                 float4 last_point = start;
+            float test = 0.0;
 
                 for (int p = 0; p <= num_points; p++) {
 
@@ -211,11 +210,11 @@ void Population::evaluateCost(glm::vec4 start, glm::vec4 dest, const Pod& pod) {
                         bezier_point = start;
                     else if (p == num_points)
                         bezier_point = dest;
-                    else bezier_point = evaluateBezierCurve(individuals, genome, genome_size, 0.0,
+                    else bezier_point = evaluateBezierCurve(individuals, genome, genome_size, (float)p / num_points,
                                                             start, dest, binomial_coeffs);
 
                     // Get pylon height with a sample from the image
-                    float2 nrm_device = (float2)(individuals[genome + p].x / width, individuals[genome + p].y / height);
+                    float2 nrm_device = (float2)(bezier_point.x / width, bezier_point.y / height);
                     float height = read_imagef(image, sampler, nrm_device).x;
 
                     // Compute spacing, only x and y distance
@@ -242,6 +241,8 @@ void Population::evaluateCost(glm::vec4 start, glm::vec4 dest, const Pod& pod) {
 
                     }
 
+                    last_point = bezier_point;
+
                 }
 
                 // Calculate grade cost
@@ -251,7 +252,7 @@ void Population::evaluateCost(glm::vec4 start, glm::vec4 dest, const Pod& pod) {
                 float total_cost = grade_cost * track_cost * curve_cost;
 
                 // Set the individual's header to contain its cost
-                individuals[genome - 1].x = total_cost;
+                individuals[genome - 1].x = min_curve;
 
             }
 
@@ -270,7 +271,9 @@ void Population::evaluateCost(glm::vec4 start, glm::vec4 dest, const Pod& pod) {
 
     // Download the data
     boost::compute::copy(_opencl_individuals.begin(), _opencl_individuals.end(), _individuals.begin(), queue);
-    std::cout << _individuals[0].x << std::endl;
+
+    for (int i = 0; i < _pop_size; i++)
+        std::cout << _individuals[i * (_genome_size + 1)].x << std::endl;
 
 }
 
