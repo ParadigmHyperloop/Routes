@@ -11,13 +11,13 @@
 #define g 9.81
 
 /** The maximum slope grade that should be allowed for the track. */
-#define MAX_SLOPE_GRADE 0.06
+#define MAX_SLOPE_GRADE 0.06f
 
 /** The maximum depth that a hyperloop track can go underground where basic excavation with suffice. */
-#define EXCAVATION_DEPTH 10.0
+#define EXCAVATION_DEPTH 10.0f
 
 /** The default max speed of a hyperloop pod in meters / second. */
-#define DEFAULT_POD_MAX_SPEED 339.0
+#define DEFAULT_POD_MAX_SPEED 339.0f
 
 class Pod {
 
