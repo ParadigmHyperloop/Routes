@@ -142,21 +142,6 @@ void ElevationData::calcStats() {
     _width_meters  = _width * pixelToMeterConversions[0];
     _height_meters = _height * pixelToMeterConversions[1];
 
-    // Get min and max
-//    double min_max[4];
-//    int min_s, max_s;
-//
-//    min_max[0] = _gdal_raster_band->GetMinimum(&min_s);
-//    min_max[1] = _gdal_raster_band->GetMaximum(&max_s);
-//
-//    // Calculate if necessary
-//    if (!min_s || !max_s)
-//        _gdal_raster_band->ComputeRasterMinMax(FALSE, &min_max[0]);
-//
-//    _elevation_min = (float)min_max[0];
-//    _elevation_max = (float)min_max[1];
-
-
 }
 
 void ElevationData::calcMinMax() {
@@ -169,7 +154,7 @@ void ElevationData::calcMinMax() {
     boost::compute::vector<float> min_max_device(2, ctx);
 
     // Generate the program sounds
-    const std::string source = BOOST_COMPUTE_STRINGIZE_SOURCE(
+    static const std::string source = BOOST_COMPUTE_STRINGIZE_SOURCE(
 
             __kernel void computeMinMax(__read_only image2d_t image, __global float* min_max, int width, int height) {
 

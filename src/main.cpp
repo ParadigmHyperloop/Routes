@@ -10,7 +10,7 @@ int test() { return 1; }
 int main() {
 
     // Test elevation object
-    ElevationData data = ElevationData("../data/USGS_NED_13_n42w071_IMG.img");
+    ElevationData data = ElevationData("../data/imgn35w119_1.img");
     std::cout << "Min: " << data.getMinElevation() << " Max:" << data.getMaxElevation() << std::endl;
     std::cout << data.getWidth() << std::endl;
 

@@ -5,6 +5,7 @@ Dependencies are automatically downloaded and installed with setup.sh.
 
 - Geospatial Data Abstraction Library (GDAL)  http://www.gdal.org
 - Boost  http://www.boost.org
+- OpenGL Mathematics (GLM) https://glm.g-truc.net/0.9.8/index.html
 
 ## Setup Instructions
 Currently we have no automated build script for Windows, but looking in setup.sh should be fairly self explanatory.
