@@ -26,3 +26,12 @@ cmake ..
 make
 ```
 You should now see a built binary in the build directory.
+
+## Data
+Data is pulled from the USGS, and is 1/3 arc second 3D elevation products. You can find all USGS data at https://viewer.nationalmap.gov/basic/
+
+Currently the algorithm is being tested on these pieces of data:
+- https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/13/IMG/USGS_NED_13_n42w071_IMG.zip
+- https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/IMG/n35w119.zip
+
+Once you download data, create a "data" folder in the repo. Unzip the downloads and copy in the .img file. 
