@@ -60,6 +60,10 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
+<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
+<a href="#pri-attribs">Private Attributes</a> &#124;
+<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="class_elevation_data-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">ElevationData Class Reference</div>  </div>
@@ -100,6 +104,52 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a6cc1457c7e72e41a5f2c38b4e96e2c43"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae3b5310f1a29129023dd0ae15350a383"><td class="memItemLeft" align="right" valign="top">glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#ae3b5310f1a29129023dd0ae15350a383">pixelsToMetersAndElevation</a> (const glm::ivec2 &amp;pos_pixles) const</td></tr>
 <tr class="separator:ae3b5310f1a29129023dd0ae15350a383"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a865b3c7320ebfb61b609622e053e2798"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#a865b3c7320ebfb61b609622e053e2798">calcConversions</a> ()</td></tr>
+<tr class="separator:a865b3c7320ebfb61b609622e053e2798"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40fde2e11dbefbb7a585742a7895307a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#a40fde2e11dbefbb7a585742a7895307a">calcStats</a> ()</td></tr>
+<tr class="separator:a40fde2e11dbefbb7a585742a7895307a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f9c909fb67abc1caf9c77c0ca739191"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#a6f9c909fb67abc1caf9c77c0ca739191">calcMinMax</a> ()</td></tr>
+<tr class="separator:a6f9c909fb67abc1caf9c77c0ca739191"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acee010de2feef7305f2ecbfa0675230a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#acee010de2feef7305f2ecbfa0675230a">createOpenCLImage</a> ()</td></tr>
+<tr class="separator:acee010de2feef7305f2ecbfa0675230a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
+Static Private Member Functions</h2></td></tr>
+<tr class="memitem:a50909d84ca168bc1fc1047b653d2d00a"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#a50909d84ca168bc1fc1047b653d2d00a">initGDAL</a> ()</td></tr>
+<tr class="separator:a50909d84ca168bc1fc1047b653d2d00a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a52cd7aa46d406d0be88fd3cfef772204"><td class="memItemLeft" align="right" valign="top">GDALDataset *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#a52cd7aa46d406d0be88fd3cfef772204">_gdal_dataset</a></td></tr>
+<tr class="separator:a52cd7aa46d406d0be88fd3cfef772204"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9aacecc8dd074e849bb7553ad206e407"><td class="memItemLeft" align="right" valign="top">GDALRasterBand *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#a9aacecc8dd074e849bb7553ad206e407">_gdal_raster_band</a></td></tr>
+<tr class="separator:a9aacecc8dd074e849bb7553ad206e407"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec2a3917f0229d057eca398b00cf8b93"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#aec2a3917f0229d057eca398b00cf8b93">_gdal_transform</a> [6]</td></tr>
+<tr class="separator:aec2a3917f0229d057eca398b00cf8b93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acd6e9c583db00f3269d14a0f6b38eb92"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#acd6e9c583db00f3269d14a0f6b38eb92">_width</a></td></tr>
+<tr class="separator:acd6e9c583db00f3269d14a0f6b38eb92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad48184df685f927e504cedf5aeb61477"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#ad48184df685f927e504cedf5aeb61477">_height</a></td></tr>
+<tr class="separator:ad48184df685f927e504cedf5aeb61477"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6252a7a4bfcf5bf97d21642ae0435a1c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#a6252a7a4bfcf5bf97d21642ae0435a1c">_width_meters</a></td></tr>
+<tr class="separator:a6252a7a4bfcf5bf97d21642ae0435a1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5d828f1715c846b258c3f016efa724c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#af5d828f1715c846b258c3f016efa724c">_height_meters</a></td></tr>
+<tr class="separator:af5d828f1715c846b258c3f016efa724c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a084e16924c54942699197b65a4843ca4"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#a084e16924c54942699197b65a4843ca4">_elevation_min</a></td></tr>
+<tr class="separator:a084e16924c54942699197b65a4843ca4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95f2cfdb1ef1c1b51017719026d43726"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#a95f2cfdb1ef1c1b51017719026d43726">_elevation_max</a></td></tr>
+<tr class="separator:a95f2cfdb1ef1c1b51017719026d43726"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e6420ce9552f2b9f4c25859999c0bb6"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#a1e6420ce9552f2b9f4c25859999c0bb6">pixelToMeterConversions</a> [2]</td></tr>
+<tr class="separator:a1e6420ce9552f2b9f4c25859999c0bb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d3cd4b9f30f762503835da6f16c01af"><td class="memItemLeft" align="right" valign="top">boost::compute::image2d&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#a0d3cd4b9f30f762503835da6f16c01af">_opencl_image</a></td></tr>
+<tr class="separator:a0d3cd4b9f30f762503835da6f16c01af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:ab4d1b8834657e3ff3c020b5cd0654a32"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#ab4d1b8834657e3ff3c020b5cd0654a32">_is_initialized</a> = <a class="el" href="class_elevation_data.html#a50909d84ca168bc1fc1047b653d2d00a">ElevationData::initGDAL</a>()</td></tr>
+<tr class="separator:ab4d1b8834657e3ff3c020b5cd0654a32"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="class_elevation_data.html">ElevationData</a> is a class that converts elevation data from GDAL into a format that can be read in OpenCL. </p>
@@ -148,6 +198,84 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a865b3c7320ebfb61b609622e053e2798"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a865b3c7320ebfb61b609622e053e2798">&#9670;&nbsp;</a></span>calcConversions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ElevationData::calcConversions </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Calculate the conversion factors to translate GDAL pixels to meters </p>
+
+</div>
+</div>
+<a id="a6f9c909fb67abc1caf9c77c0ca739191"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f9c909fb67abc1caf9c77c0ca739191">&#9670;&nbsp;</a></span>calcMinMax()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ElevationData::calcMinMax </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This is a workaround to a current bug with GDAL. Some GIS files have "NoData" values which are massive numbers. GDAL is supposed to ignore these, but for some reason when computing min and max it does not. This function uses an OpenCL <a class="el" href="class_kernel.html">Kernel</a> to get the min and max manually, ignoring these values. </p>
+
+</div>
+</div>
+<a id="a40fde2e11dbefbb7a585742a7895307a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40fde2e11dbefbb7a585742a7895307a">&#9670;&nbsp;</a></span>calcStats()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ElevationData::calcStats </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Construction helper function for calculating the min, max and width an height </p>
+
+</div>
+</div>
 <a id="ac383c5fe3d14bcb0c4dcc3f4a07b3efa"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac383c5fe3d14bcb0c4dcc3f4a07b3efa">&#9670;&nbsp;</a></span>convertPixelsToMeters()</h2>
 
@@ -171,6 +299,32 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The output position in meters. </dd></dl>
+
+</div>
+</div>
+<a id="acee010de2feef7305f2ecbfa0675230a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acee010de2feef7305f2ecbfa0675230a">&#9670;&nbsp;</a></span>createOpenCLImage()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ElevationData::createOpenCLImage </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Translate the GDAL data into an OpenCL texture </p>
 
 </div>
 </div>
@@ -297,6 +451,32 @@ Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Gets the width of the raster image in meters </p>
+
+</div>
+</div>
+<a id="a50909d84ca168bc1fc1047b653d2d00a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a50909d84ca168bc1fc1047b653d2d00a">&#9670;&nbsp;</a></span>initGDAL()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ElevationData::initGDAL </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Statically initializes GDAL. Should never be called by a <a class="el" href="class_elevation_data.html">ElevationData</a> object. </p>
 
 </div>
 </div>
@@ -430,9 +610,286 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a95f2cfdb1ef1c1b51017719026d43726"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95f2cfdb1ef1c1b51017719026d43726">&#9670;&nbsp;</a></span>_elevation_max</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float ElevationData::_elevation_max</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The maximum elevation in meters of the terrain in the raster image in meters </p>
+
+</div>
+</div>
+<a id="a084e16924c54942699197b65a4843ca4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a084e16924c54942699197b65a4843ca4">&#9670;&nbsp;</a></span>_elevation_min</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float ElevationData::_elevation_min</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The minimum elevation in meters of the terrain in the raster image in meters </p>
+
+</div>
+</div>
+<a id="a52cd7aa46d406d0be88fd3cfef772204"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a52cd7aa46d406d0be88fd3cfef772204">&#9670;&nbsp;</a></span>_gdal_dataset</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">GDALDataset* ElevationData::_gdal_dataset</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The GDAL data that is loaded from the disk. This contains all of the elevation data including how to interpret it. </p>
+
+</div>
+</div>
+<a id="a9aacecc8dd074e849bb7553ad206e407"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9aacecc8dd074e849bb7553ad206e407">&#9670;&nbsp;</a></span>_gdal_raster_band</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">GDALRasterBand* ElevationData::_gdal_raster_band</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The location where GDAL stores all of its actual data. In the data downloaded from USGS, there is only one raster band </p>
+
+</div>
+</div>
+<a id="aec2a3917f0229d057eca398b00cf8b93"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aec2a3917f0229d057eca398b00cf8b93">&#9670;&nbsp;</a></span>_gdal_transform</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double ElevationData::_gdal_transform[6]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The information about the pixel size and location of the GDAL data </p>
+
+</div>
+</div>
+<a id="ad48184df685f927e504cedf5aeb61477"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad48184df685f927e504cedf5aeb61477">&#9670;&nbsp;</a></span>_height</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int ElevationData::_height</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The height in pixels of the image </p>
+
+</div>
+</div>
+<a id="af5d828f1715c846b258c3f016efa724c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5d828f1715c846b258c3f016efa724c">&#9670;&nbsp;</a></span>_height_meters</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float ElevationData::_height_meters</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The height in meters of the image </p>
+
+</div>
+</div>
+<a id="ab4d1b8834657e3ff3c020b5cd0654a32"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab4d1b8834657e3ff3c020b5cd0654a32">&#9670;&nbsp;</a></span>_is_initialized</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ElevationData::_is_initialized = <a class="el" href="class_elevation_data.html#a50909d84ca168bc1fc1047b653d2d00a">ElevationData::initGDAL</a>()</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Dummy boolean to allow <a class="el" href="class_elevation_data.html#a50909d84ca168bc1fc1047b653d2d00a">initGDAL()</a> during static initialization. Should never be used by an <a class="el" href="class_elevation_data.html">ElevationData</a> object. </p>
+
+</div>
+</div>
+<a id="a0d3cd4b9f30f762503835da6f16c01af"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d3cd4b9f30f762503835da6f16c01af">&#9670;&nbsp;</a></span>_opencl_image</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">boost::compute::image2d ElevationData::_opencl_image</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The OpenCL image that is created once the data is loaded up from GDAL </p>
+
+</div>
+</div>
+<a id="acd6e9c583db00f3269d14a0f6b38eb92"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd6e9c583db00f3269d14a0f6b38eb92">&#9670;&nbsp;</a></span>_width</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int ElevationData::_width</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The width in pixels of the image </p>
+
+</div>
+</div>
+<a id="a6252a7a4bfcf5bf97d21642ae0435a1c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6252a7a4bfcf5bf97d21642ae0435a1c">&#9670;&nbsp;</a></span>_width_meters</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float ElevationData::_width_meters</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The width in meters of the image </p>
+
+</div>
+</div>
+<a id="a1e6420ce9552f2b9f4c25859999c0bb6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e6420ce9552f2b9f4c25859999c0bb6">&#9670;&nbsp;</a></span>pixelToMeterConversions</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float ElevationData::pixelToMeterConversions[2]</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Two conversions factors that translate pixels to meters for this particular image. pixelToMeterConversions[0] corresponds to X, pixelToMeterConversions[1] corresponds to y. </p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>src/elevation/<a class="el" href="elevation_8h_source.html">elevation.h</a></li>
-<li>src/elevation/elevation.cpp</li>
+<li>src/elevation/<a class="el" href="elevation_8cpp.html">elevation.cpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

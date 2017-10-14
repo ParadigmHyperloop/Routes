@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['meterstolongitudelatitude',['metersToLongitudeLatitude',['../class_elevation_data.html#a55a2d5abd391077532ef8f9593ca5e26',1,'ElevationData']]],
-  ['meterstometersandelevation',['metersToMetersAndElevation',['../class_elevation_data.html#a6cc1457c7e72e41a5f2c38b4e96e2c43',1,'ElevationData']]],
-  ['meterstopixels',['metersToPixels',['../class_elevation_data.html#aa8bc58b20c434c848d350829fcc1b6a7',1,'ElevationData']]]
+  ['initgdal',['initGDAL',['../class_elevation_data.html#a50909d84ca168bc1fc1047b653d2d00a',1,'ElevationData']]],
+  ['initopencl',['initOpenCL',['../class_kernel.html#aaf85aedc18138e6b5857e83658cf7582',1,'Kernel']]]
 ];

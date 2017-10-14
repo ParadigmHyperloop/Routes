@@ -147,6 +147,14 @@ class ElevationData {
         /** Construction helper function for calculating the min, max and width an height */
         void calcStats();
 
+        /**
+         * This is a workaround to a current bug with GDAL.
+         * Some GIS files have "NoData" values which are massive numbers.
+         * GDAL is supposed to ignore these, but for some reason when computing min and max it does not.
+         * This function uses an OpenCL Kernel to get the min and max manually, ignoring these values.
+         */
+        void calcMinMax();
+
         /** Translate the GDAL data into an OpenCL texture */
         void createOpenCLImage();
 

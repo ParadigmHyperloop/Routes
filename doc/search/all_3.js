@@ -1,11 +1,9 @@
 var searchData=
 [
-  ['getheight',['getHeight',['../class_elevation_data.html#a57d19e4a6ebe4f2d0b971438d60d8ee3',1,'ElevationData']]],
-  ['getheightinmeters',['getHeightInMeters',['../class_elevation_data.html#adcb339186a1244cc023b8c3e4d8ae38d',1,'ElevationData']]],
-  ['getmaxelevation',['getMaxElevation',['../class_elevation_data.html#a0b03c59a99c4df049b68437341ba4c4a',1,'ElevationData']]],
-  ['getminelevation',['getMinElevation',['../class_elevation_data.html#a7e908fc7c774b1a910cf00c7773f224a',1,'ElevationData']]],
-  ['getopenclimage',['getOpenCLImage',['../class_elevation_data.html#ad8b2c4db5db23e9dfd88bfbf11097b01',1,'ElevationData']]],
-  ['getprogram',['getProgram',['../class_kernel.html#acdcf2c3d857cf7bbf74aedf1f61c2502',1,'Kernel']]],
-  ['getwidth',['getWidth',['../class_elevation_data.html#a2321308f5d5c2d272d0637721e549dbe',1,'ElevationData']]],
-  ['getwidthinmeters',['getWidthInMeters',['../class_elevation_data.html#a73f5437a187a8f1d86e3d44dc6bb67a5',1,'ElevationData']]]
+  ['earth_5fradius',['EARTH_RADIUS',['../elevation_8h.html#aacdf1719d113d68a71127426f7c730cd',1,'elevation.h']]],
+  ['elevation_2ecpp',['elevation.cpp',['../elevation_8cpp.html',1,'']]],
+  ['elevation_2eh',['elevation.h',['../elevation_8h.html',1,'']]],
+  ['elevationdata',['ElevationData',['../class_elevation_data.html',1,'ElevationData'],['../class_elevation_data.html#aef6fdbf0b6c43243c7e6eb67cc9c5bd0',1,'ElevationData::ElevationData()']]],
+  ['excavation_5fdepth',['EXCAVATION_DEPTH',['../pod_8h.html#ae4adb5dee6386c072d6040a979e5b405',1,'pod.h']]],
+  ['execute1d',['execute1D',['../class_kernel.html#aa858ce0ccbe1e71a1d6bf0114a094f72',1,'Kernel']]]
 ];

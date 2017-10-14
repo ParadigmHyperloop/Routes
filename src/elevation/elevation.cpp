@@ -27,6 +27,7 @@ ElevationData::ElevationData(const std::string& file_path) {
         calcConversions();
         calcStats();
         createOpenCLImage();
+        calcMinMax();
 
 
     } else std::cout << "Error loading the GDAL dataset from the disk\n";
@@ -142,18 +143,71 @@ void ElevationData::calcStats() {
     _height_meters = _height * pixelToMeterConversions[1];
 
     // Get min and max
-    double min_max[4];
-    int min_s, max_s;
+//    double min_max[4];
+//    int min_s, max_s;
+//
+//    min_max[0] = _gdal_raster_band->GetMinimum(&min_s);
+//    min_max[1] = _gdal_raster_band->GetMaximum(&max_s);
+//
+//    // Calculate if necessary
+//    if (!min_s || !max_s)
+//        _gdal_raster_band->ComputeRasterMinMax(FALSE, &min_max[0]);
+//
+//    _elevation_min = (float)min_max[0];
+//    _elevation_max = (float)min_max[1];
 
-    min_max[0] = _gdal_raster_band->GetMinimum(&min_s);
-    min_max[1] = _gdal_raster_band->GetMaximum(&max_s);
 
-    // Calculate if necessary
-    if (!min_s || !max_s)
-        _gdal_raster_band->ComputeRasterMinMax(FALSE, &min_max[0]);
+}
 
-    _elevation_min = (float)min_max[0];
-    _elevation_max = (float)min_max[1];
+void ElevationData::calcMinMax() {
+
+    // Get stuff we need to execute a kernel on
+    const boost::compute::context& ctx =   Kernel::getContext();
+    boost::compute::command_queue& queue = Kernel::getQueue();
+
+    std::vector<float>            min_max_host(2);
+    boost::compute::vector<float> min_max_device(2, ctx);
+
+    // Generate the program sounds
+    const std::string source = BOOST_COMPUTE_STRINGIZE_SOURCE(
+
+            __kernel void computeMinMax(__read_only image2d_t image, __global float* min_max, int width, int height) {
+
+                const sampler_t sampler = CLK_NORMALIZED_COORDS_FALSE | CLK_ADDRESS_CLAMP_TO_EDGE | CLK_FILTER_NEAREST;
+
+                // Use this to exclude no data
+                const float extreme = 1000000.0;
+
+                size_t i = get_global_id(0);
+
+                // Convert i to x and y
+                float x = (float)(i % width);
+                float y = (float)(i / width);
+
+                float sample = read_imagef(image, sampler, (float2)(x, y)).x;
+
+                // Do a sanity check
+                if (fabs(sample) < extreme) {
+
+                    min_max[0] = min(sample, min_max[0]);
+                    min_max[1] = max(sample, min_max[1]);
+
+                }
+
+            }
+
+    );
+
+    // Create a temporary kernel and execute it
+    Kernel test_kernel = Kernel(source, "computeMinMax");
+    test_kernel.setArgs(_opencl_image, min_max_device.get_buffer(), _width, _height);
+    test_kernel.execute1D(0, _width * _height);
+
+    boost::compute::copy(min_max_device.begin(), min_max_device.end(), min_max_host.begin(), queue);
+
+    // Save the min and max
+    _elevation_min = min_max_host[0];
+    _elevation_max = min_max_host[1];
 
 }
 
