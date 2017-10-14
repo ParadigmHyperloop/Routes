@@ -5,10 +5,18 @@
 #ifndef ROUTES_POPULATION_H
 #define ROUTES_POPULATION_H
 
+#include <boost/compute/container/vector.hpp>
 #include <glm/glm.hpp>
+#include <glm/gtc/random.hpp>
 #include "../elevation/elevation.h"
 
 /** */
+
+/**
+ * The max distance above or below the max and min of elevation data a population is allowed
+ * to generate a track at.
+ */
+#define TRACK_ABOVE_BELOW_EXTREMA 10.0;
 
 /**
  * Individual is a convenience so that individuals can be treated as units rather than
@@ -22,7 +30,7 @@ struct Individual {
      * The header contains the computed cost of the individual, so long as it has been downloaded from the GPU.
      * Cost is stored in the X component and Y, Z and W are currently unused.
      */
-    glm::vec4& header;
+    glm::vec4* header;
 
     /**
      * The pointer to the genome of the individual. This is an array of glm::vec4 with length equal
@@ -70,7 +78,10 @@ class Population {
          * @param data
          * The elevation data that this population is path-finding on
          */
-        Population(size_t pop_size, size_t genome_size, const ElevationData& data);
+        Population(int pop_size, int genome_size, const ElevationData& data);
+
+        /** dummy_genome is allocated on the heap, so delete that here */
+        ~Population();
 
         /**
          * Retrieves an individual from the population. This assumes that the population data
@@ -93,6 +104,7 @@ class Population {
         /**
          * Breeds the top 20% of the individuals together to generate a new, more fit population. Only 80%
          * of the population is bred, 20% if randomly generated to avoid stagnation.
+         * Assumes that _individuals are already sorted.
          */
         void breedIndividuals();
 
@@ -100,15 +112,36 @@ class Population {
 
         /**
          * Generates the initial population using the parameters that were passed in via the constructor.
-         * This is done on the GPU, so the after this is called the CPU does not receive the data back.
+         * This is done on the CPU, but hopefully can be done on the GPU eventually.
          */
         void generatePopulation();
 
-        /** The number of individuals that should be in this population */
-        size_t _pop_size;
+        /**
+         * Cross the genes of individual a with individual a. The result is a new genome
+         * that is the linear interpolation of the genome of a and b.
+         *
+         * @param a
+         * The index of one individual in _individuals;
+         *
+         * @param b
+         * The index of another individual in _individuals;
+         *
+         * @param new_genome
+         *
+         *
+         * @return
+         * The new genome, a random mix of individual a and individual b. Does not contain an individual header.
+         */
+        glm::vec4* crossoverIndividual(int a, int b);
 
-        /** The number of "genes" (bezier curve control points) that each individual should have.
-        size_t _genome_size;
+        /** An array of glm::vec4s that's the size of _genome_size. Used to avoid repetitive heap allocations. */
+        glm::vec4* dummy_genome;
+
+        /** The number of individuals that should be in this population */
+        int _pop_size;
+
+        /** The number of "genes" (bezier curve control points) that each individual should have. */
+        int _genome_size;
 
         /** The CPU storage of the individuals.*/
         std::vector<glm::vec4> _individuals;
