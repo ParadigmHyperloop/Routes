@@ -91,6 +91,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:ae3a4c2457d9276367f242330d8497cb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a94a73718ff797a1420aa28a7018779b0"><td class="memItemLeft" align="right" valign="top">glm::vec4 *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a94a73718ff797a1420aa28a7018779b0">crossoverIndividual</a> (int a, int b)</td></tr>
 <tr class="separator:a94a73718ff797a1420aa28a7018779b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24cd0bffa59c510e04b6d3e7fd6a7625"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a24cd0bffa59c510e04b6d3e7fd6a7625">mutateGenome</a> (glm::vec4 *genome)</td></tr>
+<tr class="separator:a24cd0bffa59c510e04b6d3e7fd6a7625"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af11b90b5e90c7d41126702d5292cffac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#af11b90b5e90c7d41126702d5292cffac">calcBinomialCoefficients</a> ()</td></tr>
 <tr class="separator:af11b90b5e90c7d41126702d5292cffac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af7b072eb93ad3a60077fdf5fe841f2b2"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#af7b072eb93ad3a60077fdf5fe841f2b2">calcBinomialCoefficient</a> (int n, int i)</td></tr>
@@ -400,6 +402,39 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>An <a class="el" href="struct_individual.html">Individual</a> struct; a convenience reference to the data in _individuals. </dd></dl>
+
+</div>
+</div>
+<a id="a24cd0bffa59c510e04b6d3e7fd6a7625"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a24cd0bffa59c510e04b6d3e7fd6a7625">&#9670;&nbsp;</a></span>mutateGenome()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Population::mutateGenome </td>
+          <td>(</td>
+          <td class="paramtype">glm::vec4 *&#160;</td>
+          <td class="paramname"><em>genome</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>In order to avoid stagnation and explore more possible solutions, mutation is introduced. The function randomly flips bits in the genome.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">genome</td><td>The genome to mutate. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

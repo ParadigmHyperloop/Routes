@@ -155,6 +155,16 @@ class Population {
         glm::vec4* crossoverIndividual(int a, int b);
 
         /**
+         * In order to avoid stagnation and explore more possible solutions, mutation is introduced.
+         * The function randomly flips bits in the genome.
+         *
+         * @param genome
+         * The genome to mutate.
+         *
+         */
+        void mutateGenome(glm::vec4* genome);
+
+        /**
          * To evaluate the bezier curve, binomial coefficients are required.
          * These need factorials, so it would be slow to compute them. Instead we do it once, offline because
          * all paths have the same degree. This computes those coefficients.

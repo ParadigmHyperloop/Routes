@@ -6,6 +6,7 @@ Dependencies are automatically downloaded and installed with setup.sh.
 - Geospatial Data Abstraction Library (GDAL)  http://www.gdal.org
 - Boost  http://www.boost.org
 - OpenGL Mathematics (GLM) https://glm.g-truc.net/0.9.8/index.html
+- OpenCL https://www.khronos.org/opencl/
 
 ## Setup Instructions
 Currently we have no automated build script for Windows, but looking in setup.sh should be fairly self explanatory.
@@ -35,4 +36,7 @@ Currently the algorithm is being tested on these pieces of data:
 - https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/13/IMG/USGS_NED_13_n42w071_IMG.zip
 - https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/IMG/n35w119.zip
 
-Once you download data, create a "data" folder in the repo. Unzip the downloads and copy in the .img file. 
+Once you download data, create a "data" folder in the repo. Unzip the downloads and copy in the .img file.
+
+## Refernece
+This algorithm is an OpenCL implementaion the paper by Casey J. Handmer. This paper can be found at https://arxiv.org/pdf/1503.01524.pdf

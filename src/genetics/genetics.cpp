@@ -18,6 +18,9 @@ void Genetics::solve(Population& pop, Pod& pod, glm::vec4 start, glm::vec4 dest,
         // Generate a new population with the most fit being the mothers and father
         pop.breedIndividuals();
 
+        if (i % 20 == 0)
+            std::cout << "Finished generation " << i << std::endl;
+
     }
 
     // Sort one last time

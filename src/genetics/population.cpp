@@ -323,7 +323,23 @@ glm::vec4* Population::crossoverIndividual(int a, int b) {
 
     }
 
+    // Do some mutation
+    mutateGenome(dummy_genome);
+
     return dummy_genome;
+
+}
+
+void Population::mutateGenome(glm::vec4* genome) {
+
+    // First we reinterpret the genome into an array of bits
+    bool* bit_array = reinterpret_cast<bool*>(genome);
+
+    // Loop through the bit array
+    // There is a 20% chance that the bit will be flipped
+    for (int i = 0; i < _genome_size * sizeof(float); i++)
+        if (glm::linearRand(0.0, 1.0) > 0.8)
+            bit_array[i] = !bit_array[i];
 
 }
 
