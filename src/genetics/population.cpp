@@ -198,7 +198,7 @@ void Population::evaluateCost(glm::vec4 start, glm::vec4 dest, const Pod& pod) {
                                                      individuals[genome + genome_size - 1],
                                                      dest));
 
-                float curve_cost = (min_curve_allowed - min_curve + fabs(min_curve_allowed - min_curve)) + 1.0;
+                float curve_cost = 0.5 * (min_curve_allowed - min_curve + fabs(min_curve_allowed - min_curve)) + 1.0;
                 float track_cost = 0.0;
                 float steepest_grade = 0.0;
 
@@ -336,9 +336,9 @@ void Population::mutateGenome(glm::vec4* genome) {
     bool* bit_array = reinterpret_cast<bool*>(genome);
 
     // Loop through the bit array
-    // There is a 20% chance that the bit will be flipped
+    // There is a 45% chance that the bit will be flipped (mutated)
     for (int i = 0; i < _genome_size * sizeof(float); i++)
-        if (glm::linearRand(0.0, 1.0) > 0.8)
+        if (glm::linearRand(0.0, 1.0) > 0.55)
             bit_array[i] = !bit_array[i];
 
 }
