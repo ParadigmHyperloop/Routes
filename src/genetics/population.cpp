@@ -332,14 +332,7 @@ glm::vec4* Population::crossoverIndividual(int a, int b) {
 
 void Population::mutateGenome(glm::vec4* genome) {
 
-    // First we reinterpret the genome into an array of bits
-    bool* bit_array = reinterpret_cast<bool*>(genome);
-
-    // Loop through the bit array
-    // There is a 45% chance that the bit will be flipped (mutated)
-    for (int i = 0; i < _genome_size * sizeof(float); i++)
-        if (glm::linearRand(0.0, 1.0) > 0.55)
-            bit_array[i] = !bit_array[i];
+    // TODO Mutation needs to be properly implemented. Bit flipping is slow and produces terrible results.
 
 }
 
