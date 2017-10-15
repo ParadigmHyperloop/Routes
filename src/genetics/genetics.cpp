@@ -15,12 +15,21 @@ void Genetics::solve(Population& pop, Pod& pod, glm::vec4 start, glm::vec4 dest,
         // Sort the individuals by cost
         pop.sortIndividuals();
 
-        // Print out the cost of the most fit
-        std::cout << "Most fit cost: " << pop.getIndividual(0).header->x << std::endl;
-
         // Generate a new population with the most fit being the mothers and father
         pop.breedIndividuals();
 
     }
+
+    // Sort one last time
+    pop.sortIndividuals();
+
+    // Format a path so we can print it in python
+    Individual ind = pop.getIndividual(0);
+    std::cout << "[[" << start.x << ", " << start.y << "], ";
+
+    for (int i = 0; i < ind.num_genes; i++)
+        std::cout << "[" << ind.genome[i].x << ", " << ind.genome[i].y << "], ";
+
+    std::cout << "[" << dest.x << ", " << dest.y << "]]";
 
 }

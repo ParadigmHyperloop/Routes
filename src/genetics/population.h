@@ -8,6 +8,8 @@
 #include <boost/compute/container/vector.hpp>
 #include <glm/glm.hpp>
 #include <glm/gtc/random.hpp>
+#include <time.h>
+
 #include "../elevation/elevation.h"
 #include "../pod/pod.h"
 

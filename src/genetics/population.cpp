@@ -74,8 +74,8 @@ void Population::breedIndividuals() {
 
     // Get a random number of mother and fathers from the top 20%
     // Ensure there is 1 mother and 1 father every time though
-    int mothers = glm::linearRand(1, (int)(_pop_size * 0.2));
-    int fathers = glm::linearRand(1, (int)(_pop_size * 0.2));
+    int mothers = (int)(_pop_size * 0.2);
+    int fathers = (int)(_pop_size * 0.2);
 
     std::vector<glm::vec4> new_population = std::vector<glm::vec4>(_individuals.size());
 
@@ -83,7 +83,10 @@ void Population::breedIndividuals() {
     int i;
     for (i = 0; i < (_pop_size * 0.8); i++) {
 
-        glm::vec4* bred = crossoverIndividual(glm::linearRand(0, mothers), glm::linearRand(0, fathers));
+        int mom = glm::linearRand(0, mothers);
+        int dad = glm::linearRand(0, fathers);
+
+        glm::vec4* bred = crossoverIndividual(mom, dad);
         memcpy(new_population.data() + (i * (_genome_size + 1) + 1), bred, sizeof(glm::vec4) * _genome_size);
 
     }
@@ -164,7 +167,7 @@ void Population::evaluateCost(glm::vec4 start, glm::vec4 dest, const Pod& pod) {
                 float num = a * b * c;
                 float denom = (a + b + c) * (b + c - a) * (a - b + c) * (a + b - c);
 
-                return num / denom;
+                return num / sqrt(denom);
 
             }
 
@@ -200,7 +203,6 @@ void Population::evaluateCost(glm::vec4 start, glm::vec4 dest, const Pod& pod) {
                 float steepest_grade = 0.0;
 
                 float4 last_point = start;
-            float test = 0.0;
 
                 for (int p = 0; p <= num_points; p++) {
 
@@ -278,6 +280,9 @@ void Population::evaluateCost(glm::vec4 start, glm::vec4 dest, const Pod& pod) {
 
 void Population::generatePopulation() {
 
+    // Random seed
+    srand(time(0));
+
     // Go through each individual
     for (int i = 0; i < _pop_size; i++) {
 
@@ -312,8 +317,9 @@ glm::vec4* Population::crossoverIndividual(int a, int b) {
     for (int i = 0; i < _genome_size; i++) {
 
         // Get a random amount to cross the two by
-        float random_mix = glm::linearRand(0.0, 1.0);
-        dummy_genome[i] = glm::mix(a_genome[i], b_genome[i], random_mix);
+        dummy_genome[i] = glm::vec4(glm::mix(a_genome[i].x, b_genome[i].x, glm::linearRand(0.0, 1.0)),
+                                    glm::mix(a_genome[i].y, b_genome[i].y, glm::linearRand(0.0, 1.0)),
+                                    glm::mix(a_genome[i].z, b_genome[i].z, glm::linearRand(0.0, 1.0)), 0.0);
 
     }
 

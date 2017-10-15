@@ -2,6 +2,7 @@ var searchData=
 [
   ['g',['g',['../pod_8h.html#a167d2c0ec9b943d55f2124f7442b2f6d',1,'pod.h']]],
   ['generatepopulation',['generatePopulation',['../class_population.html#ae3a4c2457d9276367f242330d8497cb1',1,'Population']]],
+  ['genetics',['Genetics',['../class_genetics.html',1,'']]],
   ['genetics_2ecpp',['genetics.cpp',['../genetics_8cpp.html',1,'']]],
   ['genetics_2eh',['genetics.h',['../genetics_8h.html',1,'']]],
   ['genome',['genome',['../struct_individual.html#a93363084997e9905d3d19e780e2de060',1,'Individual']]],
