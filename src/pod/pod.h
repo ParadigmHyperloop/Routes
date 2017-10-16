@@ -17,7 +17,7 @@
 #define EXCAVATION_DEPTH 10.0f
 
 /** The default max speed of a hyperloop pod in meters / second. */
-#define DEFAULT_POD_MAX_SPEED 339.0f
+#define DEFAULT_POD_MAX_SPEED 343.0f
 
 class Pod {
 

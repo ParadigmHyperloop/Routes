@@ -190,7 +190,7 @@ void Population::evaluateCost(glm::vec4 start, glm::vec4 dest, const Pod& pod) {
                 // Start is special
                 float min_curve = curvature(start, individuals[genome], individuals[genome + 1]);
                 for (int p = 0; p < genome_size - 2; p++)
-                    min_curve = max(min_curve, curvature(individuals[genome + p],
+                    min_curve = min(min_curve, curvature(individuals[genome + p],
                                                          individuals[genome + p + 1],
                                                          individuals[genome + p + 2]));
 
@@ -316,7 +316,7 @@ glm::vec4* Population::crossoverIndividual(int a, int b) {
     glm::vec4* a_genome = _individuals.data() + (a * (_genome_size + 1) + 1);
     glm::vec4* b_genome = _individuals.data() + (b * (_genome_size + 1) + 1);
 
-    // Cross over each gene
+    // Crossover each gene
     for (int i = 0; i < _genome_size; i++) {
 
         // Get a random amount to cross the two by

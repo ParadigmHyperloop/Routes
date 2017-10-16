@@ -6,7 +6,7 @@ import numpy
 MACH1 = 343 #m/s
 
 # The solution points for the bezier curve
-sol = [[0, 0], [14363.6, 33499.3], [26420.7, 28297], [41581.4, 39071.7], [34848.8, 62412.5], [27620.8, 28238.9], [59134.4, 74852.1], [70000, 80000]]
+sol = [[0, 0], [58663.8, 66807.7], [4859.44, 17383.4], [3624.66, 3639.28], [67830.9, 71116.2], [68945.2, 73118.3], [69669.2, 72999.4], [70000, 80000]]
 
 #define the bezier curve
 curve = bezier.Curve(numpy.array(sol), len(sol) - 1)
@@ -30,4 +30,3 @@ currentPlot.annotate(distanceString, xy=(7000,4000), xytext=(7000,4000))
 
 #output the graph to a file
 plt.savefig("plot.png") 
-print arcLength
