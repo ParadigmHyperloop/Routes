@@ -156,7 +156,7 @@ class Population {
 
         /**
          * In order to avoid stagnation and explore more possible solutions, mutation is introduced.
-         * The function randomly flips bits in the genome.
+         * The function randomly replaces points in the genome with completely new points.
          *
          * @param genome
          * The genome to mutate.

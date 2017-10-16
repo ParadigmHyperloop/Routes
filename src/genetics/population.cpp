@@ -102,7 +102,8 @@ void Population::breedIndividuals() {
             // Create a new random vector with
             glm::vec4 random_vec = glm::vec4(glm::linearRand(0.0f, _data.getWidthInMeters()),
                                              glm::linearRand(0.0f, _data.getHeightInMeters()),
-                                             glm::linearRand(_data.getMinElevation(), _data.getMaxElevation()), 0.0);
+                                             glm::linearRand(_data.getMinElevation() - EXCAVATION_DEPTH,
+                                                             _data.getMaxElevation() + EXCAVATION_DEPTH), 0.0);
 
             new_population[individual_start + j] = random_vec;
 
@@ -189,16 +190,17 @@ void Population::evaluateCost(glm::vec4 start, glm::vec4 dest, const Pod& pod) {
                 // Start is special
                 float min_curve = curvature(start, individuals[genome], individuals[genome + 1]);
                 for (int p = 0; p < genome_size - 2; p++)
-                    min_curve = min(min_curve, curvature(individuals[genome + p],
+                    min_curve = max(min_curve, curvature(individuals[genome + p],
                                                          individuals[genome + p + 1],
                                                          individuals[genome + p + 2]));
 
                 // Curvature for last
-                min_curve = min(min_curve, curvature(individuals[genome + genome_size - 2],
+                min_curve = max(min_curve, curvature(individuals[genome + genome_size - 2],
                                                      individuals[genome + genome_size - 1],
                                                      dest));
 
-                float curve_cost = 0.5 * (min_curve_allowed - min_curve + fabs(min_curve_allowed - min_curve)) + 1.0;
+                //float curve_cost = 0.005 * (min_curve_allowed - min_curve + fabs(min_curve_allowed - min_curve)) + 1.0;
+                float curve_cost = 0.05 * pown(min_curve, 2);
                 float track_cost = 0.0;
                 float steepest_grade = 0.0;
 
@@ -281,7 +283,7 @@ void Population::evaluateCost(glm::vec4 start, glm::vec4 dest, const Pod& pod) {
 void Population::generatePopulation() {
 
     // Random seed
-    srand(time(0));
+    srand(time(0) * 119054759245460753 % 1237618231);
 
     // Go through each individual
     for (int i = 0; i < _pop_size; i++) {
@@ -294,7 +296,8 @@ void Population::generatePopulation() {
             // Create a new random vector with
             glm::vec4 random_vec = glm::vec4(glm::linearRand(0.0f, _data.getWidthInMeters()),
                                              glm::linearRand(0.0f, _data.getHeightInMeters()),
-                                             glm::linearRand(_data.getMinElevation(), _data.getMaxElevation()), 0.0);
+                                             glm::linearRand(_data.getMinElevation() - EXCAVATION_DEPTH,
+                                                             _data.getMaxElevation() + EXCAVATION_DEPTH), 0.0);
 
             _individuals[individual_start + j] = random_vec;
 
@@ -332,7 +335,20 @@ glm::vec4* Population::crossoverIndividual(int a, int b) {
 
 void Population::mutateGenome(glm::vec4* genome) {
 
-    // TODO Mutation needs to be properly implemented. Bit flipping is slow and produces terrible results.
+    if (glm::linearRand(0.0f, 1.0f) > 0.8) {
+
+        // Choose a single random point to mutate and then choose a random component
+        int point = glm::linearRand(0, _genome_size - 1);
+
+        glm::vec4* point_ptr = genome + point;
+
+        // Do the mutation
+        (*point_ptr) = glm::vec4(glm::linearRand(0.0f, _data.getWidthInMeters()),
+                                 glm::linearRand(0.0f, _data.getHeightInMeters()),
+                                 glm::linearRand(_data.getMinElevation() - EXCAVATION_DEPTH,
+                                                 _data.getMaxElevation() + EXCAVATION_DEPTH), 0.0);
+
+    }
 
 }
 

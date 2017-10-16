@@ -15,11 +15,15 @@ std::vector<glm::vec3> Genetics::solve(Population& pop, Pod& pod, glm::vec4 star
         // Sort the individuals by cost
         pop.sortIndividuals();
 
+        if (i % 20 == 0) {
+
+            Individual ind = pop.getIndividual(0);
+            std::cout << "Finished generation " << i << " Fittest: " << ind.header->x << std::endl;
+
+        }
+
         // Generate a new population with the most fit being the mothers and father
         pop.breedIndividuals();
-
-        if (i % 20 == 0)
-            std::cout << "Finished generation " << i << std::endl;
 
     }
 
