@@ -21,10 +21,13 @@ time = (arcLength / (.95 * MACH1)) / 60
 currentPlot = curve.plot(3700)
 
 #create the string to be overlayed on the graph
-timeString = "Time to travel the route at Mach1: " + str(time) + " mins"
+timeString = "Time to travel the route at Mach1 in minutes: " + str(time)
+distanceString = "Distance traveled in meters: " + str(arcLength)
 
 #annotate the graph
 currentPlot.annotate(timeString, xy=(7000,0), xytext=(7000,0))
+currentPlot.annotate(distanceString, xy=(7000,4000), xytext=(7000,4000))
 
 #output the graph to a file
 plt.savefig("plot.png") 
+print arcLength
