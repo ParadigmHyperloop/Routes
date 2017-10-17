@@ -122,13 +122,13 @@ void Population::breedIndividuals() {
 
             new_population[individual_start + j] = random_vec;
 
-            // Set the start and the destination
-            new_population[individual_start - 1] = _start;
-
-            // Set the start and the destination
-            new_population[individual_start + _genome_size] = _dest;
-
         }
+
+        // Set the start and the destination
+        new_population[individual_start - 1] = _start;
+
+        // Set the start and the destination
+        new_population[individual_start + _genome_size] = _dest;
 
     }
 

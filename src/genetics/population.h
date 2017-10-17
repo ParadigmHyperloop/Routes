@@ -69,12 +69,13 @@ struct Individual {
  * These are the genes, they represent X, Y and Z of the bezier control points.
  * W is unused, however it is needed for OpenCL.
  *
- * Population stores all of the individuals in one std::vector<glm::vec4> for efficient uploading to the GPU.
- * A single individual can be accessed with the Individual struct convenience.
- *
  * individual[gene_length + 2] = glm::vec4
  * This stores the end point of the individual for more simple computation on the GPU. This is constant for
  * every individual in the population.
+ *
+ * Population stores all of the individuals in one std::vector<glm::vec4> for efficient uploading to the GPU.
+ * A single individual can be accessed with the Individual struct convenience.
+
  */
 class Population {
 

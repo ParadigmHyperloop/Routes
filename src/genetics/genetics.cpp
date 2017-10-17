@@ -28,7 +28,7 @@ std::vector<glm::vec3> Genetics::solve(Population& pop, Pod& pod, int generation
 
             }
 
-            std::cout << "]";
+            std::cout << "]\n";
 
         }
 
@@ -44,9 +44,9 @@ std::vector<glm::vec3> Genetics::solve(Population& pop, Pod& pod, int generation
     Individual ind = pop.getIndividual(0);
 
     // Transfer the bath over
-    std::vector<glm::vec3> out_path = std::vector<glm::vec3>(ind.num_genes);
+    std::vector<glm::vec3> out_path = std::vector<glm::vec3>(ind.num_genes + 2);
     for (int i = 0; i < ind.num_genes + 2; i++)
-        out_path[i] = glm::vec3(ind.genome[i].x, ind.genome[i].y, ind.genome[i].z);
+        out_path[i] = glm::vec3(ind.path[i].x, ind.path[i].y, ind.path[i].z);
 
     return out_path;
 
