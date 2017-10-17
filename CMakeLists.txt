@@ -11,7 +11,7 @@ FILE(GLOB_RECURSE SOURCES ${CMAKE_SOURCE_DIR}/src/*.cpp)
 # Add the sources to the executables
 add_executable(Routes ${HPPS}
                       ${HS}
-                      ${SOURCES} src/pod/pod.cpp src/pod/pod.h)
+                      ${SOURCES})
 
 # Find GDAL and link it
 FIND_PACKAGE(GDAL REQUIRED)

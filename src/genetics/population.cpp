@@ -144,7 +144,9 @@ void Population::evaluateCost(glm::vec4 start, glm::vec4 dest, const Pod& pod) {
 
                     // Evaluate for x y and z
                     float multiplier = pown(one_minus_s, degree - i) * pown(s, i);
-                    out_point += controls[i + offset] * multiplier * (float)binomial_coeffs[i];
+
+                    // We subtract one here so that we use the correct control point since i starts at 1
+                    out_point += controls[i + offset - 1] * multiplier * (float)binomial_coeffs[i];
 
                 }
 
