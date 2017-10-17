@@ -24,17 +24,11 @@ class Genetics {
          * @param pod
          * The information about the hyperloop pod. Determines how curved the track can be.
          *
-         * @param start
-         * The starting location in meters of the path.
-         *
-         * @param dest
-         * The ending location in meters of the path.
-         *
          * @return
          * The points of the calculated path in meters. This will need to be converted to latitude and longitide
          * to be properly displayed.
          */
-        static std::vector<glm::vec3> solve(Population& pop, Pod& pod, glm::vec4 start, glm::vec4 dest, int generations);
+        static std::vector<glm::vec3> solve(Population& pop, Pod& pod, int generations);
 
 };
 

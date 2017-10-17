@@ -72,6 +72,8 @@ $(function() {
 Public Attributes</h2></td></tr>
 <tr class="memitem:a52bb6c8f4b027a733426ca4011d6201a"><td class="memItemLeft" align="right" valign="top">glm::vec4 *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_individual.html#a52bb6c8f4b027a733426ca4011d6201a">header</a></td></tr>
 <tr class="separator:a52bb6c8f4b027a733426ca4011d6201a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6421e0baeabaf03e26e71c627d557b90"><td class="memItemLeft" align="right" valign="top">glm::vec4 *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_individual.html#a6421e0baeabaf03e26e71c627d557b90">path</a></td></tr>
+<tr class="separator:a6421e0baeabaf03e26e71c627d557b90"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a93363084997e9905d3d19e780e2de060"><td class="memItemLeft" align="right" valign="top">glm::vec4 *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_individual.html#a93363084997e9905d3d19e780e2de060">genome</a></td></tr>
 <tr class="separator:a93363084997e9905d3d19e780e2de060"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25b92d76184a005a4f6a08113db31b87"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_individual.html#a25b92d76184a005a4f6a08113db31b87">num_genes</a></td></tr>
@@ -91,7 +93,7 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>The pointer to the genome of the individual. This is an array of glm::vec4 with length equal to num_genes. </p>
+<p>The pointer to the full path of the individual. This contains the start, the genome and the destination. </p>
 
 </div>
 </div>
@@ -122,6 +124,21 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>The length of the genome (num glm::vec4's). All individuals in the same population have the same number of genes. </p>
+
+</div>
+</div>
+<a id="a6421e0baeabaf03e26e71c627d557b90"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6421e0baeabaf03e26e71c627d557b90">&#9670;&nbsp;</a></span>path</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">glm::vec4* Individual::path</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The pointer to the genome of the individual. This is an array of glm::vec4 with length equal to num_genes. </p>
 
 </div>
 </div>

@@ -22,9 +22,9 @@ class Bezier {
          * The degree of the bezier curve, this is 1 - num_points
          *
          * @return
-         * The complete array of binomial coefficients, should be of degree length.
+         * The complete array of binomial coefficients, should be of degree length + 1.
          */
-        static const std::vector<int>& getBinomailCoefficients(int degree);
+        static const std::vector<int>& getBinomialCoefficients(int degree);
 
         /**
          * This evaluates a bezier curve at a given point on the curve.

@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['calcbinomialcoefficient',['calcBinomialCoefficient',['../class_bezier.html#a9f8ca35c731b6bbec7d50465e987f7e7',1,'Bezier::calcBinomialCoefficient()'],['../class_population.html#af7b072eb93ad3a60077fdf5fe841f2b2',1,'Population::calcBinomialCoefficient()']]],
+  ['calcbinomialcoefficient',['calcBinomialCoefficient',['../class_bezier.html#a9f8ca35c731b6bbec7d50465e987f7e7',1,'Bezier']]],
   ['calcbinomialcoefficients',['calcBinomialCoefficients',['../class_population.html#af11b90b5e90c7d41126702d5292cffac',1,'Population']]],
   ['calcconversions',['calcConversions',['../class_elevation_data.html#a865b3c7320ebfb61b609622e053e2798',1,'ElevationData']]],
   ['calcminmax',['calcMinMax',['../class_elevation_data.html#a6f9c909fb67abc1caf9c77c0ca739191',1,'ElevationData']]],

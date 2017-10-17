@@ -4,14 +4,20 @@
 
 #include "population.h"
 
-Population::Population(int pop_size, int genome_size, const ElevationData& data) : _data(data) {
+Population::Population(int pop_size, int genome_size, glm::vec4 start, glm::vec4 dest, const ElevationData& data) : _data(data) {
 
     // Save constants
     _pop_size = pop_size;
     _genome_size = genome_size;
+    _start = start;
+    _dest = dest;
+
+    // Figure out the number of vectors that make up the entire individual. This is the header, the start
+    // and the destination
+    _individual_size = _genome_size + 2 + 1;
 
     // Create the appropriate vectors
-    _individuals = std::vector<glm::vec4>(pop_size * (genome_size + 1));
+    _individuals = std::vector<glm::vec4>(pop_size * _individual_size);
     _opencl_individuals =  boost::compute::vector<glm::vec4>(_individuals.size(), Kernel::getContext());
 
     // Calculate the binomial coefficients for evaluating the bezier paths
@@ -33,9 +39,12 @@ Individual Population::getIndividual(int index) {
     ind.num_genes = _genome_size;
 
     // Calculate the location of the parts of the individual
-    glm::vec4* header_loc = _individuals.data() + index * (_genome_size + 1);
+    glm::vec4* header_loc = _individuals.data() + index * _individual_size;
     ind.header = header_loc;
-    ind.genome = header_loc + 1;
+
+    // Account for the header
+    ind.path = header_loc + 1;
+    ind.genome = header_loc + 2;
 
     return ind;
 
@@ -61,7 +70,7 @@ void Population::sortIndividuals() {
     for (int i = 0; i < _pop_size; i++) {
 
         // Copy the sorted individual into the new array
-        memcpy(sorted_individuals.data() + i * (_genome_size + 1), individuals_s[i].header, sizeof(glm::vec4) * (_genome_size + 1));
+        memcpy(sorted_individuals.data() + i * _individual_size, individuals_s[i].header, sizeof(glm::vec4) * _individual_size);
 
     }
 
@@ -87,7 +96,13 @@ void Population::breedIndividuals() {
         int dad = glm::linearRand(0, fathers);
 
         glm::vec4* bred = crossoverIndividual(mom, dad);
-        memcpy(new_population.data() + (i * (_genome_size + 1) + 1), bred, sizeof(glm::vec4) * _genome_size);
+        memcpy(new_population.data() + (i * _individual_size + 2), bred, sizeof(glm::vec4) * _genome_size);
+
+        // Set the start and the destination
+        new_population[i * _individual_size + 1] = _start;
+
+        // Set the start and the destination
+        new_population[i * _individual_size + 2 + _genome_size] = _dest;
 
     }
 
@@ -95,7 +110,7 @@ void Population::breedIndividuals() {
     for (; i < _pop_size; i++) {
 
         // Adds + 1 to ignore the header
-        int individual_start = i * (_genome_size + 1) + 1;
+        int individual_start = i * _individual_size + 2;
 
         for (int j = 0; j < _genome_size; j++) {
 
@@ -106,6 +121,12 @@ void Population::breedIndividuals() {
                                                              _data.getMaxElevation() + TRACK_ABOVE_BELOW_EXTREMA), 0.0);
 
             new_population[individual_start + j] = random_vec;
+
+            // Set the start and the destination
+            new_population[individual_start - 1] = _start;
+
+            // Set the start and the destination
+            new_population[individual_start + _genome_size] = _dest;
 
         }
 
@@ -119,7 +140,7 @@ void Population::breedIndividuals() {
 
 }
 
-void Population::evaluateCost(glm::vec4 start, glm::vec4 dest, const Pod& pod) {
+void Population::evaluateCost(const Pod& pod) {
 
     // Get stuff we need to execute a kernel on
     const boost::compute::context& ctx =   Kernel::getContext();
@@ -129,55 +150,41 @@ void Population::evaluateCost(glm::vec4 start, glm::vec4 dest, const Pod& pod) {
     static const std::string source = BOOST_COMPUTE_STRINGIZE_SOURCE(
 
             // Evaluates the bezier curve made by the given control points and start and dest at parametric value s
-            float4 evaluateBezierCurve(__global float4* controls, int offset, int points, float s, float4 start, float4 dest, __global int* binomial_coeffs) {
+            float4 evaluateBezierCurve(__global float4* controls, int offset, int points, float s, __global int* binomial_coeffs) {
 
                 float one_minus_s = 1.0 - s;
 
-                // Account for start and dest, so only add 1
-                int degree = points + 1;
+                // Degree is num points - 1
+                int degree = points - 1;
 
-                // First term
-                float4 out_point = start * pown(one_minus_s, degree);
+                float4 out_point;
 
                 // Middle terms, iterate for num points
-                for (int i = 1; i < points + 1; i++) {
+                for (int i = 0; i < points; i++) {
 
                     // Evaluate for x y and z
                     float multiplier = pown(one_minus_s, degree - i) * pown(s, i);
 
                     // We subtract one here so that we use the correct control point since i starts at 1
-                    out_point += controls[i + offset - 1] * multiplier * (float)binomial_coeffs[i];
+                    out_point += controls[i + offset] * multiplier * (float)binomial_coeffs[i];
 
                 }
 
-                // Last term
-                return out_point + dest * pown(s, degree);
+                return out_point;
 
             }
 
             // Computes the curvature implied by 3 control points of a bezier curve
             float curvature(float4 p0, float4 p1, float4 p2) {
 
-                // Get the triangle side lengths
-                float a = distance(p0, p1);
-                float b = distance(p1, p2);
-                float c = distance(p2, p0);
-
-                // Fake check, this has never actually been a problem even though the paper includes it
-                // Error if a + b == c || b + c == a || a + c == b
-
-                // Do the curvature calculation
-                float num = a * b * c;
-                float denom = (a + b + c) * (b + c - a) * (a - b + c) * (a + b - c);
-
-                return num / sqrt(denom);
+                return 1.0;
 
             }
 
             // Computes the cost of a path
-            __kernel void cost(__read_only image2d_t image, __global float4* individuals, int genome_size,
-                               float max_grade_allowed, float min_curve_allowed, float excavation_depth, float width, float height, __global int* binomial_coeffs,
-                               float4 start, float4 dest) {
+            __kernel void cost(__read_only image2d_t image, __global float4* individuals, int path_length,
+                               float max_grade_allowed, float min_curve_allowed, float excavation_depth, float width,
+                               float height, __global int* binomial_coeffs) {
 
                 const sampler_t sampler = CLK_NORMALIZED_COORDS_TRUE | CLK_ADDRESS_CLAMP_TO_EDGE | CLK_FILTER_NEAREST;
                 const float pylon_cost = 116.0;
@@ -186,38 +193,19 @@ void Population::evaluateCost(glm::vec4 start, glm::vec4 dest, const Pod& pod) {
 
                 // Get an offset to the gnome
                 size_t i = get_global_id(0);
-                int genome = i * (genome_size + 1) + 1;
+                int path = i * (path_length + 1) + 1;
 
-                // Calculate the min curve
-                // Start is special
-                float min_curve = curvature(start, individuals[genome], individuals[genome + 1]);
-                for (int p = 0; p < genome_size - 2; p++)
-                    min_curve = min(min_curve, curvature(individuals[genome + p],
-                                                         individuals[genome + p + 1],
-                                                         individuals[genome + p + 2]));
+                float min_curve = 0.0;
 
-                // Curvature for last
-                min_curve = max(min_curve, curvature(individuals[genome + genome_size - 2],
-                                                     individuals[genome + genome_size - 1],
-                                                     dest));
-
-                //float curve_cost = 0.005 * (min_curve_allowed - min_curve + fabs(min_curve_allowed - min_curve)) + 1.0;
-                float curve_cost = 0.05 * pown(min_curve, 2);
                 float track_cost = 0.0;
                 float steepest_grade = 0.0;
 
-                float4 last_point = start;
+                float4 last_last = individuals[path];
+                float4 last_point = individuals[path];
 
                 for (int p = 0; p <= num_points; p++) {
 
-                    float4 bezier_point;
-
-                    if (p == 0)
-                        bezier_point = start;
-                    else if (p == num_points)
-                        bezier_point = dest;
-                    else bezier_point = evaluateBezierCurve(individuals, genome, genome_size, (float)p / num_points,
-                                                            start, dest, binomial_coeffs);
+                    float4 bezier_point = evaluateBezierCurve(individuals, path, path_length, (float)p / num_points, binomial_coeffs);
 
                     // Get pylon height with a sample from the image
                     float2 nrm_device = (float2)(bezier_point.x / width, bezier_point.y / height);
@@ -247,32 +235,30 @@ void Population::evaluateCost(glm::vec4 start, glm::vec4 dest, const Pod& pod) {
 
                     }
 
+                    last_last = last_point;
                     last_point = bezier_point;
 
                 }
 
                 // Calculate grade cost
                 float grade_cost = 100.0 * (steepest_grade - max_grade_allowed + fabs(max_grade_allowed - steepest_grade)) + 1.0;
+                float curve_cost = 0.005 * (min_curve_allowed - min_curve + fabs(min_curve_allowed - min_curve)) + 1.0;
 
                 // Get total cost
                 float total_cost = grade_cost * track_cost * curve_cost;
 
                 // Set the individual's header to contain its cost
-                individuals[genome - 1].x = total_cost;
+                individuals[path - 1].x = total_cost;
 
             }
 
     );
 
-    // Convert start and dest to float4
-    boost::compute::float4_ start_4 = boost::compute::float4_(start.x, start.y, start.z, 0.0);
-    boost::compute::float4_ dest_4 =  boost::compute::float4_(dest.x,  dest.y,  dest.z,  0.0);
-
     // Create a temporary kernel and execute it
     static Kernel kernel = Kernel(source, "cost");
-    kernel.setArgs(_data.getOpenCLImage(), _opencl_individuals.get_buffer(), _genome_size,
+    kernel.setArgs(_data.getOpenCLImage(), _opencl_individuals.get_buffer(), _genome_size + 2,
                    MAX_SLOPE_GRADE, pod.minCurveRadius(), EXCAVATION_DEPTH, _data.getWidthInMeters(), _data.getHeightInMeters(),
-                   _opencl_binomials.get_buffer(), start_4, dest_4);
+                   _opencl_binomials.get_buffer());
     kernel.execute1D(0, _pop_size);
 
     // Download the data
@@ -290,8 +276,14 @@ void Population::generatePopulation() {
     // Go through each individual
     for (int i = 0; i < _pop_size; i++) {
 
-        // Adds + 1 to ignore the header
-        int individual_start = i * (_genome_size + 1) + 1;
+        // Adds + 2 to ignore the header and start
+        int individual_start = i * _individual_size + 2;
+
+        // Set the start and the destination
+        _individuals[individual_start - 1] = _start;
+
+        // Set the start and the destination
+        _individuals[individual_start + _genome_size] = _dest;
 
         for (int j = 0; j < _genome_size; j++) {
 
@@ -314,9 +306,9 @@ void Population::generatePopulation() {
 
 glm::vec4* Population::crossoverIndividual(int a, int b) {
 
-    // Get memory location of a's genom
-    glm::vec4* a_genome = _individuals.data() + (a * (_genome_size + 1) + 1);
-    glm::vec4* b_genome = _individuals.data() + (b * (_genome_size + 1) + 1);
+    // Get memory location of a's genom, add 2 to ignore the header and start
+    glm::vec4* a_genome = _individuals.data() + (a * _individual_size + 2);
+    glm::vec4* b_genome = _individuals.data() + (b * _individual_size + 2);
 
     // Crossover each gene
     for (int i = 0; i < _genome_size; i++) {
@@ -356,35 +348,11 @@ void Population::mutateGenome(glm::vec4* genome) {
 
 void Population::calcBinomialCoefficients() {
 
-    std::vector<int> binomials = std::vector<int>(_genome_size);
-    _opencl_binomials = boost::compute::vector<int>(_genome_size, Kernel::getContext());
-
-    for (int i = 0; i < _genome_size; i++)
-        binomials[i] = calcBinomialCoefficient(_genome_size - 1, i);
+    // For degree we have _genome_size + 2 points, so we use that minus 1 for the degree
+    const std::vector<int>& binomials = Bezier::getBinomialCoefficients(_genome_size + 1);
+    _opencl_binomials = boost::compute::vector<int>(_genome_size + 2, Kernel::getContext());
 
     // Upload to the GPU
     boost::compute::copy(binomials.begin(), binomials.end(), _opencl_binomials.begin(), Kernel::getQueue());
-
-}
-
-int Population::calcBinomialCoefficient(int n, int i) {
-
-    // Special case to prevent divide by zero
-    if (!i || n == i)
-        return 1;
-
-    // Formula taken from https://en.wikipedia.org/wiki/Binomial_coefficient#Multiplicative_formula
-    int ni_falling = n;
-    int i_fac = i;
-
-    // Calculate i!
-    for (int j = 1; j < i - 1; j++)
-        i_fac *= (i - j);
-
-    // Calculate n falling factorial i
-    for (int j = 1; j < i; j++)
-        ni_falling *= (n - j);
-
-    return ni_falling / i_fac;
 
 }

@@ -6,14 +6,14 @@
 
 std::map<int, std::vector<int>> Bezier::binomial_coeffs;
 
-const std::vector<int>& Bezier::getBinomailCoefficients(int degree) {
+const std::vector<int>& Bezier::getBinomialCoefficients(int degree) {
 
     // We use degree + 1 because a bezier curve has degree + 1 terms
-    binomial_coeffs[degree] =  std::vector<int>(degree + 1);
+    binomial_coeffs[degree] = std::vector<int>(degree + 1);
 
     // Fill it
     for (int i = 0; i < degree + 1; i++)
-        binomial_coeffs[degree] i] = calcBinomialCoefficient(degree, i);
+        binomial_coeffs[degree][i] = calcBinomialCoefficient(degree, i);
 
     return binomial_coeffs[degree];
 
@@ -23,7 +23,7 @@ glm::vec4 Bezier::evaluateBezierCurve(glm::vec4* points, int num_points, float s
 
     // Get the degree of the curve and the binomials that correspond to it 
     int degree = num_points - 1;
-    const std::vector<int>& binoms = getBinomailCoefficients(degree);
+    const std::vector<int>& binoms = getBinomialCoefficients(degree);
 
     float one_minus_s = 1.0 - s;
     glm::vec4 point;
@@ -32,7 +32,7 @@ glm::vec4 Bezier::evaluateBezierCurve(glm::vec4* points, int num_points, float s
     for (int i = 0; i < num_points; i++) {
 
         float t_and_one_minus = glm::pow(one_minus_s, degree - i) * glm::pow(s, i);
-	    point += points[i] * t_and_one_minus * binoms[i];
+	    point += points[i] * t_and_one_minus * (float)binoms[i];
 
     }
 
@@ -45,15 +45,13 @@ std::vector<glm::vec4> Bezier::evaluateEntireBezierCurve(glm::vec4* points, int 
 
     // Get the degree of the curve and the binomials that correspond to it 
     int degree = num_controls - 1;
-    const std::vector<int>& binoms = getBinomailCoefficients(degree);
+    const std::vector<int>& binoms = getBinomialCoefficients(degree);
 
     // Figure out how far along the curve each point is. We use num_desired - 1 as the divisor so that we make sure we evaluate at 1
     float point_dist = 1.0 / (float)(num_desired - 1);
     std::vector<glm::vec4> points_calc = std::vector<glm::vec4>(num_desired);
 
     for (int p = 0; p < num_desired; p++) {
-
-         glm::vec4 point;
 
          float s = (float)p * point_dist;
          float one_minus_s = 1.0 - s;
@@ -63,7 +61,7 @@ std::vector<glm::vec4> Bezier::evaluateEntireBezierCurve(glm::vec4* points, int 
          for (int i = 0; i < num_controls; i++) {
 
              float t_and_one_minus = glm::pow(one_minus_s, degree - i) * glm::pow(s, i);
-	         point += points[i] * t_and_one_minus * binoms[i];
+	         point += points[i] * t_and_one_minus * (float)binoms[i];
 
          }
 

@@ -1,6 +1,7 @@
 var searchData=
 [
   ['_5fdata',['_data',['../class_population.html#a38141fe6b682fc55d396cc4d781d1228',1,'Population']]],
+  ['_5fdest',['_dest',['../class_population.html#a7aa0ea5b8e48e19a77d28d0c268bb51d',1,'Population']]],
   ['_5felevation_5fmax',['_elevation_max',['../class_elevation_data.html#a95f2cfdb1ef1c1b51017719026d43726',1,'ElevationData']]],
   ['_5felevation_5fmin',['_elevation_min',['../class_elevation_data.html#a084e16924c54942699197b65a4843ca4',1,'ElevationData']]],
   ['_5fgdal_5fdataset',['_gdal_dataset',['../class_elevation_data.html#a52cd7aa46d406d0be88fd3cfef772204',1,'ElevationData']]],
@@ -10,6 +11,7 @@ var searchData=
   ['_5fglobal_5fcache',['_global_cache',['../class_kernel.html#a01733288671a8e63583637ec6fe8ef00',1,'Kernel']]],
   ['_5fheight',['_height',['../class_elevation_data.html#ad48184df685f927e504cedf5aeb61477',1,'ElevationData']]],
   ['_5fheight_5fmeters',['_height_meters',['../class_elevation_data.html#af5d828f1715c846b258c3f016efa724c',1,'ElevationData']]],
+  ['_5findividual_5fsize',['_individual_size',['../class_population.html#a3b8f90d4bee983b2ab48a33dc18ef195',1,'Population']]],
   ['_5findividuals',['_individuals',['../class_population.html#aeac36ea8d0adf5d86de7b450854020c5',1,'Population']]],
   ['_5fis_5finitialized',['_is_initialized',['../class_elevation_data.html#ab4d1b8834657e3ff3c020b5cd0654a32',1,'ElevationData::_is_initialized()'],['../class_kernel.html#ad3ec114105efa539756f02af36ad8749',1,'Kernel::_is_initialized()']]],
   ['_5fmax_5fspeed',['_max_speed',['../class_pod.html#acca59281981c944e3159eba166106083',1,'Pod']]],
@@ -23,6 +25,7 @@ var searchData=
   ['_5fopencl_5fprogram_5fvalid',['_opencl_program_valid',['../class_kernel.html#ab7c0ecef9ff7940c38cbc0c3915c836c',1,'Kernel']]],
   ['_5fopencl_5fqueue',['_opencl_queue',['../class_kernel.html#ae94dcd2909e2b06ffcf84bbd7dd49b7b',1,'Kernel']]],
   ['_5fpop_5fsize',['_pop_size',['../class_population.html#a9f43eeeaf6bd2ec02b5063bbbbaf78b1',1,'Population']]],
+  ['_5fstart',['_start',['../class_population.html#a4e0aeaa0a40d1c84026b31ac7eb0c794',1,'Population']]],
   ['_5fwidth',['_width',['../class_elevation_data.html#acd6e9c583db00f3269d14a0f6b38eb92',1,'ElevationData']]],
   ['_5fwidth_5fmeters',['_width_meters',['../class_elevation_data.html#a6252a7a4bfcf5bf97d21642ae0435a1c',1,'ElevationData']]]
 ];
