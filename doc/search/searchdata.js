@@ -1,10 +1,10 @@
 var indexSectionsWithContent =
 {
   0: "_bcdeghikmnpst~",
-  1: "egikp",
-  2: "egkmp",
+  1: "begikp",
+  2: "begkmp",
   3: "bcegikmps~",
-  4: "_dghnp",
+  4: "_bdghnp",
   5: "degmt"
 };
 
