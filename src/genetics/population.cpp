@@ -102,8 +102,8 @@ void Population::breedIndividuals() {
             // Create a new random vector with
             glm::vec4 random_vec = glm::vec4(glm::linearRand(0.0f, _data.getWidthInMeters()),
                                              glm::linearRand(0.0f, _data.getHeightInMeters()),
-                                             glm::linearRand(_data.getMinElevation() - EXCAVATION_DEPTH,
-                                                             _data.getMaxElevation() + EXCAVATION_DEPTH), 0.0);
+                                             glm::linearRand(_data.getMinElevation() - TRACK_ABOVE_BELOW_EXTREMA,
+                                                             _data.getMaxElevation() + TRACK_ABOVE_BELOW_EXTREMA), 0.0);
 
             new_population[individual_start + j] = random_vec;
 
@@ -298,8 +298,8 @@ void Population::generatePopulation() {
             // Create a new random vector with
             glm::vec4 random_vec = glm::vec4(glm::linearRand(0.0f, _data.getWidthInMeters()),
                                              glm::linearRand(0.0f, _data.getHeightInMeters()),
-                                             glm::linearRand(_data.getMinElevation() - EXCAVATION_DEPTH,
-                                                             _data.getMaxElevation() + EXCAVATION_DEPTH), 0.0);
+                                             glm::linearRand(_data.getMinElevation() - TRACK_ABOVE_BELOW_EXTREMA,
+                                                             _data.getMaxElevation() + TRACK_ABOVE_BELOW_EXTREMA), 0.0);
 
             _individuals[individual_start + j] = random_vec;
 
@@ -347,8 +347,8 @@ void Population::mutateGenome(glm::vec4* genome) {
         // Do the mutation
         (*point_ptr) = glm::vec4(glm::linearRand(0.0f, _data.getWidthInMeters()),
                                  glm::linearRand(0.0f, _data.getHeightInMeters()),
-                                 glm::linearRand(_data.getMinElevation() - EXCAVATION_DEPTH,
-                                                 _data.getMaxElevation() + EXCAVATION_DEPTH), 0.0);
+                                 glm::linearRand(_data.getMinElevation() - TRACK_ABOVE_BELOW_EXTREMA,
+                                                 _data.getMaxElevation() + TRACK_ABOVE_BELOW_EXTREMA), 0.0);
 
     }
 

@@ -24,7 +24,7 @@ class Bezier {
          * @return
          * The complete array of binomial coefficients, should be of degree length.
          */
-        static std::vector<int> getBinomailCoefficients(int degree);
+        static const std::vector<int>& getBinomailCoefficients(int degree);
 
         /**
          * This evaluates a bezier curve at a given point on the curve.
@@ -50,7 +50,7 @@ class Bezier {
          * @param points
          * The array of points that serve as the control points for the curve.
          *
-         * @param num_points
+         * @param num_controls
          * The number of points contained in the points array.
          *
          * @param num_desired
@@ -60,7 +60,7 @@ class Bezier {
          * @return
          * The evaluated points.
          */
-        static std::vector<glm::vec4> evaluateEntireBezierCurve(glm::vec4* points, int num_points, int num_desired);
+        static std::vector<glm::vec4> evaluateEntireBezierCurve(glm::vec4* points, int num_controls, int num_desired);
 
 
     private:
@@ -77,7 +77,7 @@ class Bezier {
          * @return
          * The binomil coefficient.
          */
-        int calcBinomialCoefficient(int n, int i);
+        static int calcBinomialCoefficient(int n, int i);
 
         /**
          * Binomial coefficients don't change between two bezier curves of the same degree. Therefore
