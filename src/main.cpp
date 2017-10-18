@@ -14,6 +14,17 @@ int main() {
 
     std::vector<glm::vec3> computed = Genetics::solve(pop, pod, 400);
 
+    std::cout << "[";
+            for (int i = 0; i < computed.size(); i++) {
+
+                glm::vec3& vec = computed[i];
+                glm::vec2 lat = data.metersToLongitudeLatitude(glm::vec2(vec.x, vec.y));
+                std::cout << "[" << lat.x << "," << lat.y << "],";
+
+            }
+
+            std::cout << "]\n";
+
 
     return 0;
 }

@@ -20,15 +20,15 @@ std::vector<glm::vec3> Genetics::solve(Population& pop, Pod& pod, int generation
             Individual ind = pop.getIndividual(4);
             std::cout << "Finished generation " << i << " Fittest: " << ind.header->x << std::endl;
 
-            std::cout << "[";
-            for (int i = 0; i < ind.num_genes + 2; i++) {
-
-                glm::vec4& vec = ind.path[i];
-                std::cout << "[" << vec.x << "," << vec.y << "],";
-
-            }
-
-            std::cout << "]\n";
+//            std::cout << "[";
+//            for (int i = 0; i < ind.num_genes + 2; i++) {
+//
+//                glm::vec4& vec = ind.path[i];
+//                std::cout << "[" << vec.x << "," << vec.y << "],";
+//
+//            }
+//
+//            std::cout << "]\n";
 
         }
 
