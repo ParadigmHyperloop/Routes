@@ -174,10 +174,21 @@ void Population::evaluateCost(const Pod& pod) {
 
             }
 
-            // Computes the curvature implied by 3 control points of a bezier curve
+            // This calculates the approximates curvature at a given point (p1)
             float curvature(float4 p0, float4 p1, float4 p2) {
 
-                return 1.0;
+                // Calculate the approximate first derivatives
+                float4 der_first0 = p1 - p0;
+                float4 der_first1 = p2 - p1;
+
+                // Get the second derivative
+                float4 der_second = der_first1 - der_first0;
+
+                // Calculate the denominator and numerator
+                float denom = length(cross(der_first0, der_second));
+                float num = pown(length(der_first0), 3);
+
+                return num / denom;
 
             }
 
@@ -195,7 +206,7 @@ void Population::evaluateCost(const Pod& pod) {
                 size_t i = get_global_id(0);
                 int path = i * (path_length + 1) + 1;
 
-                float min_curve = 0.0;
+                float min_curve = 10000000000000000.0;
 
                 float track_cost = 0.0;
                 float steepest_grade = 0.0;
@@ -213,6 +224,10 @@ void Population::evaluateCost(const Pod& pod) {
 
                     // Compute spacing, only x and y distance
                     float spacing = sqrt(pown(bezier_point.x - last_point.x, 2) + pown(bezier_point.y - last_point.y, 2));
+
+                    // Get curvature
+                    if (p > 1)
+                        min_curve = min(min_curve, curvature(last_last, last_point, bezier_point));
 
                     // Compute grade if the points had spacing
                     if (spacing) {
@@ -329,7 +344,7 @@ glm::vec4* Population::crossoverIndividual(int a, int b) {
 
 void Population::mutateGenome(glm::vec4* genome) {
 
-    if (glm::linearRand(0.0f, 1.0f) > 0.8) {
+    if (glm::linearRand(0.0f, 1.0f) > 0.5) {
 
         // Choose a single random point to mutate and then choose a random component
         int point = glm::linearRand(0, _genome_size - 1);

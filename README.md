@@ -1,7 +1,7 @@
 # Routes
 
 ## Dependencies
-Dependencies are automatically downloaded and installed with setup.sh.
+Dependencies are automatically downloaded and installed with setup.sh, except for OpenCL.
 
 - Geospatial Data Abstraction Library (GDAL)  http://www.gdal.org
 - Boost  http://www.boost.org
@@ -37,6 +37,9 @@ Currently the algorithm is being tested on these pieces of data:
 - https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/IMG/n35w119.zip
 
 Once you download data, create a "data" folder in the repo. Unzip the downloads and copy in the .img file.
+
+## OpenCL
+OpenCL is used in this project because the genetic algorithm benefits from parallel processing on the GPU. If your system does not have a dedicated GPU (or at least a decent integrated one), running the algorithm on a CPU will most likely be very slow, and is not recomended.
 
 ## Refernece
 This algorithm is an OpenCL implementaion the paper by Casey J. Handmer. This paper can be found at https://arxiv.org/pdf/1503.01524.pdf
