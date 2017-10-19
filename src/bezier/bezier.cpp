@@ -19,17 +19,17 @@ const std::vector<int>& Bezier::getBinomialCoefficients(int degree) {
 
 }
 
-glm::vec4 Bezier::evaluateBezierCurve(glm::vec4* points, int num_points, float s) {
+glm::vec3 Bezier::evaluateBezierCurve(const std::vector<glm::vec3>& points, float s) {
 
     // Get the degree of the curve and the binomials that correspond to it 
-    int degree = num_points - 1;
+    int degree = points.size() - 1;
     const std::vector<int>& binoms = getBinomialCoefficients(degree);
 
     float one_minus_s = 1.0 - s;
-    glm::vec4 point;
+    glm::vec3 point = glm::vec3(0.0);
 
     // Evaluate using the explicit definition of a bezier curve https://en.wikipedia.org/wiki/Bézier_curve#Explicit_definition
-    for (int i = 0; i < num_points; i++) {
+    for (int i = 0; i <  points.size(); i++) {
 
         float t_and_one_minus = glm::pow(one_minus_s, degree - i) * glm::pow(s, i);
 	    point += points[i] * t_and_one_minus * (float)binoms[i];
@@ -41,24 +41,23 @@ glm::vec4 Bezier::evaluateBezierCurve(glm::vec4* points, int num_points, float s
 
 }
 
-std::vector<glm::vec4> Bezier::evaluateEntireBezierCurve(glm::vec4* points, int num_controls, int num_desired) {
+std::vector<glm::vec3> Bezier::evaluateEntireBezierCurve(const std::vector<glm::vec3>& points, int num_desired) {
 
     // Get the degree of the curve and the binomials that correspond to it 
-    int degree = num_controls - 1;
+    int degree = points.size() - 1;
     const std::vector<int>& binoms = getBinomialCoefficients(degree);
 
     // Figure out how far along the curve each point is. We use num_desired - 1 as the divisor so that we make sure we evaluate at 1
-    float point_dist = 1.0 / (float)(num_desired - 1);
-    std::vector<glm::vec4> points_calc = std::vector<glm::vec4>(num_desired);
+    std::vector<glm::vec3> points_calc = std::vector<glm::vec3>(num_desired);
 
     for (int p = 0; p < num_desired; p++) {
 
-         float s = (float)p * point_dist;
+         float s = (float)p / (float)(num_desired - 1);
          float one_minus_s = 1.0 - s;
-         glm::vec4 point;
+         glm::vec3 point = glm::vec3(0.0);
 
          // Evaluate using the explicit definition of a bezier curve https://en.wikipedia.org/wiki/Bézier_curve#Explicit_definition
-         for (int i = 0; i < num_controls; i++) {
+         for (int i = 0; i < points.size(); i++) {
 
              float t_and_one_minus = glm::pow(one_minus_s, degree - i) * glm::pow(s, i);
 	         point += points[i] * t_and_one_minus * (float)binoms[i];

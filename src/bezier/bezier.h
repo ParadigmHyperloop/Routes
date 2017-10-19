@@ -6,6 +6,7 @@
 #define ROUTES_BEZIER_H
 
 #include <glm/glm.hpp>
+#include <iostream>
 #include <vector>
 #include <map>
 
@@ -42,7 +43,7 @@ class Bezier {
          * @return
          * The calculated point that is on the curve.
          */
-        static glm::vec4 evaluateBezierCurve(glm::vec4* points, int num_points, float s);
+        static glm::vec3 evaluateBezierCurve(const std::vector<glm::vec3>& points, float s);
 
         /**
          * A convenience for evaluating the entire bezier curve.
@@ -60,7 +61,7 @@ class Bezier {
          * @return
          * The evaluated points.
          */
-        static std::vector<glm::vec4> evaluateEntireBezierCurve(glm::vec4* points, int num_controls, int num_desired);
+        static std::vector<glm::vec3> evaluateEntireBezierCurve(const std::vector<glm::vec3>& points, int num_desired);
 
 
     private:

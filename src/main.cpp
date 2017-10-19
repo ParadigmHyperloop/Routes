@@ -1,6 +1,6 @@
 #include <vector>
 #include "genetics/genetics.h"
-
+#include "html/html.h"
 
 int main() {
 
@@ -14,17 +14,10 @@ int main() {
 
     std::vector<glm::vec3> computed = Genetics::solve(pop, pod, 400);
 
-    std::cout << "[";
-            for (int i = 0; i < computed.size(); i++) {
+    std::cout << computed[0].x << std::endl;
 
-                glm::vec3& vec = computed[i];
-                glm::vec2 lat = data.metersToLongitudeLatitude(glm::vec2(vec.x, vec.y));
-                std::cout << "[" << lat.x << "," << lat.y << "],";
-
-            }
-
-            std::cout << "]\n";
-
+    // Write out some html
+    HTML::generateHTMLForPath(computed, data);
 
     return 0;
 }
