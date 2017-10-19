@@ -124,8 +124,8 @@ Private Attributes</h2></td></tr>
 <p>individual[0] = glm::vec4 This vector stores the cost of the individual in the X component. Other components are blank but may be used in the future.</p>
 <p>individual[1] = glm::vec4 This stores the start point of the individual for more simple computation on the GPU. This is constant for every individual in the population.</p>
 <p>individual[2] to individual[gene_length + 1] = glm::vec4 These are the genes, they represent X, Y and Z of the bezier control points. W is unused, however it is needed for OpenCL.</p>
-<p><a class="el" href="class_population.html">Population</a> stores all of the individuals in one std::vector&lt;glm::vec4&gt; for efficient uploading to the GPU. A single individual can be accessed with the <a class="el" href="struct_individual.html">Individual</a> struct convenience.</p>
-<p>individual[gene_length + 2] = glm::vec4 This stores the end point of the individual for more simple computation on the GPU. This is constant for every individual in the population. </p>
+<p>individual[gene_length + 2] = glm::vec4 This stores the end point of the individual for more simple computation on the GPU. This is constant for every individual in the population.</p>
+<p><a class="el" href="class_population.html">Population</a> stores all of the individuals in one std::vector&lt;glm::vec4&gt; for efficient uploading to the GPU. A single individual can be accessed with the <a class="el" href="struct_individual.html">Individual</a> struct convenience. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a633a7915b7e217bd661ee64cb14eef77"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a633a7915b7e217bd661ee64cb14eef77">&#9670;&nbsp;</a></span>Population()</h2>

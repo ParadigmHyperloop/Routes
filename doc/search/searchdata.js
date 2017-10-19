@@ -1,8 +1,8 @@
 var indexSectionsWithContent =
 {
   0: "_bcdeghikmnpst~",
-  1: "begikp",
-  2: "begkmp",
+  1: "beghikp",
+  2: "beghkmp",
   3: "bcegikmps~",
   4: "_bdghnp",
   5: "degmt"

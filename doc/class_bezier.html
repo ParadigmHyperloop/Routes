@@ -74,10 +74,10 @@ $(function() {
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:af8184ad8c9c23625005c40efe7f74d13"><td class="memItemLeft" align="right" valign="top">static const std::vector&lt; int &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bezier.html#af8184ad8c9c23625005c40efe7f74d13">getBinomialCoefficients</a> (int degree)</td></tr>
 <tr class="separator:af8184ad8c9c23625005c40efe7f74d13"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a09bc06e6994cc333def53bd023654741"><td class="memItemLeft" align="right" valign="top">static glm::vec4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bezier.html#a09bc06e6994cc333def53bd023654741">evaluateBezierCurve</a> (glm::vec4 *points, int num_points, float s)</td></tr>
-<tr class="separator:a09bc06e6994cc333def53bd023654741"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8f7240d3f701ed32f10b2b240b1d4c83"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; glm::vec4 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bezier.html#a8f7240d3f701ed32f10b2b240b1d4c83">evaluateEntireBezierCurve</a> (glm::vec4 *points, int num_controls, int num_desired)</td></tr>
-<tr class="separator:a8f7240d3f701ed32f10b2b240b1d4c83"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acac673f89e94e16fd9547ca03ed5117c"><td class="memItemLeft" align="right" valign="top">static glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bezier.html#acac673f89e94e16fd9547ca03ed5117c">evaluateBezierCurve</a> (const std::vector&lt; glm::vec3 &gt; &amp;points, float s)</td></tr>
+<tr class="separator:acac673f89e94e16fd9547ca03ed5117c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af61ef957bba128786ccedf7431b051f0"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; glm::vec3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bezier.html#af61ef957bba128786ccedf7431b051f0">evaluateEntireBezierCurve</a> (const std::vector&lt; glm::vec3 &gt; &amp;points, int num_desired)</td></tr>
+<tr class="separator:af61ef957bba128786ccedf7431b051f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
@@ -137,8 +137,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a09bc06e6994cc333def53bd023654741"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a09bc06e6994cc333def53bd023654741">&#9670;&nbsp;</a></span>evaluateBezierCurve()</h2>
+<a id="acac673f89e94e16fd9547ca03ed5117c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acac673f89e94e16fd9547ca03ed5117c">&#9670;&nbsp;</a></span>evaluateBezierCurve()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -147,16 +147,10 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">glm::vec4 Bezier::evaluateBezierCurve </td>
+          <td class="memname">glm::vec3 Bezier::evaluateBezierCurve </td>
           <td>(</td>
-          <td class="paramtype">glm::vec4 *&#160;</td>
+          <td class="paramtype">const std::vector&lt; glm::vec3 &gt; &amp;&#160;</td>
           <td class="paramname"><em>points</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>num_points</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -189,8 +183,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a8f7240d3f701ed32f10b2b240b1d4c83"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8f7240d3f701ed32f10b2b240b1d4c83">&#9670;&nbsp;</a></span>evaluateEntireBezierCurve()</h2>
+<a id="af61ef957bba128786ccedf7431b051f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af61ef957bba128786ccedf7431b051f0">&#9670;&nbsp;</a></span>evaluateEntireBezierCurve()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -199,16 +193,10 @@ Static Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt; glm::vec4 &gt; Bezier::evaluateEntireBezierCurve </td>
+          <td class="memname">std::vector&lt; glm::vec3 &gt; Bezier::evaluateEntireBezierCurve </td>
           <td>(</td>
-          <td class="paramtype">glm::vec4 *&#160;</td>
+          <td class="paramtype">const std::vector&lt; glm::vec3 &gt; &amp;&#160;</td>
           <td class="paramname"><em>points</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>num_controls</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
