@@ -41,5 +41,5 @@ Once you download data, create a "data" folder in the repo. Unzip the downloads 
 ## OpenCL
 OpenCL is used in this project because the genetic algorithm benefits from parallel processing on the GPU. If your system does not have a dedicated GPU (or at least a decent integrated one), running the algorithm on a CPU will most likely be very slow, and is not recomended.
 
-## Refernece
+## Reference
 This algorithm is an OpenCL implementaion the paper by Casey J. Handmer. This paper can be found at https://arxiv.org/pdf/1503.01524.pdf
