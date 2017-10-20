@@ -13,16 +13,39 @@ add_executable(Routes ${HPPS}
                       ${HS}
                       ${SOURCES})
 
-# Find GDAL and link it
-FIND_PACKAGE(GDAL REQUIRED)
+IF (WIN32)
 
-# Find OpenCL and link it
-FIND_PATH(OPENCL_INCLUDE_DIR CL/cl.h ~/NVIDIA_GPU_Computing_SDK/OpenCL/common/inc/)
-FIND_LIBRARY(OPENCL_LIBRARIES OpenCL ENV LD_LIBRARY_PATH )
+  set(GDAL_LIBRARY C:/MinGW/msys/1.0/local/lib/libgdal.a C:/MinGW/lib/libwsock32.a C:/MinGW/lib/libws2_32.a C:/MinGW/lib/libpsapi.a)
+  set(GDAL_INCLUDE_DIR C:/MinGW/msys/1.0/local/include)
 
-# Link libraries
+  find_package(OpenCL REQUIRED)
+  include_directories(${OpenCL_INCLUDE_DIRS})
+
+ELSE()
+
+  # Find GDAL
+  FIND_PACKAGE(GDAL REQUIRED)
+
+  # Find OpenCL and link it
+  FIND_PATH(OPENCL_INCLUDE_DIR CL/cl.h ~/NVIDIA_GPU_Computing_SDK/OpenCL/common/inc/)
+  FIND_LIBRARY(OPENCL_LIBRARIES OpenCL ENV LD_LIBRARY_PATH )
+
+ENDIF()
+
+# Include stuff
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include
                     ${GDAL_INCLUDE_DIR})
 
-target_link_libraries(Routes ${OPENCL_LIBRARIES}
-                             ${GDAL_LIBRARY})
+IF (WIN32)
+
+  message(STATUS ${GDAL_LIBRARY})
+  target_link_libraries(Routes ${OpenCL_LIBRARIES}
+                               ${GDAL_LIBRARY})
+
+ELSE()
+
+  target_link_libraries(Routes ${OPENCL_LIBRARIES}
+                               ${GDAL_LIBRARY})
+
+
+ENDIF()
