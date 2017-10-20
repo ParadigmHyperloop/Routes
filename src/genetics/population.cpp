@@ -157,7 +157,7 @@ void Population::evaluateCost(const Pod& pod) {
                 // Degree is num points - 1
                 int degree = points - 1;
 
-                float4 out_point;
+                float4 out_point = (float4)(0.0, 0.0, 0.0, 0.0);
 
                 // Middle terms, iterate for num points
                 for (int i = 0; i < points; i++) {
