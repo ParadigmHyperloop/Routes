@@ -1,2 +1,85 @@
-<!DOCTYPE html><html><head>    <meta charset='utf-8' />    <title></title>    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.41.0/mapbox-gl.js'></script>    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.41.0/mapbox-gl.css' rel='stylesheet' />    <style>        body { margin:0; padding:0; }        #map { position:absolute; top:0; bottom:0; width:100%; }    </style></head><body><div id='map'></div><script>var map = new mapboxgl.Map({    container: 'map',    style: 'http://localhost:8888/hyperloop_map.json',    center: [-119, 38],    zoom: 13});map.on('load', function () {    map.addLayer({        "id": "route",        "type": "line",        "source": {            "type": "geojson",            "data": {                "type": "Feature",                "properties": {},                "geometry": {                    "type": "LineString",                    "coordinates": [[-119.001663,35.001667],[-118.985558,34.974724],[-118.968887,34.949722],[-118.952499,34.927223],[-118.935837,34.906666],[-118.919167,34.887779],[-118.902779,34.870277],[-118.886391,34.854443],[-118.870277,34.839722],[-118.854446,34.826111],[-118.838608,34.813332],[-118.823059,34.801388],[-118.808052,34.790279],[-118.793335,34.779999],[-118.778893,34.770000],[-118.764999,34.760555],[-118.751114,34.751667],[-118.738052,34.743057],[-118.725281,34.734722],[-118.712776,34.726665],[-118.700836,34.718887],[-118.689445,34.711388],[-118.678337,34.703888],[-118.667778,34.696667],[-118.657501,34.689724],[-118.647781,34.682777],[-118.638336,34.675835],[-118.629166,34.668888],[-118.620552,34.662224],[-118.612503,34.655556],[-118.604446,34.648888],[-118.596947,34.642223],[-118.589722,34.635555],[-118.582779,34.628887],[-118.576111,34.622223],[-118.570000,34.615833],[-118.563889,34.609165],[-118.557777,34.602779],[-118.552223,34.596111],[-118.546669,34.589443],[-118.541389,34.583057],[-118.536392,34.576389],[-118.531113,34.569721],[-118.526390,34.563057],[-118.521385,34.556389],[-118.516670,34.549999],[-118.511948,34.543335],[-118.507500,34.536667],[-118.502777,34.529724],[-118.498337,34.523056],[-118.493614,34.516388],[-118.489166,34.509724],[-118.484444,34.503056],[-118.480003,34.496387],[-118.475281,34.489723],[-118.470558,34.483055],[-118.465836,34.476387],[-118.461113,34.469723],[-118.456390,34.463333],[-118.451668,34.456665],[-118.446945,34.450279],[-118.441948,34.443890],[-118.437225,34.437778],[-118.432220,34.431667],[-118.427498,34.425835],[-118.422501,34.419998],[-118.417778,34.414165],[-118.413055,34.408890],[-118.408333,34.403610],[-118.403610,34.398613],[-118.399170,34.393612],[-118.394722,34.389168],[-118.390274,34.384724],[-118.386108,34.380833],[-118.382225,34.376945],[-118.378334,34.373611],[-118.374725,34.370556],[-118.371391,34.367500],[-118.368332,34.365002],[-118.365280,34.362778],[-118.362778,34.360554],[-118.360558,34.358891],[-118.358612,34.357224],[-118.356941,34.356110],[-118.355553,34.354721],[-118.354721,34.353611],[-118.354164,34.352501],[-118.353889,34.351387],[-118.354164,34.349998],[-118.354446,34.348331],[-118.355278,34.346390],[-118.356392,34.343887],[-118.358055,34.340832],[-118.359726,34.336945],[-118.361664,34.331944],[-118.363609,34.325832],[-118.365837,34.318054],[-118.368332,34.308613],[-118.370552,34.296944],[-118.373055,34.283054],]
-                                    }            }        },        "layout": {            "line-join": "round",            "line-cap": "round"        },        "paint": {            "line-color": "#F00",            "line-width": 8        }    });});</script></body></html>
+<!doctype html>
+<html lang="en">
+    
+    <link rel="stylesheet" href="css/shared.css">
+    <link rel="stylesheet" href="css/header.css">
+    
+    <script src="scripts/jquery-3.2.1.min.js"></script>
+    <script src="scripts/header.js"></script>
+    <script src="scripts/scroll-to.js"></script>
+    
+    <body>
+
+        <div class="hero_container" id="top">
+        
+            <nav class="fixed-nav-bar">
+                <table>
+                    <tr>
+
+                        <th onclick="smoothScrollToDiv('top')">
+                            <img src="res/image/paradigm-logo.png" class="nav_button" style="height: 35pt;">
+                        </th>
+                        <th class="nav_button" onclick="smoothScrollToDiv('mot')">Motivation</th>
+                        <th class="nav_button" onclick="smoothScrollToDiv('algo')">The Algorithm</th>
+                        <th class="nav_button" onclick="smoothScrollToDiv('team')">The Team</th>
+                        <th><div class="header_button" onclick="goToRoutes()">Compute</div></th>
+
+                    </tr>
+                </table>
+            </nav>
+        
+            <div class="hero_title">
+                
+                Paradigm Hyperloop<br> 
+                <div style="font-size: 90pt;">Routes</div>
+                
+            </div>
+            
+            <img src="res/image/hero-image-crop.svg" style="width: 65%; margin: auto; margin-top: 60pt;">
+            <img src="res/image/arrow_explore.svg" style="margin: auto; width: 100pt;">
+            
+        </div>
+        
+        <div class="content_container" id="container">
+        
+            <center class="content">
+                <h1 id="mot"> Motivation </h1>
+               
+                <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas blandit condimentum ligula vitae lacinia. Fusce eget aliquam enim. Nam ullamcorper odio in mi tincidunt, a volutpat leo sollicitudin. Cras sit amet feugiat augue. Nam vitae posuere lorem. Curabitur leo sem, egestas quis tellus nec, maximus bibendum libero. Nulla facilisi. Aliquam dignissim et arcu at mollis. Nullam hendrerit et nisi nec ullamcorper. Maecenas molestie gravida nibh nec sollicitudin. Sed quis nisl et mauris feugiat ultricies nec non mi. Donec a erat nec felis venenatis hendrerit. Nam facilisis rutrum erat a blandit. </p>
+                
+                <p>Fusce mollis, magna a ornare mollis, elit massa volutpat velit, id blandit ex neque ac ante. Duis venenatis lacinia massa consectetur commodo. In ac quam cursus, condimentum nibh a, rutrum metus. Nullam non eros vel mi congue facilisis sit amet nec nulla. Nulla scelerisque eros nec elit semper, sit amet porta nibh commodo. Etiam posuere, tortor nec porta pulvinar, urna neque dapibus dui, eget ullamcorper risus mi ac massa. Aliquam erat volutpat.</p>
+                
+                <h1 id="algo"> The Algorithm </h1>
+               
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor ac lorem in elementum. Fusce nec velit metus. Sed sit amet egestas lacus. Quisque eleifend mattis enim, at cursus nisi cursus non. Etiam eu bibendum dolor. Donec justo diam, tincidunt sit amet neque eget, tincidunt lobortis felis. Pellentesque commodo in nulla quis eleifend. Curabitur tempus pellentesque nunc, auctor iaculis leo faucibus quis.</p>
+
+                <p>Donec bibendum dolor et tellus pulvinar, nec sagittis dui fringilla. In ut sagittis velit. Vivamus vel lorem ut lorem sodales viverra. Fusce venenatis velit elit, in volutpat purus scelerisque elementum. Nam dignissim rhoncus est a faucibus. Nunc vel feugiat odio, ac tempus sapien. Quisque blandit tellus vitae lacus facilisis viverra.</p>
+
+                <p>Nunc sit amet justo mi. Aliquam et erat sed ligula pellentesque viverra. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec sed porttitor velit. Quisque eget cursus nisl, egestas malesuada risus. Vestibulum volutpat rhoncus congue. Aliquam erat volutpat. Etiam at faucibus nisl. Aenean viverra massa in odio tincidunt volutpat. Aliquam erat volutpat. Sed auctor auctor metus, quis pretium lectus euismod a. Praesent vehicula nec tellus nec lobortis. Suspendisse tempus luctus posuere.</p>
+
+                <p>Ut nisl purus, varius facilisis gravida nec, pretium quis lorem. Proin porttitor elementum sem, scelerisque accumsan diam ornare non. Etiam at ante tortor. Praesent vestibulum mauris quis lectus feugiat, sit amet dignissim nisl finibus. Duis tristique id felis sit amet elementum. Proin nec arcu a risus dapibus vehicula sed id velit. Nam sagittis consectetur arcu, eget condimentum est blandit a. Vivamus tempor justo id tellus rhoncus, a iaculis nulla ullamcorper. Quisque maximus eleifend elit nec gravida. Aliquam erat volutpat. Nulla consequat justo non metus porttitor placerat. In nec erat a felis mattis rhoncus. Nullam ut tristique nulla. In faucibus nec nisi vel ultricies.</p>
+
+                <p>Duis eget nisl efficitur, molestie velit vel, aliquam felis. Suspendisse risus dolor, efficitur non interdum ut, vulputate a ipsum. Sed mollis, turpis id venenatis finibus, elit ante tristique erat, scelerisque pharetra nisi felis a justo. Curabitur molestie lacus ut nisl luctus, id consequat dui pharetra. Duis lacinia lectus in tempus elementum. Vivamus vitae malesuada ante, quis accumsan velit. Suspendisse lacus dolor, malesuada id blandit eget, porttitor in urna. Morbi ultrices dui nec libero efficitur pharetra sit amet ut leo. Etiam fringilla dui lacus, sit amet laoreet nisl ultrices quis. Vestibulum sodales hendrerit est et pharetra. Etiam vitae libero et nibh imperdiet gravida non vel nisl. Phasellus vulputate dignissim nibh malesuada pharetra. Donec pharetra, ex et varius sagittis, tortor erat vulputate nibh, vitae volutpat turpis dui quis sem.</p>
+                
+                <h1 id="team">The Team</h1>
+               
+                <p> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas blandit condimentum ligula vitae lacinia. Fusce eget aliquam enim. Nam ullamcorper odio in mi tincidunt, a volutpat leo sollicitudin. Cras sit amet feugiat augue. Nam vitae posuere lorem. Curabitur leo sem, egestas quis tellus nec, maximus bibendum libero. Nulla facilisi. Aliquam dignissim et arcu at mollis. Nullam hendrerit et nisi nec ullamcorper. Maecenas molestie gravida nibh nec sollicitudin. Sed quis nisl et mauris feugiat ultricies nec non mi. Donec a erat nec felis venenatis hendrerit. Nam facilisis rutrum erat a blandit. </p>
+                
+                <p>Fusce mollis, magna a ornare mollis, elit massa volutpat velit, id blandit ex neque ac ante. Duis venenatis lacinia massa consectetur commodo. In ac quam cursus, condimentum nibh a, rutrum metus. Nullam non eros vel mi congue facilisis sit amet nec nulla. Nulla scelerisque eros nec elit semper, sit amet porta nibh commodo. Etiam posuere, tortor nec porta pulvinar, urna neque dapibus dui, eget ullamcorper risus mi ac massa. Aliquam erat volutpat.</p>
+                
+               
+            </center>
+        
+        </div>
+        
+        
+    </body>
+
+    <footer>
+
+
+    </footer>
+    
+    
+    
+</html>

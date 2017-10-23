@@ -344,16 +344,21 @@ glm::vec4* Population::crossoverIndividual(int a, int b) {
 
 void Population::mutateGenome(glm::vec4* genome) {
 
-    // Choose a single random point to mutate and then choose a random component
-    int point = glm::linearRand(0, _genome_size - 1);
-
-    glm::vec4* point_ptr = genome + point;
-
-    // Do the mutation
-    (*point_ptr) = glm::vec4(glm::linearRand(0.0f, _data.getWidthInMeters()),
-                             glm::linearRand(0.0f, _data.getHeightInMeters()),
-                             glm::linearRand(_data.getMinElevation() - TRACK_ABOVE_BELOW_EXTREMA,
-                                             _data.getMaxElevation() + TRACK_ABOVE_BELOW_EXTREMA), 0.0);
+    // 50% chance that this genome will be mutated
+    if (glm::linearRand(0.0, 1.0) > 0.5) {
+        
+        // Choose a single random point to mutate and then choose a random component
+        int point = glm::linearRand(0, _genome_size - 1);
+        
+        glm::vec4* point_ptr = genome + point;
+        
+        // Do the mutation
+        (*point_ptr) = glm::vec4(glm::linearRand(0.0f, _data.getWidthInMeters()),
+                                 glm::linearRand(0.0f, _data.getHeightInMeters()),
+                                 glm::linearRand(_data.getMinElevation() - TRACK_ABOVE_BELOW_EXTREMA,
+                                                 _data.getMaxElevation() + TRACK_ABOVE_BELOW_EXTREMA), 0.0);
+        
+    }
 
 }
 

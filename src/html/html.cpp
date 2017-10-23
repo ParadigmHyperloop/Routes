@@ -40,7 +40,7 @@ void HTML::generateHTMLForPath(const std::vector<glm::vec3>& path, const Elevati
     template_contents.replace(template_contents.find("<POINTS GO HERE>"), 16, points_json);
 
     // Write out the new file
-    std::ofstream out_file = std::ofstream("../htdocs/index.html");
+    std::ofstream out_file = std::ofstream("../htdocs/route.html");
     out_file << template_contents;
     out_file.close();
 
