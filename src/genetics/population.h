@@ -6,7 +6,6 @@
 #define ROUTES_POPULATION_H
 
 #include <boost/compute/container/vector.hpp>
-#include <glm/glm.hpp>
 #include <glm/gtc/random.hpp>
 #include <time.h>
 

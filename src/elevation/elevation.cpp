@@ -37,7 +37,9 @@ ElevationData::ElevationData(const std::string& file_path) {
 ElevationData::~ElevationData() {
 
     // Raster band is owned by the dataset so it doesnt need to be deallocated
-    GDALClose(_gdal_dataset);
+    // Only get rid of it if it exists. There is a default constructor for stitching where it will not.
+    if (_gdal_dataset)
+        GDALClose(_gdal_dataset);
 
 }
 
@@ -204,8 +206,6 @@ void ElevationData::createOpenCLImage() {
 
     for (int i = 0; i < _height; i++)
         _gdal_raster_band->RasterIO( GF_Read, 0, i, _width, 1, &image_data[_width * i], _width, 1, GDT_Float32, 0, 0);
-
-    std::cout << image_data[6000] << std::endl;
 
     // Create the OpenCL image
     boost::compute::image_format format = boost::compute::image_format(CL_INTENSITY, CL_FLOAT);

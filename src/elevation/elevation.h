@@ -5,9 +5,12 @@
 #ifndef ROUTES_ELEVATION_H
 #define ROUTES_ELEVATION_H
 
-#import <glm/glm.hpp>
-#import <gdal_priv.h>
-#import "../opencl/kernel.h"
+#define GLM_ENABLE_EXPERIMENTAL
+
+#include <glm/glm.hpp>
+#include <glm/gtx/string_cast.hpp>
+#include <gdal_priv.h>
+#include "../opencl/kernel.h"
 
 /** */
 
@@ -17,11 +20,15 @@
  */
 #define EARTH_RADIUS 6378137.0
 
+class ElevationStitch;
+
 /**
  * ElevationData is a class that converts elevation data from GDAL into
  * a format that can be read in OpenCL.
  */
 class ElevationData {
+
+        friend ElevationStitch;
 
     public:
 
@@ -140,6 +147,9 @@ class ElevationData {
         glm::vec3 pixelsToMetersAndElevation(const glm::ivec2& pos_pixles) const;
 
     private:
+
+        /** A private constructor to be used by elevation stitching */
+        ElevationData() {};
 
         /** Calculate the conversion factors to translate GDAL pixels to meters */
         void calcConversions();

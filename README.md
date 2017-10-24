@@ -19,7 +19,7 @@ Dependencies are automatically downloaded and installed with setup.sh, except fo
 ### Linux / macOS
 Run these commands
 ```
-git clone https://github.com/BlueSpud/Routes
+git clone https://github.com/ParadigmHyperloop/Routes.git
 cd Routes
 sudo ./setup.sh
 ```
@@ -40,13 +40,14 @@ Unfortunately the setup for Windows is a bit more complicated. For simplicity we
 1. Download and install MinGW. The easiest way to do this is to use the installer, which can be found at https://sourceforge.net/projects/mingw/files/Installer/. Make sure MinGW is installed directly onto C:\. After installing you should now have a folder C:\MinGW\
 2. Make sure MSYS and binutils are installed. This can also be done in the installer fairly easily by checking the msys-base and mingw32-binutils and then going to Installation > Apply Changes
 3. Find MSYS. It should be in C:\MinGW\msys\1.0 and its a batch file called MSYS. Open it.
-4. Type in these commands:
+4. Clone the repo into any folder on your C drive
+5. Type in these commands:
 ```
 cd /c/path/to/repo/Routes/
 ./setup.sh
 ```
 This will start compiling GDAL and download and place header dependencies in the correct place.
-After setup finishes, run these commands to actually build the Routes project. Make sure this is done in MSYS.
+6. After setup finishes, run these commands to actually build the Routes project. Make sure this is done in MSYS.
 ```
 mkdir build
 cd build
@@ -56,7 +57,7 @@ make
 You should now see a built binary in the build directory. In order to run the program, open back up MSYS and run it from there.
 
 ## Data
-Data is pulled from the USGS, and is 1/3 arc second 3D elevation products. You can find all USGS data at https://viewer.nationalmap.gov/basic/
+Data is pulled from the USGS, and is 1 arc second 3D elevation products. You can find all USGS data at https://viewer.nationalmap.gov/basic/
 
 Currently the algorithm is being tested on these pieces of data:
 - https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/13/IMG/USGS_NED_13_n42w071_IMG.zip
