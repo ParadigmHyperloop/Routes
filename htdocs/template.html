@@ -9,11 +9,12 @@
     <style>
         body { margin:0; padding:0; }
         #map { position:absolute; top:0; bottom:0; width:100%; }
+        
     </style>
 </head>
 <body>
 
-    <div id='map'></div>
+    <div id='map'><div class="myclass" style="z-index: 10000000">DAHKADSHKADSKJ</div></div>
 <div style="margin-top: -200pt;">HELLOOOOOOOOO</div>
 <script>
 var map = new mapboxgl.Map({
@@ -51,7 +52,6 @@ map.on('load', function () {
     });
 });
 </script>
-    <div style="z-index: 10000000">DAHKADSHKADSKJ </div>
 <script>
     var nav = new mapboxgl.NavigationControl();
     map.addControl(nav, 'top-left');
