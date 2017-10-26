@@ -70,3 +70,5 @@ OpenCL is used in this project because the genetic algorithm benefits from paral
 
 ## Reference
 This algorithm is an OpenCL implementation the paper by Casey J. Handmer. This paper can be found at https://arxiv.org/pdf/1503.01524.pdf
+
+Quick Test
