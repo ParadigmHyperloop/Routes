@@ -4,95 +4,76 @@
 
 #include "elevation-stitch.h"
 
-ElevationData ElevationStitch::stitch(const std::string& root, const std::string& sticher) {
+ElevationData ElevationStitch::stitch(const std::string& root, const std::string& stitcher) { return stitch({root, stitcher}); }
 
-    // First we load up both pieces of data from the disk.
-    GDALDataset* root_set = (GDALDataset*)GDALOpen(root.c_str(), GA_ReadOnly);
-    GDALDataset* sticher_set = (GDALDataset*)GDALOpen(sticher.c_str(), GA_ReadOnly);
+ElevationData ElevationStitch::stitch(const std::vector<std::string>& paths) {
 
-    // Now we figure out how big of a buffer we need to allocate based on if there is overlap or not
-    // First we get the origins of the two and their sizes in degrees
-    // These transforms should both be the same
-    double root_transform[8];
-    double stitcher_transform[8];
+    // Load up all of the GDAL data
+    std::vector<GDALDataset*> datasets = std::vector<GDALDataset*>(paths.size());
+    for (int i = 0; i < datasets.size(); i++)
+        datasets[i] = (GDALDataset*)GDALOpen(paths[i].c_str(), GA_ReadOnly);
 
-    root_set->GetGeoTransform(root_transform);
-    sticher_set->GetGeoTransform(stitcher_transform);
+    // Get the transform of the first (root) dataset
+    double transform[8];
+    datasets[0]->GetGeoTransform(transform);
 
-    // Make sure that the transforms are the same scale
-    if (fabs(root_transform[1] - stitcher_transform[1]) > EPSILON ||
-        fabs(root_transform[5] - stitcher_transform[5]) > EPSILON)
+    // Make sure that every other data set is compatible with this one
+    for (int i = 1; i < datasets.size(); i++) {
+
+        double transform_t[8];
+        datasets[i]->GetGeoTransform(transform_t);
+
+        if (fabs(transform[1] - transform_t[1]) > EPSILON ||
+            fabs(transform[5] - transform_t[5]) > EPSILON)
             throw std::runtime_error("The datasets could not be stitched because they did not have the same transform");
 
+    }
 
-    // Origins
-    glm::vec2 origin_root =  glm::vec2(root_transform[0],     root_transform[3]);
-    glm::vec2 sticher_root = glm::vec2(stitcher_transform[0], stitcher_transform[3]);
+    // Get the 2D buffer size required to contain all of the data
+    DataRect root_rect = DataRect(datasets[0]);
+    DataRect stitch_rect = DataRect(datasets[1]);
+    DataRect buffer_rect = getRequiredRect(root_rect, stitch_rect);;
 
-    // Get the extents of the data in degrees.
-    // We invert the y transform because it is negative and for calculation purposes we require it to be positive
-    glm::vec2 extents_root =    glm::vec2(root_set->GetRasterXSize()    *  root_transform[1],
-                                          root_set->GetRasterYSize()    * -root_transform[5]);
-
-    glm::vec2 extents_sticher = glm::vec2(sticher_set->GetRasterXSize() *  root_transform[1],
-                                          sticher_set->GetRasterYSize() * -root_transform[5]);
-
-    // Get the size of the buffer required in degrees
-    glm::vec2 extents = glm::vec2(getRequiredSize(origin_root.x, extents_root.x, sticher_root.x, extents_sticher.x),
-                                  getRequiredSize(origin_root.y, extents_root.y, sticher_root.y, extents_sticher.y));
+    // Ensure that the rect contains all sub-rects
+    for (int i = 2; i < datasets.size(); i++)
+        buffer_rect = getRequiredRect(DataRect(datasets[i]), buffer_rect);
 
     // Get the size we need in pixels now
-    glm::ivec2 size_pixels = glm::ivec2(extents.x / root_transform[1], extents.y / -root_transform[5]);
+    glm::ivec2 size_pixels = glm::ivec2(buffer_rect.extents.x / transform[1], buffer_rect.extents.y / -transform[5]);
 
     // Create a 2D array of the size that we need in pixels
     float** stitched_buffer = new float*[size_pixels.y];
     for (int i = 0; i < size_pixels.y; i++)
         stitched_buffer[i] = new float[size_pixels.x];
 
-    // Put the root buffer's contents into the new 2D buffer.
-    // First we need to figure out where the root buffer belongs
-    glm::ivec2 root_insert_pos = glm::ivec2(0);
-    glm::ivec2 stitcher_insert_pos = glm::ivec2(size_pixels.x - sticher_set->GetRasterXSize(),
-                                                size_pixels.y - root_set->GetRasterYSize());
+    // Read in all of the data
+    for (int i = datasets.size() - 1; i >= 0; i--) {
 
-    // Check if the root should be inserted after the stitcher
-    if (origin_root.x - sticher_root.x > EPSILON) {
+        GDALDataset* dataset = datasets[i];
 
-        root_insert_pos.x = size_pixels.x - root_set->GetRasterXSize();
-        stitcher_insert_pos.x = 0;
+        // Get the transform
+        double transform_t[8];
+        datasets[i]->GetGeoTransform(transform_t);
 
-    }
+        // Figure out where the origin is in pixels
+        glm::vec2 origin_t = glm::vec2(transform_t[0], transform_t[3]);
 
-    if (origin_root.y - sticher_root.y > EPSILON) {
+        // Get the offset in degrees and then convert it by pixels to get the insertion position
+        glm::vec2 delta = origin_t - buffer_rect.origin;
+        glm::ivec2 insertion = glm::ivec2(delta.x / transform[1], delta.y / -transform[5]);
 
-        root_insert_pos.y = size_pixels.y - root_set->GetRasterYSize();
-        stitcher_insert_pos.y = 0;
+        // Get the raster band for the data
+        GDALRasterBand* raster = dataset->GetRasterBand(1);
 
-    }
+        // For simplicity we do this in two loops. Doing the root second ensures that it will be the data that
+        // is always present
+        for (int i = 0; i < dataset->GetRasterYSize(); i++) {
 
-    // Get the raster band for the stitcher data
-    GDALRasterBand* stitcher_raster = sticher_set->GetRasterBand(1);
+            float* insert_pos = &stitched_buffer[insertion.y + i][insertion.x];
+            raster->RasterIO(GF_Read, 0, i, dataset->GetRasterXSize(), 1, insert_pos,
+                                            dataset->GetRasterXSize(), 1, GDT_Float32, 0, 0);
 
-    // This is inefficient but the documentation is unclear how the RasterIO function reads.
-    // This operation shouldn't be done in real time anyways, so everything is Kosher.
-    for (int i = 0; i < sticher_set->GetRasterYSize(); i++) {
-
-        float* insert_pos = &stitched_buffer[stitcher_insert_pos.y + i][stitcher_insert_pos.x];
-        stitcher_raster->RasterIO(GF_Read, 0, i, sticher_set->GetRasterXSize(), 1, insert_pos,
-                                  sticher_set->GetRasterXSize(), 1, GDT_Float32, 0, 0);
-
-    }
-
-    // Get the raster band for the root data
-    GDALRasterBand* root_raster = sticher_set->GetRasterBand(1);
-
-    // For simplicity we do this in two loops. Doing the root second ensures that it will be the data that
-    // is always present
-    for (int i = 0; i < root_set->GetRasterYSize(); i++) {
-
-        float* insert_pos = &stitched_buffer[root_insert_pos.y + i][root_insert_pos.x];
-        root_raster->RasterIO(GF_Read, 0, i, root_set->GetRasterXSize(), 1, insert_pos,
-                                  root_set->GetRasterXSize(), 1, GDT_Float32, 0, 0);
+        }
 
     }
 
@@ -110,7 +91,7 @@ ElevationData ElevationStitch::stitch(const std::string& root, const std::string
 
     // Temporarily give it the root GDAL data so that we can calculate conversions using the built-in functions.
     // To make sure that it never deallocates it after we do, we take it away after
-    new_data._gdal_dataset = root_set;
+    new_data._gdal_dataset = datasets[0];
     new_data.calcConversions();
     new_data.calcStats();
 
@@ -128,23 +109,57 @@ ElevationData ElevationStitch::stitch(const std::string& root, const std::string
     // Calc the min and max
     new_data.calcMinMax();
 
+
     // Delete the stitched buffer
     for (int i = 0; i < size_pixels.y; i++)
         delete stitched_buffer[i];
     delete [] stitched_buffer;
 
-    // Close GDAL buffers
-    GDALClose(root_set);
-    GDALClose(sticher_set);
+    // Close all of the data
+    for (int i = 0; i < datasets.size(); i++)
+        GDALClose(datasets[i]);
 
     return new_data;
 
 }
 
-float ElevationStitch::getRequiredSize(float root_origin, float root_size, float sticher_origin, float sticher_size) {
+ElevationStitch::DataRect::DataRect() { origin = glm::vec2(0.0); extents = glm::vec2(0.0);}
+
+ElevationStitch::DataRect::DataRect(GDALDataset* dataset) {
+
+    // Get the transform of the dataset
+    double transform[8];
+    dataset->GetGeoTransform(transform);
+
+    // Get the origin and extents
+    origin = glm::vec2(transform[0], transform[3]);
+
+    // We invert the y transform because it is negative and for calculation purposes we require it to be positive
+    extents = glm::vec2(dataset->GetRasterXSize()    *  transform[1],
+                        dataset->GetRasterYSize()    * -transform[5]);
+
+}
+
+ElevationStitch::DataRect ElevationStitch::getRequiredRect(DataRect a, DataRect b) {
+
+    DataRect to_return;
+
+    // Get extents
+    to_return.extents = glm::vec2(getRequiredSizeAxis(a.origin.x, a.extents.x, b.origin.x, b.extents.x),
+                                  getRequiredSizeAxis(a.origin.y, a.extents.y, b.origin.y, b.extents.y));
+
+    // Get the new origin
+    to_return.origin = glm::vec2(glm::min(a.origin.x, b.origin.x),
+                                 glm::max(a.origin.y, b.origin.y));
+
+    return to_return;
+
+}
+
+float ElevationStitch::getRequiredSizeAxis(float root_origin, float root_size, float sticher_origin, float sticher_size) {
 
     // Create two vectors for convenience
-    glm::vec2 root =    glm::vec2(root_origin,    root_size);
+    glm::vec2 root    = glm::vec2(root_origin,    root_size);
     glm::vec2 sticher = glm::vec2(sticher_origin, sticher_size);
 
     // Determine which is greater so we have a negative number

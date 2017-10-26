@@ -107,6 +107,8 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
+<tr class="memitem:a20aaba66c5d7c5e0a80e3cc050f1edc3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#a20aaba66c5d7c5e0a80e3cc050f1edc3">ElevationData</a> ()</td></tr>
+<tr class="separator:a20aaba66c5d7c5e0a80e3cc050f1edc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a865b3c7320ebfb61b609622e053e2798"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#a865b3c7320ebfb61b609622e053e2798">calcConversions</a> ()</td></tr>
 <tr class="separator:a865b3c7320ebfb61b609622e053e2798"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a40fde2e11dbefbb7a585742a7895307a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#a40fde2e11dbefbb7a585742a7895307a">calcStats</a> ()</td></tr>
@@ -123,6 +125,8 @@ Static Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:adcf3ac6c0c2b51a3c9d9d27d068e666c"><td class="memItemLeft" align="right" valign="top">friend&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#adcf3ac6c0c2b51a3c9d9d27d068e666c">ElevationStitch</a></td></tr>
+<tr class="separator:adcf3ac6c0c2b51a3c9d9d27d068e666c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a52cd7aa46d406d0be88fd3cfef772204"><td class="memItemLeft" align="right" valign="top">GDALDataset *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#a52cd7aa46d406d0be88fd3cfef772204">_gdal_dataset</a></td></tr>
 <tr class="separator:a52cd7aa46d406d0be88fd3cfef772204"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9aacecc8dd074e849bb7553ad206e407"><td class="memItemLeft" align="right" valign="top">GDALRasterBand *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#a9aacecc8dd074e849bb7553ad206e407">_gdal_raster_band</a></td></tr>
@@ -155,7 +159,7 @@ Static Private Attributes</h2></td></tr>
 <div class="textblock"><p><a class="el" href="class_elevation_data.html">ElevationData</a> is a class that converts elevation data from GDAL into a format that can be read in OpenCL. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aef6fdbf0b6c43243c7e6eb67cc9c5bd0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aef6fdbf0b6c43243c7e6eb67cc9c5bd0">&#9670;&nbsp;</a></span>ElevationData()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aef6fdbf0b6c43243c7e6eb67cc9c5bd0">&#9670;&nbsp;</a></span>ElevationData() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -194,6 +198,32 @@ Static Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>GDAL obejects are created on the heap so these are de-allocated here. Also deletes the texture so it doesnt run away. </p>
+
+</div>
+</div>
+<a id="a20aaba66c5d7c5e0a80e3cc050f1edc3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20aaba66c5d7c5e0a80e3cc050f1edc3">&#9670;&nbsp;</a></span>ElevationData() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ElevationData::ElevationData </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>A private constructor to be used by elevation stitching </p>
 
 </div>
 </div>
@@ -861,6 +891,28 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>The width in meters of the image </p>
+
+</div>
+</div>
+<a id="adcf3ac6c0c2b51a3c9d9d27d068e666c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adcf3ac6c0c2b51a3c9d9d27d068e666c">&#9670;&nbsp;</a></span>ElevationStitch</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend ElevationData::ElevationStitch</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

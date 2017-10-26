@@ -5,7 +5,7 @@
 
 int main() {
 
-    ElevationData data = ElevationStitch::stitch("../data/imgn35w119_1.img", "../data/imgn35w118_1.img");
+    ElevationData data = ElevationStitch::stitch({"../data/imgn35w119_1.img", "../data/imgn35w118_1.img"});
 
     // Test elevation object
 //    ElevationData data = ElevationData("../data/imgn35w119_1.img");
@@ -15,7 +15,7 @@ int main() {
     Pod pod = Pod(339.0);
     Population pop = Population(200, 10, glm::vec4(0.0, 0.0, 550.0, 0.0), glm::vec4(170000.0, 80000.0, 1300.0, 0.0), data);
 
-    std::vector<glm::vec3> computed = Genetics::solve(pop, pod, 400);
+    std::vector<glm::vec3> computed = Genetics::solve(pop, pod, 100);
 
     std::cout << computed[0].x << std::endl;
 
