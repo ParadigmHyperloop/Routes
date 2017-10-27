@@ -9,7 +9,7 @@ int main() {
 
     // Test elevation object
 //    ElevationData data = ElevationData("../data/imgn35w119_1.img");
-//    std::cout << "Min: " << data.getMinElevat ion() << " Max:" << data.getMaxElevation() << std::endl;
+    std::cout << "Min: " << data.getMinElevation() << " Max:" << data.getMaxElevation() << std::endl;
 //    std::cout << data.convertPixelsToMeters(glm::ivec2(data.getWidth(), 0.0)).x << std::endl;
 //
     Pod pod = Pod(339.0);

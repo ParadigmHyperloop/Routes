@@ -39,7 +39,8 @@ ElevationData ElevationStitch::stitch(const std::vector<std::string>& paths) {
         buffer_rect = getRequiredRect(DataRect(datasets[i]), buffer_rect);
 
     // Get the size we need in pixels now
-    glm::ivec2 size_pixels = glm::ivec2(buffer_rect.extents.x / transform[1], buffer_rect.extents.y / -transform[5]);
+    glm::ivec2 size_pixels = glm::ivec2(ceil(buffer_rect.extents.x / transform[1]),
+                                        ceil(buffer_rect.extents.y / -transform[5]));
 
     // Create a 2D array of the size that we need in pixels
     float** stitched_buffer = new float*[size_pixels.y];
