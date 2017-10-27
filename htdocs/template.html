@@ -5,23 +5,33 @@
     <title></title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.41.0/mapbox-gl.js'></script>
-    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.41.0/mapbox-gl.css' rel='stylesheet' />
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.41.0/mapbox-gl.css' rel='stylesheet'/>
     <style>
         body { margin:0; padding:0; }
         #map { position:absolute; top:0; bottom:0; width:100%; }
         
+        myclass{ 
+            position:fixed;
+            width: 300px;
+            height: 300px;
+            border: 25px solid blue;
+            padding: 25px;
+            margin: 25px;
+                    
+}
+        }
     </style>
 </head>
 <body>
-
-    <div id='map'><div class="myclass" style="z-index: 10000000">DAHKADSHKADSKJ</div></div>
-<div style="margin-top: -200pt;">HELLOOOOOOOOO</div>
+    <div id='map'>
+        <div class="myclass" style="position: absolute; z-index: 10000000"></div>
+    </div>
 <script>
 var map = new mapboxgl.Map({
     container: 'map',
     style: 'http://localhost:8888/hyperloop_map.json',
-    center: [-118.4, 34.5],
-    zoom: 8.5
+    center: [-118, 34.5],
+    zoom: 8
 });
 
 map.on('load', function () {
@@ -52,32 +62,5 @@ map.on('load', function () {
     });
 });
 </script>
-<script>
-    var nav = new mapboxgl.NavigationControl();
-    map.addControl(nav, 'top-left');
-</script>
-<script>
-    map.addControl(new mapboxgl.FullscreenControl());
-</script>
-<script>
-    var MyControl = L.Control.extend({
-	options: {
-        position: 'topright'
-	},
-
-    onAdd: function (map) {
-    // create the control container with a particular class name
-        var container = L.DomUtil.create('div', 'my-custom-control');
-
-        // ... initialize other DOM elements, add listeners, etc.
-
-return container;
-	}
-});
-</script>
-map.addControl(new MyControl());
-
-    
-    
-</body>
+    </body>
 </html>

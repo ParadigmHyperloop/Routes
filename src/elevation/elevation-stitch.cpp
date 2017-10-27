@@ -93,13 +93,15 @@ ElevationData ElevationStitch::stitch(const std::vector<std::string>& paths) {
     // To make sure that it never deallocates it after we do, we take it away after
     new_data._gdal_dataset = datasets[0];
     new_data.calcConversions();
-    new_data.calcStats();
 
     new_data._gdal_dataset = nullptr;
 
     // Save width and height
     new_data._width = size_pixels.x;
+    new_data._width_meters = size_pixels.x * new_data.pixelToMeterConversions[0];
+
     new_data._height = size_pixels.y;
+    new_data._height = size_pixels.y * new_data.pixelToMeterConversions[1];
 
     // Create the OpenCL image
     boost::compute::image_format format = boost::compute::image_format(CL_INTENSITY, CL_FLOAT);

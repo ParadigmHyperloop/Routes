@@ -81,16 +81,20 @@ void Population::sortIndividuals() {
 
 void Population::breedIndividuals() {
 
+
+
     // Get a random number of mother and fathers from the top 20%
     // Ensure there is 1 mother and 1 father every time though
     int mothers = (int)(_pop_size * 0.2);
     int fathers = (int)(_pop_size * 0.2);
+
 
     std::vector<glm::vec4> new_population = std::vector<glm::vec4>(_individuals.size());
 
     // Breed 80% of the population from the mother and father
     int i;
     for (i = 0; i < (_pop_size * 0.8); i++) {
+
 
         int mom = glm::linearRand(0, mothers);
         int dad = glm::linearRand(0, fathers);
