@@ -108,9 +108,38 @@ ElevationData ElevationStitch::stitch(const std::vector<std::string>& paths) {
     new_data._opencl_image = boost::compute::image2d(Kernel::getContext(), size_pixels.x, size_pixels.y,
                                                      format, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, raw.data());
 
-    // Calc the min and max
-    new_data.calcMinMax();
 
+    // Calculate the min and max
+    double min_max[2]   = {0.0, 0.0};
+    double min_max_t[2] = {0.0, 0.0};
+
+    for (int i = 0; i < datasets.size(); i++) {
+
+        // Get the raster band from each dataset
+        GDALRasterBand* band = datasets[i]->GetRasterBand(1);
+
+        // Compute min and max using GDAL
+        int succ[2] = {0, 0};
+        min_max_t[0] = band->GetMinimum(&succ[0]);
+        min_max_t[1] = band->GetMaximum(&succ[1]);
+
+        if (!succ[0] || !succ[1])
+            band->ComputeRasterMinMax(false, min_max_t);
+
+        // Check if this is the first one, if so save the results
+        if (i == 0)
+            memcpy(min_max, min_max_t, sizeof(double) * 2);
+
+        // Save the min and max
+        min_max[0] = glm::min(min_max_t[0], min_max[0]);
+        min_max[1] = glm::max(min_max_t[1], min_max[1]);
+
+        std::cout << min_max[0] << " " << min_max[1] << std::endl;
+
+    }
+
+    new_data._elevation_min = min_max[0];
+    new_data._elevation_max = min_max[1];
 
     // Delete the stitched buffer
     for (int i = 0; i < size_pixels.y; i++)
