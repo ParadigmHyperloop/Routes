@@ -9,17 +9,19 @@
     <style>
         body { margin:0; padding:0; }
         #map { position:absolute; top:0; bottom:0; width:100%; }
+        
     </style>
 </head>
 <body>
 
-<div id='map'></div>
+    <div id='map'><div class="myclass" style="z-index: 10000000">DAHKADSHKADSKJ</div></div>
+<div style="margin-top: -200pt;">HELLOOOOOOOOO</div>
 <script>
 var map = new mapboxgl.Map({
     container: 'map',
     style: 'http://localhost:8888/hyperloop_map.json',
-    center: [-119, 38],
-    zoom: 13
+    center: [-118.4, 34.5],
+    zoom: 8.5
 });
 
 map.on('load', function () {
@@ -45,11 +47,37 @@ map.on('load', function () {
         },
         "paint": {
             "line-color": "#F00",
-            "line-width": 8
+            "line-width": 5
         }
     });
 });
 </script>
+<script>
+    var nav = new mapboxgl.NavigationControl();
+    map.addControl(nav, 'top-left');
+</script>
+<script>
+    map.addControl(new mapboxgl.FullscreenControl());
+</script>
+<script>
+    var MyControl = L.Control.extend({
+	options: {
+        position: 'topright'
+	},
 
+    onAdd: function (map) {
+    // create the control container with a particular class name
+        var container = L.DomUtil.create('div', 'my-custom-control');
+
+        // ... initialize other DOM elements, add listeners, etc.
+
+return container;
+	}
+});
+</script>
+map.addControl(new MyControl());
+
+    
+    
 </body>
 </html>
