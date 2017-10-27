@@ -1,5 +1,8 @@
 # Routes
 
+## Documentation
+Full C++ documentation can be found at https://paradigmhyperloop.github.io/Routes/index.html
+
 ## Purpose
 This project is intended to calculate realistic possible hyperloop routes. We build a representation of the terrain that a hyperloop will be crossing with GIS elevation data. 
 
