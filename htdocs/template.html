@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+    <link rel="stylesheet" href="css/ui.css">
 <head>
     <meta charset='utf-8' />
     <title></title>
@@ -9,28 +10,26 @@
     <style>
         body { margin:0; padding:0; }
         #map { position:absolute; top:0; bottom:0; width:100%; }
-        
-        myclass{ 
-            position:fixed;
-            width: 300px;
-            height: 300px;
-            border: 25px solid blue;
-            padding: 25px;
-            margin: 25px;
-                    
-}
-        }
     </style>
 </head>
 <body>
     <div id='map'>
-        <div class="myclass" style="position: absolute; z-index: 10000000"></div>
+        <div class="start_end" style="position: absolute; z-index: 10000000">
+            Start: 00°00'00"N, 00°00'00"W 
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            End: 00°00'00"N, 00°00'00"W 
+        </div>
+        
+        <div class="info" style="position: absolute; z-index: 10000000">
+            Distance: 10 Distances <br />
+            Time: 42 Time Units
+        </div>
     </div>
 <script>
 var map = new mapboxgl.Map({
     container: 'map',
     style: 'http://localhost:8888/hyperloop_map.json',
-    center: [-118, 34.5],
+    center: [-117.7, 34.5],
     zoom: 8
 });
 
@@ -56,11 +55,15 @@ map.on('load', function () {
             "line-cap": "round"
         },
         "paint": {
-            "line-color": "#F00",
+            "line-color": "#FF0067",
             "line-width": 5
         }
     });
 });
+</script>
+<script>
+    map.addControl(new mapboxgl.FullscreenControl());
+    map.addControl(new mapboxgl.NavigationControl());
 </script>
     </body>
 </html>
