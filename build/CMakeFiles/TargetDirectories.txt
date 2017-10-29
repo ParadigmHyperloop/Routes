@@ -1,3 +1,0 @@
-/home/isaac/Routes/build/CMakeFiles/edit_cache.dir
-/home/isaac/Routes/build/CMakeFiles/rebuild_cache.dir
-/home/isaac/Routes/build/CMakeFiles/Routes.dir
