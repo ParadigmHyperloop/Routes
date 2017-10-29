@@ -122,10 +122,10 @@ void Population::breedIndividuals() {
     }
 
     //define min and max for mersenne twister
-    std::uniform_int_distribution<int> width_rand(0.0f, _data.getWidthInMeters());
-    std::uniform_int_distribution<int> height_rand(0.0f, _data.getHeightInMeters());
-    std::uniform_int_distribution<int> elev_rand(_data.getMinElevation() - TRACK_ABOVE_BELOW_EXTREMA,
-                                                 _data.getMaxElevation() + TRACK_ABOVE_BELOW_EXTREMA);
+    std::uniform_int_distribution<float> width_rand(0.0f, _data.getWidthInMeters());
+    std::uniform_int_distribution<float> height_rand(0.0f, _data.getHeightInMeters());
+    std::uniform_int_distribution<float> elev_rand(_data.getMinElevation() - TRACK_ABOVE_BELOW_EXTREMA,
+                                                   _data.getMaxElevation() + TRACK_ABOVE_BELOW_EXTREMA);
 
     // Generate new individuals (20%)
     for (; i < _pop_size; i++) {
@@ -325,10 +325,10 @@ void Population::generatePopulation() {
         std::mt19937 rng(rd());
 
         //define min and max for Mersenne Twister
-        std::uniform_int_distribution<int> width_rand(0.0f, _data.getWidthInMeters());
-        std::uniform_int_distribution<int> height_rand(0.0f, _data.getHeightInMeters());
-        std::uniform_int_distribution<int> elev_rand(_data.getMinElevation() - TRACK_ABOVE_BELOW_EXTREMA,
-                                                     _data.getMaxElevation() + TRACK_ABOVE_BELOW_EXTREMA);
+        std::uniform_int_distribution<float> width_rand(0.0f, _data.getWidthInMeters());
+        std::uniform_int_distribution<float> height_rand(0.0f, _data.getHeightInMeters());
+        std::uniform_int_distribution<float> elev_rand(_data.getMinElevation() - TRACK_ABOVE_BELOW_EXTREMA,
+                                                       _data.getMaxElevation() + TRACK_ABOVE_BELOW_EXTREMA);
 
 
         for (int j = 0; j < _genome_size; j++) {
@@ -360,7 +360,7 @@ glm::vec4* Population::crossoverIndividual(int a, int b) {
     std::mt19937 rng(rd());
 
     //define min and max for Mersenne Twister
-    std::uniform_int_distribution<int> zero_to_one(0.0, 1.0);
+    std::uniform_int_distribution<float> zero_to_one(0.0, 1.0);
 
 
     // Crossover each gene
@@ -372,7 +372,7 @@ glm::vec4* Population::crossoverIndividual(int a, int b) {
                                     glm::mix(a_genome[i].z, b_genome[i].z, (float)zero_to_one(rng)), 0.0);
 
     }
-g
+
     // Do some mutation
     mutateGenome(dummy_genome);
 
@@ -395,10 +395,10 @@ void Population::mutateGenome(glm::vec4* genome) {
         std::mt19937 rng(rd());
 
         //define min and max for Mersenne Twister
-        std::uniform_int_distribution<int> width_rand(0.0f, _data.getWidthInMeters());
-        std::uniform_int_distribution<int> height_rand(0.0f, _data.getHeightInMeters());
-        std::uniform_int_distribution<int> elev_rand(_data.getMinElevation() - TRACK_ABOVE_BELOW_EXTREMA,
-                                                     _data.getMaxElevation() + TRACK_ABOVE_BELOW_EXTREMA);
+        std::uniform_int_distribution<float> width_rand(0.0f, _data.getWidthInMeters());
+        std::uniform_int_distribution<float> height_rand(0.0f, _data.getHeightInMeters());
+        std::uniform_int_distribution<float> elev_rand(_data.getMinElevation() - TRACK_ABOVE_BELOW_EXTREMA,
+                                                       _data.getMaxElevation() + TRACK_ABOVE_BELOW_EXTREMA);
         
         // Do the mutation
         (*point_ptr) = glm::vec4(width_rand(rng),
