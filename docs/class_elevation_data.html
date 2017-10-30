@@ -100,6 +100,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a55a2d5abd391077532ef8f9593ca5e26"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af25237b535477c667a3b7c134443e6ec"><td class="memItemLeft" align="right" valign="top">glm::vec2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#af25237b535477c667a3b7c134443e6ec">pixelsToLongitudeLatitude</a> (const glm::ivec2 &amp;pos_pixels) const</td></tr>
 <tr class="separator:af25237b535477c667a3b7c134443e6ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c894654b893a03eeb7a57430e5b8a6a"><td class="memItemLeft" align="right" valign="top">glm::vec2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#a3c894654b893a03eeb7a57430e5b8a6a">longitudeLatitudeToMeters</a> (const glm::vec2 lat_lon) const</td></tr>
+<tr class="separator:a3c894654b893a03eeb7a57430e5b8a6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6cc1457c7e72e41a5f2c38b4e96e2c43"><td class="memItemLeft" align="right" valign="top">glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#a6cc1457c7e72e41a5f2c38b4e96e2c43">metersToMetersAndElevation</a> (const glm::vec2 &amp;pos_meters) const</td></tr>
 <tr class="separator:a6cc1457c7e72e41a5f2c38b4e96e2c43"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae3b5310f1a29129023dd0ae15350a383"><td class="memItemLeft" align="right" valign="top">glm::vec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#ae3b5310f1a29129023dd0ae15350a383">pixelsToMetersAndElevation</a> (const glm::ivec2 &amp;pos_pixles) const</td></tr>
@@ -507,6 +509,32 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Statically initializes GDAL. Should never be called by a <a class="el" href="class_elevation_data.html">ElevationData</a> object. </p>
+
+</div>
+</div>
+<a id="a3c894654b893a03eeb7a57430e5b8a6a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c894654b893a03eeb7a57430e5b8a6a">&#9670;&nbsp;</a></span>longitudeLatitudeToMeters()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">glm::vec2 ElevationData::longitudeLatitudeToMeters </td>
+          <td>(</td>
+          <td class="paramtype">const glm::vec2&#160;</td>
+          <td class="paramname"><em>lat_lon</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Takes in a position in longitude latitude and converts it to meters.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">lat_lon</td><td>The position in the raster image in longitude and latitude.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The converted position on the raster image in meters. </dd></dl>
 
 </div>
 </div>

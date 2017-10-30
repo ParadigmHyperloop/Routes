@@ -120,6 +120,17 @@ class ElevationData {
          */
         glm::vec2 pixelsToLongitudeLatitude(const glm::ivec2& pos_pixels) const;
 
+        /**
+         * Takes in a position in longitude latitude and converts it to meters.
+         *
+         * @param lat_lon
+         * The position in the raster image in longitude and latitude.
+         *
+         * @return
+         * The converted position on the raster image in meters.
+         */
+        glm::vec2 longitudeLatitudeToMeters(const glm::vec2 lat_lon) const;
+
 
         /**
          * Takes in a location on the image in meters and samples from the raster data, essentially

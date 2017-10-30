@@ -89,6 +89,17 @@ glm::vec2 ElevationData::pixelsToLongitudeLatitude(const glm::ivec2& pos_pixels)
 
 }
 
+glm::vec2 ElevationData::longitudeLatitudeToMeters(const glm::vec2 lat_lon) const {
+
+    // First convert to pixels using the gdal transform
+    glm::ivec2 pixels = glm::ivec2((lat_lon.x - _gdal_transform[0]) / _gdal_transform[1],
+                                 (lat_lon.y - _gdal_transform[3]) / _gdal_transform[5]);
+
+    // Convert pixels to meters
+    return convertPixelsToMeters(pixels);
+
+}
+
 glm::vec3 ElevationData::metersToMetersAndElevation(const glm::vec2& pos_meters) const {
 
     glm::vec3 pos_meters_sample = glm::vec3(pos_meters.x, pos_meters.y, 0.0);

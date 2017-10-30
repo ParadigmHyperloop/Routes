@@ -277,7 +277,7 @@ void Population::evaluateCost(const Pod& pod) {
 
                 // Calculate grade cost
                 float grade_cost = 100.0 * (steepest_grade - max_grade_allowed + fabs(max_grade_allowed - steepest_grade)) + 1.0;
-                float curve_cost = 0.005 * (min_curve_allowed - min_curve + fabs(min_curve_allowed - min_curve)) + 1.0;
+                float curve_cost = 0.05 * (min_curve_allowed - min_curve + fabs(min_curve_allowed - min_curve)) + 1.0;
 
                 // Get total cost
                 float total_cost = grade_cost * track_cost * curve_cost;

@@ -13,6 +13,9 @@
 #include <sstream>
 #include <gdal_priv.h>
 
+/** The minimum dx for the line intersection to not be treated as a vertical line */
+#define X_EPSILON 0.000000001
+
 /** The class responsible for managing the data database.
  * The database is a simple .csv file that contains the origin and size in degrees of each .img file in the
  * data directory.
@@ -59,7 +62,7 @@ class DB {
          * @return
          * The result of the hit detection; true if the ray intersects, false if it does not.
          */
-        static bool lineIntersectsDatSet(int index, glm::vec3 start, glm::vec3 direction);
+        static bool lineIntersectsDatSet(int index, const glm::vec3 &start, const glm::vec3 &direction);
 
         /** A struct for storing each entry in the databsae once it has been loaded */
         struct Entry {

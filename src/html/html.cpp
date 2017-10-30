@@ -21,8 +21,6 @@ void HTML::generateHTMLForPath(const std::vector<glm::vec3>& path, const Elevati
     // Evaluate the bezier curve
     std::vector<glm::vec3> evaluated = Bezier::evaluateEntireBezierCurve(path, 100);
 
-    std::cout << "Evaluated " << path[0].x << std::endl;
-
     // Get the path as a string that we can insert to the GEOJson
     std::string points_json = "[";
     for (int i = 0; i < evaluated.size(); i++) {

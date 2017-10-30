@@ -4,6 +4,7 @@ var searchData=
   ['_5fdest',['_dest',['../class_population.html#a7aa0ea5b8e48e19a77d28d0c268bb51d',1,'Population']]],
   ['_5felevation_5fmax',['_elevation_max',['../class_elevation_data.html#a95f2cfdb1ef1c1b51017719026d43726',1,'ElevationData']]],
   ['_5felevation_5fmin',['_elevation_min',['../class_elevation_data.html#a084e16924c54942699197b65a4843ca4',1,'ElevationData']]],
+  ['_5fentries',['_entries',['../class_d_b.html#a5d5f71f7ad9ad6868c40e5f9275ba0d8',1,'DB']]],
   ['_5fgdal_5fdataset',['_gdal_dataset',['../class_elevation_data.html#a52cd7aa46d406d0be88fd3cfef772204',1,'ElevationData']]],
   ['_5fgdal_5fraster_5fband',['_gdal_raster_band',['../class_elevation_data.html#a9aacecc8dd074e849bb7553ad206e407',1,'ElevationData']]],
   ['_5fgdal_5ftransform',['_gdal_transform',['../class_elevation_data.html#aec2a3917f0229d057eca398b00cf8b93',1,'ElevationData']]],

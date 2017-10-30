@@ -5,6 +5,7 @@ var searchData=
   ['calcconversions',['calcConversions',['../class_elevation_data.html#a865b3c7320ebfb61b609622e053e2798',1,'ElevationData']]],
   ['calcminmax',['calcMinMax',['../class_elevation_data.html#a6f9c909fb67abc1caf9c77c0ca739191',1,'ElevationData']]],
   ['calcstats',['calcStats',['../class_elevation_data.html#a40fde2e11dbefbb7a585742a7895307a',1,'ElevationData']]],
+  ['calculateroute',['calculateRoute',['../class_routes.html#aaaf72047baa19ae80f946f018b510771',1,'Routes']]],
   ['calculating',['Calculating',['../cmd_8h.html#a904d04369d91d823ba6d593e0a458626a925be70b04b82d260deb312914338e99',1,'cmd.h']]],
   ['cmd',['CMD',['../class_c_m_d.html',1,'']]],
   ['cmd_2ecpp',['cmd.cpp',['../cmd_8cpp.html',1,'']]],

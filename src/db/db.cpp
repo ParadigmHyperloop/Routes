@@ -90,6 +90,8 @@ void DB::build() {
             std::string path_e = std::string(entry.path().c_str());
             out_file << path_e << "," << origin.x << "," << origin.y << "," << size.x << "," << size.y << "\n";
 
+            GDALClose(dataset);
+
         }
 
     }
@@ -131,7 +133,7 @@ std::vector<std::string> DB::getRequiredDatasets(glm::vec2 start, glm::vec2 dest
 
 }
 
-bool DB::lineIntersectsDatSet(int index, glm::vec3 start, glm::vec3 direction) {
+bool DB::lineIntersectsDatSet(int index, const glm::vec3 &start, const glm::vec3 &direction) {
 
     Entry& entry = _entries[index];
 
@@ -158,7 +160,7 @@ bool DB::lineIntersectsDatSet(int index, glm::vec3 start, glm::vec3 direction) {
     // Get min y and max y
     float dx = direction.x;
 
-    if (fabs(dx) > 0.000000001) {
+    if (fabs(dx) > X_EPSILON) {
 
         float m = direction.y / dx;
         float k = start.y - m * start.x;
@@ -184,6 +186,6 @@ bool DB::lineIntersectsDatSet(int index, glm::vec3 start, glm::vec3 direction) {
     if (maxy > entry.origin.y)
         maxy = entry.origin.y;
 
-    return maxy > miny;
+    return maxy >= miny;
 
 }
