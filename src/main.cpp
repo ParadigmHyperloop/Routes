@@ -15,7 +15,7 @@ int main() {
     Pod pod = Pod(339.0);
     Population pop = Population(200, 10, glm::vec4(0.0, 0.0, 550.0, 0.0), glm::vec4(350000.0, 80000.0, 1300.0, 0.0), data);
 
-    std::vector<glm::vec3> computed = Genetics::solve(pop, pod, 600);
+    std::vector<glm::vec3> computed = Genetics::solve(pop, pod, 200);
 
     std::cout << computed[0].x << std::endl;
 

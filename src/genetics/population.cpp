@@ -122,9 +122,9 @@ void Population::breedIndividuals() {
     }
 
     //define min and max for mersenne twister
-    std::uniform_int_distribution<float> width_rand(0.0f, _data.getWidthInMeters());
-    std::uniform_int_distribution<float> height_rand(0.0f, _data.getHeightInMeters());
-    std::uniform_int_distribution<float> elev_rand(_data.getMinElevation() - TRACK_ABOVE_BELOW_EXTREMA,
+    std::uniform_real_distribution<> width_rand(0.0f, _data.getWidthInMeters());
+    std::uniform_real_distribution<> height_rand(0.0f, _data.getHeightInMeters());
+    std::uniform_real_distribution<> elev_rand(_data.getMinElevation() - TRACK_ABOVE_BELOW_EXTREMA,
                                                    _data.getMaxElevation() + TRACK_ABOVE_BELOW_EXTREMA);
 
     // Generate new individuals (20%)
@@ -325,9 +325,9 @@ void Population::generatePopulation() {
         std::mt19937 rng(rd());
 
         //define min and max for Mersenne Twister
-        std::uniform_int_distribution<float> width_rand(0.0f, _data.getWidthInMeters());
-        std::uniform_int_distribution<float> height_rand(0.0f, _data.getHeightInMeters());
-        std::uniform_int_distribution<float> elev_rand(_data.getMinElevation() - TRACK_ABOVE_BELOW_EXTREMA,
+        std::uniform_real_distribution<> width_rand(0.0f, _data.getWidthInMeters());
+        std::uniform_real_distribution<> height_rand(0.0f, _data.getHeightInMeters());
+        std::uniform_real_distribution<> elev_rand(_data.getMinElevation() - TRACK_ABOVE_BELOW_EXTREMA,
                                                        _data.getMaxElevation() + TRACK_ABOVE_BELOW_EXTREMA);
 
 
@@ -360,7 +360,7 @@ glm::vec4* Population::crossoverIndividual(int a, int b) {
     std::mt19937 rng(rd());
 
     //define min and max for Mersenne Twister
-    std::uniform_int_distribution<float> zero_to_one(0.0, 1.0);
+    std::uniform_real_distribution<> zero_to_one(0.0, 1.0);
 
 
     // Crossover each gene
@@ -384,10 +384,10 @@ void Population::mutateGenome(glm::vec4* genome) {
 
     // 50% chance that this genome will be mutated
     if (glm::linearRand(0.0, 1.0) > 0.5) {
-        
+
         // Choose a single random point to mutate and then choose a random component
         int point = glm::linearRand(0, _genome_size - 1);
-        
+
         glm::vec4* point_ptr = genome + point;
 
         //initialize the mersenne twister
@@ -395,9 +395,9 @@ void Population::mutateGenome(glm::vec4* genome) {
         std::mt19937 rng(rd());
 
         //define min and max for Mersenne Twister
-        std::uniform_int_distribution<float> width_rand(0.0f, _data.getWidthInMeters());
-        std::uniform_int_distribution<float> height_rand(0.0f, _data.getHeightInMeters());
-        std::uniform_int_distribution<float> elev_rand(_data.getMinElevation() - TRACK_ABOVE_BELOW_EXTREMA,
+        std::uniform_real_distribution<> width_rand(0.0f, _data.getWidthInMeters());
+        std::uniform_real_distribution<> height_rand(0.0f, _data.getHeightInMeters());
+        std::uniform_real_distribution<> elev_rand(_data.getMinElevation() - TRACK_ABOVE_BELOW_EXTREMA,
                                                        _data.getMaxElevation() + TRACK_ABOVE_BELOW_EXTREMA);
         
         // Do the mutation
