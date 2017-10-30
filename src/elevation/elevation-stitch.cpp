@@ -135,8 +135,6 @@ ElevationData ElevationStitch::stitch(const std::vector<std::string>& paths) {
         min_max[0] = glm::min(min_max_t[0], min_max[0]);
         min_max[1] = glm::max(min_max_t[1], min_max[1]);
 
-        std::cout << min_max[0] << " " << min_max[1] << std::endl;
-
     }
 
     new_data._elevation_min = min_max[0];
