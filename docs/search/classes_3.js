@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['genetics',['Genetics',['../class_genetics.html',1,'']]]
+  ['elevationdata',['ElevationData',['../class_elevation_data.html',1,'']]],
+  ['elevationstitch',['ElevationStitch',['../class_elevation_stitch.html',1,'']]]
 ];

@@ -26,6 +26,7 @@ var searchData=
   ['_5fopencl_5fqueue',['_opencl_queue',['../class_kernel.html#ae94dcd2909e2b06ffcf84bbd7dd49b7b',1,'Kernel']]],
   ['_5fpop_5fsize',['_pop_size',['../class_population.html#a9f43eeeaf6bd2ec02b5063bbbbaf78b1',1,'Population']]],
   ['_5fstart',['_start',['../class_population.html#a4e0aeaa0a40d1c84026b31ac7eb0c794',1,'Population']]],
+  ['_5fstate',['_state',['../class_c_m_d.html#a6514aa4a90837f1b1d54bf8b3dc7165e',1,'CMD']]],
   ['_5fwidth',['_width',['../class_elevation_data.html#acd6e9c583db00f3269d14a0f6b38eb92',1,'ElevationData']]],
   ['_5fwidth_5fmeters',['_width_meters',['../class_elevation_data.html#a6252a7a4bfcf5bf97d21642ae0435a1c',1,'ElevationData']]]
 ];

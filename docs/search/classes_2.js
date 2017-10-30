@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['elevationdata',['ElevationData',['../class_elevation_data.html',1,'']]],
-  ['elevationstitch',['ElevationStitch',['../class_elevation_stitch.html',1,'']]]
+  ['datarect',['DataRect',['../struct_elevation_stitch_1_1_data_rect.html',1,'ElevationStitch']]]
 ];

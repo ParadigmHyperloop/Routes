@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['_7eelevationdata',['~ElevationData',['../class_elevation_data.html#a5a794b83d7aaf57a2820649b29ffae31',1,'ElevationData']]],
-  ['_7epopulation',['~Population',['../class_population.html#a4c8cedd0f038e41746fb6084639f5616',1,'Population']]]
+  ['track_5fabove_5fbelow_5fextrema',['TRACK_ABOVE_BELOW_EXTREMA',['../population_8h.html#ada0398b27c35ebe568d6a615bf7538a7',1,'population.h']]]
 ];

@@ -14,6 +14,7 @@ var searchData=
   ['getqueue',['getQueue',['../class_kernel.html#aa5273e14f07845343045a53124b0d057',1,'Kernel']]],
   ['getrequiredrect',['getRequiredRect',['../class_elevation_stitch.html#a1b479e5fd72575c45c36589c8555afec',1,'ElevationStitch']]],
   ['getrequiredsizeaxis',['getRequiredSizeAxis',['../class_elevation_stitch.html#a7e9d8cd8dd87cdb576059dc78de2398c',1,'ElevationStitch']]],
+  ['getstate',['getState',['../class_c_m_d.html#a78241396d0dfc04b988e64e7eb8caede',1,'CMD']]],
   ['getwidth',['getWidth',['../class_elevation_data.html#a2321308f5d5c2d272d0637721e549dbe',1,'ElevationData']]],
   ['getwidthinmeters',['getWidthInMeters',['../class_elevation_data.html#a73f5437a187a8f1d86e3d44dc6bb67a5',1,'ElevationData']]]
 ];

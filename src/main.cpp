@@ -2,25 +2,40 @@
 #include "genetics/genetics.h"
 #include "elevation/elevation-stitch.h"
 #include "html/html.h"
+#include "cmd/cmd.h"
 
-int main() {
+namespace po = boost::program_options;
 
-    ElevationData data = ElevationStitch::stitch({"../data/imgn35w119_1.img", "../data/imgn35w118_1.img", "../data/imgn35w117_1.img"});
+int main(int argc, const char* argv[]) {
 
-    // Test elevation object
-//    ElevationData data = ElevationData("../data/imgn35w119_1.img");
-    std::cout << "Min: " << data.getMinElevation() << " Max:" << data.getMaxElevation() << std::endl;
-//    std::cout << data.convertPixelsToMeters(glm::ivec2(data.getWidth(), 0.0)).x << std::endl;
+    CMD::parseArguments(argc, argv);
 
-    Pod pod = Pod(339.0);
-    Population pop = Population(200, 10, glm::vec4(0.0, 0.0, 550.0, 0.0), glm::vec4(350000.0, 80000.0, 1300.0, 0.0), data);
+    switch (CMD::getState()) {
 
-    std::vector<glm::vec3> computed = Genetics::solve(pop, pod, 200);
+        case Calculating: {
 
-    std::cout << computed[0].x << std::endl;
+            // Calculate a route
+            ElevationData data = ElevationStitch::stitch({"../data/imgn35w119_1.img", "../data/imgn35w118_1.img", "../data/imgn35w117_1.img"});
 
-    // Write out some html
-    HTML::generateHTMLForPath(computed, data);
+            Pod pod = Pod(339.0);
+            Population pop = Population(200, 10, glm::vec4(0.0, 0.0, 550.0, 0.0), glm::vec4(350000.0, 80000.0, 1300.0, 0.0), data);
+
+            std::vector<glm::vec3> computed = Genetics::solve(pop, pod, 200);
+
+            std::cout << computed[0].x << std::endl;
+
+            // Write out some html
+            HTML::generateHTMLForPath(computed, data);
+
+        } break;
+
+        case Rebuilding:
+
+            std::cout << "Rebuilding databse\n";
+
+            break;
+
+    }
 
     return 0;
 }
