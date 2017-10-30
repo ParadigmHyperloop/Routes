@@ -66,7 +66,11 @@ Currently the algorithm is being tested on these pieces of data:
 - https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/13/IMG/USGS_NED_13_n42w071_IMG.zip
 - https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/IMG/n35w119.zip
 
-Once you download data, create a "data" folder in the repo. Unzip the downloads and copy in the .img file.
+Once you download data, create a "data" folder in the repo. Unzip the downloads and copy in the .img file. After you have all of the data in the data folder, you'll need to build the database. To do this run:
+```
+cd build
+./Routes --rebuild
+```
 
 ## OpenCL
 OpenCL is used in this project because the genetic algorithm benefits from parallel processing on the GPU. If your system does not have a dedicated GPU (or at least a decent integrated one), running the algorithm on a CPU will most likely be very slow, and is not recommended.

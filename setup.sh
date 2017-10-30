@@ -34,6 +34,14 @@ tar -xvzf boost.tar.gz
 
 # Copy libraries
 cp -r boost_1_65_1/boost/ include/boost/
+
+# Compile boost filesystem and program options 
+cd boost_1_65_1
+./bootstrap.sh --with-libraries=program_options,filesystem
+./b2 link=static
+cp -r stage/lib ../
+cd ..
+
 rm -rf boost_1_65_1
 rm -rf boost.tar.gz
 
