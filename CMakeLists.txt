@@ -8,6 +8,8 @@ FILE(GLOB_RECURSE HPPS ${CMAKE_SOURCE_DIR}/src/*.hpp)
 FILE(GLOB_RECURSE HS ${CMAKE_SOURCE_DIR}/src/*.h)
 FILE(GLOB_RECURSE SOURCES ${CMAKE_SOURCE_DIR}/src/*.cpp)
 
+FILE(GLOB_RECURSE LIBRARIES ${CMAKE_SOURCE_DIR}/lib/*.a)
+
 # Add the sources to the executables
 add_executable(Routes ${HPPS}
                       ${HS}
@@ -40,12 +42,14 @@ IF (WIN32)
 
   message(STATUS ${GDAL_LIBRARY})
   target_link_libraries(Routes ${OpenCL_LIBRARIES}
-                               ${GDAL_LIBRARY})
+                               ${GDAL_LIBRARY}
+                               ${LIBRARIES})
 
 ELSE()
 
   target_link_libraries(Routes ${OPENCL_LIBRARIES}
-                               ${GDAL_LIBRARY})
+                               ${GDAL_LIBRARY}
+                               ${LIBRARIES})
 
 
 ENDIF()
