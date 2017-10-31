@@ -12,8 +12,8 @@ int main(int argc, const char* argv[]) {
             DB::load();
 
             // Calculate the route
-            Routes::calculateRoute(glm::vec3(-118.773193359375, 34.8047829195724, 550.0),
-                                   glm::vec3(-116.53173828125, 34.38877925439021, 550.0));
+            Routes::calculateRoute(glm::vec3(-118.873193359375, 34.8047829195724, 550.0),
+                                   glm::vec3(-118.23173828125, 34.08877925439021, 550.0));
 
         } break;
 

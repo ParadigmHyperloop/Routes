@@ -23,7 +23,8 @@ std::vector<glm::vec3> Genetics::solve(Population& pop, Pod& pod, int generation
         }
 
         // Generate a new population with the most fit being the mothers and father
-        pop.breedIndividuals();
+        if (i != generations - 1)
+            pop.breedIndividuals();
 
     }
 

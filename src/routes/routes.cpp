@@ -14,7 +14,7 @@ void Routes::calculateRoute(glm::vec3 start, glm::vec3 dest) {
         std::cout << "Stitching :" << required_data[i] << std::endl;
 
     // Stitch together the data
-    ElevationData data = ElevationStitch::stitch(required_data);
+    ElevationData data = ElevationData(required_data[0]);
 
     // Figure out where the longitude and latitude are in meters
     glm::vec2 start_meter = data.longitudeLatitudeToMeters(glm::vec2(start.x, start.y));
