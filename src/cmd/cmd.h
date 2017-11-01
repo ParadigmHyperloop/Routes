@@ -6,6 +6,7 @@
 #define ROUTES_CMD_H
 
 #include <boost/program_options.hpp>
+#include <glm/glm.hpp>
 #include <iostream>
 
 /** A enum describing the various states that the program can be in based on arguments from the command line */
@@ -38,6 +39,12 @@ class CMD {
 
         /** Gets the state of the program based on the arguments on the command line */
         static RoutesState getState();
+
+        /** The starting position of the route taken in from the command line */
+        static glm::vec3 start;
+
+         /** The ending position of the route taken in from the command line */
+        static glm::vec3 dest;
 
     private:
 

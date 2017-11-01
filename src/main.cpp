@@ -11,9 +11,12 @@ int main(int argc, const char* argv[]) {
             // Load the databse
             DB::load();
 
+            std::cout << "Computing route from " << glm::to_string(CMD::start) << " to " << glm::to_string(CMD::dest) <<
+                      std::endl;
+
             // Calculate the route
-            Routes::calculateRoute(glm::vec3(-118.873193359375, 34.8047829195724, 550.0),
-                                   glm::vec3(-118.13173828125, 34.08877925439021, 550.0));
+            Routes::calculateRoute(CMD::start,
+                                   CMD::dest);
 
         } break;
 

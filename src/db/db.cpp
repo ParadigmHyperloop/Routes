@@ -67,12 +67,13 @@ void DB::build() {
 
     for(auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(data_path), {})) {
 
-        // Make sure that this is not the database file
-        // Also on Mac no .DS_Store
-        if (entry.path().compare("../data/database.csv") && entry.path().compare("../data/.DS_Store")) {
+        // Make sure that this file is a .img file
+        std::string path_string = entry.path().c_str();
+
+        if (!path_string.substr(path_string.length() - 4, 3).compare("img")) {
 
             // Load up the GDAL file
-            GDALDataset* dataset = (GDALDataset*)GDALOpen(entry.path().c_str(), GA_ReadOnly);
+            GDALDataset* dataset = (GDALDataset*)GDALOpen(path_string.c_str(), GA_ReadOnly);
 
             // Read the transform, this has everything we need
             double transform[8];
@@ -87,7 +88,7 @@ void DB::build() {
                                        (float)dataset->GetRasterYSize() * transform[5]);
 
             // Write out the entry
-            std::string path_e = std::string(entry.path().c_str());
+            std::string path_e = std::string(path_string.c_str());
             out_file << path_e << "," << origin.x << "," << origin.y << "," << size.x << "," << size.y << "\n";
 
             GDALClose(dataset);
