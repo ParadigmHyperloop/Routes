@@ -25,7 +25,7 @@ void Routes::calculateRoute(glm::vec3 start, glm::vec3 dest) {
     Population pop = Population(200, 8, glm::vec4(start_meter.x, start_meter.y, start.z, 0.0), glm::vec4(dest_meter.x, dest_meter.y, dest.z, 0.0), data);
 
     // Solve!
-    std::vector<glm::vec3> computed = Genetics::solve(pop, pod, 400);
+    std::vector<glm::vec3> computed = Genetics::solve(pop, pod, 200);
 
     // Write out some HTML
     HTML::generateHTMLForPath(computed, data);

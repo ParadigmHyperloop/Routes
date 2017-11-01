@@ -247,7 +247,7 @@ void Population::evaluateCost(const Pod& pod) {
 
                         // Below cost
                         float below_cost = (-fabs(pylon_height + excavation_depth) + pylon_height + excavation_depth);
-                        float below_cost_den = 2.0 * pylon_height + 20.0;
+                        float below_cost_den = 2.0 * pylon_height + 2.0 * (excavation_depth);
 
                         below_cost = below_cost / below_cost_den * tunnel_cost;
                         track_cost += (above_cost + below_cost) * spacing;
@@ -285,12 +285,11 @@ void Population::evaluateCost(const Pod& pod) {
 
 }
 
-
-
 void Population::generatePopulation() {
 
     // Random seed
-    srand(time(0) * 119054759245460753 % 1237618231);
+    std::hash<int> hasher;
+    srand(hasher(time(0)));
 
     // Go through each individual
     for (int i = 0; i < _pop_size; i++) {
