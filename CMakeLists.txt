@@ -38,9 +38,20 @@ ENDIF()
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include
                     ${GDAL_INCLUDE_DIR})
 
-target_link_libraries(Routes ${OpenCL_LIBRARIES}
-                                ${GDAL_LIBRARY}
-                                ${LIBRARIES})
+IF (WIN32)
+
+  message(STATUS ${GDAL_LIBRARY})
+  target_link_libraries(Routes ${OpenCL_LIBRARIES}
+                               ${GDAL_LIBRARY}
+                               ${LIBRARIES})
+
+ELSE()
+
+  target_link_libraries(Routes ${OPENCL_LIBRARIES}
+                               ${GDAL_LIBRARY}
+                               ${LIBRARIES})
+
+ENDIF()
 
 add_custom_target(copy)
 
@@ -73,7 +84,18 @@ include_directories(Routes-Exec ${CMAKE_BINARY_DIR}/include)
 target_link_libraries(Routes-Exec ${CMAKE_BINARY_DIR}/libRoutes.a)
 
 # Link in the other libraries
-target_link_libraries(Routes-Exec ${OpenCL_LIBRARIES}
-                                  ${GDAL_LIBRARY}
-                                  ${LIBRARIES})
+IF (WIN32)
 
+  message(STATUS ${GDAL_LIBRARY})
+  target_link_libraries(Routes-Exec ${OpenCL_LIBRARIES}
+                                    ${GDAL_LIBRARY}
+                                   ${LIBRARIES})
+
+ELSE()
+
+  target_link_libraries(Routes-Exec ${OPENCL_LIBRARIES}
+                                    ${GDAL_LIBRARY}
+                                    ${LIBRARIES})
+
+
+ENDIF()
