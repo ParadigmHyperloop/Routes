@@ -11,7 +11,11 @@ void Routes::calculateRoute(glm::vec3 start, glm::vec3 dest) {
                                                                      glm::vec2(dest.x,  dest.y));
 
     for (int i = 0; i < required_data.size(); i++)
-        std::cout << "Stitching :" << required_data[i] << std::endl;
+        std::cout << "Using:" << required_data[i] << std::endl;
+
+    // Make sure there was data to compute this
+    if (!required_data.size())
+        throw std::runtime_error("Data to compute this route was missing or the database is corrupt.");
 
     // Stitch together the data
     ElevationData data = ElevationData(required_data[0]);

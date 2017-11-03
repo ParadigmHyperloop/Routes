@@ -1,21 +1,5 @@
 #!/bin/bash
 
-if [ -f /usr/local/lib/libgdal.a ] 
-then
-
-	echo "Found GDAL installed"
-else
-
-	git clone https://github.com/OSGeo/gdal.git
-	cd gdal/gdal
-	./configure
-	sudo make
-	sudo make install
-	cd ../..
-	rm -rf gdal
-
-fi
-
 if [ -f include ]
 then
 
@@ -24,7 +8,6 @@ then
 else
 
 	mkdir include
-	sudo chmod 777 include
 
 fi
 

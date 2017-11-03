@@ -68,9 +68,8 @@ void DB::build() {
     for(auto& entry : boost::make_iterator_range(boost::filesystem::directory_iterator(data_path), {})) {
 
         // Make sure that this file is a .img file
-        std::string path_string = entry.path().c_str();
-
-        if (!path_string.substr(path_string.length() - 4, 3).compare("img")) {
+        std::string path_string = entry.path().string();
+        if (path_string.length() > 3 && !path_string.substr(path_string.length() - 4, 4).compare(".img")) {
 
             // Load up the GDAL file
             GDALDataset* dataset = (GDALDataset*)GDALOpen(path_string.c_str(), GA_ReadOnly);
