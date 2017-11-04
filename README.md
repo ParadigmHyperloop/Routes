@@ -64,13 +64,32 @@ make
 You should now see a built binary in the build directory. In order to run the program, open back up MSYS and run it from there.
 
 ## Running
-The Routes executable takes in the start and destination for the route from the command line. Here is an example:
+The Routes-Exec executable takes in the start and destination for the route from the command line. Here is an example:
 ```
-./Routes --start=-119.001666666700030,35.001666666664143,550.0 
-         --dest=-118.13173828125,34.08877925439021,145.0
+./Routes-Exec --start=-119.001666666700030,35.001666666664143,550.0
+              --dest=-118.13173828125,34.08877925439021,145.0
 ```
 This will calculate a route from -119.001666666700030°W 35.001666666664143°N 550.0m above sea level to 118.13173828125°W 34.08877925439021°N 145.0m above sea level. The format of the arguments is --[start or dest]=lon,lat,h where lon is the desired longitude, lat is the desired latitude and h is the distance in meters above sea level.
- 
+
+## Server
+For web-based computation of routes, Routes-Server provides a simple REST API.
+First make sure that the database has been build by running
+```
+./Routes-Exec --rebuild
+```
+Then run the REST server with
+```
+./Routes-Server
+```
+This will start the server on the port 8080 and provides two API calls. The first is to queue the calculation of a new route. To do this make a GET request with the format
+```
+http://localhost:8080/compute?start=lat,long,h&dest=lat,long,h
+```
+Where lon is the desired longitude, lat is the desired latitude and h is the distance in meters above sea level. This request will return a number, which should be saved by your client. To retrieve the route call
+```
+http://localhost:8080/retrieve?id=unique
+```
+Where unique is the number that was returned from the call to compute. This will return one of two things. It will either return "false", which indicates that the route is still in the queue or is still computing, or it will return a JSON string with the control points of the route. After the JSON is returned the server will discard the computed route and calling it again.
 
 ## Data
 Data is pulled from the USGS, and is 1 arc second 3D elevation products. You can find all USGS data at https://viewer.nationalmap.gov/basic/
@@ -82,7 +101,7 @@ Currently the algorithm is being tested on these pieces of data:
 Once you download data, create a "data" folder in the repo. Unzip the downloads and copy in the .img file. After you have all of the data in the data folder, you'll need to build the database. To do this run:
 ```
 cd build
-./Routes --rebuild
+./Routes-Exec --rebuild
 ```
 
 ## OpenCL

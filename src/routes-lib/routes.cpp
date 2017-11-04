@@ -4,7 +4,7 @@
 
 #include "routes.h"
 
-void Routes::calculateRoute(glm::vec3 start, glm::vec3 dest) {
+std::vector<glm::vec3> Routes::calculateRoute(glm::vec3 start, glm::vec3 dest) {
 
     // Determine which datasets need to be stitched together using the database
     std::vector<std::string> required_data = DB::getRequiredDatasets(glm::vec2(start.x, start.y),
@@ -29,9 +29,20 @@ void Routes::calculateRoute(glm::vec3 start, glm::vec3 dest) {
     Population pop = Population(200, 8, glm::vec4(start_meter.x, start_meter.y, start.z, 0.0), glm::vec4(dest_meter.x, dest_meter.y, dest.z, 0.0), data);
 
     // Solve!
+    // These points will be in meters so we need to convert them
     std::vector<glm::vec3> computed = Genetics::solve(pop, pod, 200);
 
-    // Write out some HTML
-    HTML::generateHTMLForPath(computed, data);
+    // Convert to longitude, latitude and elevation
+    for (int i = 0; i < computed.size(); i++) {
+
+        glm::vec3& vec = computed[i];
+        glm::vec2 conv = data.metersToLongitudeLatitude(glm::vec2(vec.x, vec.y));
+
+        vec.x = conv.x;
+        vec.y = conv.y;
+
+    }
+
+    return computed;
 
 }

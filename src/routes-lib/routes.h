@@ -27,8 +27,11 @@ class Routes {
          * @param dest
          * The end position in longitude latitude of the route.
          * z component is the ending elevation of the route.
+         *
+         * @return
+         * The computed points of the route in longitude latitude and elevation.
          */
-        static void calculateRoute(glm::vec3 start, glm::vec3 dest);
+        static std::vector<glm::vec3> calculateRoute(glm::vec3 start, glm::vec3 dest);
 
 };
 
