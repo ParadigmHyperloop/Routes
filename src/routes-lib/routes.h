@@ -8,7 +8,6 @@
 #include "genetics/genetics.h"
 #include "elevation/elevation-stitch.h"
 #include "html/html.h"
-#include "cmd/cmd.h"
 #include "db/db.h"
 
 /** This is a simple class to handle the complete calculation of a route. */

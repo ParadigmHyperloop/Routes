@@ -4,6 +4,8 @@
 
 #include <routes.h>
 
+#include "cmd/cmd.h"
+
 int main(int argc, const char* argv[]) {
 
     CMD::parseArguments(argc, argv);

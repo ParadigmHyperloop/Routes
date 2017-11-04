@@ -11,9 +11,7 @@ FILE(GLOB_RECURSE LIBRARIES ${CMAKE_SOURCE_DIR}/lib/*.a)
 
 # Add the sources to the executables
 add_library(Routes STATIC ${HS}
-			                 ${SOURCES})
-
-set_target_properties(Routes PROPERTIES PUBLIC_HEADER ${HPPS} ${HS})
+                          ${SOURCES})
 
 IF (WIN32)
 
@@ -97,5 +95,33 @@ ELSE()
                                     ${GDAL_LIBRARY}
                                     ${LIBRARIES})
 
+ENDIF()
+
+# Server executable
+FILE(GLOB_RECURSE HS ${CMAKE_SOURCE_DIR}/src/routes-server/*.h*)
+FILE(GLOB_RECURSE SOURCES ${CMAKE_SOURCE_DIR}/src/routes-server/*.cpp)
+
+add_executable(Routes-Server ${HS}
+                             ${SOURCES})
+
+add_dependencies(Routes-Server Routes)
+
+# Build it with the library
+include_directories(Routes-Server ${CMAKE_BINARY_DIR}/include)
+target_link_libraries(Routes-Server ${CMAKE_BINARY_DIR}/libRoutes.a)
+
+# Link in the other libraries
+IF (WIN32)
+
+  message(STATUS ${GDAL_LIBRARY})
+  target_link_libraries(Routes-Server ${OpenCL_LIBRARIES}
+                                      ${GDAL_LIBRARY}
+                                      ${LIBRARIES})
+
+ELSE()
+
+  target_link_libraries(Routes-Server ${OPENCL_LIBRARIES}
+                                      ${GDAL_LIBRARY}
+                                      ${LIBRARIES})
 
 ENDIF()

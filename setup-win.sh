@@ -32,3 +32,15 @@ rm -rf boost.tar.gz
 git clone https://github.com/g-truc/glm.git
 cp -r glm/glm/ include/glm/
 rm -rf glm
+
+# Compile restbed
+git clone https://github.com/Corvusoft/restbed.git --recursive
+cd restbed 
+mkdir build
+cd build
+cmake -DBUILD_SSL=NO .. 
+make install 
+cd ../../
+cp -r restbed/distribution/library/ lib/
+cp -r restbed/distribution/include/ include/
+rm -rf restbed
