@@ -85,10 +85,18 @@ void RoutesServer::handleRetrieval(const std::shared_ptr<restbed::Session> sessi
         // Convert to a  JSON string
         std::string JSON = "{\"controls\": [";
 
-        for (int i = 0; i < points.size(); i++)
+        for (int i = 0; i < points.size(); i++) {
+            
             JSON += "[" + std::to_string(points[i].x) + ", " +
-                          std::to_string(points[i].y) + ", " +
-                          std::to_string(points[i].z) + "],";
+            std::to_string(points[i].y) + ", " +
+            std::to_string(points[i].z) + "]";
+            
+            // Make sure there aren't trailing commas
+            if (i != points.size() - 1)
+                JSON += ",";
+            
+        }
+            
 
         JSON += "]}";
 
