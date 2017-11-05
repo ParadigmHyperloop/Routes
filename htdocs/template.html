@@ -14,16 +14,28 @@
 </head>
 <body>
     <div id='map'>
-        <div class="start_end" style="position: absolute; z-index: 10000000">
-            Start: 00°00'00"N, 00°00'00"W 
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            End: 00°00'00"N, 00°00'00"W 
+        <button onclick="push()">Calculate</button>
+        <div class=topbar 
+             style="position: absolute; z-index: 10000000">
+            <table>
+                <tr>
+                    <th>
+                        <img class="logo"
+                             src="res/image/paradigm-logo.png">
+                    </th>
+                    <th class="start">34° 28′ 51.6684" N 117° 55′ 13.368" W</th>
+                    <th></th>
+                    <th class="dest">35° 25′ 41.0504" N 133° 56′ 13.368" W</th>
+                </tr>
+            </table>
+        </div>
+        <div class="distance">
+            Distance: 120km
+        </div>
+        <div>
+            Estimated Travel Time: 1 Hour
         </div>
         
-        <div class="info" style="position: absolute; z-index: 10000000">
-            Distance: 10 Distances <br />
-            Time: 42 Time Units
-        </div>
     </div>
 <script>
 var map = new mapboxgl.Map({
