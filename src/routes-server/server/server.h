@@ -5,11 +5,12 @@
 #ifndef ROUTES_SERVER_H
 #define ROUTES_SERVER_H
 
-#include <memory>
-#include <chrono>
-#include <cstdlib>
-#include <restbed>
+#include <map>
 #include <thread>
+#include <memory>
+#include <functional>
+
+#include <restbed>
 
 #include "../queue/queue.h"
 
@@ -38,6 +39,15 @@ class RoutesServer {
         static void startServer(int port);
 
     private:
+
+        /**
+         * This function is responsible for handling the OPTIONS call. This is essentially what enables CORS
+         * for the api.This function shouldn't be called from anywhere, restbed calls it.
+         *
+         * @param session
+         * The session input from restbed.
+         */
+        static void handleCORS(const std::shared_ptr<restbed::Session> session);
 
         /**
          * This function handles the GET request for computation of the route. This function shouldn't be called from

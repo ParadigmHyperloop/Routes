@@ -898,7 +898,7 @@ EXCLUDE_PATTERNS       =
 # AClass::ANamespace, ANamespace::*Test
 #
 # Note that the wildcards are matched against the file with absolute path, so to
-# exclude all test directories use the pattern */test/*
+# exclude all test directories use the pattern */handleCORS/*
 
 EXCLUDE_SYMBOLS        =
 

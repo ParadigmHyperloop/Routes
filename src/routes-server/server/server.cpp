@@ -12,11 +12,13 @@ void RoutesServer::startServer(int port) {
     auto compute_resource = std::make_shared<restbed::Resource>();
     compute_resource->set_path("/compute");
     compute_resource->set_method_handler("GET", handleCompute);
+    compute_resource->set_method_handler("OPTIONS", handleCORS);
 
     // Make the resource for the retrial of the routes
     auto retrieve_resource = std::make_shared<restbed::Resource>();
     retrieve_resource->set_path("/retrieve");
     retrieve_resource->set_method_handler("GET", handleRetrieval);
+    retrieve_resource->set_method_handler("OPTIONS", handleCORS);
 
     // Make the settings to start up the server
     auto settings = std::make_shared<restbed::Settings>();
@@ -33,6 +35,14 @@ void RoutesServer::startServer(int port) {
     service->start(settings);
 
 
+}
+
+void RoutesServer::handleCORS(const std::shared_ptr<restbed::Session> session) {
+
+    // Send back a response with the proper CORS headers
+    session->close(restbed::OK, "", {{"Access-Control-Allow-Origin",  "*"},
+                                     {"Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS"},
+                                     {"Access-Control-Allow-Headers", "Content-Type, Accept, Access-Control-Allow-Headers, Access-Control-Allow-Methods, Access-Control-Allow-Origin"}} );
 }
 
 void RoutesServer::handleCompute(const std::shared_ptr<restbed::Session> session) {
@@ -53,7 +63,9 @@ void RoutesServer::handleCompute(const std::shared_ptr<restbed::Session> session
     std::string id_as_string =  std::to_string(id);
 
     session->close(restbed::OK, id_as_string.c_str(),
-                   {{"Content-Length", std::to_string(id_as_string.length())}, { "Connection", "close" }});
+                   {{"Access-Control-Allow-Origin",  "*"},
+                    {"Content-Length", std::to_string(id_as_string.length())},
+                    { "Connection", "close" }});
 
 }
 
@@ -68,25 +80,28 @@ void RoutesServer::handleRetrieval(const std::shared_ptr<restbed::Session> sessi
     if (RoutesQueue::isRouteCompleted(id)) {
 
         // Get the control points
-        std::vector<glm::vec3> controls = RoutesQueue::getCompletedRoute(id);
+        std::vector<glm::vec3> points = RoutesQueue::getCompletedRoute(id);
 
         // Convert to a  JSON string
         std::string JSON = "{\"controls\": [";
 
-        for (int i = 0; i < controls.size(); i++)
-            JSON += "[" + std::to_string(controls[i].x) + ", " +
-                          std::to_string(controls[i].y) + ", " +
-                          std::to_string(controls[i].z) + "],";
+        for (int i = 0; i < points.size(); i++)
+            JSON += "[" + std::to_string(points[i].x) + ", " +
+                          std::to_string(points[i].y) + ", " +
+                          std::to_string(points[i].z) + "],";
 
         JSON += "]}";
 
         session->close(restbed::OK, JSON.c_str(),
-                       {{"Content-Length", std::to_string(JSON.length())}, { "Connection", "close" }});
+                       {{"Access-Control-Allow-Origin",  "*"},
+                        {"Content-Length", std::to_string(JSON.length())},
+                        { "Connection", "close" }});
 
     } else {
 
         // Route was not done, return "false"
-        session->close(restbed::OK, "false", { { "Content-Length", "5" } } );
+        session->close(restbed::OK, "false", {{"Access-Control-Allow-Origin",  "*"},
+                                              { "Content-Length", "5" }} );
 
     }
 
