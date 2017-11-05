@@ -15,6 +15,6 @@ $(window).on('scroll',function(){
 // Goes to the route calculation screen
 function goToRoutes() {
     
-    window.location.href="route.html";
+    window.location.href="calculate.html";
     
 }
