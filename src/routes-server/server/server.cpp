@@ -52,7 +52,7 @@ void RoutesServer::handleCompute(const std::shared_ptr<restbed::Session> session
 
     // Parse the arguments
     std::string start_s = request->get_query_parameter("start", "");
-    std::string dest_s = request->get_query_parameter("start", "");
+    std::string dest_s = request->get_query_parameter("dest", "");
 
     glm::vec3 start, dest;
     sscanf(start_s.c_str(), "%f,%f,%f", &start.x, &start.y, &start.z);

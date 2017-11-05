@@ -61,6 +61,9 @@ $(function() {
 <div class="textblock">Here is a list of all class members with links to the classes they belong to:</div>
 
 <h3><a id="index__"></a>- _ -</h3><ul>
+<li>_completed
+: <a class="el" href="class_routes_queue.html#af4956405c4fb878eb2d8578d17763a80">RoutesQueue</a>
+</li>
 <li>_data
 : <a class="el" href="class_population.html#a38141fe6b682fc55d396cc4d781d1228">Population</a>
 </li>
@@ -140,6 +143,9 @@ $(function() {
 <li>_pop_size
 : <a class="el" href="class_population.html#a9f43eeeaf6bd2ec02b5063bbbbaf78b1">Population</a>
 </li>
+<li>_routes
+: <a class="el" href="class_routes_queue.html#a9b37a7e3b672bcac6886e057f5953e1e">RoutesQueue</a>
+</li>
 <li>_start
 : <a class="el" href="class_population.html#a4e0aeaa0a40d1c84026b31ac7eb0c794">Population</a>
 </li>
@@ -185,7 +191,13 @@ $(function() {
 : <a class="el" href="class_elevation_data.html#a40fde2e11dbefbb7a585742a7895307a">ElevationData</a>
 </li>
 <li>calculateRoute()
-: <a class="el" href="class_routes.html#aaaf72047baa19ae80f946f018b510771">Routes</a>
+: <a class="el" href="class_routes.html#aea76d951d800423c797d03ef4c9fe5e4">Routes</a>
+</li>
+<li>calculateRoutes()
+: <a class="el" href="class_routes_queue.html#a221ea6e4c3d367c5af5a0372abb135c5">RoutesQueue</a>
+</li>
+<li>calculation_thread
+: <a class="el" href="class_routes_server.html#aaac121c1ec3a5f42f688354f73072758">RoutesServer</a>
 </li>
 <li>convertPixelsToMeters()
 : <a class="el" href="class_elevation_data.html#ac383c5fe3d14bcb0c4dcc3f4a07b3efa">ElevationData</a>
@@ -205,6 +217,7 @@ $(function() {
 </li>
 <li>dest
 : <a class="el" href="class_c_m_d.html#a6c8a94b4e349d91047392e72a74613b6">CMD</a>
+, <a class="el" href="struct_routes_queue_1_1_route_item.html#a167e1dd10a05f1c3ebfef77c874248ba">RoutesQueue::RouteItem</a>
 </li>
 <li>dummy_genome
 : <a class="el" href="class_population.html#aacd259f2578f16644206346bc82fa4fd">Population</a>
@@ -249,6 +262,9 @@ $(function() {
 </li>
 <li>getBinomialCoefficients()
 : <a class="el" href="class_bezier.html#af8184ad8c9c23625005c40efe7f74d13">Bezier</a>
+</li>
+<li>getCompletedRoute()
+: <a class="el" href="class_routes_queue.html#a8e579ab43c560d2e9bb2809e9a5b08f7">RoutesQueue</a>
 </li>
 <li>getContext()
 : <a class="el" href="class_kernel.html#a52489f89ded060d514b7e5d12f23e720">Kernel</a>
@@ -299,6 +315,15 @@ $(function() {
 
 
 <h3><a id="index_h"></a>- h -</h3><ul>
+<li>handleCompute()
+: <a class="el" href="class_routes_server.html#af6cbfc7bed53a9513652ebcf57db0e62">RoutesServer</a>
+</li>
+<li>handleCORS()
+: <a class="el" href="class_routes_server.html#a0fbe118020f33b6c8bbb738b69a2e650">RoutesServer</a>
+</li>
+<li>handleRetrieval()
+: <a class="el" href="class_routes_server.html#a4e7cca25126f5a8fe309462b4ee9da49">RoutesServer</a>
+</li>
 <li>header
 : <a class="el" href="struct_individual.html#a52bb6c8f4b027a733426ca4011d6201a">Individual</a>
 </li>
@@ -306,11 +331,17 @@ $(function() {
 
 
 <h3><a id="index_i"></a>- i -</h3><ul>
+<li>id
+: <a class="el" href="struct_routes_queue_1_1_route_item.html#ae51c1f018750b5863362be38ce74b2aa">RoutesQueue::RouteItem</a>
+</li>
 <li>initGDAL()
 : <a class="el" href="class_elevation_data.html#a50909d84ca168bc1fc1047b653d2d00a">ElevationData</a>
 </li>
 <li>initOpenCL()
 : <a class="el" href="class_kernel.html#aaf85aedc18138e6b5857e83658cf7582">Kernel</a>
+</li>
+<li>isRouteCompleted()
+: <a class="el" href="class_routes_queue.html#a8f3ef306a73330317fec093c3bcd9c13">RoutesQueue</a>
 </li>
 </ul>
 
@@ -362,6 +393,9 @@ $(function() {
 
 
 <h3><a id="index_o"></a>- o -</h3><ul>
+<li>onServerReady()
+: <a class="el" href="class_routes_server.html#af597f2c9ed328659fef87cbbe71be875">RoutesServer</a>
+</li>
 <li>origin
 : <a class="el" href="struct_d_b_1_1_entry.html#a7fa27d4c9e58f971d3819707c7c2a081">DB::Entry</a>
 , <a class="el" href="struct_elevation_stitch_1_1_data_rect.html#ae5fdb41c845150274f481bb383b85535">ElevationStitch::DataRect</a>
@@ -395,6 +429,13 @@ $(function() {
 </ul>
 
 
+<h3><a id="index_q"></a>- q -</h3><ul>
+<li>queueRoute()
+: <a class="el" href="class_routes_queue.html#aabbbadba48b5a9651da88d95aea25ecc">RoutesQueue</a>
+</li>
+</ul>
+
+
 <h3><a id="index_s"></a>- s -</h3><ul>
 <li>setArgs()
 : <a class="el" href="class_kernel.html#af4e0fd31fe498b840a638ce5dc726c82">Kernel</a>
@@ -410,6 +451,10 @@ $(function() {
 </li>
 <li>start
 : <a class="el" href="class_c_m_d.html#acd02f54ccc657259eaaa3020e044f7db">CMD</a>
+, <a class="el" href="struct_routes_queue_1_1_route_item.html#a584eb23c2a5e75f8e47d93ce8aaa38a3">RoutesQueue::RouteItem</a>
+</li>
+<li>startServer()
+: <a class="el" href="class_routes_server.html#af62764a777011be3aed79e0dfece82b6">RoutesServer</a>
 </li>
 <li>stitch()
 : <a class="el" href="class_elevation_stitch.html#a449b027513439e7109aeb1ff310a30cf">ElevationStitch</a>

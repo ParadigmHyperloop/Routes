@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['_5fcompleted',['_completed',['../class_routes_queue.html#af4956405c4fb878eb2d8578d17763a80',1,'RoutesQueue']]],
   ['_5fdata',['_data',['../class_population.html#a38141fe6b682fc55d396cc4d781d1228',1,'Population']]],
   ['_5fdest',['_dest',['../class_population.html#a7aa0ea5b8e48e19a77d28d0c268bb51d',1,'Population']]],
   ['_5felevation_5fmax',['_elevation_max',['../class_elevation_data.html#a95f2cfdb1ef1c1b51017719026d43726',1,'ElevationData']]],
@@ -26,6 +27,7 @@ var searchData=
   ['_5fopencl_5fprogram_5fvalid',['_opencl_program_valid',['../class_kernel.html#ab7c0ecef9ff7940c38cbc0c3915c836c',1,'Kernel']]],
   ['_5fopencl_5fqueue',['_opencl_queue',['../class_kernel.html#ae94dcd2909e2b06ffcf84bbd7dd49b7b',1,'Kernel']]],
   ['_5fpop_5fsize',['_pop_size',['../class_population.html#a9f43eeeaf6bd2ec02b5063bbbbaf78b1',1,'Population']]],
+  ['_5froutes',['_routes',['../class_routes_queue.html#a9b37a7e3b672bcac6886e057f5953e1e',1,'RoutesQueue']]],
   ['_5fstart',['_start',['../class_population.html#a4e0aeaa0a40d1c84026b31ac7eb0c794',1,'Population']]],
   ['_5fstate',['_state',['../class_c_m_d.html#a6514aa4a90837f1b1d54bf8b3dc7165e',1,'CMD']]],
   ['_5fwidth',['_width',['../class_elevation_data.html#acd6e9c583db00f3269d14a0f6b38eb92',1,'ElevationData']]],

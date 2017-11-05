@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['lineintersectsdatset',['lineIntersectsDatSet',['../class_d_b.html#aa3258ba73b6956fc931c3e0bf43406a3',1,'DB']]],
-  ['load',['load',['../class_d_b.html#a8afc9daf01ae74ab20489de0a81b3386',1,'DB']]],
-  ['longitudelatitudetometers',['longitudeLatitudeToMeters',['../class_elevation_data.html#a3c894654b893a03eeb7a57430e5b8a6a',1,'ElevationData']]]
+  ['kernel',['Kernel',['../class_kernel.html#a0e137f5646f930df1a646306cc119170',1,'Kernel::Kernel(const std::string &amp;program, const std::string name)'],['../class_kernel.html#a8dbc456fce5b42316efcfcfe71136431',1,'Kernel::Kernel(const boost::compute::program &amp;program, const std::string name)']]]
 ];

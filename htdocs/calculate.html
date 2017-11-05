@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+    
+    <script src="scripts/jquery-3.2.1.min.js"></script>
+<script type="text/javascript">
+
+    function getComputeRequest(start, dest, succ) {
+        
+        // Return the dictonary with the parameters filled in
+        return {
+            
+            type: "GET",
+            url: "http://10.60.89.224:8080/compute?start=" + start + "&dest=" + dest,
+
+            contentType: "text/plain",
+
+            headers: { "Access-Control-Allow-Origin" : "*", },
+
+            success: function(result) { succ(result) }
+        }
+            
+    }
+    
+    function getCheckRequest(_ident, succ, fail) {
+        
+        return {
+            
+            type: "GET",
+            url: "http://10.60.89.224:8080/retrieve?id=" + _ident,
+
+            contentType: "text/plain",
+
+            headers: { "Access-Control-Allow-Origin" : "*", },
+
+            success: function(result) { 
+            
+                if (result == "false")
+                    fail();
+                else succ(result);
+            
+            }
+            
+        }
+        
+    }
+    
+    function gotFinishedRoute(result) {
+        
+        // Parse the JSON 
+        var JSON_result = JSON.parse(result);
+        
+        var points = [];
+        
+        for (var i = 0; i < JSON_result.controls.length; i++) {
+            points.push([JSON_result.controls[i][0], 
+                         JSON_result.controls[i][1]])
+            
+        }
+        
+        map.addLayer({
+        "id": "route",
+        "type": "line",
+        "source": {
+            "type": "geojson",
+            "data": {
+                "type": "Feature",
+                "properties": {},
+                "geometry": {
+                    "type": "LineString",
+                    "coordinates": points
+                    
+                }
+            }
+        },
+        "layout": {
+            "line-join": "round",
+            "line-cap": "round"
+        },
+        "paint": {
+            "line-color": "#FF0067",
+            "line-width": 5
+        }
+    });
+        
+    }
+    
+    function gotInProgress() {
+        
+        // Set a timer 
+        setTimeout(checkCompleted, 1000);
+        
+    }
+    
+    function checkCompleted() {
+        
+        $.ajax(getCheckRequest(ident, gotFinishedRoute, gotInProgress));
+        
+    }
+    
+        
+    var ident = "";
+    function handleIdentifier(result) {
+        
+        // Save the identifier and display it
+        ident = result;
+        $("#div1").html(result);
+        
+        // Set a timer 
+        setTimeout(checkCompleted, 1000);
+    }
+    
+    
+    function push() {
+
+        $.ajax(getComputeRequest("-119.001666666700032,35.001666666664143,550.0", 
+                                 "-118.5000000,34.5000000,145.0", 
+                                 handleIdentifier));
+
+    }
+
+</script>
+    
+    <link rel="stylesheet" href="css/ui.css">
+<head>
+    <meta charset='utf-8' />
+    <title></title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.41.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.41.0/mapbox-gl.css' rel='stylesheet'/>
+    <style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
+    </style>
+</head>
+<body>
+    <div id='map'>
+        <button onclick="push()">HELLO</button>
+        <div class="start_end" style="position: absolute; z-index: 10000000">
+            Start: 00°00'00"N, 00°00'00"W 
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            End: 00°00'00"N, 00°00'00"W 
+        </div>
+        
+        <div class="info" style="position: absolute; z-index: 10000000">
+            Distance: 10 Distances <br />
+            Time: 42 Time Units
+        </div>
+    </div>
+<script>
+var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'http://localhost:8888/hyperloop_map.json',
+    center: [-117.7, 34.5],
+    zoom: 8
+});
+
+map.on('load', function () {
+
+    
+});
+</script>
+<script>
+    map.addControl(new mapboxgl.FullscreenControl());
+    map.addControl(new mapboxgl.NavigationControl());
+</script>
+    </body>
+</html>

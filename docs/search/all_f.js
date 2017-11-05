@@ -1,9 +1,11 @@
 var searchData=
 [
-  ['setargs',['setArgs',['../class_kernel.html#af4e0fd31fe498b840a638ce5dc726c82',1,'Kernel']]],
-  ['size',['size',['../struct_d_b_1_1_entry.html#ab0aaf7121409cca9f1050bfc1865d88c',1,'DB::Entry']]],
-  ['solve',['solve',['../class_genetics.html#a92ff6ec5783b9246ee75b40c50fb1568',1,'Genetics']]],
-  ['sortindividuals',['sortIndividuals',['../class_population.html#a6ae5934795f9ec9ee1f6c320828d4f03',1,'Population']]],
-  ['start',['start',['../class_c_m_d.html#acd02f54ccc657259eaaa3020e044f7db',1,'CMD']]],
-  ['stitch',['stitch',['../class_elevation_stitch.html#a449b027513439e7109aeb1ff310a30cf',1,'ElevationStitch::stitch(const std::string &amp;root, const std::string &amp;stitcher)'],['../class_elevation_stitch.html#ac160c5b4050e7f063c3d528dff594960',1,'ElevationStitch::stitch(const std::vector&lt; std::string &gt; &amp;paths)']]]
+  ['rebuilding',['Rebuilding',['../cmd_8h.html#a904d04369d91d823ba6d593e0a458626a1af5c288f5be3c6d24b37e0946383ccb',1,'cmd.h']]],
+  ['routeitem',['RouteItem',['../struct_routes_queue_1_1_route_item.html',1,'RoutesQueue']]],
+  ['routes',['Routes',['../class_routes.html',1,'']]],
+  ['routes_2ecpp',['routes.cpp',['../routes_8cpp.html',1,'']]],
+  ['routes_2eh',['routes.h',['../routes_8h.html',1,'']]],
+  ['routesqueue',['RoutesQueue',['../class_routes_queue.html',1,'']]],
+  ['routesserver',['RoutesServer',['../class_routes_server.html',1,'']]],
+  ['routesstate',['RoutesState',['../cmd_8h.html#a904d04369d91d823ba6d593e0a458626',1,'cmd.h']]]
 ];

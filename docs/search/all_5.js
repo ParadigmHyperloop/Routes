@@ -8,6 +8,7 @@ var searchData=
   ['genetics_2eh',['genetics.h',['../genetics_8h.html',1,'']]],
   ['genome',['genome',['../struct_individual.html#a93363084997e9905d3d19e780e2de060',1,'Individual']]],
   ['getbinomialcoefficients',['getBinomialCoefficients',['../class_bezier.html#af8184ad8c9c23625005c40efe7f74d13',1,'Bezier']]],
+  ['getcompletedroute',['getCompletedRoute',['../class_routes_queue.html#a8e579ab43c560d2e9bb2809e9a5b08f7',1,'RoutesQueue']]],
   ['getcontext',['getContext',['../class_kernel.html#a52489f89ded060d514b7e5d12f23e720',1,'Kernel']]],
   ['getheight',['getHeight',['../class_elevation_data.html#a57d19e4a6ebe4f2d0b971438d60d8ee3',1,'ElevationData']]],
   ['getheightinmeters',['getHeightInMeters',['../class_elevation_data.html#adcb339186a1244cc023b8c3e4d8ae38d',1,'ElevationData']]],

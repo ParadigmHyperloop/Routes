@@ -70,14 +70,14 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:aaaf72047baa19ae80f946f018b510771"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_routes.html#aaaf72047baa19ae80f946f018b510771">calculateRoute</a> (glm::vec3 start, glm::vec3 dest)</td></tr>
-<tr class="separator:aaaf72047baa19ae80f946f018b510771"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aea76d951d800423c797d03ef4c9fe5e4"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; glm::vec3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_routes.html#aea76d951d800423c797d03ef4c9fe5e4">calculateRoute</a> (glm::vec3 start, glm::vec3 dest)</td></tr>
+<tr class="separator:aea76d951d800423c797d03ef4c9fe5e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This is a simple class to handle the complete calculation of a route. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="aaaf72047baa19ae80f946f018b510771"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaaf72047baa19ae80f946f018b510771">&#9670;&nbsp;</a></span>calculateRoute()</h2>
+<a id="aea76d951d800423c797d03ef4c9fe5e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aea76d951d800423c797d03ef4c9fe5e4">&#9670;&nbsp;</a></span>calculateRoute()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -86,7 +86,7 @@ Static Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Routes::calculateRoute </td>
+          <td class="memname">std::vector&lt; glm::vec3 &gt; Routes::calculateRoute </td>
           <td>(</td>
           <td class="paramtype">glm::vec3&#160;</td>
           <td class="paramname"><em>start</em>, </td>
@@ -113,10 +113,11 @@ Static Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">start</td><td>The start position in longitude latitude of the route. The z component is the starting elevation of the route.</td></tr>
-    <tr><td class="paramname">dest</td><td>The end position in longitude latitude of the route. z component is the ending elevation of the route. </td></tr>
+    <tr><td class="paramname">dest</td><td>The end position in longitude latitude of the route. z component is the ending elevation of the route.</td></tr>
   </table>
   </dd>
 </dl>
+<dl class="section return"><dt>Returns</dt><dd>The computed points of the route in longitude latitude and elevation. </dd></dl>
 
 </div>
 </div>
