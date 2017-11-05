@@ -104,7 +104,7 @@ void RoutesServer::onServerReady(restbed::Service &service) {
         while (true) {
 
             // Sleep for a single second and then try to calculate some new routes
-            usleep(1000000);
+            CPLSleep(1);
             RoutesQueue::calculateRoutes();
 
         }

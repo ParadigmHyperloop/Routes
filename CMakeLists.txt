@@ -7,7 +7,8 @@ set(CMAKE_CXX_STANDARD 17)
 FILE(GLOB_RECURSE HS ${CMAKE_SOURCE_DIR}/src/routes-lib/*.h*)
 FILE(GLOB_RECURSE SOURCES ${CMAKE_SOURCE_DIR}/src/routes-lib/*.cpp)
 
-FILE(GLOB_RECURSE LIBRARIES ${CMAKE_SOURCE_DIR}/lib/*.a)
+FILE(GLOB_RECURSE LIBRARIES ${CMAKE_SOURCE_DIR}/lib/*${CMAKE_STATIC_LIBRARY_SUFFIX})
+message(WARNING ${LIBRARIES})
 
 # Add the sources to the executables
 add_library(Routes STATIC ${HS}
@@ -15,8 +16,8 @@ add_library(Routes STATIC ${HS}
 
 IF (WIN32)
 
-  set(GDAL_LIBRARY C:/MinGW/msys/1.0/local/lib/libgdal.a C:/MinGW/lib/libwsock32.a C:/MinGW/lib/libws2_32.a C:/MinGW/lib/libpsapi.a)
-  set(GDAL_INCLUDE_DIR C:/MinGW/msys/1.0/local/include)
+  set(GDAL_LIBRARY C:/warmerda/bld/lib/gdal_i.lib)
+  set(GDAL_INCLUDE_DIR C:/warmerda/bld/include/)
 
   find_package(OpenCL REQUIRED)
   include_directories(${OpenCL_INCLUDE_DIRS})
@@ -36,12 +37,19 @@ ENDIF()
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include
                     ${GDAL_INCLUDE_DIR})
 
+add_custom_target(copy)
+
 IF (WIN32)
 
   message(STATUS ${GDAL_LIBRARY})
   target_link_libraries(Routes ${OpenCL_LIBRARIES}
                                ${GDAL_LIBRARY}
                                ${LIBRARIES})
+
+  add_custom_command(TARGET copy PRE_BUILD
+                     COMMAND ${CMAKE_COMMAND} -E
+                     copy C:/warmerda/bld/bin/gdal202.dll
+                     ${CMAKE_BINARY_DIR}/gdal202.dll)
 
 ELSE()
 
@@ -50,8 +58,6 @@ ELSE()
                                ${LIBRARIES})
 
 ENDIF()
-
-add_custom_target(copy)
 
 foreach(Header ${HS})
 
@@ -79,15 +85,15 @@ add_dependencies(Routes-Exec Routes)
 
 # Build it with the library
 include_directories(Routes-Exec ${CMAKE_BINARY_DIR}/include)
-target_link_libraries(Routes-Exec ${CMAKE_BINARY_DIR}/libRoutes.a)
+target_link_libraries(Routes-Exec ${CMAKE_BINARY_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}Routes${CMAKE_STATIC_LIBRARY_SUFFIX})
 
 # Link in the other libraries
 IF (WIN32)
 
-  message(STATUS ${GDAL_LIBRARY})
+  message(WARNING ${GDAL_LIBRARY})
   target_link_libraries(Routes-Exec ${OpenCL_LIBRARIES}
                                     ${GDAL_LIBRARY}
-                                   ${LIBRARIES})
+                                    ${LIBRARIES})
 
 ELSE()
 
@@ -108,7 +114,7 @@ add_dependencies(Routes-Server Routes)
 
 # Build it with the library
 include_directories(Routes-Server ${CMAKE_BINARY_DIR}/include)
-target_link_libraries(Routes-Server ${CMAKE_BINARY_DIR}/libRoutes.a)
+target_link_libraries(Routes-Server ${CMAKE_BINARY_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}Routes${CMAKE_STATIC_LIBRARY_SUFFIX})
 
 # Link in the other libraries
 IF (WIN32)

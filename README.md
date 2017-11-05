@@ -28,7 +28,7 @@ git clone https://github.com/ParadigmHyperloop/Routes.git
 cd Routes
 sudo ./setup.sh
 ```
-This will clone GDAL, compile it, and install it. This will take a while and is also why `./setup.sh` requires sudo. It will also download boost 1.6.5 and copy all of the headers into the include directory.
+This will clone GDAL, compile it, and install it. It will also compile restbed and add it to the lib folder. This will take a while and is also why `./setup.sh` requires sudo. It will also download boost 1.6.5 and glm, copying all of the headers into the include directory.
 
 
 After setup finishes, run these commands to actually build the Routes project.
@@ -38,29 +38,29 @@ cd build
 cmake ..
 make
 ```
-You should now see a built binary in the build directory.
+You should now see a built library and a set of binaries in the build directory.
 
 ### Windows
-Unfortunately the setup for Windows is a bit more complicated We were able to successfully compile the project using MSYS. Other compilers should work but the CMake file is specifically built for using MSYS, at least for now, so if you do use another compiler you will have to change CMakeLists.txt.
-1. Download and install MinGW. The easiest way to do this is to use the installer, which can be found at https://sourceforge.net/projects/mingw/files/Installer/. Make sure MinGW is installed directly onto C:\. After installing you should now have a folder C:\MinGW\
-2. Make sure MSYS, gcc, g++ and binutils are installed. This can also be done in the installer fairly easily by checking the msys-base, mingw32-gcc, mingw32-gcc-g++ and mingw32-binutils, then going to Installation > Apply Changes
-3. Find MSYS. It should be in C:\MinGW\msys\1.0 and its a batch file called MSYS. Open it.
-4. Clone the repo into any folder on your C drive
-5. Setup GDAL. GDAL has a page on how to compile it for MinGW / MSYS which can be found at https://trac.osgeo.org/gdal/wiki/BuildingWithMinGW. We had to replace the cpl_config.h with the one in the instructions under the Misc section on the tutorial to get it to compile.
-6. Install the Intel OpenCL SDK from https://software.intel.com/en-us/intel-opencl. You'll also need to make sure your graphics drivers are up to date.
-7. Install curl if you don't already have it. A great installer can be found at http://www.confusedbycode.com/curl/
-8. Type in these commands:
+Make sure Visual Studio 2017 is installed. The Community edition is free and will suffice. 
+1. Open up the Visual Studio 2017 Developer Command Prompt. If you search "Developer" in Cortana it should be one of the results. 
+2. Download and install curl from http://www.confusedbycode.com/curl/. Ensure that you select the option to add it to your PATH.
+3. Make sure that the Intel OpenCL SDK is installed from https://software.intel.com/en-us/intel-opencl
+4. Run these commands from the developer command prompt:
 ```
-cd /c/path/to/repo/Routes/
-./setup-win.sh
+git clone https://github.com/ParadigmHyperloop/Routes.git
+cd Routes
+setup.bat
 ```
-6. After setup finishes, run these commands to actually build the Routes project. Make sure this is done in MSYS.
+This will download, compile and install GDAL. Restbed will also be downloaded and compiled. Boost 1.6.5 and glm will be downloaded and added to the include directory. Once the setup is finished (it will take a long time) run these commands:
 ```
 mkdir build
 cd build
-cmake -G "MSYS Makefiles" ..
-make
+cmake -G "NMake Makefiles" ..
+nmake
+
+You should now see a built library and a set of binaries in the build directory.
 ```
+
 You should now see a built binary in the build directory. In order to run the program, open back up MSYS and run it from there.
 
 ## Running
