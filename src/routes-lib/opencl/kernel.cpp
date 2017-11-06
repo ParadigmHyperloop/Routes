@@ -45,7 +45,7 @@ Kernel::Kernel(const std::string& program, const std::string name) {
         // Let the user know there was an error.
         // Boost compute doesn't seem to return much useful information as to why it failed, so just print there was an error.
         // Also make sure that we remember that this program is invalid.
-        std::cout << "Program failed to compile: " << name << std::endl;
+        std::cout << _opencl_program.build_log() << std::endl;
         _opencl_program_valid = false;
         return;
 

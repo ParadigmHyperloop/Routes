@@ -152,70 +152,161 @@ void Population::evaluateCost(const Pod& pod) {
     // Generate the program sounds
     static const std::string source = BOOST_COMPUTE_STRINGIZE_SOURCE(
 
-            // Evaluates the bezier curve made by the given control points and start and dest at parametric value s
-            float4 evaluateBezierCurve(__global float4* controls, int offset, int points, float s, __global int* binomial_coeffs) {
+        // Evaluates the bezier curve made by the given control points and start and dest at parametric value s
+        float4 evaluateBezierCurve(__global float4* controls, int offset, int points, float s, __global int* binomial_coeffs) {
 
-                float one_minus_s = 1.0 - s;
+            float one_minus_s = 1.0 - s;
 
-                // Degree is num points - 1
-                int degree = points - 1;
+            // Degree is num points - 1
+            int degree = points - 1;
 
-                float4 out_point = (float4)(0.0, 0.0, 0.0, 0.0);
+            float4 out_point = (float4)(0.0, 0.0, 0.0, 0.0);
 
-                // Middle terms, iterate for num points
-                for (int i = 0; i < points; i++) {
+            // Middle terms, iterate for num points
+            for (int i = 0; i < points; i++) {
 
-                    // Evaluate for x y and z
-                    float multiplier = pown(one_minus_s, degree - i) * pown(s, i);
+                // Evaluate for x y and z
+                float multiplier = pown(one_minus_s, degree - i) * pown(s, i);
 
-                    // We subtract one here so that we use the correct control point since i starts at 1
-                    out_point += controls[i + offset] * multiplier * (float)binomial_coeffs[i];
+                // We subtract one here so that we use the correct control point since i starts at 1
+                out_point += controls[i + offset] * multiplier * (float)binomial_coeffs[i];
+
+            }
+
+            return out_point;
+
+        }
+
+        // This calculates the approximates curvature at a given point (p1)
+        float curvature(float4 p0, float4 p1, float4 p2) {
+
+            // Calculate the approximate first derivatives
+            float4 der_first0 = p1 - p0;
+            float4 der_first1 = p2 - p1;
+
+            // Get the second derivative
+            float4 der_second = der_first1 - der_first0;
+
+            // Calculate the denominator and numerator
+            float denom = length(cross(der_first0, der_second));
+            float num = pown(length(der_first0), 3);
+
+            return num / denom;
+
+        }
+
+        // Computes the cost of a path
+        __kernel void cost(__read_only image2d_t image, __global float4* individuals, int path_length,
+                           float max_grade_allowed, float min_curve_allowed, float excavation_depth, float width,
+                           float height, __global int* binomial_coeffs) {
+
+            const sampler_t sampler = CLK_NORMALIZED_COORDS_TRUE | CLK_ADDRESS_CLAMP_TO_EDGE | CLK_FILTER_NEAREST;
+            const float pylon_cost = 116.0;
+            const float tunnel_cost = 310000.0;
+            const float num_points = 3700.0;
+            const float num_points_1 = 3699.0;
+            const int points_per_worker = 74;
+
+            __local float min_curves [50];
+            __local float max_grades [50];
+            __local float track_costs[50];
+
+            // Get an offset to the gnome
+            size_t i = get_global_id(0);
+            size_t w = get_local_id(1);
+
+            int path = i * (path_length + 1) + 1;
+
+            float min_curve = 10000000000000000.0;
+
+            float track_cost = 0.0;
+            float steepest_grade = 0.0;
+
+            // Figure out where to start and end
+            int start = w * points_per_worker;
+            int end = start + points_per_worker;
+
+            float4 last_last = individuals[path];
+            float4 last_point = individuals[path];
+
+            if (w) {
+
+                last_last =  evaluateBezierCurve(individuals, path, path_length, (float)(start - 2) / num_points_1, binomial_coeffs);
+                last_point = evaluateBezierCurve(individuals, path, path_length, (float)(start - 1) / num_points_1, binomial_coeffs);
+
+            }
+
+            for (int p = start; p <= end; p++) {
+
+                float4 bezier_point = evaluateBezierCurve(individuals, path, path_length, (float)p / num_points_1, binomial_coeffs);
+
+                // Get pylon height with a sample from the image
+                float2 nrm_device = (float2)(bezier_point.x / width, bezier_point.y / height);
+                float height = read_imagef(image, sampler, nrm_device).x;
+
+                // Compute spacing, only x and y distance
+                float spacing = sqrt(pown(bezier_point.x - last_point.x, 2) + pown(bezier_point.y - last_point.y, 2));
+
+                // Get curvature
+                if (p > 1)
+                    min_curve = min(min_curve, curvature(last_last, last_point, bezier_point));
+
+                // Compute grade if the points had spacing
+                if (spacing) {
+
+                    steepest_grade = max(steepest_grade, fabs(bezier_point.z - last_point.z) / spacing);
+
+                    // Compute track cost
+                    float pylon_height = bezier_point.z - height;
+
+                    // Above cost
+                    float above_cost = 0.5 * (fabs(pylon_height) + pylon_height);
+                    above_cost = pown(above_cost, 2) * pylon_cost;
+
+                    // Below cost
+                    float below_cost = (-fabs(pylon_height + excavation_depth) + pylon_height + excavation_depth);
+                    float below_cost_den = 2.0 * pylon_height + 2.0 * (excavation_depth);
+
+                    below_cost = below_cost / below_cost_den * tunnel_cost;
+                    track_cost += (above_cost + below_cost) * spacing;
+
+            }
+
+                last_last = last_point;
+                last_point = bezier_point;
+
+            }
+
+            // Write to the buffer
+            min_curves [w] = min_curve;
+            max_grades [w] = min_curve_allowed;
+            track_costs[w] = track_cost;
+
+            barrier(CLK_LOCAL_MEM_FENCE);
+
+            if (!w) {
+
+                // Figure out real min curve and max grade
+                for (int m = 1; m < 50; m++) {
+
+                     min_curve = min(min_curve, min_curves[m]);
+                     steepest_grade = max(steepest_grade, max_grades[m]);
+                     track_cost += track_costs[m];
 
                 }
 
-                return out_point;
+                // Calculate grade cost
+                float grade_cost = 100.0 * (steepest_grade - max_grade_allowed + fabs(max_grade_allowed - steepest_grade)) + 1.0;
+                float curve_cost = 0.005 * (min_curve_allowed - min_curve + fabs(min_curve_allowed - min_curve)) + 1.0;
+
+                // Get total cost
+                float total_cost = grade_cost * track_cost * curve_cost;
+
+                // Set the individual's header to contain its cost
+                individuals[path - 1].x = total_cost;
 
             }
-
-            // This calculates the approximates curvature at a given point (p1)
-            float curvature(float4 p0, float4 p1, float4 p2) {
-
-                // Calculate the approximate first derivatives
-                float4 der_first0 = p1 - p0;
-                float4 der_first1 = p2 - p1;
-
-                // Get the second derivative
-                float4 der_second = der_first1 - der_first0;
-
-                // Calculate the denominator and numerator
-                float denom = length(cross(der_first0, der_second));
-                float num = pown(length(der_first0), 3);
-
-                return num / denom;
-
-            }
-
-            // Computes the cost of a path
-            __kernel void cost(__read_only image2d_t image, __global float4* individuals, int path_length,
-                               float max_grade_allowed, float min_curve_allowed, float excavation_depth, float width,
-                               float height, __global int* binomial_coeffs) {
-
-                const sampler_t sampler = CLK_NORMALIZED_COORDS_TRUE | CLK_ADDRESS_CLAMP_TO_EDGE | CLK_FILTER_NEAREST;
-                const float pylon_cost = 116.0;
-                const float tunnel_cost = 310000.0;
-                const float num_points = 3700.0;
-                const int num_workers = 5;
-                const int points_per_worker = num_points / num_workers;
-
-                // Get an offset to the gnome
-                size_t i = get_global_id(0);
-                size_t w = get_local_id(1);
-
-                individuals[path - 1].x = test;
-
-            }
-
-    );
+    });
 
     // Create a temporary kernel and execute it
     static Kernel kernel = Kernel(source, "cost");
@@ -225,8 +316,8 @@ void Population::evaluateCost(const Pod& pod) {
 
     // Execute the 2D kernel with a work size of 5. 5 threads working on a single individual
     kernel.execute2D(glm::vec<2, size_t>(0, 0),
-                     glm::vec<2, size_t>(_pop_size, 5),
-                     glm::vec<2, size_t>(1, 5));
+                     glm::vec<2, size_t>(_pop_size, 50),
+                     glm::vec<2, size_t>(1, 50));
 
     // Download the data
     boost::compute::copy(_opencl_individuals.begin(), _opencl_individuals.end(), _individuals.begin(), queue);
