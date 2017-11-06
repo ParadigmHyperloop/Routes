@@ -206,38 +206,11 @@ class Population {
         glm::vec4 _dest;
 
         /** The CPU storage of the individuals.*/
-        std::vector<glm::vec4>* _individuals;
+        std::vector<glm::vec4> _individuals;
 
         /** The GPU uploaded version of the individual data */
         boost::compute::vector<glm::vec4> _opencl_individuals;
-    
-        /**
-        * A vector that is allocated once to be used during the sorting step.
-        * This particular vector contains the individuals as structures.
-        */
-        std::vector<Individual> _individuals_s;
-    
-        /**
-         * A vector that is allocated once to be used during the sorting step.
-         * This particular vector contains the individuals as vec4s.
-         */
-        std::vector<glm::vec4>* _sorted_individuals;
 
-        /**
-        * A significant portion of GPU time is spent copying over the large amounts of data.
-        * Since all we require after the cost is computed is the actual cost itself, we can use a float array
-        * whch results in less copying.
-        */
-        std::vector<float> _costs;
-    
-        /**
-         * A significant portion of GPU time is spent copying over the large amounts of data.
-         * Since all we require after the cost is computed is the actual cost itself, we can use a float array
-         * whch results in less copying.
-         * This is the OpenCL version of that buffer.
-         */
-        boost::compute::vector<float> _opencl_costs;
-    
         /**
          * To evaluate the bezier curve, binomial coefficients are required.
          * These need factorials, so it would be slow to compute them. Instead we do it once, offline because
