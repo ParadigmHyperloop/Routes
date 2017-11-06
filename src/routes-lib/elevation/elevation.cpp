@@ -93,7 +93,7 @@ glm::vec2 ElevationData::longitudeLatitudeToMeters(const glm::vec2 lat_lon) cons
 
     // First convert to pixels using the gdal transform
     glm::ivec2 pixels = glm::ivec2((lat_lon.x - _gdal_transform[0]) / _gdal_transform[1],
-                                 (lat_lon.y - _gdal_transform[3]) / _gdal_transform[5]);
+                                   (lat_lon.y - _gdal_transform[3]) / _gdal_transform[5]);
 
     // Convert pixels to meters
     return convertPixelsToMeters(pixels);

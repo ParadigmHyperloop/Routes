@@ -105,11 +105,14 @@ ElevationData ElevationStitch::stitch(const std::vector<std::string>& paths) {
     new_data._width_meters  = size_pixels.x * new_data.pixelToMeterConversions[0];
     new_data._height_meters = size_pixels.y * new_data.pixelToMeterConversions[1];
 
+    // Edit the transform to have the correct origin
+    new_data._gdal_transform[0] = buffer_rect.origin.x;
+    new_data._gdal_transform[3] = buffer_rect.origin.y;
+
     // Create the OpenCL image
     boost::compute::image_format format = boost::compute::image_format(CL_INTENSITY, CL_FLOAT);
     new_data._opencl_image = boost::compute::image2d(Kernel::getContext(), size_pixels.x, size_pixels.y,
                                                      format, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, raw.data());
-
 
     // Calculate the min and max
     double min_max[2]   = {0.0, 0.0};
@@ -167,7 +170,7 @@ ElevationStitch::DataRect::DataRect(GDALDataset* dataset) {
 
     // We invert the y transform because it is negative and for calculation purposes we require it to be positive
     extents = glm::dvec2(dataset->GetRasterXSize() *  transform[1],
-                        dataset->GetRasterYSize() * -transform[5]);
+                         dataset->GetRasterYSize() * -transform[5]);
 
 }
 
@@ -177,7 +180,7 @@ ElevationStitch::DataRect ElevationStitch::getRequiredRect(DataRect a, DataRect 
 
     // Get extents
     to_return.extents = glm::dvec2(getRequiredSizeAxis(a.origin.x, a.extents.x, b.origin.x, b.extents.x),
-                                  getRequiredSizeAxis(a.origin.y, a.extents.y, b.origin.y, b.extents.y));
+                                   getRequiredSizeAxis(a.origin.y, a.extents.y, b.origin.y, b.extents.y));
 
     // Get the new origin
     to_return.origin = glm::dvec2(glm::min(a.origin.x, b.origin.x),
