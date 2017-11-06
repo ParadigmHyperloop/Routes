@@ -113,8 +113,8 @@ std::vector<std::string> DB::getRequiredDatasets(glm::vec2 start, glm::vec2 dest
     corner_vec = glm::normalize(corner_vec) * 0.5f;
 
     // Create two new starts for 2 new rays
-    glm::vec3 start_a = start_3 + path_vec;
-    glm::vec3 start_b = start_3 - path_vec;
+    //glm::vec3 start_a = start_3 + corner_vec;
+    //glm::vec3 start_b = start_3 - corner_vec;
 
     std::vector<std::string> intersected;
 

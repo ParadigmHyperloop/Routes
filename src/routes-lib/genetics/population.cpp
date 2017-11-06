@@ -147,7 +147,6 @@ void Population::breedIndividuals() {
 void Population::evaluateCost(const Pod& pod) {
 
     // Get stuff we need to execute a kernel on
-    const boost::compute::context& ctx =   Kernel::getContext();
     boost::compute::command_queue& queue = Kernel::getQueue();
 
     // Generate the program sounds

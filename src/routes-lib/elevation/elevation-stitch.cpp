@@ -32,15 +32,15 @@ ElevationData ElevationStitch::stitch(const std::vector<std::string>& paths) {
     // Get the 2D buffer size required to contain all of the data
     DataRect root_rect = DataRect(datasets[0]);
     DataRect stitch_rect = DataRect(datasets[1]);
-    DataRect buffer_rect = getRequiredRect(root_rect, stitch_rect);;
+    DataRect buffer_rect = getRequiredRect(root_rect, stitch_rect);
 
     // Ensure that the rect contains all sub-rects
     for (int i = 2; i < datasets.size(); i++)
         buffer_rect = getRequiredRect(DataRect(datasets[i]), buffer_rect);
 
     // Get the size we need in pixels now
-    glm::ivec2 size_pixels = glm::ivec2(ceil(buffer_rect.extents.x / transform[1]),
-                                        ceil(buffer_rect.extents.y / -transform[5]));
+    glm::ivec2 size_pixels = glm::ivec2(floor(buffer_rect.extents.x / transform[1]),
+                                        floor(buffer_rect.extents.y / -transform[5]));
 
     // Create a 2D array of the size that we need in pixels
     float** stitched_buffer = new float*[size_pixels.y];
@@ -57,21 +57,22 @@ ElevationData ElevationStitch::stitch(const std::vector<std::string>& paths) {
         datasets[i]->GetGeoTransform(transform_t);
 
         // Figure out where the origin is in pixels
-        glm::vec2 origin_t = glm::vec2(transform_t[0], transform_t[3]);
+        glm::dvec2 origin_t = glm::dvec2(transform_t[0], transform_t[3]);
 
         // Get the offset in degrees and then convert it by pixels to get the insertion position
-        glm::vec2 delta = origin_t - buffer_rect.origin;
-        glm::ivec2 insertion = glm::ivec2(delta.x / transform[1], delta.y / -transform[5]);
+        glm::dvec2 delta = origin_t - buffer_rect.origin;
+        glm::ivec2 insertion = glm::ivec2(delta.x / transform[1],
+                                          delta.y / transform[5]);
 
         // Get the raster band for the data
         GDALRasterBand* raster = dataset->GetRasterBand(1);
-
+        
         // For simplicity we do this in two loops. Doing the root second ensures that it will be the data that
         // is always present
-        for (int i = 0; i < dataset->GetRasterYSize(); i++) {
+        for (int j = 0; j < dataset->GetRasterYSize(); j++) {
 
-            float* insert_pos = &stitched_buffer[insertion.y + i][insertion.x];
-            raster->RasterIO(GF_Read, 0, i, dataset->GetRasterXSize(), 1, insert_pos,
+            float* insert_pos = &stitched_buffer[insertion.y + j][insertion.x];
+            raster->RasterIO(GF_Read, 0, j, dataset->GetRasterXSize(), 1, insert_pos,
                                             dataset->GetRasterXSize(), 1, GDT_Float32, 0, 0);
 
         }
@@ -86,7 +87,7 @@ ElevationData ElevationStitch::stitch(const std::vector<std::string>& paths) {
         memcpy(raw.data() + i * size_pixels.x, &stitched_buffer[i][0], sizeof(float) * size_pixels.x);
 
     }
-
+    
     // Now we leverage the fact that this is a friend class of ElevationData to create a new one from scratch
     ElevationData new_data = ElevationData();
 
@@ -153,7 +154,7 @@ ElevationData ElevationStitch::stitch(const std::vector<std::string>& paths) {
 
 }
 
-ElevationStitch::DataRect::DataRect() { origin = glm::vec2(0.0); extents = glm::vec2(0.0);}
+ElevationStitch::DataRect::DataRect() { origin = glm::dvec2(0.0); extents = glm::dvec2(0.0);}
 
 ElevationStitch::DataRect::DataRect(GDALDataset* dataset) {
 
@@ -162,11 +163,11 @@ ElevationStitch::DataRect::DataRect(GDALDataset* dataset) {
     dataset->GetGeoTransform(transform);
 
     // Get the origin and extents
-    origin = glm::vec2(transform[0], transform[3]);
+    origin = glm::dvec2(transform[0], transform[3]);
 
     // We invert the y transform because it is negative and for calculation purposes we require it to be positive
-    extents = glm::vec2(dataset->GetRasterXSize()    *  transform[1],
-                        dataset->GetRasterYSize()    * -transform[5]);
+    extents = glm::dvec2(dataset->GetRasterXSize() *  transform[1],
+                        dataset->GetRasterYSize() * -transform[5]);
 
 }
 
@@ -175,26 +176,26 @@ ElevationStitch::DataRect ElevationStitch::getRequiredRect(DataRect a, DataRect 
     DataRect to_return;
 
     // Get extents
-    to_return.extents = glm::vec2(getRequiredSizeAxis(a.origin.x, a.extents.x, b.origin.x, b.extents.x),
+    to_return.extents = glm::dvec2(getRequiredSizeAxis(a.origin.x, a.extents.x, b.origin.x, b.extents.x),
                                   getRequiredSizeAxis(a.origin.y, a.extents.y, b.origin.y, b.extents.y));
 
     // Get the new origin
-    to_return.origin = glm::vec2(glm::min(a.origin.x, b.origin.x),
-                                 glm::max(a.origin.y, b.origin.y));
+    to_return.origin = glm::dvec2(glm::min(a.origin.x, b.origin.x),
+                                  glm::max(a.origin.y, b.origin.y));
 
     return to_return;
 
 }
 
-float ElevationStitch::getRequiredSizeAxis(float root_origin, float root_size, float sticher_origin, float sticher_size) {
+double ElevationStitch::getRequiredSizeAxis(double root_origin, double root_size, double sticher_origin, double sticher_size) {
 
     // Create two vectors for convenience
-    glm::vec2 root    = glm::vec2(root_origin,    root_size);
-    glm::vec2 sticher = glm::vec2(sticher_origin, sticher_size);
+    glm::dvec2 root    = glm::dvec2(root_origin,    root_size);
+    glm::dvec2 sticher = glm::dvec2(sticher_origin, sticher_size);
 
     // Determine which is greater so we have a negative number
-    glm::vec2* greater = &root;
-    glm::vec2* lesser = &sticher;
+    glm::dvec2* greater = &root;
+    glm::dvec2* lesser = &sticher;
     if (sticher_origin > root_origin) {
 
         greater = &sticher;
@@ -203,7 +204,7 @@ float ElevationStitch::getRequiredSizeAxis(float root_origin, float root_size, f
     }
 
     // The size is now the furthest extent of the largest minus the origin of the smallest
-    float size = greater->x + greater->y - lesser->x;
+    double size = greater->x + greater->y - lesser->x;
 
     return size;
 

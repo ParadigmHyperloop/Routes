@@ -67,10 +67,10 @@ class ElevationStitch {
         struct DataRect {
 
             /** The origin of the dataset in longitude latitude */
-            glm::vec2 origin;
+            glm::dvec2 origin;
 
             /** The size of the dataset in degrees */
-            glm::vec2 extents;
+            glm::dvec2 extents;
 
             /** Default constructor */
             DataRect();
@@ -114,7 +114,7 @@ class ElevationStitch {
          * @return
          * The size in degrees required to contain the two datasets on the given axis
          */
-        static float getRequiredSizeAxis(float root_origin, float root_size, float sticher_origin, float sticher_size);
+        static double getRequiredSizeAxis(double root_origin, double root_size, double sticher_origin, double sticher_size);
 
 
 };

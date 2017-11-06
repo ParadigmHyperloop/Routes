@@ -19,6 +19,9 @@ std::vector<glm::vec3> Routes::calculateRoute(glm::vec3 start, glm::vec3 dest) {
 
     // Stitch together the data
     ElevationData data = ElevationData(required_data[0]);
+    
+    if (required_data.size() > 1)
+        data = ElevationStitch::stitch(required_data);
 
     // Figure out where the longitude and latitude are in meters
     glm::vec2 start_meter = data.longitudeLatitudeToMeters(glm::vec2(start.x, start.y));
@@ -30,7 +33,7 @@ std::vector<glm::vec3> Routes::calculateRoute(glm::vec3 start, glm::vec3 dest) {
 
     // Solve!
     // These points will be in meters so we need to convert them
-    std::vector<glm::vec3> computed = Genetics::solve(pop, pod, 1);
+    std::vector<glm::vec3> computed = Genetics::solve(pop, pod, 200);
 
     // Convert to longitude, latitude and elevation
     for (int i = 0; i < computed.size(); i++) {
