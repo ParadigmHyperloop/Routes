@@ -204,69 +204,14 @@ void Population::evaluateCost(const Pod& pod) {
                 const float pylon_cost = 116.0;
                 const float tunnel_cost = 310000.0;
                 const float num_points = 3700.0;
+                const int num_workers = 5;
+                const int points_per_worker = num_points / num_workers;
 
                 // Get an offset to the gnome
                 size_t i = get_global_id(0);
-                int path = i * (path_length + 1) + 1;
+                size_t w = get_local_id(1);
 
-                float min_curve = 10000000000000000.0;
-
-                float track_cost = 0.0;
-                float steepest_grade = 0.0;
-
-                float4 last_last = individuals[path];
-                float4 last_point = individuals[path];
-
-                for (int p = 0; p <= num_points; p++) {
-
-                    float4 bezier_point = evaluateBezierCurve(individuals, path, path_length, (float)p / num_points, binomial_coeffs);
-
-                    // Get pylon height with a sample from the image
-                    float2 nrm_device = (float2)(bezier_point.x / width, bezier_point.y / height);
-                    float height = read_imagef(image, sampler, nrm_device).x;
-
-                    // Compute spacing, only x and y distance
-                    float spacing = sqrt(pown(bezier_point.x - last_point.x, 2) + pown(bezier_point.y - last_point.y, 2));
-
-                    // Get curvature
-                    if (p > 1)
-                        min_curve = min(min_curve, curvature(last_last, last_point, bezier_point));
-
-                    // Compute grade if the points had spacing
-                    if (spacing) {
-
-                        steepest_grade = max(steepest_grade, fabs(bezier_point.z - last_point.z) / spacing);
-
-                        // Compute track cost
-                        float pylon_height = bezier_point.z - height;
-
-                        // Above cost
-                        float above_cost = 0.5 * (fabs(pylon_height) + pylon_height);
-                        above_cost = pown(above_cost, 2) * pylon_cost;
-
-                        // Below cost
-                        float below_cost = (-fabs(pylon_height + excavation_depth) + pylon_height + excavation_depth);
-                        float below_cost_den = 2.0 * pylon_height + 2.0 * (excavation_depth);
-
-                        below_cost = below_cost / below_cost_den * tunnel_cost;
-                        track_cost += (above_cost + below_cost) * spacing;
-
-                    }
-
-                    last_last = last_point;
-                    last_point = bezier_point;
-
-                }
-
-                // Calculate grade cost
-                float grade_cost = 100.0 * (steepest_grade - max_grade_allowed + fabs(max_grade_allowed - steepest_grade)) + 1.0;
-                float curve_cost = 0.005 * (min_curve_allowed - min_curve + fabs(min_curve_allowed - min_curve)) + 1.0;
-
-                // Get total cost
-                float total_cost = grade_cost * track_cost * curve_cost;
-
-                // Set the individual's header to contain its cost
-                individuals[path - 1].x = total_cost;
+                individuals[path - 1].x = test;
 
             }
 
@@ -277,7 +222,11 @@ void Population::evaluateCost(const Pod& pod) {
     kernel.setArgs(_data.getOpenCLImage(), _opencl_individuals.get_buffer(), _genome_size + 2,
                    MAX_SLOPE_GRADE, pod.minCurveRadius(), EXCAVATION_DEPTH, _data.getWidthInMeters(), _data.getHeightInMeters(),
                    _opencl_binomials.get_buffer());
-    kernel.execute1D(0, _pop_size);
+
+    // Execute the 2D kernel with a work size of 5. 5 threads working on a single individual
+    kernel.execute2D(glm::vec<2, size_t>(0, 0),
+                     glm::vec<2, size_t>(_pop_size, 5),
+                     glm::vec<2, size_t>(1, 5));
 
     // Download the data
     boost::compute::copy(_opencl_individuals.begin(), _opencl_individuals.end(), _individuals.begin(), queue);

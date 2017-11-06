@@ -25,6 +25,8 @@ bool Kernel::initOpenCL() {
     // Get the cache
     _global_cache = boost::compute::program_cache::get_global_cache(_opencl_context);
 
+    std::cout << _opencl_device.get_info<CL_DEVICE_LOCAL_MEM_SIZE>() << std::endl;
+
     return true;
 
 }
@@ -67,5 +69,15 @@ void Kernel::execute1D(size_t start_index, size_t num_iterations, size_t work_si
     // Add a work order onto the kernel with the parameters that were given
     if (_opencl_program_valid)
         _opencl_queue.enqueue_1d_range_kernel(_opencl_kernel, start_index, num_iterations, work_size);
+
+}
+
+void Kernel:: execute2D(const glm::vec<2, size_t>& start_index,
+                        const glm::vec<2, size_t>& num_iterations,
+                        const glm::vec<2, size_t>& work_size) {
+
+    // Add a work order onto the kernel with the parameters that were given
+    if (_opencl_program_valid)
+        _opencl_queue.enqueue_nd_range_kernel(_opencl_kernel, 2, &start_index[0], &num_iterations[0], &work_size[0]);
 
 }
