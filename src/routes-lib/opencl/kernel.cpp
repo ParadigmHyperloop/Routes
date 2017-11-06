@@ -69,3 +69,11 @@ void Kernel::execute1D(size_t start_index, size_t num_iterations, size_t work_si
         _opencl_queue.enqueue_1d_range_kernel(_opencl_kernel, start_index, num_iterations, work_size);
 
 }
+
+void Kernel::execute2D(glm::vec<2, size_t> start_indices, glm::vec<2, size_t> num_iterations, glm::vec<2, size_t> work_sizes) {
+    
+    // Add a work order onto the kernel with the parameters that were given
+    if (_opencl_program_valid)
+        _opencl_queue.enqueue_nd_range_kernel(_opencl_kernel, 2, &start_indices[0], &num_iterations[0], &work_sizes[0]);
+    
+}

@@ -6,6 +6,7 @@
 #define ROUTES_KERNEL_H
 
 #include <boost/compute.hpp>
+#include <glm/glm.hpp>
 
 /** */
 
@@ -72,6 +73,26 @@ class Kernel {
          * OpenCL will do it's best to figure out what it should use.
          */
         void execute1D(size_t start_index, size_t num_iterations, size_t work_size = 0);
+    
+        /**
+         * Runs the program on the kernel using data that was already passed to the kernel.
+         * This differs from the 1D execuation in that it uses 2 dimensions
+         *
+         * @param start_index
+         * The start indivies in the OpenCL program this set of work should start at.
+         * X is dimensions 0 and Y is dimenstion 1.
+         *
+         * @param num_iterations
+         * The number of times that the OpenCL program will itterate for.
+         * Final index will be start_index + num_iterations - 1 for each dimension.
+         * X is dimensions 0 and Y is dimenstion 1.
+         *
+         * @param work_size
+         * The size of each work group in each dimension to be iterated over. When not specified,
+         * OpenCL will do it's best to figure out what it should use.
+         * X is dimensions 0 and Y is dimenstion 1.
+         */
+        void execute2D(glm::vec<2, size_t> start_index, glm::vec<2, size_t> num_iterations, glm::vec<2, size_t> work_size = glm::vec<2, size_t>(0, 0));
 
         inline static const boost::compute::context& getContext() { return _opencl_context; }
         inline static boost::compute::command_queue& getQueue()   { return _opencl_queue; }
