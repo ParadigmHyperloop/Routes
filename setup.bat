@@ -48,6 +48,7 @@ mkdir build
 
 : Patch CMakeLists.txt
 Echo set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd")>>"CMakeLists.txt"
+mkdir build
 cd build
 cmake -G "NMake Makefiles" -DBUILD_SSL=NO .. 
 nmake install

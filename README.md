@@ -47,6 +47,7 @@ Make sure Visual Studio 2017 is installed. The Community edition is free and wil
 3. Make sure that the Intel OpenCL SDK is installed from https://software.intel.com/en-us/intel-opencl
 4. Run these commands from the developer command prompt:
 ```
+cd C:/Users/<Your username>/Desktop/
 git clone https://github.com/ParadigmHyperloop/Routes.git
 cd Routes
 setup.bat
