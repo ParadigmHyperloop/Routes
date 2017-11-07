@@ -33,7 +33,7 @@ std::vector<glm::vec3> Routes::calculateRoute(glm::vec3 start, glm::vec3 dest) {
 
     // Solve!
     // These points will be in meters so we need to convert them
-    std::vector<glm::vec3> computed = Genetics::solve(pop, pod, 4000);
+    std::vector<glm::vec3> computed = Genetics::solve(pop, pod, 200);
 
     // Convert to longitude, latitude and elevation
     for (int i = 0; i < computed.size(); i++) {
