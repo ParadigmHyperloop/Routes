@@ -121,6 +121,10 @@ std::vector<std::string> DB::getRequiredDatasets(glm::vec2 start, glm::vec2 dest
     // Check everything for three intersections
     for (int i = 0; i < _entries.size(); i++) {
 
+        // Check if this contains the ray
+        if (datasetContainsRay(i, start_3, dest_3))
+            return {_entries[i].path};
+
         // Check for intersection with all three rays
         if (lineIntersectsDatSet(i, start_3, path_vec) /* ||
             lineIntersectsDatSet(i, start_a, path_vec) || */
@@ -187,5 +191,29 @@ bool DB::lineIntersectsDatSet(int index, const glm::vec3 &start, const glm::vec3
         maxy = entry.origin.y;
 
     return maxy >= miny;
+
+}
+
+bool DB::datasetContainsRay(int index, const glm::vec3 &start, const glm::vec3 &dest) {
+
+    Entry& entry = _entries[index];
+
+    // Check if the start is outside on X
+    if (entry.origin.x > start.x || entry.origin.x + entry.size.x < start.x)
+        return false;
+
+    // Check if the dest is outside on X
+    if (entry.origin.x > dest.x || entry.origin.x + entry.size.x < dest.x)
+        return false;
+
+    // Check if the start is outside on Y
+    if (entry.origin.y < start.y || entry.origin.y + entry.size.y > start.y)
+        return false;
+
+    // Check if the dest is outside on Y
+    if (entry.origin.y < dest.y || entry.origin.y + entry.size.y > dest.y)
+        return false;
+
+    return true;
 
 }

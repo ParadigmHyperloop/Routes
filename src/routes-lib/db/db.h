@@ -57,12 +57,35 @@ class DB {
          * The starting position in latitude longitude
          *
          * @param direction
-         * The direction in latitude longitude
+         * The direction in degrees
          *
          * @return
          * The result of the hit detection; true if the ray intersects, false if it does not.
          */
         static bool lineIntersectsDatSet(int index, const glm::vec3 &start, const glm::vec3 &direction);
+
+
+        /**
+         * This checks if a dataset contains the entire ray. We do this because it is possible for other datasets to
+         * intersect the ray but don't need to be stitched because the ray will fit into only one.
+         *
+         * @param index
+         * The index of the dataset to check against
+         *
+         * @param start
+         * The starting position in latitude longitude
+         *
+         * @param dest
+         * The ending position in latitude longitude
+         *
+         * @return
+         * The result of the hit detection; true if the ray intersects, false if it does not.
+         */
+        static bool datasetContainsRay(int index, const glm::vec3 &start, const glm::vec3 &dest);
+
+
+
+        static
 
         /** A struct for storing each entry in the databsae once it has been loaded */
         struct Entry {
