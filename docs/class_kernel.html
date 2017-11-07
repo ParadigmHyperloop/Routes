@@ -83,6 +83,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af4e0fd31fe498b840a638ce5dc726c82"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa858ce0ccbe1e71a1d6bf0114a094f72"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kernel.html#aa858ce0ccbe1e71a1d6bf0114a094f72">execute1D</a> (size_t start_index, size_t num_iterations, size_t work_size=0)</td></tr>
 <tr class="separator:aa858ce0ccbe1e71a1d6bf0114a094f72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba9c958784693e1f9d0e06217171abd7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kernel.html#aba9c958784693e1f9d0e06217171abd7">execute2D</a> (const glm::vec&lt; 2, size_t &gt; &amp;start_index, const glm::vec&lt; 2, size_t &gt; &amp;num_iterations, const glm::vec&lt; 2, size_t &gt; &amp;work_size=glm::vec&lt; 2, size_t &gt;(0, 0))</td></tr>
+<tr class="separator:aba9c958784693e1f9d0e06217171abd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acdcf2c3d857cf7bbf74aedf1f61c2502"><td class="memItemLeft" align="right" valign="top">const boost::compute::program &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kernel.html#acdcf2c3d857cf7bbf74aedf1f61c2502">getProgram</a> () const</td></tr>
 <tr class="separator:acdcf2c3d857cf7bbf74aedf1f61c2502"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -218,6 +220,49 @@ Static Private Attributes</h2></td></tr>
           <td></td>
           <td class="paramtype">size_t&#160;</td>
           <td class="paramname"><em>work_size</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Runs the program on the kernel using data that was already passed to the kernel.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">start_index</td><td>The index in the OpenCL program this set of work should start at.</td></tr>
+    <tr><td class="paramname">num_iterations</td><td>The number of times that the OpenCL program will itterate for. Final index will be start_index + num_iterations - 1</td></tr>
+    <tr><td class="paramname">work_size</td><td>The size of each work group to be iterated over. When not specified, OpenCL will do it's best to figure out what it should use. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aba9c958784693e1f9d0e06217171abd7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba9c958784693e1f9d0e06217171abd7">&#9670;&nbsp;</a></span>execute2D()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Kernel::execute2D </td>
+          <td>(</td>
+          <td class="paramtype">const glm::vec&lt; 2, size_t &gt; &amp;&#160;</td>
+          <td class="paramname"><em>start_index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const glm::vec&lt; 2, size_t &gt; &amp;&#160;</td>
+          <td class="paramname"><em>num_iterations</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const glm::vec&lt; 2, size_t &gt; &amp;&#160;</td>
+          <td class="paramname"><em>work_size</em> = <code>glm::vec&lt;2,&#160;size_t&gt;(0,&#160;0)</code>&#160;</td>
         </tr>
         <tr>
           <td></td>

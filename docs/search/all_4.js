@@ -14,5 +14,6 @@ var searchData=
   ['evaluateentirebeziercurve',['evaluateEntireBezierCurve',['../class_bezier.html#af61ef957bba128786ccedf7431b051f0',1,'Bezier']]],
   ['excavation_5fdepth',['EXCAVATION_DEPTH',['../pod_8h.html#ae4adb5dee6386c072d6040a979e5b405',1,'pod.h']]],
   ['execute1d',['execute1D',['../class_kernel.html#aa858ce0ccbe1e71a1d6bf0114a094f72',1,'Kernel']]],
-  ['extents',['extents',['../struct_elevation_stitch_1_1_data_rect.html#acc28e6649e2c6a58dc9ea641c3312a4d',1,'ElevationStitch::DataRect']]]
+  ['execute2d',['execute2D',['../class_kernel.html#aba9c958784693e1f9d0e06217171abd7',1,'Kernel']]],
+  ['extents',['extents',['../struct_elevation_stitch_1_1_data_rect.html#a6eb3f651e73880f650ca97db4070ee39',1,'ElevationStitch::DataRect']]]
 ];

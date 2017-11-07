@@ -89,6 +89,8 @@ Static Public Member Functions</h2></td></tr>
 Static Private Member Functions</h2></td></tr>
 <tr class="memitem:aa3258ba73b6956fc931c3e0bf43406a3"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_d_b.html#aa3258ba73b6956fc931c3e0bf43406a3">lineIntersectsDatSet</a> (int index, const glm::vec3 &amp;start, const glm::vec3 &amp;direction)</td></tr>
 <tr class="separator:aa3258ba73b6956fc931c3e0bf43406a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2275e48ee44bfb393a43b92a8dd7d5c4"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_d_b.html#a2275e48ee44bfb393a43b92a8dd7d5c4">datasetContainsRay</a> (int index, const glm::vec3 &amp;start, const glm::vec3 &amp;dest)</td></tr>
+<tr class="separator:a2275e48ee44bfb393a43b92a8dd7d5c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
@@ -121,6 +123,58 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Builds the database from scratch. This can be a slow process because every file needs to be opened. </p>
+
+</div>
+</div>
+<a id="a2275e48ee44bfb393a43b92a8dd7d5c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2275e48ee44bfb393a43b92a8dd7d5c4">&#9670;&nbsp;</a></span>datasetContainsRay()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool DB::datasetContainsRay </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const glm::vec3 &amp;&#160;</td>
+          <td class="paramname"><em>start</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const glm::vec3 &amp;&#160;</td>
+          <td class="paramname"><em>dest</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This checks if a dataset contains the entire ray. We do this because it is possible for other datasets to intersect the ray but don't need to be stitched because the ray will fit into only one.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>The index of the dataset to check against</td></tr>
+    <tr><td class="paramname">start</td><td>The starting position in latitude longitude</td></tr>
+    <tr><td class="paramname">dest</td><td>The ending position in latitude longitude</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The result of the hit detection; true if the ray intersects, false if it does not. </dd></dl>
 
 </div>
 </div>
@@ -213,7 +267,7 @@ Static Private Attributes</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">index</td><td>The index of the dataset to check against</td></tr>
     <tr><td class="paramname">start</td><td>The starting position in latitude longitude</td></tr>
-    <tr><td class="paramname">direction</td><td>The direction in latitude longitude</td></tr>
+    <tr><td class="paramname">direction</td><td>The direction in degrees</td></tr>
   </table>
   </dd>
 </dl>
