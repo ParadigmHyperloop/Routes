@@ -1,0 +1,39 @@
+/*
+div{
+    border: 1px solid grey
+}
+*/
+
+.loading-holder {
+    margin-top: 100px;
+}
+
+.loading_blob {
+    font-family: 'Lato';
+    font-weight: 700;
+    color: white;
+
+    background-color: cornflowerblue;
+    border-radius: 25pt;
+
+    box-shadow:0pt 0pt 15pt 1pt rgba(0, 0, 0, 0.3);
+    padding: 20pt;
+
+    width: 200pt;
+    height: 200pt;
+
+    display: flex;
+    justify-content: center; /* align horizontal */
+    align-items: center; /* align vertical */
+}
+
+
+
+#button-holder {
+/*vertically and horizontally aligns the button within*/
+    width: 100%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+}
