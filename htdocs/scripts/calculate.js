@@ -1,12 +1,13 @@
 var sayings = ["Adding that Musk-y smell", 
                "Elon-gating the track", 
-               "Proving Charles Darwin right", 
+               "Proving Darwin right", 
                "Counting the 1's and 0's",
                "Wishing upon a star",
                "Praying to Gaben",
+               "Genie is a dumb name",
                "Tasting victory",
                "404 track not found",
-               "Mmmmmmmm... bacon",
+               "Mmmm... bacon",
                "Sucking out the air",
                "Hey look a butterfly!",
                "Conjuring Genie"];
@@ -14,7 +15,11 @@ var sayings = ["Adding that Musk-y smell",
 var saying_timer;
 var current_saying;
 
-window.onload = function() { $("#loading").hide(); }
+window.onload = onLoad()
+
+function onLoad(){
+    $("#loading_blob").hide(); 
+}
 
 function changeSaying() {
 
@@ -146,12 +151,11 @@ function handleIdentifier(result) {
 
 
 function push() {
+//    $.ajax(getComputeRequest("-119.001666666700032,35.001666666664143,550.0", 
+//                             "-118.5000000,34.5000000,145.0", 
+//                             handleIdentifier));
 
-    $.ajax(getComputeRequest("-119.001666666700032,35.001666666664143,550.0", 
-                             "-118.5000000,34.5000000,145.0", 
-                             handleIdentifier));
-
-    $("#loading").show();
+    $("#loading_blob").show();
     changeSaying();
 
 }
