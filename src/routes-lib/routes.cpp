@@ -29,7 +29,7 @@ std::vector<glm::vec3> Routes::calculateRoute(glm::vec3 start, glm::vec3 dest) {
 
     // Create a pod and a population
     Pod pod = Pod(339.0);
-    Population pop = Population(200, 8, glm::vec4(start_meter.x, start_meter.y, start.z, 0.0), glm::vec4(dest_meter.x, dest_meter.y, dest.z, 0.0), data);
+    Population pop = Population(200, 12, glm::vec4(start_meter.x, start_meter.y, start.z, 0.0), glm::vec4(dest_meter.x, dest_meter.y, dest.z, 0.0), data);
 
     // Solve!
     // These points will be in meters so we need to convert them

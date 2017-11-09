@@ -81,24 +81,12 @@ void RoutesServer::handleRetrieval(const std::shared_ptr<restbed::Session> sessi
 
         // Get the control points
         std::vector<glm::vec3> points = RoutesQueue::getCompletedRoute(id);
+        
+        // Evaluate it
+        std::vector<glm::vec3> evaluated = Bezier::evaluateEntireBezierCurve(points, 100);
 
         // Convert to a  JSON string
-        std::string JSON = "{\"controls\": [";
-
-        for (int i = 0; i < points.size(); i++) {
-            
-            JSON += "[" + std::to_string(points[i].x) + ", " +
-            std::to_string(points[i].y) + ", " +
-            std::to_string(points[i].z) + "]";
-            
-            // Make sure there aren't trailing commas
-            if (i != points.size() - 1)
-                JSON += ",";
-            
-        }
-            
-
-        JSON += "]}";
+        std::string JSON = "{\"controls\":\n" + vectorToJSON(points) + ", \n\"evaluated\":\n" + vectorToJSON(evaluated) + "}";
 
         session->close(restbed::OK, JSON.c_str(),
                        {{"Access-Control-Allow-Origin",  "*"},
@@ -134,4 +122,29 @@ void RoutesServer::onServerReady(restbed::Service &service) {
 
     });
 
+}
+
+std::string RoutesServer::vectorToJSON(const std::vector<glm::vec3> points) {
+    
+    std::string JSON = "   [";
+    
+    for (int i = 0; i < points.size(); i++) {
+        
+        // Add an indent to make it a little easier for humans to read
+        if (i)
+            JSON += "    ";
+        
+        JSON += "[" + std::to_string(points[i].x) + ", " +
+        std::to_string(points[i].y) + ", " +
+        std::to_string(points[i].z) + "]";
+        
+        // Make sure there aren't trailing commas
+        if (i != points.size() - 1)
+            JSON += ", \n";
+        
+    }
+    
+    
+    return JSON + "]";
+    
 }

@@ -93,9 +93,11 @@
             
             var points = [];
             
-            for (var i = 0; i < JSON_result.controls.length; i++) {
-                points.push([JSON_result.controls[i][0], 
-                             JSON_result.controls[i][1]])
+            for (var i = 0; i < JSON_result.evaluated.length; i++) {
+
+                points.push([JSON_result.evaluated[i][0], 
+                             JSON_result.evaluated[i][1]])
+                
                 
             }
             

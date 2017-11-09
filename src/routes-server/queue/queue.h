@@ -57,7 +57,7 @@ class RoutesQueue {
         static bool isRouteCompleted(size_t id);
 
         /**
-         * Returns the evaluated points of a calculated path. This assumes that isRouteCompleted has been called so the
+         * Returns the control points of a calculated path. This assumes that isRouteCompleted has been called so the
          * completed route exists.
          *
          * @param id
