@@ -85,6 +85,8 @@ Static Private Member Functions</h2></td></tr>
 <tr class="separator:a4e7cca25126f5a8fe309462b4ee9da49"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af597f2c9ed328659fef87cbbe71be875"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_routes_server.html#af597f2c9ed328659fef87cbbe71be875">onServerReady</a> (restbed::Service &amp;service)</td></tr>
 <tr class="separator:af597f2c9ed328659fef87cbbe71be875"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f9b33991a047e2a28337385f5f7cfbb"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_routes_server.html#a2f9b33991a047e2a28337385f5f7cfbb">vectorToJSON</a> (const std::vector&lt; glm::vec3 &gt; points)</td></tr>
+<tr class="separator:a2f9b33991a047e2a28337385f5f7cfbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
@@ -255,6 +257,39 @@ Static Private Attributes</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">port</td><td>The port that the server should listen on. Since this is not a regular HTTP server this should not really be 80 so that it can run on the same machine that the frontend is hosted on. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a2f9b33991a047e2a28337385f5f7cfbb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f9b33991a047e2a28337385f5f7cfbb">&#9670;&nbsp;</a></span>vectorToJSON()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string RoutesServer::vectorToJSON </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; glm::vec3 &gt;&#160;</td>
+          <td class="paramname"><em>points</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Converts a vector of glm::vec3's to a JSON string.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">points</td><td>The vector of points to be converted to JSON </td></tr>
   </table>
   </dd>
 </dl>

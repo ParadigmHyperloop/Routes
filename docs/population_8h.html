@@ -89,8 +89,42 @@ Classes</h2></td></tr>
 Macros</h2></td></tr>
 <tr class="memitem:ada0398b27c35ebe568d6a615bf7538a7"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="population_8h.html#ada0398b27c35ebe568d6a615bf7538a7">TRACK_ABOVE_BELOW_EXTREMA</a>&#160;&#160;&#160;10.0f</td></tr>
 <tr class="separator:ada0398b27c35ebe568d6a615bf7538a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a995dc8039bc2f74e15aafc595d0e5808"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="population_8h.html#a995dc8039bc2f74e15aafc595d0e5808">MAX_STRAIGHT_DEVIATION</a>&#160;&#160;&#160;30000.0f</td></tr>
+<tr class="separator:a995dc8039bc2f74e15aafc595d0e5808"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acfcee9c17743fdcd5c1a217c1b94961f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="population_8h.html#acfcee9c17743fdcd5c1a217c1b94961f">METERS_TO_POINT_CONVERSION</a>&#160;&#160;&#160;30.1867567568f</td></tr>
+<tr class="separator:acfcee9c17743fdcd5c1a217c1b94961f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a995dc8039bc2f74e15aafc595d0e5808"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a995dc8039bc2f74e15aafc595d0e5808">&#9670;&nbsp;</a></span>MAX_STRAIGHT_DEVIATION</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define MAX_STRAIGHT_DEVIATION&#160;&#160;&#160;30000.0f</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Since we assume that paths are relatively close to straight lines, we decide on a maximum deviation from a straight line that a path can initially generate from. This number represents the max deviation in meters. (Does not apply to mutation) </p>
+
+</div>
+</div>
+<a id="acfcee9c17743fdcd5c1a217c1b94961f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acfcee9c17743fdcd5c1a217c1b94961f">&#9670;&nbsp;</a></span>METERS_TO_POINT_CONVERSION</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define METERS_TO_POINT_CONVERSION&#160;&#160;&#160;30.1867567568f</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>In order to get the number of points that a particular path should be evaluated along, we run a converstion. This factor converts meters to number of points of evaluation. </p>
+
+</div>
+</div>
 <a id="ada0398b27c35ebe568d6a615bf7538a7"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ada0398b27c35ebe568d6a615bf7538a7">&#9670;&nbsp;</a></span>TRACK_ABOVE_BELOW_EXTREMA</h2>
 
