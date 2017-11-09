@@ -16,6 +16,11 @@ var current_saying;
 
 window.onload = onLoad()
 
+
+function openNav(){
+    
+    $("#overlay").css("width","100%");
+}
 function onLoad(){
     $("#loading_blob").hide(); 
 }
@@ -150,6 +155,7 @@ function handleIdentifier(result) {
 
 
 function push() {
+    $("#overlay").css("width","0%");
 //    $.ajax(getComputeRequest("-119.001666666700032,35.001666666664143,550.0", 
 //                             "-118.5000000,34.5000000,145.0", 
 //                             handleIdentifier));
