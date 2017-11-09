@@ -13,8 +13,6 @@
 #include "../bezier/bezier.h"
 #include "../pod/pod.h"
 
-
-
 /** */
 
 /**
@@ -29,6 +27,12 @@
  * (Does not apply to mutation)
  */
 #define MAX_STRAIGHT_DEVIATION 30000.0f
+
+/**
+ * In order to get the number of points that a particular path should be evaluated along, we run a converstion.
+ * This factor converts meters to number of points of evaluation.
+ */
+#define METERS_TO_POINT_CONVERSION 29.7297297f
 
 /**
  * Individual is a convenience so that individuals can be treated as units rather than
@@ -228,6 +232,16 @@ class Population {
         * Measured in meters.
         */
         glm::vec4 _direction;
+
+        /**
+         * Since the cost algorithm uses sampling we need to know how many samples to take. For one dataset this is a
+         * trivial task. However some routes may span multiple datasets and therefore a calculation needs to be
+         * performed to figure out how may samples should be taken.
+         */
+        uint8_t _num_evaluation_points;
+
+        /** _num_evaluation_points - 1. This is a float because it is used for division in the cost function */
+        float _num_evaluation_points_1;
 
         /** The CPU storage of the individuals.*/
         std::vector<glm::vec4> _individuals;
