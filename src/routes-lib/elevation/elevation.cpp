@@ -135,7 +135,7 @@ void ElevationData::calcConversions() {
 
     // Calculate conversion factors based on the size of pixels in degrees.
     // This uses a simplified formula of degrees -> arcseconds -> meters
-    float degrees_to_meters = 1.0 * EARTH_RADIUS * M_PI / 180.0;
+    float degrees_to_meters = EARTH_RADIUS * M_PI / 180.0;
 
     // X conversion
     pixelToMeterConversions[0] = degrees_to_meters *      (float)_gdal_transform[1];

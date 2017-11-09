@@ -29,12 +29,11 @@ Population::Population(int pop_size, int genome_size, glm::vec4 start, glm::vec4
 
     // Figure out how many points this route should be evaluated on.
     // We also make sure it is a multiple of workers
-    _num_evaluation_points = (uint8_t)ceil(glm::max(data.getHeightInMeters() * METERS_TO_POINT_CONVERSION,
-                                                    data.getHeightInMeters() * METERS_TO_POINT_CONVERSION) / 50.0) * 50;
-    std::cout << _num_evaluation_points << std::endl;
+    _num_evaluation_points = ceil(glm::max(data.getHeightInMeters() / METERS_TO_POINT_CONVERSION,
+                                           data.getHeightInMeters() / METERS_TO_POINT_CONVERSION) / 50.0) * 50;
+    
+    std::cout << "Using " << _num_evaluation_points << " points of evaluation" << std::endl;
     _num_evaluation_points_1 = (float)_num_evaluation_points - 1.0f;
-
-    exit(0);
 
     // Generate the population
     generatePopulation();
@@ -200,7 +199,7 @@ void Population::evaluateCost(const Pod& pod) {
         __kernel void cost(__read_only image2d_t image, __global float4* individuals, int path_length,
                            float max_grade_allowed, float min_curve_allowed, float excavation_depth, float width,
                            float height, __global int* binomial_coeffs,
-                           __constant float num_points_1, __constant int points_per_worker) {
+                           float num_points_1, int points_per_worker) {
 
             const sampler_t sampler = CLK_NORMALIZED_COORDS_TRUE | CLK_ADDRESS_CLAMP_TO_EDGE | CLK_FILTER_NEAREST;
             const float pylon_cost = 116.0;

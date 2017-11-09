@@ -32,7 +32,7 @@
  * In order to get the number of points that a particular path should be evaluated along, we run a converstion.
  * This factor converts meters to number of points of evaluation.
  */
-#define METERS_TO_POINT_CONVERSION 29.7297297f
+#define METERS_TO_POINT_CONVERSION 30.1867567568f
 
 /**
  * Individual is a convenience so that individuals can be treated as units rather than
@@ -238,7 +238,7 @@ class Population {
          * trivial task. However some routes may span multiple datasets and therefore a calculation needs to be
          * performed to figure out how may samples should be taken.
          */
-        uint8_t _num_evaluation_points;
+        int _num_evaluation_points;
 
         /** _num_evaluation_points - 1. This is a float because it is used for division in the cost function */
         float _num_evaluation_points_1;
