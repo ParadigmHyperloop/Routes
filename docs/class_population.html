@@ -72,8 +72,8 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a633a7915b7e217bd661ee64cb14eef77"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a633a7915b7e217bd661ee64cb14eef77">Population</a> (int pop_size, int genome_size, glm::vec4 start, glm::vec4 dest, const <a class="el" href="class_elevation_data.html">ElevationData</a> &amp;data)</td></tr>
-<tr class="separator:a633a7915b7e217bd661ee64cb14eef77"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af036b67dfca03fa520b1e0c14a847973"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#af036b67dfca03fa520b1e0c14a847973">Population</a> (int pop_size, glm::vec4 start, glm::vec4 dest, const <a class="el" href="class_elevation_data.html">ElevationData</a> &amp;data)</td></tr>
+<tr class="separator:af036b67dfca03fa520b1e0c14a847973"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4c8cedd0f038e41746fb6084639f5616"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a4c8cedd0f038e41746fb6084639f5616">~Population</a> ()</td></tr>
 <tr class="separator:a4c8cedd0f038e41746fb6084639f5616"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a28e723c1694a1a831f46dfa454850ee3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_individual.html">Individual</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a28e723c1694a1a831f46dfa454850ee3">getIndividual</a> (int index)</td></tr>
@@ -87,6 +87,8 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
+<tr class="memitem:a52a41d7911ed22285e95244f3f780fbb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a52a41d7911ed22285e95244f3f780fbb">calcGenomeSize</a> ()</td></tr>
+<tr class="separator:a52a41d7911ed22285e95244f3f780fbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae3a4c2457d9276367f242330d8497cb1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#ae3a4c2457d9276367f242330d8497cb1">generatePopulation</a> ()</td></tr>
 <tr class="separator:ae3a4c2457d9276367f242330d8497cb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a94a73718ff797a1420aa28a7018779b0"><td class="memItemLeft" align="right" valign="top">glm::vec4 *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a94a73718ff797a1420aa28a7018779b0">crossoverIndividual</a> (int a, int b)</td></tr>
@@ -135,8 +137,8 @@ Private Attributes</h2></td></tr>
 <p>individual[gene_length + 2] = glm::vec4 This stores the end point of the individual for more simple computation on the GPU. This is constant for every individual in the population.</p>
 <p><a class="el" href="class_population.html">Population</a> stores all of the individuals in one std::vector&lt;glm::vec4&gt; for efficient uploading to the GPU. A single individual can be accessed with the <a class="el" href="struct_individual.html">Individual</a> struct convenience. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a633a7915b7e217bd661ee64cb14eef77"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a633a7915b7e217bd661ee64cb14eef77">&#9670;&nbsp;</a></span>Population()</h2>
+<a id="af036b67dfca03fa520b1e0c14a847973"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af036b67dfca03fa520b1e0c14a847973">&#9670;&nbsp;</a></span>Population()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -146,12 +148,6 @@ Private Attributes</h2></td></tr>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
           <td class="paramname"><em>pop_size</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>genome_size</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -182,7 +178,6 @@ Private Attributes</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">pop_size</td><td>The amount of individuals that should be generated.</td></tr>
-    <tr><td class="paramname">genome_size</td><td>The number of points that each individual should have in its genome. </td></tr>
     <tr><td class="paramname">start</td><td>The start location of the path. X, Y and Z are measured in meters.</td></tr>
     <tr><td class="paramname">dest</td><td>The destination of the path. X, Y and Z are measured in meters.</td></tr>
     <tr><td class="paramname">data</td><td>The elevation data that this population is path-finding on </td></tr>
@@ -252,6 +247,32 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>To evaluate the bezier curve, binomial coefficients are required. These need factorials, so it would be slow to compute them. Instead we do it once, offline because all paths have the same degree. This computes those coefficients. </p>
+
+</div>
+</div>
+<a id="a52a41d7911ed22285e95244f3f780fbb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a52a41d7911ed22285e95244f3f780fbb">&#9670;&nbsp;</a></span>calcGenomeSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Population::calcGenomeSize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This function calculates the size of the genome. This is based off the length of the route that this population represent and has a square root relationship. </p>
 
 </div>
 </div>

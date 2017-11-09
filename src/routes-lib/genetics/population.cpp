@@ -4,14 +4,16 @@
 
 #include "population.h"
 
-Population::Population(int pop_size, int genome_size, glm::vec4 start, glm::vec4 dest, const ElevationData& data) : _data(data) {
+Population::Population(int pop_size, glm::vec4 start, glm::vec4 dest, const ElevationData& data) : _data(data) {
 
     // Save constants
     _pop_size = pop_size;
-    _genome_size = genome_size;
     _start = start;
     _dest = dest;
-    _direction = _dest - _start;
+    _direction = _dest -_start;
+
+    // Figure out how many points we need for this route
+    calcGenomeSize();
 
     // Figure out the number of vectors that make up the entire individual. This is the header, the start
     // and the destination
@@ -25,7 +27,7 @@ Population::Population(int pop_size, int genome_size, glm::vec4 start, glm::vec4
     calcBinomialCoefficients();
 
     // Make a dummy genome
-    dummy_genome = new glm::vec4[genome_size];
+    dummy_genome = new glm::vec4[_genome_size];
 
     // Figure out how many points this route should be evaluated on.
     // We also make sure it is a multiple of workers
@@ -89,8 +91,6 @@ void Population::sortIndividuals() {
 }
 
 void Population::breedIndividuals() {
-
-
 
     // Get a random number of mother and fathers from the top 20%
     // Ensure there is 1 mother and 1 father every time though
@@ -320,6 +320,15 @@ void Population::evaluateCost(const Pod& pod) {
 
     // Download the data
     boost::compute::copy(_opencl_individuals.begin(), _opencl_individuals.end(), _individuals.begin(), queue);
+
+}
+
+void Population::calcGenomeSize() {
+
+    // The genome size has a square root relationship with the length of the route
+    float sqrt_lenth = sqrt(glm::length(_direction));
+    _genome_size = std::round(sqrt_lenth * LENGTH_TO_GENOME);
+    std::cout << "Genome size: " << _genome_size << std::endl;
 
 }
 

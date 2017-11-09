@@ -3,6 +3,7 @@ var searchData=
   ['calcbinomialcoefficient',['calcBinomialCoefficient',['../class_bezier.html#a9f8ca35c731b6bbec7d50465e987f7e7',1,'Bezier']]],
   ['calcbinomialcoefficients',['calcBinomialCoefficients',['../class_population.html#af11b90b5e90c7d41126702d5292cffac',1,'Population']]],
   ['calcconversions',['calcConversions',['../class_elevation_data.html#a865b3c7320ebfb61b609622e053e2798',1,'ElevationData']]],
+  ['calcgenomesize',['calcGenomeSize',['../class_population.html#a52a41d7911ed22285e95244f3f780fbb',1,'Population']]],
   ['calcminmax',['calcMinMax',['../class_elevation_data.html#a6f9c909fb67abc1caf9c77c0ca739191',1,'ElevationData']]],
   ['calcstats',['calcStats',['../class_elevation_data.html#a40fde2e11dbefbb7a585742a7895307a',1,'ElevationData']]],
   ['calculateroute',['calculateRoute',['../class_routes.html#aea76d951d800423c797d03ef4c9fe5e4',1,'Routes']]],

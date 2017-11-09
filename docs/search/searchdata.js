@@ -7,7 +7,7 @@ var indexSectionsWithContent =
   4: "_bcdeghinops",
   5: "r",
   6: "cr",
-  7: "degmtx"
+  7: "deglmnptx"
 };
 
 var indexSectionNames =

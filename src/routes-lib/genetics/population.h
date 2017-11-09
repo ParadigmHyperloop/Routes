@@ -35,6 +35,12 @@
 #define METERS_TO_POINT_CONVERSION 30.1867567568f
 
 /**
+ * To calculate the length of the genome we take the square root of the length of the route and then multiply it
+ * by a constant. This constant is small so we get few points for a lot of meters.
+ */
+#define LENGTH_TO_GENOME 0.0274360619f
+
+/**
  * Individual is a convenience so that individuals can be treated as units rather than
  * as a single float vector, which is how they are stored.
  * Individual is not used to store any new data, but rather reference other data.
@@ -100,8 +106,6 @@ class Population {
          * @param pop_size
          * The amount of individuals that should be generated.
          *
-         * @param genome_size
-         * The number of points that each individual should have in its genome.
          * @param start
          * The start location of the path. X, Y and Z are measured in meters.
          *
@@ -111,7 +115,7 @@ class Population {
          * @param data
          * The elevation data that this population is path-finding on
          */
-        Population(int pop_size, int genome_size, glm::vec4 start, glm::vec4 dest, const ElevationData& data);
+        Population(int pop_size, glm::vec4 start, glm::vec4 dest, const ElevationData& data);
 
         /** dummy_genome is allocated on the heap, so delete that here */
         ~Population();
@@ -153,6 +157,12 @@ class Population {
         void evaluateCost(const Pod& pod);
 
     private:
+
+         /**
+          * This function calculates the size of the genome.
+          * This is based off the length of the route that this population represent and has a square root relationship.
+          */
+        void calcGenomeSize();
 
         /**
          * Generates the initial population using the parameters that were passed in via the constructor.

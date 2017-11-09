@@ -28,12 +28,12 @@ std::vector<glm::vec3> Routes::calculateRoute(glm::vec3 start, glm::vec3 dest) {
     glm::vec2 dest_meter  = data.longitudeLatitudeToMeters(glm::vec2(dest.x,  dest.y));
 
     // Create a pod and a population
-    Pod pod = Pod(339.0);
-    Population pop = Population(200, 12, glm::vec4(start_meter.x, start_meter.y, start.z, 0.0), glm::vec4(dest_meter.x, dest_meter.y, dest.z, 0.0), data);
+    Pod pod = Pod(DEFAULT_POD_MAX_SPEED);
+    Population pop = Population(POP_SIZE, glm::vec4(start_meter.x, start_meter.y, start.z, 0.0), glm::vec4(dest_meter.x, dest_meter.y, dest.z, 0.0), data);
 
     // Solve!
     // These points will be in meters so we need to convert them
-    std::vector<glm::vec3> computed = Genetics::solve(pop, pod, 400);
+    std::vector<glm::vec3> computed = Genetics::solve(pop, pod, NUM_GENERATIONS);
 
     // Convert to longitude, latitude and elevation
     for (int i = 0; i < computed.size(); i++) {

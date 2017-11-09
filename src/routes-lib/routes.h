@@ -10,6 +10,14 @@
 #include "html/html.h"
 #include "db/db.h"
 
+/** */
+
+/** The default size of the population for calculating a route */
+#define POP_SIZE 200
+
+/** The default number of generations that the population should be bred for */
+#define NUM_GENERATIONS 400
+
 /** This is a simple class to handle the complete calculation of a route. */
 class Routes {
 
