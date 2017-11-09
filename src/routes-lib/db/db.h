@@ -83,10 +83,6 @@ class DB {
          */
         static bool datasetContainsRay(int index, const glm::vec3 &start, const glm::vec3 &dest);
 
-
-
-        static
-
         /** A struct for storing each entry in the databsae once it has been loaded */
         struct Entry {
 

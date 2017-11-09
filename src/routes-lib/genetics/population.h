@@ -24,6 +24,13 @@
 #define TRACK_ABOVE_BELOW_EXTREMA 10.0f
 
 /**
+ * Since we assume that paths are relatively close to straight lines, we decide on a maximum deviation from a straight
+ * line that a path can initially generate from. This number represents the max deviation in meters.
+ * (Does not apply to mutation)
+ */
+#define MAX_STRAIGHT_DEVIATION 30000.0f
+
+/**
  * Individual is a convenience so that individuals can be treated as units rather than
  * as a single float vector, which is how they are stored.
  * Individual is not used to store any new data, but rather reference other data.
@@ -184,6 +191,17 @@ class Population {
          */
         void calcBinomialCoefficients();
 
+       /**
+        * This function computes a constrained random point. We do this because it is most likely that the best
+        * route is one that is very close to a straight line. Therefore we constrain the sample space to within
+        * MAX_STRAIGHT_DEVIATION to speed up the convergence. This is especially important for stitching datasets
+        * where the unconstrained sample space is much larger.
+        *
+        * @param to_gen
+        * A vector that should be the receiving end of the generation.
+        */
+        void generateRandomPoint(glm::vec4& to_gen) const;
+
         /** An array of glm::vec4s that's the size of _genome_size. Used to avoid repetitive heap allocations. */
         glm::vec4* dummy_genome;
 
@@ -204,6 +222,12 @@ class Population {
 
         /** The ending position of the path that this population is trying to "solve" */
         glm::vec4 _dest;
+
+        /**
+        * The direction vector of the path that this population is built for.
+        * Measured in meters.
+        */
+        glm::vec4 _direction;
 
         /** The CPU storage of the individuals.*/
         std::vector<glm::vec4> _individuals;

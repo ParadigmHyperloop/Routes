@@ -11,6 +11,7 @@ Population::Population(int pop_size, int genome_size, glm::vec4 start, glm::vec4
     _genome_size = genome_size;
     _start = start;
     _dest = dest;
+    _direction = _dest - _start;
 
     // Figure out the number of vectors that make up the entire individual. This is the header, the start
     // and the destination
@@ -116,17 +117,8 @@ void Population::breedIndividuals() {
         // Adds + 1 to ignore the header
         int individual_start = i * _individual_size + 2;
 
-        for (int j = 0; j < _genome_size; j++) {
-
-            // Create a new random vector with
-            glm::vec4 random_vec = glm::vec4(glm::linearRand(0.0f, _data.getWidthInMeters()),
-                                             glm::linearRand(0.0f, _data.getHeightInMeters()),
-                                             glm::linearRand(_data.getMinElevation() - TRACK_ABOVE_BELOW_EXTREMA,
-                                                             _data.getMaxElevation() + TRACK_ABOVE_BELOW_EXTREMA), 0.0);
-
-            new_population[individual_start + j] = random_vec;
-
-        }
+        for (int j = 0; j < _genome_size; j++)
+            generateRandomPoint(new_population[individual_start + j]);
 
         // Set the start and the destination
         new_population[individual_start - 1] = _start;
@@ -342,17 +334,8 @@ void Population::generatePopulation() {
         // Set the start and the destination
         _individuals[individual_start + _genome_size] = _dest;
 
-        for (int j = 0; j < _genome_size; j++) {
-
-            // Create a new random vector with
-            glm::vec4 random_vec = glm::vec4(glm::linearRand(0.0f, _data.getWidthInMeters()),
-                                             glm::linearRand(0.0f, _data.getHeightInMeters()),
-                                             glm::linearRand(_data.getMinElevation() - TRACK_ABOVE_BELOW_EXTREMA,
-                                                             _data.getMaxElevation() + TRACK_ABOVE_BELOW_EXTREMA), 0.0);
-
-            _individuals[individual_start + j] = random_vec;
-
-        }
+        for (int j = 0; j < _genome_size; j++)
+            generateRandomPoint(_individuals[individual_start + j]);
 
     }
 
@@ -395,10 +378,7 @@ void Population::mutateGenome(glm::vec4* genome) {
         glm::vec4* point_ptr = genome + point;
         
         // Do the mutation
-        (*point_ptr) = glm::vec4(glm::linearRand(0.0f, _data.getWidthInMeters()),
-                                 glm::linearRand(0.0f, _data.getHeightInMeters()),
-                                 glm::linearRand(_data.getMinElevation() - TRACK_ABOVE_BELOW_EXTREMA,
-                                                 _data.getMaxElevation() + TRACK_ABOVE_BELOW_EXTREMA), 0.0);
+        generateRandomPoint((*point_ptr));
         
     }
 
@@ -412,5 +392,24 @@ void Population::calcBinomialCoefficients() {
 
     // Upload to the GPU
     boost::compute::copy(binomials.begin(), binomials.end(), _opencl_binomials.begin(), Kernel::getQueue());
+
+}
+
+void Population::generateRandomPoint(glm::vec4& to_gen) const {
+
+    // First we move along the direction vector by a random amount
+    float percent = glm::linearRand(0.0, 1.0);
+    glm::vec4 progressed = _direction * percent + _start;
+
+    // Generate a random deviation
+    glm::vec4 deviation = progressed + glm::vec4(glm::linearRand(0.0f, MAX_STRAIGHT_DEVIATION),
+                                                 glm::linearRand(0.0f, MAX_STRAIGHT_DEVIATION),
+                                                 0.0f, 0.0f);
+
+    // Final vector, clamp to width and height
+    to_gen = glm::vec4(glm::clamp(deviation.x, 0.0f, _data.getWidthInMeters()),
+                       glm::clamp(deviation.y, 0.0f, _data.getHeightInMeters()),
+                       glm::linearRand(_data.getMinElevation() - TRACK_ABOVE_BELOW_EXTREMA,
+                                       _data.getMaxElevation() + TRACK_ABOVE_BELOW_EXTREMA), 0.0f);
 
 }
