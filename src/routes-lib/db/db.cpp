@@ -122,8 +122,8 @@ std::vector<std::string> DB::getRequiredDatasets(glm::vec2 start, glm::vec2 dest
     for (int i = 0; i < _entries.size(); i++) {
 
         // Check if this contains the ray
-//        if (datasetContainsRay(i, start_3, dest_3))
-//            return {_entries[i].path};
+        if (datasetContainsRay(i, start_3, dest_3))
+            return {_entries[i].path};
 
         // Check for intersection with all three rays
         if (lineIntersectsDatSet(i, start_3, path_vec) /* ||
@@ -142,7 +142,8 @@ bool DB::lineIntersectsDatSet(int index, const glm::vec3 &start, const glm::vec3
     Entry& entry = _entries[index];
 
     // Calculate if the line intersects this dataset.
-    // Algorithm taken from https://stackoverflow.com/questions/99353/how-to-test-if-a-line-segment-intersects-an-axis-aligned-rectange-in-2d, metamal's answer.
+    // Algorithm taken from https://stackoverflow.com/questions/99353/how-to-test-if-a-line-segment-intersects-an-axis-aligned-rectange-in-2d,
+    // ?etamal's answer.
 
     float minx = glm::min(start.x, start.x + direction.x);
     float maxx = glm::max(start.x, start.x + direction.x);

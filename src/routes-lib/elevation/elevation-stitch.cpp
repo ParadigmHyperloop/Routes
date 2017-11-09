@@ -35,17 +35,23 @@ ElevationData ElevationStitch::stitch(const std::vector<std::string>& paths) {
     DataRect buffer_rect = getRequiredRect(root_rect, stitch_rect);
 
     // Ensure that the rect contains all sub-rects
-    for (int i = 2; i < datasets.size(); i++)
-        buffer_rect = getRequiredRect(DataRect(datasets[i]), buffer_rect);
+    for (int w = 2; w < datasets.size(); w++)
+        buffer_rect = getRequiredRect(DataRect(datasets[w]), buffer_rect);
 
     // Get the size we need in pixels now
-    glm::ivec2 size_pixels = glm::ivec2(floor(buffer_rect.extents.x / transform[1]),
-                                        floor(buffer_rect.extents.y / -transform[5]));
+    glm::ivec2 size_pixels = glm::ivec2(ceil(buffer_rect.extents.x / transform[1]),
+                                        ceil(buffer_rect.extents.y / -transform[5]));
 
     // Create a 2D array of the size that we need in pixels
     float** stitched_buffer = new float*[size_pixels.y];
-    for (int i = 0; i < size_pixels.y; i++)
+    for (int i = 0; i < size_pixels.y; i++) {
+        
+        // Create a new buffer and make sure it has a ridiculous value inside it so that we avoid it like the plague
         stitched_buffer[i] = new float[size_pixels.x];
+        memset(stitched_buffer[i], std::numeric_limits<float>::max() , sizeof(float) * size_pixels.x);
+        
+    }
+        
 
     // Read in all of the data
     for (int i = datasets.size() - 1; i >= 0; i--) {
@@ -179,8 +185,11 @@ ElevationStitch::DataRect ElevationStitch::getRequiredRect(DataRect a, DataRect 
     DataRect to_return;
 
     // Get extents
-    to_return.extents = glm::dvec2(getRequiredSizeAxis(a.origin.x, a.extents.x, b.origin.x, b.extents.x),
-                                   getRequiredSizeAxis(a.origin.y, a.extents.y, b.origin.y, b.extents.y));
+    glm::dvec2 maxes = glm::dvec2(glm::max(a.extents.x, b.extents.x),
+                                  glm::max(a.extents.y, b.extents.y));
+    
+    to_return.extents = glm::dvec2(glm::max(maxes.x, getRequiredSizeAxis(a.origin.x, a.extents.x, b.origin.x, b.extents.x)),
+                                   glm::max(maxes.y, getRequiredSizeAxis(a.origin.y, a.extents.y, b.origin.y, b.extents.y)));
 
     // Get the new origin
     to_return.origin = glm::dvec2(glm::min(a.origin.x, b.origin.x),
