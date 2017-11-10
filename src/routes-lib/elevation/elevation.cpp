@@ -256,3 +256,5 @@ glm::dvec2 ElevationData::getCroppedSizeMeters() const {
     return longitudeLatitudeToMeters(_crop_extent) - longitudeLatitudeToMeters(_crop_origin);
 
 }
+
+glm::vec2 ElevationData::getCroppedOriginMeters() const { return longitudeLatitudeToMeters(_crop_origin); }

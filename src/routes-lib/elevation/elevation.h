@@ -178,6 +178,16 @@ public:
      */
     glm::dvec3 pixelsToMetersAndElevation(const glm::ivec2& pos_pixles) const;
 
+
+    /**
+     * Gets the cropped origin's location in meters.
+     * Z and W are unused.
+     *
+     * @return
+     * The origin of the cropped portion of the raster in meters.
+     */
+    glm::vec2 getCroppedOriginMeters() const;
+
 private:
 
     /**
