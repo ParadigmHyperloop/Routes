@@ -14,6 +14,44 @@ var sayings = ["Adding that Musk-y smell",
 var saying_timer;
 var current_saying;
 
+function initMap() {
+                var uluru = {lat: 34.0522, lng: -118.2437};
+                var map = new google.maps.Map(document.getElementById('map-holder'), {
+                    zoom: 7,
+                    center: uluru,
+                    disableDefaultUI: true,
+                    styles: [
+                        {
+                            "featureType": "poi.business",
+                            "stylers": [
+                                {
+                                    "visibility": "off"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "poi.park",
+                            "elementType": "labels.text",
+                            "stylers": [
+                                {
+                                    "visibility": "off"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "road",
+                            "stylers": [
+                                {
+                                    "visibility": "off"
+                                }
+                            ]
+                        }
+                    ]                
+                });
+
+            }
+
+
 window.onload = onLoad()
 
 
@@ -23,6 +61,7 @@ function openNav(){
 }
 function onLoad(){
     $("#loading_blob").hide(); 
+    initMap();
 }
 
 function changeSaying() {
@@ -127,6 +166,43 @@ function gotFinishedRoute(result) {
     });
 
 }
+
+function initMap() {
+                var uluru = {lat: 34.0522, lng: -118.2437};
+                var map = new google.maps.Map(document.getElementById('map-holder'), {
+                    zoom: 7,
+                    center: uluru,
+                    disableDefaultUI: true,
+                    styles: [
+                        {
+                            "featureType": "poi.business",
+                            "stylers": [
+                                {
+                                    "visibility": "off"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "poi.park",
+                            "elementType": "labels.text",
+                            "stylers": [
+                                {
+                                    "visibility": "off"
+                                }
+                            ]
+                        },
+                        {
+                            "featureType": "road",
+                            "stylers": [
+                                {
+                                    "visibility": "off"
+                                }
+                            ]
+                        }
+                    ]                
+                });
+
+            }
 
 function gotInProgress() {
 
