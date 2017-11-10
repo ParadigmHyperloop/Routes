@@ -15,7 +15,7 @@ bool ElevationData::initGDAL() {
 
 }
 
-ElevationData::ElevationData(const std::string& file_path) {
+ElevationData::ElevationData(const std::string& file_path, const glm::vec3& start, const glm::vec3& dest) {
 
     // Get the dataset from the disk
     _gdal_dataset = (GDALDataset*)GDALOpen(file_path.c_str(), GA_ReadOnly);
@@ -24,6 +24,8 @@ ElevationData::ElevationData(const std::string& file_path) {
         // Get the raster band
         _gdal_raster_band = _gdal_dataset->GetRasterBand(1);
 
+        calcCoordinates(start, dest);
+        
         calcConversions();
         calcStats();
         createOpenCLImage();
@@ -46,23 +48,23 @@ ElevationData::~ElevationData() {
 int ElevationData::getWidth() const { return _width; }
 int ElevationData::getHeight() const { return _height; }
 
-float ElevationData::getWidthInMeters() const { return _width_meters; }
-float ElevationData::getHeightInMeters() const { return _height_meters; }
+double ElevationData::getWidthInMeters() const { return _width_meters; }
+double ElevationData::getHeightInMeters() const { return _height_meters; }
 
-float ElevationData::getMinElevation() const { return _elevation_min; }
-float ElevationData::getMaxElevation() const { return _elevation_max; }
+double ElevationData::getMinElevation() const { return _elevation_min; }
+double ElevationData::getMaxElevation() const { return _elevation_max; }
 
 const boost::compute::image2d& ElevationData::getOpenCLImage() const { return _opencl_image; }
 
-glm::vec2 ElevationData::convertPixelsToMeters(const glm::ivec2& pos_pixels) const {
+glm::dvec2 ElevationData::convertPixelsToMeters(const glm::ivec2& pos_pixels) const {
 
     // Multiply by the conversion factors
-    return glm::vec2((float)pos_pixels.x * pixelToMeterConversions[0],
+    return glm::dvec2((float)pos_pixels.x * pixelToMeterConversions[0],
                      (float)pos_pixels.y * pixelToMeterConversions[1]);
 
 }
 
-glm::ivec2 ElevationData::metersToPixels(const glm::vec2 &pos_meters) const {
+glm::ivec2 ElevationData::metersToPixels(const glm::dvec2 &pos_meters) const {
 
     // Divide by the conversion factors
     return glm::ivec2(pos_meters.x / pixelToMeterConversions[0],
@@ -70,7 +72,7 @@ glm::ivec2 ElevationData::metersToPixels(const glm::vec2 &pos_meters) const {
 
 }
 
-glm::vec2 ElevationData::metersToLongitudeLatitude(const glm::vec2& pos_meters) const {
+glm::dvec2 ElevationData::metersToLongitudeLatitude(const glm::dvec2& pos_meters) const {
 
     // Convert back to pixels
     glm::ivec2 pos_pixels = metersToPixels(pos_meters);
@@ -80,16 +82,16 @@ glm::vec2 ElevationData::metersToLongitudeLatitude(const glm::vec2& pos_meters) 
 
 }
 
-glm::vec2 ElevationData::pixelsToLongitudeLatitude(const glm::ivec2& pos_pixels) const {
+glm::dvec2 ElevationData::pixelsToLongitudeLatitude(const glm::ivec2& pos_pixels) const {
 
     // Convert using the GDAL transform
     // Formula can be found in the GDAL tutorial
-    return glm::vec2(_gdal_transform[0] + (float)pos_pixels.x * _gdal_transform[1],
-                     _gdal_transform[3] + (float)pos_pixels.y * _gdal_transform[5]);
+    return glm::dvec2(_gdal_transform[0] + (float)pos_pixels.x * _gdal_transform[1],
+                      _gdal_transform[3] + (float)pos_pixels.y * _gdal_transform[5]);
 
 }
 
-glm::vec2 ElevationData::longitudeLatitudeToMeters(const glm::vec2 lat_lon) const {
+glm::dvec2 ElevationData::longitudeLatitudeToMeters(const glm::vec2 lat_lon) const {
 
     // First convert to pixels using the gdal transform
     glm::ivec2 pixels = glm::ivec2((lat_lon.x - _gdal_transform[0]) / _gdal_transform[1],
@@ -100,29 +102,33 @@ glm::vec2 ElevationData::longitudeLatitudeToMeters(const glm::vec2 lat_lon) cons
 
 }
 
-glm::vec3 ElevationData::metersToMetersAndElevation(const glm::vec2& pos_meters) const {
+glm::dvec3 ElevationData::metersToMetersAndElevation(const glm::dvec2& pos_meters) const {
 
-    glm::vec3 pos_meters_sample = glm::vec3(pos_meters.x, pos_meters.y, 0.0);
+    glm::dvec3 pos_meters_sample = glm::dvec3(pos_meters.x, pos_meters.y, 0.0);
 
     // Get the pixel position
     glm::ivec2 pos_pixels = metersToPixels(pos_meters);
 
     // Do the sample
-    _gdal_raster_band->RasterIO( GF_Read, pos_pixels.x, pos_pixels.y, 1, 1, &pos_meters_sample[2], 1, 0, GDT_Float32, 0, 0);
+    CPLErr err =_gdal_raster_band->RasterIO( GF_Read, pos_pixels.x, pos_pixels.y, 1, 1, &pos_meters_sample[2], 1, 0, GDT_Float32, 0, 0);
+    if (err)
+        throw std::runtime_error("There was an error reading from the GDAL dataset");
 
     return pos_meters_sample;
 
 }
 
 
-glm::vec3 ElevationData::pixelsToMetersAndElevation(const glm::ivec2& pos_pixels) const {
+glm::dvec3 ElevationData::pixelsToMetersAndElevation(const glm::ivec2& pos_pixels) const {
 
     // First convert pixels to meters
-    glm::vec2 pos_meters = convertPixelsToMeters(pos_pixels);
-    glm::vec3 pos_meters_sample = glm::vec3(pos_meters.x, pos_meters.y, 0.0);
+    glm::dvec2 pos_meters = convertPixelsToMeters(pos_pixels);
+    glm::dvec3 pos_meters_sample = glm::vec3(pos_meters.x, pos_meters.y, 0.0);
 
     // Now get the sample instead of calling metersToMetersAndElevation because GDAL samples in pixels
-    _gdal_raster_band->RasterIO( GF_Read, pos_pixels.x, pos_pixels.y, 1, 1, &pos_meters_sample[2], 1, 0, GDT_Float32, 0, 0);
+    CPLErr err = _gdal_raster_band->RasterIO( GF_Read, pos_pixels.x, pos_pixels.y, 1, 1, &pos_meters_sample[2], 1, 0, GDT_Float32, 0, 0);
+    if (err)
+        throw std::runtime_error("There was an error reading from the GDAL dataset");
 
     return pos_meters_sample;
 
@@ -180,12 +186,38 @@ void ElevationData::createOpenCLImage() {
     // Go line by line and read GDAL data to get the data in the format we need
     std::vector<float> image_data = std::vector<float>(_width * _height);
 
-    for (int i = 0; i < _height; i++)
-        _gdal_raster_band->RasterIO( GF_Read, 0, i, _width, 1, &image_data[_width * i], _width, 1, GDT_Float32, 0, 0);
+    for (int i = 0; i < _height; i++) {
+        
+        CPLErr err = _gdal_raster_band->RasterIO( GF_Read, 0, i, _width, 1, &image_data[_width * i], _width, 1, GDT_Float32, 0, 0);
+        if (err)
+            throw std::runtime_error("There was an error reading from the GDAL dataset");
+        
+    }
 
     // Create the OpenCL image
     boost::compute::image_format format = boost::compute::image_format(CL_INTENSITY, CL_FLOAT);
     _opencl_image = boost::compute::image2d(Kernel::getContext(), _width, _height, format, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, &image_data[0]);
 
 
+}
+
+void ElevationData::calcCoordinates(const glm::dvec3& start, const glm::dvec3& dest) {
+    
+    // Get the origin of the subset of data
+    // min X (because -X is left) and max Y (because +Y is up)
+    _bound_origin = glm::vec2(glm::min(start.x, dest.x),
+                              glm::max(start.y, dest.y));
+    
+    // Get the extent of the subset data
+    // max X (because X is right) and min Y (because -Y is down)
+    _bound_extent = glm::vec2(glm::max(start.x, dest.x),
+                              glm::min(start.y, dest.y));
+    
+    // Add on padding
+    _bound_origin += glm::vec2(-DATASET_ROUTE_PADDING,
+                                DATASET_ROUTE_PADDING);
+    
+    _bound_extent += glm::vec2(-DATASET_ROUTE_PADDING,
+                               DATASET_ROUTE_PADDING);
+    
 }

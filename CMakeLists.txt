@@ -44,7 +44,8 @@ IF (WIN32)
   message(STATUS ${GDAL_LIBRARY})
   target_link_libraries(Routes ${OpenCL_LIBRARIES}
                                ${GDAL_LIBRARY}
-                               ${LIBRARIES})
+                               ${LIBRARIES}
+                               -lpthread)
 
   add_custom_command(TARGET copy PRE_BUILD
                      COMMAND ${CMAKE_COMMAND} -E
@@ -94,7 +95,8 @@ IF (WIN32)
   message(WARNING ${GDAL_LIBRARY})
   target_link_libraries(Routes-Exec ${OpenCL_LIBRARIES}
                                     ${GDAL_LIBRARY}
-                                    ${LIBRARIES})
+                                    ${LIBRARIES}
+                                    -lpthread)
 
 ELSE()
 
@@ -124,7 +126,8 @@ IF (WIN32)
   message(STATUS ${GDAL_LIBRARY})
   target_link_libraries(Routes-Server ${OpenCL_LIBRARIES}
                                       ${GDAL_LIBRARY}
-                                      ${LIBRARIES})
+                                      ${LIBRARIES}
+                                      -lpthread)
 
 ELSE()
 

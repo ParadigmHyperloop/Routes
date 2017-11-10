@@ -6,7 +6,6 @@
 #define ROUTES_ROUTES_H
 
 #include "genetics/genetics.h"
-#include "elevation/elevation-stitch.h"
 #include "html/html.h"
 #include "db/db.h"
 

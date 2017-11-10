@@ -18,10 +18,10 @@ std::vector<glm::vec3> Routes::calculateRoute(glm::vec3 start, glm::vec3 dest) {
         throw std::runtime_error("Data to compute this route was missing or the database is corrupt.");
 
     // Stitch together the data
-    ElevationData data = ElevationData(required_data[0]);
+    ElevationData data = ElevationData("", start, dest);
     
-    if (required_data.size() > 1)
-        data = ElevationStitch::stitch(required_data);
+//    if (required_data.size() > 1)
+//        data = ElevationStitch::stitch(required_data);
 
     // Figure out where the longitude and latitude are in meters
     glm::vec2 start_meter = data.longitudeLatitudeToMeters(glm::vec2(start.x, start.y));
