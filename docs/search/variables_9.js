@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['origin',['origin',['../struct_d_b_1_1_entry.html#a7fa27d4c9e58f971d3819707c7c2a081',1,'DB::Entry::origin()'],['../struct_elevation_stitch_1_1_data_rect.html#afddd10ba89c3a93345b582b07859060d',1,'ElevationStitch::DataRect::origin()']]]
+  ['start',['start',['../class_c_m_d.html#acd02f54ccc657259eaaa3020e044f7db',1,'CMD::start()'],['../struct_routes_queue_1_1_route_item.html#a584eb23c2a5e75f8e47d93ce8aaa38a3',1,'RoutesQueue::RouteItem::start()']]]
 ];

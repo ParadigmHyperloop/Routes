@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['vectortojson',['vectorToJSON',['../class_routes_server.html#a2f9b33991a047e2a28337385f5f7cfbb',1,'RoutesServer']]]
+  ['_7eelevationdata',['~ElevationData',['../class_elevation_data.html#a5a794b83d7aaf57a2820649b29ffae31',1,'ElevationData']]],
+  ['_7epopulation',['~Population',['../class_population.html#a4c8cedd0f038e41746fb6084639f5616',1,'Population']]]
 ];

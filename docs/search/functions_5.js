@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['handlecompute',['handleCompute',['../class_routes_server.html#af6cbfc7bed53a9513652ebcf57db0e62',1,'RoutesServer']]],
-  ['handlecors',['handleCORS',['../class_routes_server.html#a0fbe118020f33b6c8bbb738b69a2e650',1,'RoutesServer']]],
-  ['handleretrieval',['handleRetrieval',['../class_routes_server.html#a4e7cca25126f5a8fe309462b4ee9da49',1,'RoutesServer']]]
+  ['initgdal',['initGDAL',['../class_elevation_data.html#a50909d84ca168bc1fc1047b653d2d00a',1,'ElevationData']]],
+  ['initopencl',['initOpenCL',['../class_kernel.html#aaf85aedc18138e6b5857e83658cf7582',1,'Kernel']]],
+  ['isroutecompleted',['isRouteCompleted',['../class_routes_queue.html#a8f3ef306a73330317fec093c3bcd9c13',1,'RoutesQueue']]]
 ];

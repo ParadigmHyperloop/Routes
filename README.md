@@ -1,4 +1,5 @@
 # Routes
+[Travis] : https://travis-ci.org/ParadigmHyperloop/Routes.svg?branch=master
 
 ## Documentation
 Full C++ documentation can be found at https://paradigmhyperloop.github.io/Routes/index.html

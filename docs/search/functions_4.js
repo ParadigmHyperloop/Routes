@@ -1,23 +1,6 @@
 var searchData=
 [
-  ['generatehtmlforpath',['generateHTMLForPath',['../class_h_t_m_l.html#a7cd31d05ec60ad2155a751933c4588cd',1,'HTML']]],
-  ['generatepopulation',['generatePopulation',['../class_population.html#ae3a4c2457d9276367f242330d8497cb1',1,'Population']]],
-  ['generaterandompoint',['generateRandomPoint',['../class_population.html#abe7ee50b9ccf97dc23c0da85197b5068',1,'Population']]],
-  ['getbinomialcoefficients',['getBinomialCoefficients',['../class_bezier.html#af8184ad8c9c23625005c40efe7f74d13',1,'Bezier']]],
-  ['getcompletedroute',['getCompletedRoute',['../class_routes_queue.html#a8e579ab43c560d2e9bb2809e9a5b08f7',1,'RoutesQueue']]],
-  ['getcontext',['getContext',['../class_kernel.html#a52489f89ded060d514b7e5d12f23e720',1,'Kernel']]],
-  ['getheight',['getHeight',['../class_elevation_data.html#a57d19e4a6ebe4f2d0b971438d60d8ee3',1,'ElevationData']]],
-  ['getheightinmeters',['getHeightInMeters',['../class_elevation_data.html#adcb339186a1244cc023b8c3e4d8ae38d',1,'ElevationData']]],
-  ['getindividual',['getIndividual',['../class_population.html#a28e723c1694a1a831f46dfa454850ee3',1,'Population']]],
-  ['getmaxelevation',['getMaxElevation',['../class_elevation_data.html#a0b03c59a99c4df049b68437341ba4c4a',1,'ElevationData']]],
-  ['getminelevation',['getMinElevation',['../class_elevation_data.html#a7e908fc7c774b1a910cf00c7773f224a',1,'ElevationData']]],
-  ['getopenclimage',['getOpenCLImage',['../class_elevation_data.html#ad8b2c4db5db23e9dfd88bfbf11097b01',1,'ElevationData']]],
-  ['getprogram',['getProgram',['../class_kernel.html#acdcf2c3d857cf7bbf74aedf1f61c2502',1,'Kernel']]],
-  ['getqueue',['getQueue',['../class_kernel.html#aa5273e14f07845343045a53124b0d057',1,'Kernel']]],
-  ['getrequireddatasets',['getRequiredDatasets',['../class_d_b.html#a73c2b5f3de995986c1d167f13e5ce63e',1,'DB']]],
-  ['getrequiredrect',['getRequiredRect',['../class_elevation_stitch.html#a1b479e5fd72575c45c36589c8555afec',1,'ElevationStitch']]],
-  ['getrequiredsizeaxis',['getRequiredSizeAxis',['../class_elevation_stitch.html#ad66d215db984a9a6e3ef51ff57fa3994',1,'ElevationStitch']]],
-  ['getstate',['getState',['../class_c_m_d.html#a78241396d0dfc04b988e64e7eb8caede',1,'CMD']]],
-  ['getwidth',['getWidth',['../class_elevation_data.html#a2321308f5d5c2d272d0637721e549dbe',1,'ElevationData']]],
-  ['getwidthinmeters',['getWidthInMeters',['../class_elevation_data.html#a73f5437a187a8f1d86e3d44dc6bb67a5',1,'ElevationData']]]
+  ['handlecompute',['handleCompute',['../class_routes_server.html#af6cbfc7bed53a9513652ebcf57db0e62',1,'RoutesServer']]],
+  ['handlecors',['handleCORS',['../class_routes_server.html#a0fbe118020f33b6c8bbb738b69a2e650',1,'RoutesServer']]],
+  ['handleretrieval',['handleRetrieval',['../class_routes_server.html#a4e7cca25126f5a8fe309462b4ee9da49',1,'RoutesServer']]]
 ];

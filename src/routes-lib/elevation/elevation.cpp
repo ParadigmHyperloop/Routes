@@ -25,16 +25,16 @@ ElevationData::ElevationData(const std::string& file_path, const glm::dvec3& sta
         _gdal_raster_band = _gdal_dataset->GetRasterBand(1);
 
         calcCroppedSize(start, dest);
-        
+
         calcConversions();
         calcStats();
         createOpenCLImage();
-        
+
         calcMinMax();
 
 
     } else std::cout << "Error loading the GDAL dataset from the disk\n";
-    
+
 }
 
 ElevationData::~ElevationData() {
@@ -103,11 +103,11 @@ glm::dvec2 ElevationData::longitudeLatitudeToMeters(const glm::dvec2 lat_lon) co
 }
 
 glm::ivec2 ElevationData::longitudeLatitudeToPixels(const glm::dvec2 lat_lon) const {
-    
+
     // First convert to pixels using the gdal transform
     return glm::ivec2((lat_lon.x - _gdal_transform[0]) / _gdal_transform[1],
                       (lat_lon.y - _gdal_transform[3]) / _gdal_transform[5]);
-    
+
 }
 
 glm::dvec3 ElevationData::metersToMetersAndElevation(const glm::dvec2& pos_meters) const {
@@ -124,7 +124,7 @@ glm::dvec3 ElevationData::metersToMetersAndElevation(const glm::dvec2& pos_meter
         throw std::runtime_error("There was an error reading from the dataset");
 
     pos_meters_sample.z = (double)z;
-    
+
     return pos_meters_sample;
 
 }
@@ -135,40 +135,37 @@ glm::dvec3 ElevationData::pixelsToMetersAndElevation(const glm::ivec2& pos_pixel
     // First convert pixels to meters
     glm::dvec2 pos_meters = convertPixelsToMeters(pos_pixels);
     glm::dvec3 pos_meters_sample = glm::dvec3(pos_meters.x, pos_meters.y, 0.0);
-    float z = 0.0;
 
     // Now get the sample instead of calling metersToMetersAndElevation because GDAL samples in pixels
-    CPLErr err = _gdal_raster_band->RasterIO(GF_Read, pos_pixels.x, pos_pixels.y, 1, 1, &z, 1, 1, GDT_Float32, 0, 0);
+    CPLErr err = _gdal_raster_band->RasterIO(GF_Read, pos_pixels.x, pos_pixels.y, 1, 1, &pos_meters_sample.z, 1, 1, GDT_Float32, 0, 0);
     if (err)
         throw std::runtime_error("There was an error reading from the dataset");
-
-    pos_meters_sample.z = (double)z;
 
     return pos_meters_sample;
 
 }
 
 void ElevationData::calcCroppedSize(const glm::dvec3& start, const glm::dvec3& dest) {
-    
+
     // Get the origin of the cropped data.
     // On the X this is the min because as you go left, X gets more negative
     // On the Y this is the max because as you go up, Y gets more positive
     _crop_origin = glm::dvec2(glm::min(start.x, dest.x),
                               glm::max(start.y, dest.y));
-    
+
     // Get the extent of the cropped data.
     // On the X this is the max because as you go right, X gets more positive
     // On the Y this is the min because as you go down, Y gets more negative
     _crop_extent = glm::dvec2(glm::max(start.x, dest.x),
                               glm::min(start.y, dest.y));
-    
+
     // Add padding on
     _crop_origin += glm::dvec2(-ROUTE_PADDING,
-                                ROUTE_PADDING);
-    
+                               ROUTE_PADDING);
+
     _crop_extent += glm::dvec2( ROUTE_PADDING,
-                               -ROUTE_PADDING);
-    
+                                -ROUTE_PADDING);
+
 }
 
 void ElevationData::calcConversions() {
@@ -222,29 +219,29 @@ void ElevationData::createOpenCLImage() {
     // Convert the cropped rect to pixels
     glm::ivec2 crop_origin_p = longitudeLatitudeToPixels(_crop_origin);
     glm::ivec2 crop_extent_p = longitudeLatitudeToPixels(_crop_extent);
-    
+
     // Make sure that the coordinates are inside the raster image
     glm::ivec2 crop_origin_c = glm::ivec2(glm::clamp(crop_origin_p.x, 0, _gdal_dataset->GetRasterXSize()),
                                           glm::clamp(crop_origin_p.y, 0, _gdal_dataset->GetRasterYSize()));
     glm::ivec2 crop_extent_c = glm::ivec2(glm::clamp(crop_extent_p.x, 0, _gdal_dataset->GetRasterXSize()),
                                           glm::clamp(crop_extent_p.y, 0, _gdal_dataset->GetRasterYSize()));
-    
+
     // Calculate the adjusted width and height
     glm::ivec2 size = crop_extent_c - crop_origin_c;
-    
+
     // OpenCL needs image data to be in a 1D double array.
     // Go line by line and read GDAL data to get the data in the format we need
     std::vector<float> image_data = std::vector<float>(size.x * size.y);
 
     for (int i = 0; i < size.y; i++) {
-        
+
         CPLErr err = _gdal_raster_band->RasterIO(GF_Read, crop_origin_c.x, i + crop_origin_c.y, size.x,
                                                  1, &image_data[size.x * i], size.x, 1, GDT_Float32, 0, 0);
         if (err)
             throw std::runtime_error("There was an error reading from the dataset");
-        
+
     }
-    
+
     std::cout << image_data[10000] << std::endl;
 
     // Create the OpenCL image
@@ -254,29 +251,8 @@ void ElevationData::createOpenCLImage() {
 }
 
 glm::dvec2 ElevationData::getCroppedSizeMeters() const {
-    
+
     // Convert to meters and subtract
     return longitudeLatitudeToMeters(_crop_extent) - longitudeLatitudeToMeters(_crop_origin);
-    
-}
 
-void ElevationData::calcCoordinates(const glm::dvec3& start, const glm::dvec3& dest) {
-    
-    // Get the origin of the subset of data
-    // min X (because -X is left) and max Y (because +Y is up)
-    _bound_origin = glm::vec2(glm::min(start.x, dest.x),
-                              glm::max(start.y, dest.y));
-    
-    // Get the extent of the subset data
-    // max X (because X is right) and min Y (because -Y is down)
-    _bound_extent = glm::vec2(glm::max(start.x, dest.x),
-                              glm::min(start.y, dest.y));
-    
-    // Add on padding
-    _bound_origin += glm::vec2(-DATASET_ROUTE_PADDING,
-                                DATASET_ROUTE_PADDING);
-    
-    _bound_extent += glm::vec2(-DATASET_ROUTE_PADDING,
-                               DATASET_ROUTE_PADDING);
-    
 }
