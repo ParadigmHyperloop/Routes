@@ -48,7 +48,7 @@
             return {
                 
                 type: "GET",
-                url: "http://localhost:8080/compute?start=" + start + "&dest=" + dest,
+                url: "http://hyperroutes.duckdns.org:8080/compute?start=" + start + "&dest=" + dest,
 
                 contentType: "text/plain",
 
@@ -64,7 +64,7 @@
             return {
                 
                 type: "GET",
-                url: "http://localhost:8080/retrieve?id=" + _ident,
+                url: "http://hyperroutes.duckdns.org:8080/retrieve?id=" + _ident,
 
                 contentType: "text/plain",
 
@@ -233,7 +233,7 @@
         <script>
         var map = new mapboxgl.Map({
             container: 'map',
-            style: 'http://localhost:8888/hyperloop_map.json',
+            style: 'http://hyperroutes.duckdns.org:8888/hyperloop_map.json',
             center: [-117.7, 34.5],
             zoom: 8
         });
