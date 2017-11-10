@@ -115,7 +115,7 @@ void RoutesServer::onServerReady(restbed::Service &service) {
         while (true) {
 
             // Sleep for a single second and then try to calculate some new routes
-            CPLSleep(1);
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
             RoutesQueue::calculateRoutes();
 
         }

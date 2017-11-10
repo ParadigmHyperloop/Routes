@@ -307,11 +307,14 @@ void Population::evaluateCost(const Pod& pod) {
             }
     });
 
+    // Get the cropped size of the data
+    glm::vec2 size_crop = _data.getCroppedSizeMeters();
+
     // Create a temporary kernel and execute it
     static Kernel kernel = Kernel(source, "cost");
     kernel.setArgs(_data.getOpenCLImage(), _opencl_individuals.get_buffer(), _genome_size + 2,
-                   MAX_SLOPE_GRADE, pod.minCurveRadius(), EXCAVATION_DEPTH, _data.getWidthInMeters(),
-                   _data.getHeightInMeters(), _opencl_binomials.get_buffer(),
+                   MAX_SLOPE_GRADE, pod.minCurveRadius(), EXCAVATION_DEPTH, size_crop.x,
+                   size_crop.y, _opencl_binomials.get_buffer(),
                    _num_evaluation_points_1, _num_evaluation_points / 50);
 
     // Execute the 2D kernel with a work size of 5. 5 threads working on a single individual
