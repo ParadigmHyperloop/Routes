@@ -31,8 +31,9 @@ Population::Population(int pop_size, glm::vec4 start, glm::vec4 dest, const Elev
 
     // Figure out how many points this route should be evaluated on.
     // We also make sure it is a multiple of workers
-    _num_evaluation_points = ceil(glm::max(data.getHeightInMeters() / METERS_TO_POINT_CONVERSION,
-                                           data.getHeightInMeters() / METERS_TO_POINT_CONVERSION) / 50.0) * 50;
+    glm::dvec2 cropped_size = data.getCroppedSizeMeters();
+    _num_evaluation_points = ceil(glm::max(cropped_size.x / METERS_TO_POINT_CONVERSION,
+                                           cropped_size.y / METERS_TO_POINT_CONVERSION) / 50.0) * 50;
     
     std::cout << "Using " << _num_evaluation_points << " points of evaluation" << std::endl;
     _num_evaluation_points_1 = (float)_num_evaluation_points - 1.0f;
@@ -423,9 +424,9 @@ void Population::generateRandomPoint(glm::vec4& to_gen) const {
                                                  0.0f, 0.0f);
 
     // Final vector, clamp to width and height
-    to_gen = glm::vec4(glm::clamp(deviation.x, 0.0f, _data.getWidthInMeters()),
-                       glm::clamp(deviation.y, 0.0f, _data.getHeightInMeters()),
+    to_gen = glm::vec4(glm::clamp((double)deviation.x, 0.0, _data.getWidthInMeters()),
+                       glm::clamp((double)deviation.y, 0.0, _data.getHeightInMeters()),
                        glm::linearRand(_data.getMinElevation() - TRACK_ABOVE_BELOW_EXTREMA,
-                                       _data.getMaxElevation() + TRACK_ABOVE_BELOW_EXTREMA), 0.0f);
+                                       _data.getMaxElevation() + TRACK_ABOVE_BELOW_EXTREMA), 0.0);
 
 }
