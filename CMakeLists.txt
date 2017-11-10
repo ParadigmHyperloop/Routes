@@ -34,8 +34,8 @@ ELSE()
 ENDIF()
 
 # Include stuff
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include
-                    ${GDAL_INCLUDE_DIR})
+include_directories(SYSTEM ${CMAKE_CURRENT_SOURCE_DIR}/include
+                           ${GDAL_INCLUDE_DIR})
 
 add_custom_target(copy)
 
@@ -55,7 +55,8 @@ ELSE()
 
   target_link_libraries(Routes ${OPENCL_LIBRARIES}
                                ${GDAL_LIBRARY}
-                               ${LIBRARIES})
+                               ${LIBRARIES}
+                               -lpthread)
 
 ENDIF()
 
@@ -99,7 +100,8 @@ ELSE()
 
   target_link_libraries(Routes-Exec ${OPENCL_LIBRARIES}
                                     ${GDAL_LIBRARY}
-                                    ${LIBRARIES})
+                                    ${LIBRARIES}
+                                    -lpthread)
 
 ENDIF()
 
@@ -128,7 +130,8 @@ ELSE()
 
   target_link_libraries(Routes-Server ${OPENCL_LIBRARIES}
                                       ${GDAL_LIBRARY}
-                                      ${LIBRARIES})
+                                      ${LIBRARIES}
+                                      -lpthread)
 
 ENDIF()
 
