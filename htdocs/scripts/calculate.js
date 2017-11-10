@@ -13,6 +13,7 @@ var sayings = ["Adding that Musk-y smell",
 
 var saying_timer;
 var current_saying;
+var map = null;
 
 window.onload = onLoad()
 
@@ -22,8 +23,8 @@ function onLoad(){
 
 function initMap() {
     var uluru = {lat: 34.0522, lng: -118.2437};
-    var map = new google.maps.Map(document.getElementById('map-holder'), {
-        zoom: 7,
+    map = new google.maps.Map(document.getElementById('map-holder'), {
+        zoom: 3,
         center: uluru,
         disableDefaultUI: true,
         styles: [
@@ -58,7 +59,6 @@ function initMap() {
 
 }
 
-
 function initAutocomplete(){
     autocomplete = new google.maps.places.Autocomplete((document.getElementById('autocomplete')),
                                                        {types: ['geocode']});
@@ -68,14 +68,9 @@ function initAutocomplete(){
 
 }
 
-
-
-
 function openNav(){
     $("#overlay").css("width","100%");
 }
-
-
 
 function changeSaying() {
 
@@ -180,43 +175,6 @@ function gotFinishedRoute(result) {
 
 }
 
-//function initMap() {
-//    var uluru = {lat: 34.0522, lng: -118.2437};
-//    var map = new google.maps.Map(document.getElementById('map-holder'), {
-//        zoom: 7,
-//        center: uluru,
-//        disableDefaultUI: true,
-//        styles: [
-//            {
-//                "featureType": "poi.business",
-//                "stylers": [
-//                    {
-//                        "visibility": "off"
-//                    }
-//                ]
-//            },
-//            {
-//                "featureType": "poi.park",
-//                "elementType": "labels.text",
-//                "stylers": [
-//                    {
-//                        "visibility": "off"
-//                    }
-//                ]
-//            },
-//            {
-//                "featureType": "road",
-//                "stylers": [
-//                    {
-//                        "visibility": "off"
-//                    }
-//                ]
-//            }
-//        ]                
-//    });
-//}
-
-
 function gotInProgress() {
 
     // Set a timer 
@@ -230,7 +188,6 @@ function checkCompleted() {
 
 }
 
-
 var ident = "";
 function handleIdentifier(result) {
 
@@ -242,9 +199,13 @@ function handleIdentifier(result) {
     setTimeout(checkCompleted, 1000);
 }
 
-
 function push() {
+    zoomToLocation();
+    
     $("#overlay").css("width","0%");
+    
+    
+    
     //    $.ajax(getComputeRequest("-119.001666666700032,35.001666666664143,550.0", 
     //                             "-118.5000000,34.5000000,145.0", 
     //                             handleIdentifier));
@@ -252,4 +213,19 @@ function push() {
     $("#loading_blob").show();
     changeSaying();
 
+}
+
+function zoomToLocation(){
+    
+    var startlat = autocomplete.getPlace().geometry.location.lat();
+    var startlong = autocomplete.getPlace().geometry.location.lng();
+    
+    var endlat = autocomplete2.getPlace().geometry.location.lat();
+    var endlong = autocomplete2.getPlace().geometry.location.lng();
+    
+    var centerlat = (startlat + endlat)/2;
+    var centerlong = (startlong + endlong)/2;
+    
+    map.setCenter({ lat: centerlat, lng: centerlong })
+    console.log(centerlong)
 }
