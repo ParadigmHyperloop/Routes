@@ -135,11 +135,14 @@ glm::dvec3 ElevationData::pixelsToMetersAndElevation(const glm::ivec2& pos_pixel
     // First convert pixels to meters
     glm::dvec2 pos_meters = convertPixelsToMeters(pos_pixels);
     glm::dvec3 pos_meters_sample = glm::dvec3(pos_meters.x, pos_meters.y, 0.0);
+    float z = 0.0;
 
     // Now get the sample instead of calling metersToMetersAndElevation because GDAL samples in pixels
-    CPLErr err = _gdal_raster_band->RasterIO(GF_Read, pos_pixels.x, pos_pixels.y, 1, 1, &pos_meters_sample.z, 1, 1, GDT_Float32, 0, 0);
+    CPLErr err = _gdal_raster_band->RasterIO(GF_Read, pos_pixels.x, pos_pixels.y, 1, 1, &z, 1, 1, GDT_Float32, 0, 0);
     if (err)
         throw std::runtime_error("There was an error reading from the dataset");
+
+    pos_meters_sample.z = (double)z;
 
     return pos_meters_sample;
 
@@ -254,5 +257,26 @@ glm::dvec2 ElevationData::getCroppedSizeMeters() const {
     
     // Convert to meters and subtract
     return longitudeLatitudeToMeters(_crop_extent) - longitudeLatitudeToMeters(_crop_origin);
+    
+}
+
+void ElevationData::calcCoordinates(const glm::dvec3& start, const glm::dvec3& dest) {
+    
+    // Get the origin of the subset of data
+    // min X (because -X is left) and max Y (because +Y is up)
+    _bound_origin = glm::vec2(glm::min(start.x, dest.x),
+                              glm::max(start.y, dest.y));
+    
+    // Get the extent of the subset data
+    // max X (because X is right) and min Y (because -Y is down)
+    _bound_extent = glm::vec2(glm::max(start.x, dest.x),
+                              glm::min(start.y, dest.y));
+    
+    // Add on padding
+    _bound_origin += glm::vec2(-DATASET_ROUTE_PADDING,
+                                DATASET_ROUTE_PADDING);
+    
+    _bound_extent += glm::vec2(-DATASET_ROUTE_PADDING,
+                               DATASET_ROUTE_PADDING);
     
 }

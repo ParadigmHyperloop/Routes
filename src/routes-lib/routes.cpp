@@ -10,7 +10,7 @@ std::vector<glm::vec3> Routes::calculateRoute(glm::vec3 start, glm::vec3 dest) {
     
     // Stitch together the data
     ElevationData data = ElevationData("../data/db.vtf", start, dest);
-    
+
     // Figure out where the longitude and latitude are in meters
     glm::dvec3 start_meter = data.metersToMetersAndElevation(data.longitudeLatitudeToMeters(glm::vec2(start.x, start.y)));
     glm::dvec3 dest_meter  = data.metersToMetersAndElevation(data.longitudeLatitudeToMeters(glm::vec2(dest.x,  dest.y)));

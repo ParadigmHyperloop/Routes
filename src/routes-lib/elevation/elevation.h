@@ -208,6 +208,18 @@ class ElevationData {
 
         /** Translate the GDAL data into an OpenCL texture */
         void createOpenCLImage();
+    
+        /**
+         * This function computes the minimum bounding rectangle on the dataset for the given route. We do this so we can create an OpenCL
+         * texture that is specially fit to the route. This is padded by DATASET_ROUTE_PADDING so that there is slightly more samplespace than required
+         *
+         * @param start
+         * The starting position in longitude latitude of the route.
+         *
+         * @param dest
+         * The ending position in longitude latitude of the route.
+         */
+        void calcCoordinates(const glm::dvec3& start, const glm::dvec3& dest);
 
         /**
          * The GDAL data that is loaded from the disk.
@@ -241,12 +253,12 @@ class ElevationData {
 
         /** The maximum elevation in meters of the terrain in the raster image in meters */
         double _elevation_max;
-    
+
         /** The origin of the subset of data that was taken to encapsulate the route in longitude latitude */
         glm::dvec2 _crop_origin;
     
         /** The extent (origin + size) of the subset of data that was taken to encapsulate the route in longitude latitude */
-    glm::dvec2 _crop_extent;
+        glm::dvec2 _crop_extent;
 
         /**
          * Two conversions factors that translate pixels to meters for this particular image.
@@ -256,6 +268,12 @@ class ElevationData {
 
         /** The OpenCL image that is created once the data is loaded up from GDAL */
         boost::compute::image2d _opencl_image;
+    
+        /** The origin of the dataset adjusted for the route in longitude latitude */
+        glm::vec2 _bound_origin;
+    
+        /** The furthest extent of the dataset adjusted for the route in longitude latitude  */
+        glm::vec2 _bound_extent;
 
     private:
 
