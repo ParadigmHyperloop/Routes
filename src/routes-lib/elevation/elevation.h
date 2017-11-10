@@ -47,7 +47,7 @@ public:
      * @param dest
      * The ending position in longitude latitude of the route.
      */
-    ElevationData(const std::string& file_path, const glm::dvec3& start, const glm::dvec3& dest);
+    ElevationData(const std::string& file_path, const glm::dvec2& start, const glm::dvec2& dest);
 
     /**
      * GDAL obejects are created on the heap so these are de-allocated here.
@@ -200,7 +200,7 @@ private:
     * @param dest
     * The ending position in longitude latitude of the route.
     */
-    void calcCroppedSize(const glm::dvec3& start, const glm::dvec3& dest);
+    void calcCroppedSize(const glm::dvec2& start, const glm::dvec2& dest);
 
     /** Calculate the conversion factors to translate GDAL pixels to meters */
     void calcConversions();

@@ -54,9 +54,9 @@ void RoutesServer::handleCompute(const std::shared_ptr<restbed::Session> session
     std::string start_s = request->get_query_parameter("start", "");
     std::string dest_s = request->get_query_parameter("dest", "");
 
-    glm::vec3 start, dest;
-    sscanf(start_s.c_str(), "%f,%f,%f", &start.x, &start.y, &start.z);
-    sscanf(dest_s.c_str(),  "%f,%f,%f", &dest.x, &dest.y, &dest.z);
+    glm::vec2 start, dest;
+    sscanf(start_s.c_str(), "%f,%f", &start.x, &start.y);
+    sscanf(dest_s.c_str(),  "%f,%f", &dest.x, &dest.y);
 
     // Add the route to the queue
     size_t id = RoutesQueue::queueRoute(start, dest);

@@ -6,8 +6,8 @@
 
 RoutesState CMD::_state = Calculating;
 
-glm::vec3 CMD::start = glm::vec3(0.0);
-glm::vec3 CMD::dest = glm::vec3(0.0);
+glm::vec2 CMD::start = glm::vec2(0.0);
+glm::vec2 CMD::dest = glm::vec2(0.0);
 
 void CMD::parseArguments(int argc, const char* argv[]) {
 
@@ -18,9 +18,9 @@ void CMD::parseArguments(int argc, const char* argv[]) {
             ("help", "Prints the help message")
             ("rebuild", "Rebuilds the database from the contents of the data folder")
             ("start", boost::program_options::value<std::string>(),
-             "Example: start=X,Y,Z where X and Y are the longitude and latitude of the start of the route and Z is the elevation in meters")
+             "Example: start=X,Y where X and Y are the longitude and latitude of the start of the route")
             ("dest", boost::program_options::value<std::string>(),
-             "Example: dest=X,Y,Z where X and Y are the longitude and latitude of the destination of the route and Z is the elevation in meters")
+             "Example: dest=X,Y where X and Y are the longitude and latitude of the destination of the route")
             ;
 
     boost::program_options::variables_map var_map;
@@ -48,8 +48,8 @@ void CMD::parseArguments(int argc, const char* argv[]) {
             std::string start_string = var_map["start"].as<std::string>();
             std::string dest_string  = var_map["dest"].as<std::string>();
 
-            sscanf(start_string.c_str(), "%f,%f,%f", &start.x, &start.y, &start.z);
-            sscanf(dest_string.c_str(),  "%f,%f,%f", &dest.x, &dest.y, &dest.z);
+            sscanf(start_string.c_str(), "%f,%f", &start.x, &start.y);
+            sscanf(dest_string.c_str(),  "%f,%f", &dest.x, &dest.y);
 
         } else {
 

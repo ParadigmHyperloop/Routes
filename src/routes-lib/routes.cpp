@@ -4,7 +4,7 @@
 
 #include "routes.h"
 
-std::vector<glm::vec3> Routes::calculateRoute(glm::vec3 start, glm::vec3 dest) {
+std::vector<glm::vec3> Routes::calculateRoute(glm::vec2 start, glm::vec2 dest) {
 
     std::cout << "Calculating a route\n";
     
@@ -12,8 +12,8 @@ std::vector<glm::vec3> Routes::calculateRoute(glm::vec3 start, glm::vec3 dest) {
     ElevationData data = ElevationData("../data/db.vtf", start, dest);
 
     // Figure out where the longitude and latitude are in meters
-    glm::dvec3 start_meter = data.metersToMetersAndElevation(data.longitudeLatitudeToMeters(glm::vec2(start.x, start.y)));
-    glm::dvec3 dest_meter  = data.metersToMetersAndElevation(data.longitudeLatitudeToMeters(glm::vec2(dest.x,  dest.y)));
+    glm::dvec3 start_meter = data.metersToMetersAndElevation(data.longitudeLatitudeToMeters(start));
+    glm::dvec3 dest_meter  = data.metersToMetersAndElevation(data.longitudeLatitudeToMeters(dest));
 
     std::cout << "Final path was: " << glm::to_string(start_meter) << " -> " << glm::to_string(dest_meter) << std::endl;
     

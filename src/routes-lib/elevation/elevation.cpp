@@ -15,7 +15,7 @@ bool ElevationData::initGDAL() {
 
 }
 
-ElevationData::ElevationData(const std::string& file_path, const glm::dvec3& start, const glm::dvec3& dest) {
+ElevationData::ElevationData(const std::string& file_path, const glm::dvec2& start, const glm::dvec2& dest) {
 
     // Get the dataset from the disk
     _gdal_dataset = (GDALDataset*)GDALOpenShared(file_path.c_str(), GA_ReadOnly);
@@ -145,7 +145,7 @@ glm::dvec3 ElevationData::pixelsToMetersAndElevation(const glm::ivec2& pos_pixel
 
 }
 
-void ElevationData::calcCroppedSize(const glm::dvec3& start, const glm::dvec3& dest) {
+void ElevationData::calcCroppedSize(const glm::dvec2& start, const glm::dvec2& dest) {
 
     // Get the origin of the cropped data.
     // On the X this is the min because as you go left, X gets more negative
