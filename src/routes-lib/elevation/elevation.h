@@ -20,15 +20,17 @@
  */
 #define EARTH_RADIUS 6378137.0
 
-class ElevationStitch;
+/**
+* When determining the cropped rect for a route we add a little bit of padding.
+* This gives slightly more sample space to explore to perhaps find a better solution.
+*/
+#define ROUTE_PADDING 0.1
 
 /**
  * ElevationData is a class that converts elevation data from GDAL into
  * a format that can be read in OpenCL.
  */
 class ElevationData {
-
-        friend ElevationStitch;
 
     public:
 
@@ -38,8 +40,14 @@ class ElevationData {
          *
          * @param file_path
          * The path on the disk where the elevation data should be loaded from.
+         *
+         * @param start
+         * The starting position in longitude latitude of the route.
+         *
+         * @param dest
+         * The ending position in longitude latitude of the route.
          */
-        ElevationData(const std::string& file_path);
+        ElevationData(const std::string& file_path, const glm::dvec3& start, const glm::dvec3& dest);
 
         /**
          * GDAL obejects are created on the heap so these are de-allocated here.
@@ -54,17 +62,20 @@ class ElevationData {
         int getHeight() const;
 
         /** Gets the width of the raster image in meters */
-        float getWidthInMeters() const;
+        double getWidthInMeters() const;
 
         /** Gets the height of the raster image in meters */
-        float getHeightInMeters() const;
+        double getHeightInMeters() const;
 
         /** Gets the minimum height found in the raster image in meters */
-        float getMinElevation() const;
+        double getMinElevation() const;
 
         /** Gets the maximum height found in the raster image in meters */
-        float getMaxElevation() const;
+        double getMaxElevation() const;
 
+        /** Gets the size of the cropped dataset in meters */
+        glm::dvec2 getCroppedSizeMeters() const;
+    
         /** Gets the uploaded OpenCL data */
         const boost::compute::image2d& getOpenCLImage() const;
 
@@ -78,7 +89,7 @@ class ElevationData {
          * @return
          * The output position in meters.
          */
-        glm::vec2 convertPixelsToMeters(const glm::ivec2& pos_pixels) const;
+        glm::dvec2 convertPixelsToMeters(const glm::ivec2& pos_pixels) const;
 
         /**
          * Takes in a location inside the raster image (measured in meters) and converts that
@@ -90,7 +101,7 @@ class ElevationData {
          * @return
          * The output position in pixels
          */
-        glm::ivec2 metersToPixels(const glm::vec2 &pos_meters) const;
+        glm::ivec2 metersToPixels(const glm::dvec2 &pos_meters) const;
 
         /**
          * Takes in a location inside the raster image (measured in meters) and converts that
@@ -104,7 +115,7 @@ class ElevationData {
          * The output longitude and latitude.
          * return[0] is longitude and return[1] is latitude.
          */
-        glm::vec2 metersToLongitudeLatitude(const glm::vec2& pos_meters) const;
+        glm::dvec2 metersToLongitudeLatitude(const glm::dvec2& pos_meters) const;
 
         /**
          * Takes in a location inside the raster image (measured in pixels) and converts that
@@ -118,7 +129,7 @@ class ElevationData {
          * The output longitude and latitude.
          * return[0] is longitude and return[1] is latitude.
          */
-        glm::vec2 pixelsToLongitudeLatitude(const glm::ivec2& pos_pixels) const;
+        glm::dvec2 pixelsToLongitudeLatitude(const glm::ivec2& pos_pixels) const;
 
         /**
          * Takes in a position in longitude latitude and converts it to meters.
@@ -129,8 +140,18 @@ class ElevationData {
          * @return
          * The converted position on the raster image in meters.
          */
-        glm::vec2 longitudeLatitudeToMeters(const glm::vec2 lat_lon) const;
+        glm::dvec2 longitudeLatitudeToMeters(const glm::dvec2 lat_lon) const;
 
+        /**
+         * Takes in a position in longitude latitude and converts it to pixels.
+         *
+         * @param lat_lon
+         * The position in the raster image in longitude and latitude.
+         *
+         * @return
+         * The converted position on the raster image in pixels.
+         */
+        glm::ivec2 longitudeLatitudeToPixels(const glm::dvec2 lat_lon) const;
 
         /**
          * Takes in a location on the image in meters and samples from the raster data, essentially
@@ -142,7 +163,7 @@ class ElevationData {
          * @return
          * The position on the terrain in meters. Z is the up direction on this vector.
          */
-        glm::vec3 metersToMetersAndElevation(const glm::vec2& pos_meters) const;
+        glm::dvec3 metersToMetersAndElevation(const glm::dvec2& pos_meters) const;
 
         /**
          * Takes in a location on the image in pixels and samples from the raster data, essentially
@@ -155,13 +176,22 @@ class ElevationData {
          * @return
          * The position on the terrain in meters. Z is the up direction on this vector.
          */
-        glm::vec3 pixelsToMetersAndElevation(const glm::ivec2& pos_pixles) const;
+        glm::dvec3 pixelsToMetersAndElevation(const glm::ivec2& pos_pixles) const;
 
     private:
 
-        /** A private constructor to be used by elevation stitching */
-        ElevationData() {};
-
+        /**
+        * When creating the OpenCL texture we only want to take as little data as we need. This function takes in the start and end of a route
+        * and computes _crop_origin and _crop_extent to encapsulate the route with padding equal to ROUTE_PADDING.
+        *
+        * @param start
+        * The starting position in longitude latitude of the route.
+        *
+        * @param dest
+        * The ending position in longitude latitude of the route.
+        */
+        void calcCroppedSize(const glm::dvec3& start, const glm::dvec3& dest);
+    
         /** Calculate the conversion factors to translate GDAL pixels to meters */
         void calcConversions();
 
@@ -201,22 +231,28 @@ class ElevationData {
         int _height;
 
         /** The width in meters of the image */
-        float _width_meters;
+        double _width_meters;
 
         /** The height in meters of the image */
-        float _height_meters;
+        double _height_meters;
 
         /** The minimum elevation in meters of the terrain in the raster image in meters */
-        float _elevation_min;
+        double _elevation_min;
 
         /** The maximum elevation in meters of the terrain in the raster image in meters */
-        float _elevation_max;
+        double _elevation_max;
+    
+        /** The origin of the subset of data that was taken to encapsulate the route in longitude latitude */
+        glm::dvec2 _crop_origin;
+    
+        /** The extent (origin + size) of the subset of data that was taken to encapsulate the route in longitude latitude */
+    glm::dvec2 _crop_extent;
 
         /**
          * Two conversions factors that translate pixels to meters for this particular image.
          * pixelToMeterConversions[0] corresponds to X, pixelToMeterConversions[1] corresponds to y.
          */
-        float pixelToMeterConversions[2];
+        double pixelToMeterConversions[2];
 
         /** The OpenCL image that is created once the data is loaded up from GDAL */
         boost::compute::image2d _opencl_image;

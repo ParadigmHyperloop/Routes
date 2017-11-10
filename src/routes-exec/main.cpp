@@ -3,7 +3,7 @@
 //
 
 #include <routes.h>
-
+#include <stdlib.h>
 #include "cmd/cmd.h"
 
 int main(int argc, const char* argv[]) {
@@ -13,9 +13,6 @@ int main(int argc, const char* argv[]) {
     switch (CMD::getState()) {
 
         case Calculating: {
-
-            // Load the databse
-            DB::load();
 
             std::cout << "Computing route from " << glm::to_string(CMD::start) << " to " << glm::to_string(CMD::dest) <<
                       std::endl;
@@ -29,7 +26,12 @@ int main(int argc, const char* argv[]) {
         case Rebuilding:
 
             std::cout << "Rebuilding database\n";
-            DB::build();
+
+            // Run a command to generate the vtf
+            system("gdalbuildvrt ../data/db.vtf ../data/*.img");
+            
+            // Generate the stats for it
+            system("gdalinfo ../data/db.vtf -stats");
 
             break;
 
