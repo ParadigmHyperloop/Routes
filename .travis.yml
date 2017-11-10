@@ -1,0 +1,21 @@
+language: cpp
+
+sudo: required
+
+compiler:
+- gcc
+
+addons:
+    apt:
+        sources:
+            - llvm-toolchain-precise
+            - ubuntu-toolchain-r-test
+        packages:
+            - g++-7
+            - gcc-7
+            - ocl-icd-opencl-dev
+            - libgdal-dev
+
+install: ./travis.sh
+
+script: cd build && make
