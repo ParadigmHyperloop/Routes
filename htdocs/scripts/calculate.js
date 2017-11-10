@@ -14,55 +14,68 @@ var sayings = ["Adding that Musk-y smell",
 var saying_timer;
 var current_saying;
 
-function initMap() {
-                var uluru = {lat: 34.0522, lng: -118.2437};
-                var map = new google.maps.Map(document.getElementById('map-holder'), {
-                    zoom: 7,
-                    center: uluru,
-                    disableDefaultUI: true,
-                    styles: [
-                        {
-                            "featureType": "poi.business",
-                            "stylers": [
-                                {
-                                    "visibility": "off"
-                                }
-                            ]
-                        },
-                        {
-                            "featureType": "poi.park",
-                            "elementType": "labels.text",
-                            "stylers": [
-                                {
-                                    "visibility": "off"
-                                }
-                            ]
-                        },
-                        {
-                            "featureType": "road",
-                            "stylers": [
-                                {
-                                    "visibility": "off"
-                                }
-                            ]
-                        }
-                    ]                
-                });
-
-            }
-
-
 window.onload = onLoad()
+
+function onLoad(){
+    $("#loading_blob").hide(); 
+}
+
+function initMap() {
+    var uluru = {lat: 34.0522, lng: -118.2437};
+    var map = new google.maps.Map(document.getElementById('map-holder'), {
+        zoom: 7,
+        center: uluru,
+        disableDefaultUI: true,
+        styles: [
+            {
+                "featureType": "poi.business",
+                "stylers": [
+                    {
+                        "visibility": "off"
+                    }
+                ]
+            },
+            {
+                "featureType": "poi.park",
+                "elementType": "labels.text",
+                "stylers": [
+                    {
+                        "visibility": "off"
+                    }
+                ]
+            },
+            {
+                "featureType": "road",
+                "stylers": [
+                    {
+                        "visibility": "off"
+                    }
+                ]
+            }
+        ]                
+    });
+    initAutocomplete();
+
+}
+
+
+function initAutocomplete(){
+    autocomplete = new google.maps.places.Autocomplete((document.getElementById('autocomplete')),
+                                                       {types: ['geocode']});
+    autocomplete2 = new google.maps.places.Autocomplete((document.getElementById('autocomplete2')),
+                                                       {types: ['geocode']});
+    
+
+}
+
+
 
 
 function openNav(){
-    
     $("#overlay").css("width","100%");
 }
-function onLoad(){
-    $("#loading_blob").hide(); 
-    initMap();
-}
+
+
 
 function changeSaying() {
 
@@ -167,42 +180,42 @@ function gotFinishedRoute(result) {
 
 }
 
-function initMap() {
-                var uluru = {lat: 34.0522, lng: -118.2437};
-                var map = new google.maps.Map(document.getElementById('map-holder'), {
-                    zoom: 7,
-                    center: uluru,
-                    disableDefaultUI: true,
-                    styles: [
-                        {
-                            "featureType": "poi.business",
-                            "stylers": [
-                                {
-                                    "visibility": "off"
-                                }
-                            ]
-                        },
-                        {
-                            "featureType": "poi.park",
-                            "elementType": "labels.text",
-                            "stylers": [
-                                {
-                                    "visibility": "off"
-                                }
-                            ]
-                        },
-                        {
-                            "featureType": "road",
-                            "stylers": [
-                                {
-                                    "visibility": "off"
-                                }
-                            ]
-                        }
-                    ]                
-                });
+//function initMap() {
+//    var uluru = {lat: 34.0522, lng: -118.2437};
+//    var map = new google.maps.Map(document.getElementById('map-holder'), {
+//        zoom: 7,
+//        center: uluru,
+//        disableDefaultUI: true,
+//        styles: [
+//            {
+//                "featureType": "poi.business",
+//                "stylers": [
+//                    {
+//                        "visibility": "off"
+//                    }
+//                ]
+//            },
+//            {
+//                "featureType": "poi.park",
+//                "elementType": "labels.text",
+//                "stylers": [
+//                    {
+//                        "visibility": "off"
+//                    }
+//                ]
+//            },
+//            {
+//                "featureType": "road",
+//                "stylers": [
+//                    {
+//                        "visibility": "off"
+//                    }
+//                ]
+//            }
+//        ]                
+//    });
+//}
 
-            }
 
 function gotInProgress() {
 
@@ -232,9 +245,9 @@ function handleIdentifier(result) {
 
 function push() {
     $("#overlay").css("width","0%");
-//    $.ajax(getComputeRequest("-119.001666666700032,35.001666666664143,550.0", 
-//                             "-118.5000000,34.5000000,145.0", 
-//                             handleIdentifier));
+    //    $.ajax(getComputeRequest("-119.001666666700032,35.001666666664143,550.0", 
+    //                             "-118.5000000,34.5000000,145.0", 
+    //                             handleIdentifier));
 
     $("#loading_blob").show();
     changeSaying();
