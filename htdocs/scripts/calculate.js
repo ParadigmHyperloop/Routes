@@ -19,6 +19,7 @@ window.onload = onLoad()
 
 function onLoad(){
     $("#loading_blob").hide(); 
+	genieIntro();
 }
 
 function initMap() {
