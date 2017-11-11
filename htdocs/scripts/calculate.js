@@ -144,16 +144,12 @@ function gotFinishedRoute(result) {
     var JSON_result = JSON.parse(result);
 
     var points = [];
-    console.log(JSON_result)
     for (var i = 0; i < JSON_result.evaluated.length; i++) {
         points.push({lat: JSON_result.evaluated[i][1], lng:
                       JSON_result.evaluated[i][0]})
 
     }
 
-    console.log(points.length);
-    console.log(points);
-    
     var flightPath = new google.maps.Polyline({
         path: points,
         geodesic: true,
