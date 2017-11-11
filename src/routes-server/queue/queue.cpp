@@ -7,7 +7,7 @@
 boost::lockfree::queue<RoutesQueue::RouteItem> RoutesQueue::_routes(0);
 std::unordered_map<size_t, std::vector<glm::vec3>> RoutesQueue::_completed;
 
-size_t RoutesQueue::queueRoute(const glm::vec3& start, const glm::vec3& dest) {
+size_t RoutesQueue::queueRoute(const glm::vec2& start, const glm::vec2& dest) {
 
     // Get the current time
     size_t identifier = time(0);
@@ -50,12 +50,9 @@ std::vector<glm::vec3> RoutesQueue::getCompletedRoute(size_t id) {
     // We assume that the route is finished because isRouteCompleted should have been called.
     std::vector<glm::vec3> controls = _completed[id];
 
-    // Evaluate it
-    std::vector<glm::vec3> evaluated = Bezier::evaluateEntireBezierCurve(controls, 100);
-
     // Erase it from the completed
     _completed.erase(id);
 
-    return evaluated;
+    return controls;
 
 }

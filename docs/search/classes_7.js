@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['kernel',['Kernel',['../class_kernel.html',1,'']]]
+  ['pod',['Pod',['../class_pod.html',1,'']]],
+  ['population',['Population',['../class_population.html',1,'']]]
 ];

@@ -25,7 +25,7 @@ bool Kernel::initOpenCL() {
     // Get the cache
     _global_cache = boost::compute::program_cache::get_global_cache(_opencl_context);
 
-    std::cout << _opencl_device.get_info<CL_DEVICE_LOCAL_MEM_SIZE>() << std::endl;
+    std::cout << _opencl_device.get_info<CL_DEVICE_IMAGE2D_MAX_WIDTH>() << std::endl;
 
     return true;
 

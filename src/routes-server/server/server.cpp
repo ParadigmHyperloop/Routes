@@ -54,9 +54,9 @@ void RoutesServer::handleCompute(const std::shared_ptr<restbed::Session> session
     std::string start_s = request->get_query_parameter("start", "");
     std::string dest_s = request->get_query_parameter("dest", "");
 
-    glm::vec3 start, dest;
-    sscanf(start_s.c_str(), "%f,%f,%f", &start.x, &start.y, &start.z);
-    sscanf(dest_s.c_str(),  "%f,%f,%f", &dest.x, &dest.y, &dest.z);
+    glm::vec2 start, dest;
+    sscanf(start_s.c_str(), "%f,%f", &start.x, &start.y);
+    sscanf(dest_s.c_str(),  "%f,%f", &dest.x, &dest.y);
 
     // Add the route to the queue
     size_t id = RoutesQueue::queueRoute(start, dest);
@@ -81,24 +81,12 @@ void RoutesServer::handleRetrieval(const std::shared_ptr<restbed::Session> sessi
 
         // Get the control points
         std::vector<glm::vec3> points = RoutesQueue::getCompletedRoute(id);
+        
+        // Evaluate it
+        std::vector<glm::vec3> evaluated = Bezier::evaluateEntireBezierCurve(points, 100);
 
         // Convert to a  JSON string
-        std::string JSON = "{\"controls\": [";
-
-        for (int i = 0; i < points.size(); i++) {
-            
-            JSON += "[" + std::to_string(points[i].x) + ", " +
-            std::to_string(points[i].y) + ", " +
-            std::to_string(points[i].z) + "]";
-            
-            // Make sure there aren't trailing commas
-            if (i != points.size() - 1)
-                JSON += ",";
-            
-        }
-            
-
-        JSON += "]}";
+        std::string JSON = "{\"controls\":\n" + vectorToJSON(points) + ", \n\"evaluated\":\n" + vectorToJSON(evaluated) + "}";
 
         session->close(restbed::OK, JSON.c_str(),
                        {{"Access-Control-Allow-Origin",  "*"},
@@ -127,11 +115,36 @@ void RoutesServer::onServerReady(restbed::Service &service) {
         while (true) {
 
             // Sleep for a single second and then try to calculate some new routes
-            CPLSleep(1);
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
             RoutesQueue::calculateRoutes();
 
         }
 
     });
 
+}
+
+std::string RoutesServer::vectorToJSON(const std::vector<glm::vec3> points) {
+    
+    std::string JSON = "   [";
+    
+    for (int i = 0; i < points.size(); i++) {
+        
+        // Add an indent to make it a little easier for humans to read
+        if (i)
+            JSON += "    ";
+        
+        JSON += "[" + std::to_string(points[i].x) + ", " +
+        std::to_string(points[i].y) + ", " +
+        std::to_string(points[i].z) + "]";
+        
+        // Make sure there aren't trailing commas
+        if (i != points.size() - 1)
+            JSON += ", \n";
+        
+    }
+    
+    
+    return JSON + "]";
+    
 }

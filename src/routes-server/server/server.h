@@ -77,6 +77,15 @@ class RoutesServer {
          * The restbed service.
          */
         static void onServerReady(restbed::Service &service);
+    
+        /**
+         * Converts a vector of glm::vec3's to a JSON string.
+         *
+         * @param points
+         * The vector of points to be converted to JSON
+         *
+         */
+        static std::string vectorToJSON(const std::vector<glm::vec3> points);
 
         /** A thread to perform route calculation on. */
         static std::thread calculation_thread;

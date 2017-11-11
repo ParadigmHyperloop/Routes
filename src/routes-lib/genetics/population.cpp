@@ -4,13 +4,16 @@
 
 #include "population.h"
 
-Population::Population(int pop_size, int genome_size, glm::vec4 start, glm::vec4 dest, const ElevationData& data) : _data(data) {
+Population::Population(int pop_size, glm::vec4 start, glm::vec4 dest, const ElevationData& data) : _data(data) {
 
     // Save constants
     _pop_size = pop_size;
-    _genome_size = genome_size;
     _start = start;
     _dest = dest;
+    _direction = _dest -_start;
+
+    // Figure out how many points we need for this route
+    calcGenomeSize();
 
     // Figure out the number of vectors that make up the entire individual. This is the header, the start
     // and the destination
@@ -24,7 +27,16 @@ Population::Population(int pop_size, int genome_size, glm::vec4 start, glm::vec4
     calcBinomialCoefficients();
 
     // Make a dummy genome
-    dummy_genome = new glm::vec4[genome_size];
+    dummy_genome = new glm::vec4[_genome_size];
+
+    // Figure out how many points this route should be evaluated on.
+    // We also make sure it is a multiple of workers
+    glm::dvec2 cropped_size = data.getCroppedSizeMeters();
+    _num_evaluation_points = ceil(glm::max(cropped_size.x / METERS_TO_POINT_CONVERSION,
+                                           cropped_size.y / METERS_TO_POINT_CONVERSION) / 50.0) * 50;
+    
+    std::cout << "Using " << _num_evaluation_points << " points of evaluation" << std::endl;
+    _num_evaluation_points_1 = (float)_num_evaluation_points - 1.0f;
 
     // Generate the population
     generatePopulation();
@@ -81,8 +93,6 @@ void Population::sortIndividuals() {
 
 void Population::breedIndividuals() {
 
-
-
     // Get a random number of mother and fathers from the top 20%
     // Ensure there is 1 mother and 1 father every time though
     int mothers = (int)(_pop_size * 0.2);
@@ -116,17 +126,8 @@ void Population::breedIndividuals() {
         // Adds + 1 to ignore the header
         int individual_start = i * _individual_size + 2;
 
-        for (int j = 0; j < _genome_size; j++) {
-
-            // Create a new random vector with
-            glm::vec4 random_vec = glm::vec4(glm::linearRand(0.0f, _data.getWidthInMeters()),
-                                             glm::linearRand(0.0f, _data.getHeightInMeters()),
-                                             glm::linearRand(_data.getMinElevation() - TRACK_ABOVE_BELOW_EXTREMA,
-                                                             _data.getMaxElevation() + TRACK_ABOVE_BELOW_EXTREMA), 0.0);
-
-            new_population[individual_start + j] = random_vec;
-
-        }
+        for (int j = 0; j < _genome_size; j++)
+            generateRandomPoint(new_population[individual_start + j]);
 
         // Set the start and the destination
         new_population[individual_start - 1] = _start;
@@ -198,14 +199,12 @@ void Population::evaluateCost(const Pod& pod) {
         // Computes the cost of a path
         __kernel void cost(__read_only image2d_t image, __global float4* individuals, int path_length,
                            float max_grade_allowed, float min_curve_allowed, float excavation_depth, float width,
-                           float height, __global int* binomial_coeffs) {
+                           float height, __global int* binomial_coeffs,
+                           float num_points_1, int points_per_worker, float origin_x, float origin_y) {
 
             const sampler_t sampler = CLK_NORMALIZED_COORDS_TRUE | CLK_ADDRESS_CLAMP_TO_EDGE | CLK_FILTER_NEAREST;
             const float pylon_cost = 116.0;
             const float tunnel_cost = 310000.0;
-            const float num_points = 3700.0;
-            const float num_points_1 = 3699.0;
-            const int points_per_worker = 74;
 
             __local float min_curves [50];
             __local float max_grades [50];
@@ -241,7 +240,7 @@ void Population::evaluateCost(const Pod& pod) {
                 float4 bezier_point = evaluateBezierCurve(individuals, path, path_length, (float)p / num_points_1, binomial_coeffs);
 
                 // Get pylon height with a sample from the image
-                float2 nrm_device = (float2)(bezier_point.x / width, bezier_point.y / height);
+                float2 nrm_device = (float2)((bezier_point.x - origin_x) / width, (bezier_point.y - origin_y) / height);
                 float height = read_imagef(image, sampler, nrm_device).x;
 
                 // Compute spacing, only x and y distance
@@ -308,11 +307,16 @@ void Population::evaluateCost(const Pod& pod) {
             }
     });
 
+    // Get the data to allow for proper texture sampling
+    glm::vec2 size_crop = _data.getCroppedSizeMeters();
+    glm::vec2 origin = _data.getCroppedOriginMeters();
+
     // Create a temporary kernel and execute it
     static Kernel kernel = Kernel(source, "cost");
     kernel.setArgs(_data.getOpenCLImage(), _opencl_individuals.get_buffer(), _genome_size + 2,
-                   MAX_SLOPE_GRADE, pod.minCurveRadius(), EXCAVATION_DEPTH, _data.getWidthInMeters(), _data.getHeightInMeters(),
-                   _opencl_binomials.get_buffer());
+                   MAX_SLOPE_GRADE, pod.minCurveRadius(), EXCAVATION_DEPTH, size_crop.x,
+                   size_crop.y, _opencl_binomials.get_buffer(),
+                   _num_evaluation_points_1, _num_evaluation_points / 50, origin.y, origin.y);
 
     // Execute the 2D kernel with a work size of 5. 5 threads working on a single individual
     kernel.execute2D(glm::vec<2, size_t>(0, 0),
@@ -321,6 +325,15 @@ void Population::evaluateCost(const Pod& pod) {
 
     // Download the data
     boost::compute::copy(_opencl_individuals.begin(), _opencl_individuals.end(), _individuals.begin(), queue);
+
+}
+
+void Population::calcGenomeSize() {
+
+    // The genome size has a square root relationship with the length of the route
+    float sqrt_lenth = sqrt(glm::length(_direction));
+    _genome_size = std::round(sqrt_lenth * LENGTH_TO_GENOME);
+    std::cout << "Genome size: " << _genome_size << std::endl;
 
 }
 
@@ -342,17 +355,8 @@ void Population::generatePopulation() {
         // Set the start and the destination
         _individuals[individual_start + _genome_size] = _dest;
 
-        for (int j = 0; j < _genome_size; j++) {
-
-            // Create a new random vector with
-            glm::vec4 random_vec = glm::vec4(glm::linearRand(0.0f, _data.getWidthInMeters()),
-                                             glm::linearRand(0.0f, _data.getHeightInMeters()),
-                                             glm::linearRand(_data.getMinElevation() - TRACK_ABOVE_BELOW_EXTREMA,
-                                                             _data.getMaxElevation() + TRACK_ABOVE_BELOW_EXTREMA), 0.0);
-
-            _individuals[individual_start + j] = random_vec;
-
-        }
+        for (int j = 0; j < _genome_size; j++)
+            generateRandomPoint(_individuals[individual_start + j]);
 
     }
 
@@ -395,10 +399,7 @@ void Population::mutateGenome(glm::vec4* genome) {
         glm::vec4* point_ptr = genome + point;
         
         // Do the mutation
-        (*point_ptr) = glm::vec4(glm::linearRand(0.0f, _data.getWidthInMeters()),
-                                 glm::linearRand(0.0f, _data.getHeightInMeters()),
-                                 glm::linearRand(_data.getMinElevation() - TRACK_ABOVE_BELOW_EXTREMA,
-                                                 _data.getMaxElevation() + TRACK_ABOVE_BELOW_EXTREMA), 0.0);
+        generateRandomPoint((*point_ptr));
         
     }
 
@@ -412,5 +413,24 @@ void Population::calcBinomialCoefficients() {
 
     // Upload to the GPU
     boost::compute::copy(binomials.begin(), binomials.end(), _opencl_binomials.begin(), Kernel::getQueue());
+
+}
+
+void Population::generateRandomPoint(glm::vec4& to_gen) const {
+
+    // First we move along the direction vector by a random amount
+    float percent = glm::linearRand(0.0, 1.0);
+    glm::vec4 progressed = _direction * percent + _start;
+
+    // Generate a random deviation
+    glm::vec4 deviation = progressed + glm::vec4(glm::linearRand(0.0f, MAX_STRAIGHT_DEVIATION),
+                                                 glm::linearRand(0.0f, MAX_STRAIGHT_DEVIATION),
+                                                 0.0f, 0.0f);
+
+    // Final vector, clamp to width and height
+    to_gen = glm::vec4(glm::clamp((double)deviation.x, 0.0, _data.getWidthInMeters()),
+                       glm::clamp((double)deviation.y, 0.0, _data.getHeightInMeters()),
+                       glm::linearRand(_data.getMinElevation() - TRACK_ABOVE_BELOW_EXTREMA,
+                                       _data.getMaxElevation() + TRACK_ABOVE_BELOW_EXTREMA), 0.0);
 
 }

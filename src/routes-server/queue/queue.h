@@ -27,17 +27,15 @@ class RoutesQueue {
          * Queues a route to be calculated.
          *
          * @param start
-         * The starting position of the route. X and Y are longitude and latitude respectively and Z is the elevation.
-         * in meters above sea level.
+         * The starting position of the route. X and Y are longitude and latitude respectively.
          *
          * @param dest
-         * The ending position of the route. X and Y are longitude and latitude respectively and Z is the elevation.
-         * in meters above sea level.
+         * The ending position of the route. X and Y are longitude and latitude respectively.
          *
          * @return
          * A unique identifier that can be used to reference this route and check if it is complete.
          */
-        static size_t queueRoute(const glm::vec3& start, const glm::vec3& dest);
+        static size_t queueRoute(const glm::vec2& start, const glm::vec2& dest);
 
         /**
          * A function that will calculate any routes that are in the queue. All routes that are calculated are then
@@ -57,7 +55,7 @@ class RoutesQueue {
         static bool isRouteCompleted(size_t id);
 
         /**
-         * Returns the evaluated points of a calculated path. This assumes that isRouteCompleted has been called so the
+         * Returns the control points of a calculated path. This assumes that isRouteCompleted has been called so the
          * completed route exists.
          *
          * @param id
@@ -83,13 +81,13 @@ class RoutesQueue {
              * The starting position of the route. X and Y are longitude and latitude respectively and Z is the elevation
              * in meters above sea level.
              */
-            glm::vec3 start;
+            glm::vec2 start;
 
             /**
              * The ending position of the route. X and Y are longitude and latitude respectively and Z is the elevation
              * in meters above sea level.
              */
-            glm::vec3 dest;
+            glm::vec2 dest;
 
         };
 

@@ -41,10 +41,10 @@ class CMD {
         static RoutesState getState();
 
         /** The starting position of the route taken in from the command line */
-        static glm::vec3 start;
+        static glm::vec2 start;
 
          /** The ending position of the route taken in from the command line */
-        static glm::vec3 dest;
+        static glm::vec2 dest;
 
     private:
 

@@ -13,8 +13,6 @@
 #include "../bezier/bezier.h"
 #include "../pod/pod.h"
 
-
-
 /** */
 
 /**
@@ -22,6 +20,25 @@
  * to generate a track at.
  */
 #define TRACK_ABOVE_BELOW_EXTREMA 10.0f
+
+/**
+ * Since we assume that paths are relatively close to straight lines, we decide on a maximum deviation from a straight
+ * line that a path can initially generate from. This number represents the max deviation in meters.
+ * (Does not apply to mutation)
+ */
+#define MAX_STRAIGHT_DEVIATION 30000.0f
+
+/**
+ * In order to get the number of points that a particular path should be evaluated along, we run a converstion.
+ * This factor converts meters to number of points of evaluation.
+ */
+#define METERS_TO_POINT_CONVERSION 30.1867567568f
+
+/**
+ * To calculate the length of the genome we take the square root of the length of the route and then multiply it
+ * by a constant. This constant is small so we get few points for a lot of meters.
+ */
+#define LENGTH_TO_GENOME 0.0274360619f
 
 /**
  * Individual is a convenience so that individuals can be treated as units rather than
@@ -89,8 +106,6 @@ class Population {
          * @param pop_size
          * The amount of individuals that should be generated.
          *
-         * @param genome_size
-         * The number of points that each individual should have in its genome.
          * @param start
          * The start location of the path. X, Y and Z are measured in meters.
          *
@@ -100,7 +115,7 @@ class Population {
          * @param data
          * The elevation data that this population is path-finding on
          */
-        Population(int pop_size, int genome_size, glm::vec4 start, glm::vec4 dest, const ElevationData& data);
+        Population(int pop_size, glm::vec4 start, glm::vec4 dest, const ElevationData& data);
 
         /** dummy_genome is allocated on the heap, so delete that here */
         ~Population();
@@ -143,6 +158,12 @@ class Population {
 
     private:
 
+         /**
+          * This function calculates the size of the genome.
+          * This is based off the length of the route that this population represent and has a square root relationship.
+          */
+        void calcGenomeSize();
+
         /**
          * Generates the initial population using the parameters that were passed in via the constructor.
          * This is done on the CPU, but hopefully can be done on the GPU eventually.
@@ -184,6 +205,17 @@ class Population {
          */
         void calcBinomialCoefficients();
 
+       /**
+        * This function computes a constrained random point. We do this because it is most likely that the best
+        * route is one that is very close to a straight line. Therefore we constrain the sample space to within
+        * MAX_STRAIGHT_DEVIATION to speed up the convergence. This is especially important for stitching datasets
+        * where the unconstrained sample space is much larger.
+        *
+        * @param to_gen
+        * A vector that should be the receiving end of the generation.
+        */
+        void generateRandomPoint(glm::vec4& to_gen) const;
+
         /** An array of glm::vec4s that's the size of _genome_size. Used to avoid repetitive heap allocations. */
         glm::vec4* dummy_genome;
 
@@ -204,6 +236,22 @@ class Population {
 
         /** The ending position of the path that this population is trying to "solve" */
         glm::vec4 _dest;
+
+        /**
+        * The direction vector of the path that this population is built for.
+        * Measured in meters.
+        */
+        glm::vec4 _direction;
+
+        /**
+         * Since the cost algorithm uses sampling we need to know how many samples to take. For one dataset this is a
+         * trivial task. However some routes may span multiple datasets and therefore a calculation needs to be
+         * performed to figure out how may samples should be taken.
+         */
+        int _num_evaluation_points;
+
+        /** _num_evaluation_points - 1. This is a float because it is used for division in the cost function */
+        float _num_evaluation_points_1;
 
         /** The CPU storage of the individuals.*/
         std::vector<glm::vec4> _individuals;

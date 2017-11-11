@@ -79,8 +79,8 @@ int Bezier::calcBinomialCoefficient(int n, int i) {
         return 1;
 
     // Formula taken from https://en.wikipedia.org/wiki/Binomial_coefficient#Multiplicative_formula
-    int ni_falling = n;
-    int i_fac = i;
+    unsigned long long ni_falling = n;
+    unsigned long long i_fac = i;
 
     // Calculate i!
     for (int j = 1; j < i - 1; j++)
