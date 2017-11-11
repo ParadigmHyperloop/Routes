@@ -43,6 +43,9 @@ class Bezier {
          * @return
          * The calculated point that is on the curve.
          */
+
+
+
         static glm::vec3 evaluateBezierCurve(const std::vector<glm::vec3>& points, float s);
 
         /**
@@ -55,13 +58,16 @@ class Bezier {
          * The number of points contained in the points array.
          *
          * @param num_desired
-         * The number of times that the curve should be evlauated and also the number of
+         * The number of times that the curve should be evaluated and also the number of
          * points that are to be returned.
          *
          * @return
          * The evaluated points.
          */
         static std::vector<glm::vec3> evaluateEntireBezierCurve(const std::vector<glm::vec3>& points, int num_desired);
+
+        static float bezierLength(const std::vector<glm::vec3>& points);
+
 
 
     private:
@@ -76,7 +82,7 @@ class Bezier {
          * The size of the subset to get.
          *
          * @return
-         * The binomil coefficient.
+         * The binomial coefficient.
          */
         static int calcBinomialCoefficient(int n, int i);
 

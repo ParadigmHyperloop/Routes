@@ -303,6 +303,7 @@ void Population::evaluateCost(const Pod& pod) {
 
                 // Set the individual's header to contain its cost
                 individuals[path - 1].x = total_cost;
+                individuals[path - 1].y = min_curve;
 
             }
     });
