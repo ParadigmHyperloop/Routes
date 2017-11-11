@@ -74,8 +74,8 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:af5f392bf9d250a74a9412df86e4534eb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#af5f392bf9d250a74a9412df86e4534eb">ElevationData</a> (const std::string &amp;file_path, const glm::dvec3 &amp;start, const glm::dvec3 &amp;dest)</td></tr>
-<tr class="separator:af5f392bf9d250a74a9412df86e4534eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e96faba55cb1b4b421f51e09b387f18"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#a9e96faba55cb1b4b421f51e09b387f18">ElevationData</a> (const std::string &amp;file_path, const glm::dvec2 &amp;start, const glm::dvec2 &amp;dest)</td></tr>
+<tr class="separator:a9e96faba55cb1b4b421f51e09b387f18"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5a794b83d7aaf57a2820649b29ffae31"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#a5a794b83d7aaf57a2820649b29ffae31">~ElevationData</a> ()</td></tr>
 <tr class="separator:a5a794b83d7aaf57a2820649b29ffae31"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2321308f5d5c2d272d0637721e549dbe"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#a2321308f5d5c2d272d0637721e549dbe">getWidth</a> () const</td></tr>
@@ -110,11 +110,13 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a576a7875766bac0620235c159b8a13a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acdec9831e60da230ee051698ba2cd3f5"><td class="memItemLeft" align="right" valign="top">glm::dvec3&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#acdec9831e60da230ee051698ba2cd3f5">pixelsToMetersAndElevation</a> (const glm::ivec2 &amp;pos_pixles) const</td></tr>
 <tr class="separator:acdec9831e60da230ee051698ba2cd3f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af812976b708595d3b8eedcfabc2d1740"><td class="memItemLeft" align="right" valign="top">glm::vec2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#af812976b708595d3b8eedcfabc2d1740">getCroppedOriginMeters</a> () const</td></tr>
+<tr class="separator:af812976b708595d3b8eedcfabc2d1740"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a3b011f976ee26b43b577acd9ccfc7fa1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#a3b011f976ee26b43b577acd9ccfc7fa1">calcCroppedSize</a> (const glm::dvec3 &amp;start, const glm::dvec3 &amp;dest)</td></tr>
-<tr class="separator:a3b011f976ee26b43b577acd9ccfc7fa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab041efcad231e72739b517838a9d251b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#ab041efcad231e72739b517838a9d251b">calcCroppedSize</a> (const glm::dvec2 &amp;start, const glm::dvec2 &amp;dest)</td></tr>
+<tr class="separator:ab041efcad231e72739b517838a9d251b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a865b3c7320ebfb61b609622e053e2798"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#a865b3c7320ebfb61b609622e053e2798">calcConversions</a> ()</td></tr>
 <tr class="separator:a865b3c7320ebfb61b609622e053e2798"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a40fde2e11dbefbb7a585742a7895307a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#a40fde2e11dbefbb7a585742a7895307a">calcStats</a> ()</td></tr>
@@ -166,8 +168,8 @@ Static Private Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="class_elevation_data.html">ElevationData</a> is a class that converts elevation data from GDAL into a format that can be read in OpenCL. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="af5f392bf9d250a74a9412df86e4534eb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af5f392bf9d250a74a9412df86e4534eb">&#9670;&nbsp;</a></span>ElevationData()</h2>
+<a id="a9e96faba55cb1b4b421f51e09b387f18"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9e96faba55cb1b4b421f51e09b387f18">&#9670;&nbsp;</a></span>ElevationData()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -181,13 +183,13 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const glm::dvec3 &amp;&#160;</td>
+          <td class="paramtype">const glm::dvec2 &amp;&#160;</td>
           <td class="paramname"><em>start</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const glm::dvec3 &amp;&#160;</td>
+          <td class="paramtype">const glm::dvec2 &amp;&#160;</td>
           <td class="paramname"><em>dest</em>&#160;</td>
         </tr>
         <tr>
@@ -254,8 +256,8 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a3b011f976ee26b43b577acd9ccfc7fa1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3b011f976ee26b43b577acd9ccfc7fa1">&#9670;&nbsp;</a></span>calcCroppedSize()</h2>
+<a id="ab041efcad231e72739b517838a9d251b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab041efcad231e72739b517838a9d251b">&#9670;&nbsp;</a></span>calcCroppedSize()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -266,13 +268,13 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">void ElevationData::calcCroppedSize </td>
           <td>(</td>
-          <td class="paramtype">const glm::dvec3 &amp;&#160;</td>
+          <td class="paramtype">const glm::dvec2 &amp;&#160;</td>
           <td class="paramname"><em>start</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const glm::dvec3 &amp;&#160;</td>
+          <td class="paramtype">const glm::dvec2 &amp;&#160;</td>
           <td class="paramname"><em>dest</em>&#160;</td>
         </tr>
         <tr>
@@ -399,6 +401,25 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Translate the GDAL data into an OpenCL texture </p>
+
+</div>
+</div>
+<a id="af812976b708595d3b8eedcfabc2d1740"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af812976b708595d3b8eedcfabc2d1740">&#9670;&nbsp;</a></span>getCroppedOriginMeters()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">glm::vec2 ElevationData::getCroppedOriginMeters </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Gets the cropped origin's location in meters. Z and W are unused.</p>
+<dl class="section return"><dt>Returns</dt><dd>The origin of the cropped portion of the raster in meters. </dd></dl>
 
 </div>
 </div>

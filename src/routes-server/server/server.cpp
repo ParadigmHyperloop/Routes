@@ -65,7 +65,7 @@ void RoutesServer::handleCompute(const std::shared_ptr<restbed::Session> session
     session->close(restbed::OK, id_as_string.c_str(),
                    {{"Access-Control-Allow-Origin",  "*"},
                     {"Content-Length", std::to_string(id_as_string.length())},
-                    { "Connection", "close" }});
+                    {"Connection", "close" }});
 
 }
 
@@ -91,7 +91,7 @@ void RoutesServer::handleRetrieval(const std::shared_ptr<restbed::Session> sessi
         session->close(restbed::OK, JSON.c_str(),
                        {{"Access-Control-Allow-Origin",  "*"},
                         {"Content-Length", std::to_string(JSON.length())},
-                        { "Connection", "close" }});
+                        {"Connection", "close" }});
 
     } else {
 

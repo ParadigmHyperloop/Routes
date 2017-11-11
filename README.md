@@ -41,6 +41,11 @@ make
 ```
 You should now see a built library and a set of binaries in the build directory.
 
+To run the tests:
+```
+make check
+```
+
 ### Windows
 Note: We had some issues getting the project to compile under Windows with the newest version of CMake. CMake 3.8.2 has been confirmed to work. 
 
@@ -61,11 +66,8 @@ mkdir build
 cd build
 cmake -G "NMake Makefiles" ..
 nmake
-
-You should now see a built library and a set of binaries in the build directory.
 ```
-
-You should now see a built binary in the build directory. In order to run the program, open back up MSYS and run it from there.
+You should now see a built library and a set of binaries in the build directory.
 
 ## Running
 The Routes-Exec executable takes in the start and destination for the route from the command line. Here is an example:

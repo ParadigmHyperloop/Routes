@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['track_5fabove_5fbelow_5fextrema',['TRACK_ABOVE_BELOW_EXTREMA',['../population_8h.html#ada0398b27c35ebe568d6a615bf7538a7',1,'population.h']]]
+  ['route_5fpadding',['ROUTE_PADDING',['../elevation_8h.html#afbea235ff44d2e6147808af94710cf36',1,'elevation.h']]]
 ];

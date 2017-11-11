@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['pop_5fsize',['POP_SIZE',['../routes_8h.html#aea5b3e4c9df97408e95b67cdf3f992fb',1,'routes.h']]]
+  ['num_5fgenerations',['NUM_GENERATIONS',['../routes_8h.html#a4b47b6cd274e96fea0d4ad67b4d74b93',1,'routes.h']]]
 ];

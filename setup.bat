@@ -15,7 +15,7 @@ unzip.exe boost.zip
 : Compile boost
 cd boost_1_65_1
 call bootstrap.bat
-bjam variant=debug threading=single link=static --with-filesystem --with-program_options --with-system --with-chrono 
+bjam variant=debug threading=single link=static --with-filesystem --with-program_options --with-system --with-chrono --with-test
 
 : Copy Boost
 cd ..
@@ -33,6 +33,11 @@ echo cleaning up boost...
 RMDIR /S /Q boost_1_65_1
 DEL /S /Q boost.zip
 DEL /S /Q unzip.exe
+
+# Remove libraries that get built and we dont need
+DEL /S /Q lib/*boost_prg_exec_monitor*
+DEL /S /Q lib/*boost_test_exec_monitor*
+DEL /S /Q lib/*boost_timer*
 
 : Grab GLM
 git clone https://github.com/g-truc/glm.git
