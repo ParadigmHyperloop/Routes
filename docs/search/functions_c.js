@@ -1,7 +1,4 @@
 var searchData=
 [
-  ['setargs',['setArgs',['../class_kernel.html#af4e0fd31fe498b840a638ce5dc726c82',1,'Kernel']]],
-  ['solve',['solve',['../class_genetics.html#a92ff6ec5783b9246ee75b40c50fb1568',1,'Genetics']]],
-  ['sortindividuals',['sortIndividuals',['../class_population.html#a6ae5934795f9ec9ee1f6c320828d4f03',1,'Population']]],
-  ['startserver',['startServer',['../class_routes_server.html#af62764a777011be3aed79e0dfece82b6',1,'RoutesServer']]]
+  ['queueroute',['queueRoute',['../class_routes_queue.html#aa6658be21531a1c191f0d507a0bbf08f',1,'RoutesQueue']]]
 ];

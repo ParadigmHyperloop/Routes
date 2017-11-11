@@ -1,9 +1,15 @@
 var searchData=
 [
-  ['elevationdata',['ElevationData',['../class_elevation_data.html#a9e96faba55cb1b4b421f51e09b387f18',1,'ElevationData']]],
-  ['evaluatebeziercurve',['evaluateBezierCurve',['../class_bezier.html#acac673f89e94e16fd9547ca03ed5117c',1,'Bezier']]],
-  ['evaluatecost',['evaluateCost',['../class_population.html#a86d72c30398fef34f336a6b7265f04cd',1,'Population']]],
-  ['evaluateentirebeziercurve',['evaluateEntireBezierCurve',['../class_bezier.html#af61ef957bba128786ccedf7431b051f0',1,'Bezier']]],
-  ['execute1d',['execute1D',['../class_kernel.html#aa858ce0ccbe1e71a1d6bf0114a094f72',1,'Kernel']]],
-  ['execute2d',['execute2D',['../class_kernel.html#aba9c958784693e1f9d0e06217171abd7',1,'Kernel']]]
+  ['calcbinomialcoefficient',['calcBinomialCoefficient',['../class_bezier.html#a9f8ca35c731b6bbec7d50465e987f7e7',1,'Bezier']]],
+  ['calcbinomialcoefficients',['calcBinomialCoefficients',['../class_population.html#af11b90b5e90c7d41126702d5292cffac',1,'Population']]],
+  ['calcconversions',['calcConversions',['../class_elevation_data_1_1___static_g_d_a_l.html#a4f587db1cccb6fa7f5525ed0057196a0',1,'ElevationData::_StaticGDAL']]],
+  ['calccroppedsize',['calcCroppedSize',['../class_elevation_data.html#ab041efcad231e72739b517838a9d251b',1,'ElevationData']]],
+  ['calcgenomesize',['calcGenomeSize',['../class_population.html#a52a41d7911ed22285e95244f3f780fbb',1,'Population']]],
+  ['calcminmax',['calcMinMax',['../class_elevation_data_1_1___static_g_d_a_l.html#af77b4848d0ab5e323c1f17f6753204fe',1,'ElevationData::_StaticGDAL']]],
+  ['calcstats',['calcStats',['../class_elevation_data_1_1___static_g_d_a_l.html#a3cb0fd8dad451466b74835aa3fffa2b1',1,'ElevationData::_StaticGDAL']]],
+  ['calculateroute',['calculateRoute',['../class_routes.html#ae2a60ebc21f42e861959ee955995345b',1,'Routes']]],
+  ['calculateroutes',['calculateRoutes',['../class_routes_queue.html#a221ea6e4c3d367c5af5a0372abb135c5',1,'RoutesQueue']]],
+  ['convertpixelstometers',['convertPixelsToMeters',['../class_elevation_data.html#a519db51fa0a56aae327a6f34fc269c56',1,'ElevationData']]],
+  ['createopenclimage',['createOpenCLImage',['../class_elevation_data.html#acee010de2feef7305f2ecbfa0675230a',1,'ElevationData']]],
+  ['crossoverindividual',['crossoverIndividual',['../class_population.html#a94a73718ff797a1420aa28a7018779b0',1,'Population']]]
 ];

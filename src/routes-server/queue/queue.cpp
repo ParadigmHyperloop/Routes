@@ -4,7 +4,7 @@
 
 #include "queue.h"
 
-boost::lockfree::queue<RoutesQueue::RouteItem> RoutesQueue::_routes(0);
+boost::lockfree::queue<RoutesQueue::_RouteItem> RoutesQueue::_routes(0);
 std::unordered_map<size_t, std::vector<glm::vec3>> RoutesQueue::_completed;
 
 size_t RoutesQueue::queueRoute(const glm::vec2& start, const glm::vec2& dest) {
@@ -12,8 +12,8 @@ size_t RoutesQueue::queueRoute(const glm::vec2& start, const glm::vec2& dest) {
     // Get the current time
     size_t identifier = time(0);
 
-    // Make a new RouteItem and add it to the queue
-    RouteItem item;
+    // Make a new _RouteItem and add it to the queue
+    _RouteItem item;
 
     item.id = identifier;
     item.start = start;
@@ -27,7 +27,7 @@ size_t RoutesQueue::queueRoute(const glm::vec2& start, const glm::vec2& dest) {
 
 void RoutesQueue::calculateRoutes() {
 
-    RouteItem item;
+    _RouteItem item;
     while (_routes.pop(item)) {
 
         // Calculate the route and insert it into the map

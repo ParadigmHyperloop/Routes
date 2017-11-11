@@ -72,7 +72,7 @@ class RoutesQueue {
     private:
 
         /** A structure to store routes to be calculated */
-        struct RouteItem {
+        struct _RouteItem {
 
             /** A unique identifier for this route */
             size_t id;
@@ -96,7 +96,7 @@ class RoutesQueue {
          * We use Boost's lockfree queue so that we can read from the calculation thread and write from the
          * request handler thread.
          */
-        static boost::lockfree::queue<RouteItem> _routes;
+        static boost::lockfree::queue<_RouteItem> _routes;
 
         /**
          * The map of the completed routes.
