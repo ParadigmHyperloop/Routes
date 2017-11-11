@@ -188,6 +188,21 @@ class ElevationData {
 
     private:
 
+       /*
+        * Returns a boolean whether or not this route can be computed by the dataset that is on the disk.
+        *
+        * @param start
+        * The starting position in longitude latitude of the route.
+        *
+        * @param dest
+        * The ending position in longitude latitude of the route.
+        *
+        * @return
+        * true if the route is contained inside the data, false otherwise.
+        *
+        */
+        bool routeInsideData(const glm::dvec2& start, const glm::dvec2& dest);
+
         /**
         * When creating the OpenCL texture we only want to take as little data as we need. This function takes in the start and end of a route
         * and computes _crop_origin and _crop_extent to encapsulate the route with padding equal to ROUTE_PADDING.
@@ -200,8 +215,18 @@ class ElevationData {
         */
         void calcCroppedSize(const glm::dvec2& start, const glm::dvec2& dest);
 
-        /** Translate the GDAL data into an OpenCL texture */
+        /**
+         * Translate the GDAL data into an OpenCL texture.
+         * This function also uses an OpenCL kernel to calculate the local min and max elevation instead of
+         * the global min and max to decrease the sample space.
+         */
         void createOpenCLImage();
+
+        /** The minimum elevation in meters of the terrain in the raster image in meters */
+        double _elevation_min;
+
+        /** The maximum elevation in meters of the terrain in the raster image in meters */
+        double _elevation_max;
 
         /** The origin of the subset of data that was taken to encapsulate the route in longitude latitude */
         glm::dvec2 _crop_origin;
@@ -234,15 +259,7 @@ class ElevationData {
             
                 /** Construction helper function for calculating the min, max and width an height */
                 void calcStats();
-            
-                /**
-                 * This is a workaround to a current bug with GDAL.
-                 * Some GIS files have "NoData" values which are massive numbers.
-                 * GDAL is supposed to ignore these, but for some reason when computing min and max it does not.
-                 * This function uses an OpenCL Kernel to get the min and max manually, ignoring these values.
-                 */
-                void calcMinMax();
-            
+
                 /**
                  * The GDAL data that is loaded from the disk.
                  * This contains all of the elevation data including how to interpret it.
@@ -269,12 +286,6 @@ class ElevationData {
             
                 /** The height in meters of the image */
                 static double _height_meters;
-            
-                /** The minimum elevation in meters of the terrain in the raster image in meters */
-                static double _elevation_min;
-            
-                /** The maximum elevation in meters of the terrain in the raster image in meters */
-                static double _elevation_max;
             
                 /**
                  * Two conversions factors that translate pixels to meters for this particular image.

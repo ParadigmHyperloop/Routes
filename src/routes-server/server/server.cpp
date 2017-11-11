@@ -85,14 +85,24 @@ void RoutesServer::handleRetrieval(const std::shared_ptr<restbed::Session>& sess
 
         // Get the control points
         std::vector<glm::vec3> points = RoutesQueue::getCompletedRoute(id);
-        
-        // Evaluate it
-        std::vector<glm::vec3> evaluated = Bezier::evaluateEntireBezierCurve(points, 100);
 
-        // Convert to a  JSON string
-        std::string JSON = "{\"controls\":\n" + vectorToJSON(points) + ", \n\"evaluated\":\n" + vectorToJSON(evaluated) + "}";
+        // Check if there was an exception
+        if (points[0].x == std::numeric_limits<float>::max()) {
 
-        sendResponse(session, JSON);
+            // Send some error text
+            sendResponse(session, "An error was encountered calculating the route");
+
+        } else {
+
+            // Evaluate it
+            std::vector<glm::vec3> evaluated = Bezier::evaluateEntireBezierCurve(points, 100);
+
+            // Convert to a  JSON string
+            std::string JSON = "{\"controls\":\n" + vectorToJSON(points) + ", \n\"evaluated\":\n" + vectorToJSON(evaluated) + "}";
+
+            sendResponse(session, JSON);
+
+        }
 
     } else {
 

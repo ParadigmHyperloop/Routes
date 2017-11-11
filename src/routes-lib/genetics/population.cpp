@@ -296,7 +296,7 @@ void Population::evaluateCost(const Pod& pod) {
 
                 // Calculate grade cost
                 float grade_cost = 100.0 * (steepest_grade - max_grade_allowed + fabs(max_grade_allowed - steepest_grade)) + 1.0;
-                float curve_cost = 0.005 * (min_curve_allowed - min_curve + fabs(min_curve_allowed - min_curve)) + 1.0;
+                float curve_cost = 0.5 * (min_curve_allowed - min_curve + fabs(min_curve_allowed - min_curve)) + 1.0;
 
                 // Get total cost
                 float total_cost = grade_cost * track_cost * curve_cost;
@@ -392,7 +392,7 @@ glm::vec4* Population::crossoverIndividual(int a, int b) {
 void Population::mutateGenome(glm::vec4* genome) {
 
     // 81% chance that this genome will be mutated
-    if (glm::linearRand(0.0, 1.0) > 0.19) {
+    if (glm::linearRand(0.0, 1.0) > 0.23) {
         
         // Choose a single random point to mutate and then choose a random component
         int point = glm::linearRand(0, _genome_size - 1);
@@ -424,8 +424,8 @@ void Population::generateRandomPoint(glm::vec4& to_gen) const {
     glm::vec4 progressed = _direction * percent + _start;
 
     // Generate a random deviation
-    glm::vec4 deviation = progressed + glm::vec4(glm::linearRand(0.0f, MAX_STRAIGHT_DEVIATION),
-                                                 glm::linearRand(0.0f, MAX_STRAIGHT_DEVIATION),
+    glm::vec4 deviation = progressed + glm::vec4(glm::linearRand(-MAX_STRAIGHT_DEVIATION, MAX_STRAIGHT_DEVIATION),
+                                                 glm::linearRand(-MAX_STRAIGHT_DEVIATION, MAX_STRAIGHT_DEVIATION),
                                                  0.0f, 0.0f);
 
     // Final vector, clamp to width and height

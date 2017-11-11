@@ -16,8 +16,6 @@ int ElevationData::_StaticGDAL::_height;
 
 double ElevationData::_StaticGDAL::_width_meters;
 double ElevationData::_StaticGDAL::_height_meters;
-double ElevationData::_StaticGDAL::_elevation_min;
-double ElevationData::_StaticGDAL::_elevation_max;
 double ElevationData::_StaticGDAL::_pixelToMeterConversions[2];
 
 ElevationData::_StaticGDAL::_StaticGDAL() {
@@ -37,7 +35,6 @@ ElevationData::_StaticGDAL::_StaticGDAL() {
     
     calcConversions();
     calcStats();
-    calcMinMax();
     
 }
 
@@ -77,26 +74,18 @@ void ElevationData::_StaticGDAL::calcStats() {
     
 }
 
-void ElevationData::_StaticGDAL::calcMinMax() {
-    
-    double gdal_min_max[2] = {0.0, 0.0};
-    int succ[2] = {0, 0};
-    
-    gdal_min_max[0] = _gdal_raster_band->GetMinimum(&succ[0]);
-    gdal_min_max[1] = _gdal_raster_band->GetMaximum(&succ[1]);
-    
-    if (!succ[0] || !succ[1])
-        _gdal_raster_band->ComputeRasterMinMax(true, gdal_min_max);
-    
-    // Save the min and max
-    _elevation_min = gdal_min_max[0];
-    _elevation_max = gdal_min_max[1];
-    
-}
-
 /***********************************************************************************************************************************************/
 
 ElevationData::ElevationData(const glm::dvec2& start, const glm::dvec2& dest) {
+
+    // Before we do anything we do a sanity check
+    if (!routeInsideData(start, dest)) {
+
+        std::cout << "Attempted to compute a route that was not in the dataset\n";
+        throw std::runtime_error("Attempted to compute a route that was not in the dataset");
+
+    }
+
 
     // Get the size and then make the image
     calcCroppedSize(start, dest);
@@ -110,8 +99,8 @@ int ElevationData::getHeight() const { return _StaticGDAL::_height; }
 double ElevationData::getWidthInMeters() const { return _StaticGDAL::_width_meters; }
 double ElevationData::getHeightInMeters() const { return _StaticGDAL::_height_meters; }
 
-double ElevationData::getMinElevation() const { return _StaticGDAL::_elevation_min; }
-double ElevationData::getMaxElevation() const { return _StaticGDAL::_elevation_max; }
+double ElevationData::getMinElevation() const { return _elevation_min; }
+double ElevationData::getMaxElevation() const { return _elevation_max; }
 
 const boost::compute::image2d& ElevationData::getOpenCLImage() const { return _opencl_image; }
 
@@ -203,6 +192,27 @@ glm::dvec3 ElevationData::pixelsToMetersAndElevation(const glm::ivec2& pos_pixel
 
 }
 
+bool ElevationData::routeInsideData(const glm::dvec2& start, const glm::dvec2& dest) {
+
+    // Get the origin and extent as points
+    glm::dvec2 origin = pixelsToLongitudeLatitude(glm::ivec2(0));
+    glm::dvec2 extent = pixelsToLongitudeLatitude(glm::ivec2(_StaticGDAL::_gdal_dataset->GetRasterXSize(),
+                                                             _StaticGDAL::_gdal_dataset->GetRasterYSize()));
+
+    // Check if start is outside
+    if (start.x < origin.x || start.x > extent.x ||
+            start.y > origin.y || start.y < extent.y)
+        return false;
+
+    // Check if dest is outside
+    if (dest.x < dest.x || dest.x > dest.x ||
+            dest.y > dest.y || dest.y < dest.y)
+        return false;
+
+    return true;
+
+}
+
 void ElevationData::calcCroppedSize(const glm::dvec2& start, const glm::dvec2& dest) {
 
     // Get the origin of the cropped data.
@@ -241,6 +251,14 @@ void ElevationData::createOpenCLImage() {
     // Calculate the adjusted width and height
     glm::ivec2 size = crop_extent_c - crop_origin_c;
 
+    static size_t max_size = Kernel::getDevice().get_info<CL_DEVICE_IMAGE2D_MAX_WIDTH>();
+
+    // Ensure that we can actually fit all of the data required for this route
+    // Otherwise throw and exception
+    if (size.x >= max_size || size.y >= max_size)
+        throw std::runtime_error("Route was too large to calculate");
+
+
     // OpenCL needs image data to be in a 1D double array.
     // Go line by line and read GDAL data to get the data in the format we need
     std::vector<float> image_data = std::vector<float>(size.x * size.y);
@@ -258,6 +276,55 @@ void ElevationData::createOpenCLImage() {
     boost::compute::image_format format = boost::compute::image_format(CL_INTENSITY, CL_FLOAT);
     _opencl_image = boost::compute::image2d(Kernel::getContext(), size.x, size.y, format, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, &image_data[0]);
 
+    // Figure out the min and max elevations
+    // Get stuff we need to execute a kernel on
+    const boost::compute::context& ctx =   Kernel::getContext();
+    boost::compute::command_queue& queue = Kernel::getQueue();
+
+    std::vector<float>            min_max_host(2);
+    boost::compute::vector<float> min_max_device(2, ctx);
+
+    // Generate the program sounds
+    const std::string source = BOOST_COMPUTE_STRINGIZE_SOURCE(
+
+            __kernel void computeMinMax(__read_only image2d_t image, __global float* min_max, int width, int height) {
+
+                const sampler_t sampler = CLK_NORMALIZED_COORDS_FALSE | CLK_ADDRESS_CLAMP_TO_EDGE | CLK_FILTER_NEAREST;
+
+                // Use this to exclude no data
+                const float extreme = 1000000.0;
+
+                size_t x = get_global_id(0);
+                size_t y = get_global_id(1);
+
+                float sample = read_imagef(image, sampler, (float2)(x, y)).x;
+
+                // Do a sanity check
+                if (fabs(sample) < extreme) {
+
+                    min_max[0] = min(sample, min_max[0]);
+                    min_max[1] = max(sample, min_max[1]);
+
+                }
+
+            }
+
+    );
+
+    // Create a temporary kernel and execute it
+    Kernel extrema_kernel = Kernel(source, "computeMinMax");
+    extrema_kernel.setArgs(_opencl_image, min_max_device.get_buffer(), size.x, size.y);
+    extrema_kernel.execute2D(glm::vec<2, size_t>(0, 0),
+                             glm::vec<2, size_t>(size.x, size.y),
+                             glm::vec<2, size_t>(1, 1));
+
+    boost::compute::copy(min_max_device.begin(), min_max_device.end(), min_max_host.begin(), queue);
+
+    _elevation_min = min_max_host[0];
+    _elevation_max = min_max_host[1];
+
+    std::cout << _elevation_min << " " << _elevation_max << std::endl;
+
 }
 
 glm::dvec2 ElevationData::getCroppedSizeMeters() const {
@@ -272,7 +339,7 @@ glm::vec2 ElevationData::getCroppedOriginMeters() const { return longitudeLatitu
 double ElevationData::getLongestAllowedRoute() {
     
     // Querry OpenCL for the max texutre height. We assume that the max texture size is a square.
-    size_t max_size = Kernel::getDevice().get_info<CL_DEVICE_IMAGE2D_MAX_WIDTH>();
+    static size_t max_size = Kernel::getDevice().get_info<CL_DEVICE_IMAGE2D_MAX_WIDTH>();
     
     // Multiply it by both of the meter conversions and return the smaller one
     return glm::min((float)max_size * _StaticGDAL::_pixelToMeterConversions[0],

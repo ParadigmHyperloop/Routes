@@ -13,7 +13,7 @@
 #define POP_SIZE 350
 
 /** The default number of generations that the population should be bred for */
-#define NUM_GENERATIONS 400
+#define NUM_GENERATIONS 600
 
 /** This is a simple class to handle the complete calculation of a route. */
 class Routes {
@@ -35,6 +35,20 @@ class Routes {
          * The computed points of the route in longitude latitude and elevation.
          */
         static std::vector<glm::vec3> calculateRoute(glm::vec2 start, glm::vec2 dest);
+
+    private:
+
+    /**
+     * In some areas we have a no data value in the elevation data. In this case we have no idea what to compute
+     * the Z of the route to be. For now we check for this case and throw a std::runtime_error if this happens.
+     *
+     * @param point
+     * The point to be checked for validity.
+     *
+     * @return
+     * True if the point was valid, false if otherwise.
+     */
+        static bool validatePoint(const glm::vec3& point);
 
 };
 

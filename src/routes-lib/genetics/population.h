@@ -24,9 +24,8 @@
 /**
  * Since we assume that paths are relatively close to straight lines, we decide on a maximum deviation from a straight
  * line that a path can initially generate from. This number represents the max deviation in meters.
- * (Does not apply to mutation)
  */
-#define MAX_STRAIGHT_DEVIATION 30000.0f
+#define MAX_STRAIGHT_DEVIATION 10000.0f
 
 /**
  * In order to get the number of points that a particular path should be evaluated along, we run a converstion.
