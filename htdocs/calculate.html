@@ -1,248 +1,62 @@
-<!DOCTYPE html>
 <html>
-    
-    <script src="scripts/jquery-3.2.1.min.js"></script>
-    <link rel="stylesheet" href="css/ui.css">
-    <script type="text/javascript">
-
-        var sayings = ["Adding that Musk-y smell", 
-                       "Elon-gating the track", 
-                       "Proving Charles Darwin right", 
-                       "Counting the 1's and 0's",
-                       "Wishing upon a star",
-					   "Praying to Gaben",
-                       "Tasting victory",
-                       "404 track not found",
-                       "Mmmmmmmm... bacon",
-                       "Sucking out the air",
-                       "Hey look a butterfly!",
-                       "Conjuring Genie"];
-        
-        var saying_timer;
-        var current_saying;
-        
-        window.onload = function() { $("#loading").hide(); }
-        
-        function changeSaying() {
-            
-            var new_saying;
-            while (true) {
-                
-                new_saying = Math.floor((Math.random() * sayings.length));
-                if (new_saying != current_saying)
-                    break;
-                
-            }
-            
-            current_saying = new_saying;
-            
-            $("#saying").html(sayings[new_saying]);
-            
-            saying_timer = window.setTimeout(changeSaying, 2000);
-            
-        }
-        
-        function getComputeRequest(start, dest, succ) {
-            
-            // Return the dictonary with the parameters filled in
-            return {
-                
-                type: "GET",
-                url: "http://hyperroutes.duckdns.org:8080/compute?start=" + start + "&dest=" + dest,
-
-                contentType: "text/plain",
-
-                headers: { "Access-Control-Allow-Origin" : "*", },
-
-                success: function(result) { succ(result) }
-            }
-                
-        }
-        
-        function getCheckRequest(_ident, succ, fail) {
-            
-            return {
-                
-                type: "GET",
-                url: "http://hyperroutes.duckdns.org:8080/retrieve?id=" + _ident,
-
-                contentType: "text/plain",
-
-                headers: { "Access-Control-Allow-Origin" : "*", },
-
-                success: function(result) { 
-                
-                    if (result == "false")
-                        fail();
-                    else succ(result);
-                
-                }
-                
-            }
-            
-        }
-        
-        function gotFinishedRoute(result) {
-            
-            // Invalidate the timer and dismiss loading
-            clearTimeout(saying_timer);
-            $("#loading").hide();
-            
-            // Parse the JSON 
-            var JSON_result = JSON.parse(result);
-            
-            var points = [];
-            
-            for (var i = 0; i < JSON_result.evaluated.length; i++) {
-
-                points.push([JSON_result.evaluated[i][0], 
-                             JSON_result.evaluated[i][1]])
-                
-                
-            }
-            
-            map.addLayer({
-            "id": "route",
-            "type": "line",
-            "source": {
-                "type": "geojson",
-                "data": {
-                    "type": "Feature",
-                    "properties": {},
-                    "geometry": {
-                        "type": "LineString",
-                        "coordinates": points
-                        
-                    }
-                }
-            },
-            "layout": {
-                "line-join": "round",
-                "line-cap": "round"
-            },
-            "paint": {
-                "line-color": "#FF0067",
-                "line-width": 5
-            }
-        });
-            
-        }
-        
-        function gotInProgress() {
-            
-            // Set a timer 
-            setTimeout(checkCompleted, 1000);
-            
-        }
-        
-        function checkCompleted() {
-            
-            $.ajax(getCheckRequest(ident, gotFinishedRoute, gotInProgress));
-            
-        }
-        
-            
-        var ident = "";
-        function handleIdentifier(result) {
-            
-            // Save the identifier and display it
-            ident = result;
-            $("#div1").html(result);
-            
-            // Set a timer 
-            setTimeout(checkCompleted, 1000);
-        }
-        
-        
-        function push() {
-
-            $.ajax(getComputeRequest("-119.001666666700032,35.001666666664143", 
-                                     "-118.5150000,34.407666666664143", 
-                                     handleIdentifier));
-            
-            $("#loading").show();
-            changeSaying();
-
-        }
-
-    </script>
-        
     <head>
+        <title>Hyperloop Routes</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <meta charset='utf-8' />
-        <title></title>
-        <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-        <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.41.0/mapbox-gl.js'></script>
-        <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.41.0/mapbox-gl.css' rel='stylesheet'/>
+        <!-- Jquery -->
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        
+        <!--Bootstrap css js-->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
 
-        <style>
-            body { margin:0; padding:0; }
-            #map { position:absolute; top:0; bottom:0; width:100%; }
-        </style>
-
+<!--        <link rel="stylesheet" href="css/shared.css">-->
+        <link rel="stylesheet" href="css/calculate.css">
+<!--        <link rel="stylesheet" href="css/header.css">-->
+<!--        <link rel="stylesheet" href="css/ui.css">-->
     </head>
+
     <body>
-        
-        <div id="loading">
-                    
-            <center>
-            
-                <div class="loading_blob">
-            
-                    <div>
-                    
-                        <h1>Loading...</h1>
-                        <img src="res/image/puff.svg" style="width: 40pt; height:40pt"><br><br>
-                        <h3 id="saying">Adding that Musk-y smell</h3>
-                    
-                    </div>
-            
+        <div id = "overlay">
+            <div class = "overlay-content">
+                <div id ="locationField">
+                    <input id="autocomplete" class="form-control" placeholder = "Start location" type="test">
+                    <input id="autocomplete2" class="form-control" placeholder = "End location" type="test">
                 </div>
-            
-            </center>
-            
-        </div>
-        
-        <div id='map'>
-           
-            <div class=topbar 
-                 style="position: absolute; z-index: 10000000">
-                <table>
-                    <tr>
-                        <th>
-                            <img class="logo"
-                                 src="res/image/paradigm-logo.png">
-                        </th>
-                        <th class="start">34° 28′ 51.6684" N 117° 55′ 13.368" W</th>
-                        <th><img class="arrow"
-                                 src="res/image/right-arrow.svg"></th>
-                        <th class="dest">35° 25′ 41.0504" N 133° 56′ 13.368" W</th>
-                        <button class="button" onclick="push()">Calculate</button> 
-                    </tr>
-                </table>
-            </div>
-            <div class="distance">
-                Distance: 120km
-            </div>
-            <div class="time">
-                Estimated Travel Time: 1 Hour
-            </div>
-            
-        </div>
-        
-        <script>
-        var map = new mapboxgl.Map({
-            container: 'map',
-            style: 'http://hyperroutes.duckdns.org:8888/hyperloop_map.json',
-            center: [-117.7, 34.5],
-            zoom: 8
-        });
 
-        map.on('load', function () {
+                <button id = "calculate" type="button" class="btn btn-lg" onclick="push()">Calculate</button>
+            </div>
+        </div>
 
-            
-        });
+        <div id = "map-holder">
+        </div>
+
+<!--
+        <div id="loading_blob">
+            <div>
+                <h1>Loading...</h1>
+                <img src="res/image/puff.svg" style="width: 40pt; height:40pt"><br><br>
+                <h3 id="saying">Insert pun here</h3>
+            </div>
+        </div>
+-->
+
+        <button id = "new-route" type="button" class="btn btn-primary" onclick="openNav()">Test new route</button>
+
+        <div id = "stats">
+            <p>stats comparing hyperloop to conventional transport go here but styled super cool</p>
+        </div>
+
+       
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+
+        <script src="scripts/config.js" type="text/javascript"></script>
+        <script src="scripts/calculate.js" type="text/javascript"></script>
+
+        <script async defer
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyARXZWbgKN2HjFHrEHr-tI_3tlfeo_B2Lw&libraries=places&callback=initMap">
         </script>
-
+        
     </body>
 </html>
