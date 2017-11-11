@@ -95,6 +95,7 @@ function changeSaying() {
 function getComputeRequest(start, dest, succ) {
 
     // Return the dictonary with the parameters filled in
+    console.log("http://hyperroutes.duckdns.org:8080/compute?start=" + start + "&dest=" + dest)
     return {
 
         type: "GET",
@@ -138,7 +139,7 @@ function gotFinishedRoute(result) {
 
     // Invalidate the timer and dismiss loading
     clearTimeout(saying_timer);
-    $("#loading-blob").hide();
+    $("#loading_blob").hide();
 
     // Parse the JSON 
     var JSON_result = JSON.parse(result);
@@ -146,45 +147,19 @@ function gotFinishedRoute(result) {
     var points = [];
     for (var i = 0; i < JSON_result.evaluated.length; i++) {
         points.push({lat: JSON_result.evaluated[i][1], lng:
-                      JSON_result.evaluated[i][0]})
+                     JSON_result.evaluated[i][0]})
 
     }
 
-    var flightPath = new google.maps.Polyline({
+    var pathLine = new google.maps.Polyline({
         path: points,
         geodesic: true,
         strokeColor: '#FF0000',
         strokeOpacity: 1.0,
-        strokeWeight: 2
+        strokeWeight: 4
     });
 
-    flightPath.setMap(map);
-
-//    map.addLayer({
-//        "id": "route",
-//        "type": "line",
-//        "source": {
-//            "type": "geojson",
-//            "data": {
-//                "type": "Feature",
-//                "properties": {},
-//                "geometry": {
-//                    "type": "LineString",
-//                    "coordinates": points
-//
-//                }
-//            }
-//        },
-//        "layout": {
-//            "line-join": "round",
-//            "line-cap": "round"
-//        },
-//        "paint": {
-//            "line-color": "#FF0067",
-//            "line-width": 5
-//        }
-//    });
-
+    pathLine.setMap(map);
 
 }
 
@@ -203,25 +178,31 @@ function checkCompleted() {
 
 var ident = "";
 function handleIdentifier(result) {
-
-    // Save the identifier and display it
+    // Save the identifier
     ident = result;
-    $("#div1").html(result);
 
     // Set a timer 
     setTimeout(checkCompleted, 1000);
 }
 
 function push() {
+//    switch to map view
     zoomToLocation();
-
+    $("#loading_blob").show();
     $("#overlay").css("width","0%");
 
-    $.ajax(getComputeRequest("-119.001666666700032,35.001666666664143", 
-                             "-118.5000000,34.5000000", 
-                             handleIdentifier));
+    
+//    format start and end for the api call
+    let s_lat = autocomplete.getPlace().geometry.location.lat()
+    let s_lng = autocomplete.getPlace().geometry.location.lng()
+    let e_lat = autocomplete2.getPlace().geometry.location.lat()
+    let e_lng = autocomplete2.getPlace().geometry.location.lng()
+    let s = s_lng + "," + s_lat
+    let e = e_lng + "," + e_lat
+    console.log(s,e)
 
-    $("#loading_blob").show();
+    $.ajax(getComputeRequest(s,e,handleIdentifier));
+
     changeSaying();
 }
 
