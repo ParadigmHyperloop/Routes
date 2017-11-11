@@ -18,4 +18,7 @@ addons:
 
 install: ./travis.sh
 
-script: cd build && make
+script: 
+- cd build && make
+- ./Routes-Exec --rebuild
+- make check

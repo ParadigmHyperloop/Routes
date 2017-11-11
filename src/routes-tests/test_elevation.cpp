@@ -5,14 +5,14 @@
 //  Created by Logan on 11/10/17.
 //
 
-#define BOOST_TEST_MODULE Routes-Test-Elevation
+#define BOOST_TEST_MODULE Routes-Tests
 #include <boost/test/unit_test.hpp>
 #include <routes.h>
 
 BOOST_AUTO_TEST_CASE(test_elevation_conversions) {
     
     // Load up a fake route to get some data
-    ElevationData data = ElevationData(glm::vec2(-119.001666666700030,35.001666666664143),
+    ElevationData data = ElevationData(glm::vec2(-118.9016667,34.9016667),
                                        glm::vec2(-118.5000,34.08877925439021));
     
     // Check some conversions
@@ -27,7 +27,7 @@ BOOST_AUTO_TEST_CASE(test_elevation_conversions) {
 BOOST_AUTO_TEST_CASE(test_elevation_sampling) {
     
     // Load up a fake route to get some data
-    ElevationData data = ElevationData(glm::vec2(-119.001666666700030,35.001666666664143),
+    ElevationData data = ElevationData(glm::vec2(-118.9016667,34.9016667),
                                        glm::vec2(-118.5000,34.08877925439021));
     
     // Sample using regular GDAL data

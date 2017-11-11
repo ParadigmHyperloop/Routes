@@ -24,18 +24,21 @@ ElevationData::_StaticGDAL::_StaticGDAL() {
     // Register all of the file formats for GDAL
     GDALAllRegister();
     
-    // Open up the GDAL dataset
-    _gdal_dataset = (GDALDataset*)GDALOpenShared(GDAL_DB_PATH, GA_ReadOnly);
-    if (!_gdal_dataset)
-        throw std::runtime_error("The databse could not be loaded from the disk. Make sure to build it first.");
+    // We dont throw an error here because this funciton is still called when we rebuild and we dont want to crash
+    if (boost::filesystem::exists(GDAL_DB_PATH)) {
+        
+        // Open up the GDAL dataset
+        _gdal_dataset = (GDALDataset*)GDALOpenShared(GDAL_DB_PATH, GA_ReadOnly);
     
-    std::cout << "Statically initializing the GDAL Data\n";
-    
-    // Get the raster band
-    _gdal_raster_band = _gdal_dataset->GetRasterBand(1);
-    
-    calcConversions();
-    calcStats();
+        std::cout << "Statically initializing the GDAL Data\n";
+        
+        // Get the raster band
+        _gdal_raster_band = _gdal_dataset->GetRasterBand(1);
+        
+        calcConversions();
+        calcStats();
+        
+    }
     
 }
 
@@ -80,6 +83,9 @@ void ElevationData::_StaticGDAL::calcStats() {
 
 ElevationData::ElevationData(const glm::dvec2& start, const glm::dvec2& dest) {
 
+    if (!_StaticGDAL::_gdal_dataset)
+        throw std::runtime_error("The databse could not be loaded from the disk. Make sure to build it first.");
+    
     // Before we do anything we do a sanity check
     if (!routeInsideData(start, dest)) {
 

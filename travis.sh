@@ -51,6 +51,12 @@ cp -r restbed/distribution/include/corvusoft include/corvusoft
 cp -r restbed/distribution/include/restbed include/restbed
 rm -rf restbed
 
+mkdir data
+cd data
+curl -L https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/IMG/n35w119.zip --output n35w119.zip
+unzip -o -q n35w119.zip
+cd ..
+
 curl -sSL https://cmake.org/files/v3.8/cmake-3.8.2-Linux-x86_64.tar.gz | sudo tar -xzC /opt
 
 mkdir build

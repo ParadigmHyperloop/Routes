@@ -43,9 +43,6 @@ class Bezier {
          * @return
          * The calculated point that is on the curve.
          */
-
-
-
         static glm::vec3 evaluateBezierCurve(const std::vector<glm::vec3>& points, float s);
 
         /**
@@ -65,13 +62,7 @@ class Bezier {
          * The evaluated points.
          */
         static std::vector<glm::vec3> evaluateEntireBezierCurve(const std::vector<glm::vec3>& points, int num_desired);
-
-        static float bezierLength(const std::vector<glm::vec3>& points);
-
-
-
-    private:
-
+    
         /**
          * Used to calculated a binomial coefficient for the given n and i.
          *
@@ -85,6 +76,11 @@ class Bezier {
          * The binomial coefficient.
          */
         static int calcBinomialCoefficient(int n, int i);
+
+        static float bezierLength(const std::vector<glm::vec3>& points);
+
+    private:
+
 
         /**
          * Binomial coefficients don't change between two bezier curves of the same degree. Therefore

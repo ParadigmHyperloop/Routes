@@ -9,6 +9,7 @@
 
 #include <glm/glm.hpp>
 #include <glm/gtx/string_cast.hpp>
+#include <boost/filesystem.hpp>
 #include <gdal_priv.h>
 #include "../opencl/kernel.h"
 
