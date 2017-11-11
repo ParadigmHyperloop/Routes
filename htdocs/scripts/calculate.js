@@ -55,6 +55,7 @@ function initMap() {
             }
         ]                
     });
+
     initAutocomplete();
 
 }
@@ -121,8 +122,10 @@ function getCheckRequest(_ident, succ, fail) {
 
         success: function(result) { 
 
-            if (result == "false")
+            if (result == "false"){
+                console.log("failed to retrieve data from server" + ident)
                 fail();
+            }
             else succ(result);
 
         }
@@ -135,43 +138,57 @@ function gotFinishedRoute(result) {
 
     // Invalidate the timer and dismiss loading
     clearTimeout(saying_timer);
-    $("#loading").hide();
+    $("#loading-blob").hide();
 
     // Parse the JSON 
     var JSON_result = JSON.parse(result);
 
     var points = [];
-
-    for (var i = 0; i < JSON_result.controls.length; i++) {
-        points.push([JSON_result.controls[i][0], 
-                     JSON_result.controls[i][1]])
+    console.log(JSON_result)
+    for (var i = 0; i < JSON_result.evaluated.length; i++) {
+        points.push({lat: JSON_result.evaluated[i][1], lng:
+                      JSON_result.evaluated[i][0]})
 
     }
 
-    map.addLayer({
-        "id": "route",
-        "type": "line",
-        "source": {
-            "type": "geojson",
-            "data": {
-                "type": "Feature",
-                "properties": {},
-                "geometry": {
-                    "type": "LineString",
-                    "coordinates": points
-
-                }
-            }
-        },
-        "layout": {
-            "line-join": "round",
-            "line-cap": "round"
-        },
-        "paint": {
-            "line-color": "#FF0067",
-            "line-width": 5
-        }
+    console.log(points.length);
+    console.log(points);
+    
+    var flightPath = new google.maps.Polyline({
+        path: points,
+        geodesic: true,
+        strokeColor: '#FF0000',
+        strokeOpacity: 1.0,
+        strokeWeight: 2
     });
+
+    flightPath.setMap(map);
+
+//    map.addLayer({
+//        "id": "route",
+//        "type": "line",
+//        "source": {
+//            "type": "geojson",
+//            "data": {
+//                "type": "Feature",
+//                "properties": {},
+//                "geometry": {
+//                    "type": "LineString",
+//                    "coordinates": points
+//
+//                }
+//            }
+//        },
+//        "layout": {
+//            "line-join": "round",
+//            "line-cap": "round"
+//        },
+//        "paint": {
+//            "line-color": "#FF0067",
+//            "line-width": 5
+//        }
+//    });
+
 
 }
 
@@ -204,13 +221,12 @@ function push() {
 
     $("#overlay").css("width","0%");
 
-    //    $.ajax(getComputeRequest("-119.001666666700032,35.001666666664143,550.0", 
-    //                             "-118.5000000,34.5000000,145.0", 
-    //                             handleIdentifier));
+    $.ajax(getComputeRequest("-119.001666666700032,35.001666666664143", 
+                             "-118.5000000,34.5000000", 
+                             handleIdentifier));
 
     $("#loading_blob").show();
     changeSaying();
-
 }
 
 function zoomToLocation(){
