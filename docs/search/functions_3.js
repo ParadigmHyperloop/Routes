@@ -1,21 +1,9 @@
 var searchData=
 [
-  ['generatehtmlforpath',['generateHTMLForPath',['../class_h_t_m_l.html#a7cd31d05ec60ad2155a751933c4588cd',1,'HTML']]],
-  ['generatepopulation',['generatePopulation',['../class_population.html#ae3a4c2457d9276367f242330d8497cb1',1,'Population']]],
-  ['generaterandompoint',['generateRandomPoint',['../class_population.html#abe7ee50b9ccf97dc23c0da85197b5068',1,'Population']]],
-  ['getbinomialcoefficients',['getBinomialCoefficients',['../class_bezier.html#af8184ad8c9c23625005c40efe7f74d13',1,'Bezier']]],
-  ['getcompletedroute',['getCompletedRoute',['../class_routes_queue.html#a8e579ab43c560d2e9bb2809e9a5b08f7',1,'RoutesQueue']]],
-  ['getcontext',['getContext',['../class_kernel.html#a52489f89ded060d514b7e5d12f23e720',1,'Kernel']]],
-  ['getcroppedsizemeters',['getCroppedSizeMeters',['../class_elevation_data.html#ad5b1a62dcad25588ee8518dfe8f1be03',1,'ElevationData']]],
-  ['getheight',['getHeight',['../class_elevation_data.html#a57d19e4a6ebe4f2d0b971438d60d8ee3',1,'ElevationData']]],
-  ['getheightinmeters',['getHeightInMeters',['../class_elevation_data.html#a2db4b1c1fd0d20772b4e16daee2a1ee3',1,'ElevationData']]],
-  ['getindividual',['getIndividual',['../class_population.html#a28e723c1694a1a831f46dfa454850ee3',1,'Population']]],
-  ['getmaxelevation',['getMaxElevation',['../class_elevation_data.html#a1cb421b09d097a08a596538fac44a02f',1,'ElevationData']]],
-  ['getminelevation',['getMinElevation',['../class_elevation_data.html#ac1939e5ac1005fb060bd7eabf72ca229',1,'ElevationData']]],
-  ['getopenclimage',['getOpenCLImage',['../class_elevation_data.html#ad8b2c4db5db23e9dfd88bfbf11097b01',1,'ElevationData']]],
-  ['getprogram',['getProgram',['../class_kernel.html#acdcf2c3d857cf7bbf74aedf1f61c2502',1,'Kernel']]],
-  ['getqueue',['getQueue',['../class_kernel.html#aa5273e14f07845343045a53124b0d057',1,'Kernel']]],
-  ['getstate',['getState',['../class_c_m_d.html#a78241396d0dfc04b988e64e7eb8caede',1,'CMD']]],
-  ['getwidth',['getWidth',['../class_elevation_data.html#a2321308f5d5c2d272d0637721e549dbe',1,'ElevationData']]],
-  ['getwidthinmeters',['getWidthInMeters',['../class_elevation_data.html#abb0f737b5cf0b294423b302b29ae35ab',1,'ElevationData']]]
+  ['elevationdata',['ElevationData',['../class_elevation_data.html#a5b957c8457614f1d149b7bb02b6f7f98',1,'ElevationData']]],
+  ['evaluatebeziercurve',['evaluateBezierCurve',['../class_bezier.html#acac673f89e94e16fd9547ca03ed5117c',1,'Bezier']]],
+  ['evaluatecost',['evaluateCost',['../class_population.html#a86d72c30398fef34f336a6b7265f04cd',1,'Population']]],
+  ['evaluateentirebeziercurve',['evaluateEntireBezierCurve',['../class_bezier.html#af61ef957bba128786ccedf7431b051f0',1,'Bezier']]],
+  ['execute1d',['execute1D',['../class_kernel.html#aa858ce0ccbe1e71a1d6bf0114a094f72',1,'Kernel']]],
+  ['execute2d',['execute2D',['../class_kernel.html#aba9c958784693e1f9d0e06217171abd7',1,'Kernel']]]
 ];

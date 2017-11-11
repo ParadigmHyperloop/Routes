@@ -20,13 +20,18 @@ cp -r boost_1_65_1/boost/ include/boost/
 
 # Compile boost filesystem and program options 
 cd boost_1_65_1
-./bootstrap.sh --with-libraries=program_options,filesystem
+./bootstrap.sh --with-libraries=program_options,filesystem,test
 ./b2 link=static
 cp -r stage/lib ../
 cd ..
 
 rm -rf boost_1_65_1
 rm -rf boost.tar.gz
+
+# Remove libraries that get built and we dont need
+rm lib/*boost_prg_exec_monitor*
+rm lib/*boost_test_exec_monitor*
+rm lib/*boost_timer*
 
 # Download GLM
 git clone https://github.com/g-truc/glm.git

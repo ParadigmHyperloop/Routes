@@ -10,7 +10,7 @@
 /** */
 
 /** The default size of the population for calculating a route */
-#define POP_SIZE 200
+#define POP_SIZE 350
 
 /** The default number of generations that the population should be bred for */
 #define NUM_GENERATIONS 400

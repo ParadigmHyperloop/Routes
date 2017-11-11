@@ -19,6 +19,12 @@ void RoutesServer::startServer(int port) {
     retrieve_resource->set_path("/retrieve");
     retrieve_resource->set_method_handler("GET", handleRetrieval);
     retrieve_resource->set_method_handler("OPTIONS", handleCORS);
+    
+    // Make the resource for the querrying the max route length
+    auto length_resource = std::make_shared<restbed::Resource>();
+    length_resource->set_path("/max-route-length");
+    length_resource->set_method_handler("GET", handleMaxRoute);
+    length_resource->set_method_handler("OPTIONS", handleCORS);
 
     // Make the settings to start up the server
     auto settings = std::make_shared<restbed::Settings>();
@@ -29,6 +35,7 @@ void RoutesServer::startServer(int port) {
 
     service->publish(compute_resource);
     service->publish(retrieve_resource);
+    service->publish(length_resource);
     service->set_ready_handler(onServerReady);
 
     // Start the server
@@ -37,7 +44,7 @@ void RoutesServer::startServer(int port) {
 
 }
 
-void RoutesServer::handleCORS(const std::shared_ptr<restbed::Session> session) {
+void RoutesServer::handleCORS(const std::shared_ptr<restbed::Session>& session) {
 
     // Send back a response with the proper CORS headers
     session->close(restbed::OK, "", {{"Access-Control-Allow-Origin",  "*"},
@@ -45,7 +52,7 @@ void RoutesServer::handleCORS(const std::shared_ptr<restbed::Session> session) {
                                      {"Access-Control-Allow-Headers", "Content-Type, Accept, Access-Control-Allow-Headers, Access-Control-Allow-Methods, Access-Control-Allow-Origin"}} );
 }
 
-void RoutesServer::handleCompute(const std::shared_ptr<restbed::Session> session) {
+void RoutesServer::handleCompute(const std::shared_ptr<restbed::Session>& session) {
 
     // Get the request
     auto request = session->get_request();
@@ -62,14 +69,11 @@ void RoutesServer::handleCompute(const std::shared_ptr<restbed::Session> session
     size_t id = RoutesQueue::queueRoute(start, dest);
     std::string id_as_string =  std::to_string(id);
 
-    session->close(restbed::OK, id_as_string.c_str(),
-                   {{"Access-Control-Allow-Origin",  "*"},
-                    {"Content-Length", std::to_string(id_as_string.length())},
-                    { "Connection", "close" }});
+    sendResponse(session, id_as_string);
 
 }
 
-void RoutesServer::handleRetrieval(const std::shared_ptr<restbed::Session> session) {
+void RoutesServer::handleRetrieval(const std::shared_ptr<restbed::Session>& session) {
 
     auto request = session->get_request();
 
@@ -88,20 +92,24 @@ void RoutesServer::handleRetrieval(const std::shared_ptr<restbed::Session> sessi
         // Convert to a  JSON string
         std::string JSON = "{\"controls\":\n" + vectorToJSON(points) + ", \n\"evaluated\":\n" + vectorToJSON(evaluated) + "}";
 
-        session->close(restbed::OK, JSON.c_str(),
-                       {{"Access-Control-Allow-Origin",  "*"},
-                        {"Content-Length", std::to_string(JSON.length())},
-                        { "Connection", "close" }});
+        sendResponse(session, JSON);
 
     } else {
 
         // Route was not done, return "false"
-        session->close(restbed::OK, "false", {{"Access-Control-Allow-Origin",  "*"},
-                                              { "Content-Length", "5" }} );
+        sendResponse(session, "false");
 
     }
 
 
+}
+
+void RoutesServer::handleMaxRoute(const std::shared_ptr <restbed::Session>& session) {
+    
+    // Send the longest distance as a string
+    std::string max_length = std::to_string(ElevationData::getLongestAllowedRoute());
+    sendResponse(session, max_length);
+    
 }
 
 void RoutesServer::onServerReady(restbed::Service &service) {
@@ -122,6 +130,15 @@ void RoutesServer::onServerReady(restbed::Service &service) {
 
     });
 
+}
+
+void RoutesServer::sendResponse(const std::shared_ptr<restbed::Session>& session, const std::string& message) {
+    
+    session->close(restbed::OK, message.c_str(),
+                   {{"Access-Control-Allow-Origin",  "*"},
+                       {"Content-Length", std::to_string(message.length())},
+                       {"Connection", "close"}});
+    
 }
 
 std::string RoutesServer::vectorToJSON(const std::vector<glm::vec3> points) {

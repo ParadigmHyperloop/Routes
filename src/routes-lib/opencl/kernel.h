@@ -103,6 +103,15 @@ class Kernel {
          * The const reference to this kernel's program.
          */
         inline const boost::compute::program& getProgram() const { return _opencl_program; }
+    
+        /**
+         * Gets a const reference to the current device (hopefully a GPU).
+         *
+         * @return
+         * The const refernece to the device
+         *
+         */
+        inline static const boost::compute::device& getDevice() { return _opencl_device; }
 
     protected:
 

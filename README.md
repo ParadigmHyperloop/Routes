@@ -41,6 +41,11 @@ make
 ```
 You should now see a built library and a set of binaries in the build directory.
 
+To run the tests:
+```
+make check
+```
+
 ### Windows
 Note: We had some issues getting the project to compile under Windows with the newest version of CMake. CMake 3.8.2 has been confirmed to work. 
 
@@ -61,11 +66,8 @@ mkdir build
 cd build
 cmake -G "NMake Makefiles" ..
 nmake
-
-You should now see a built library and a set of binaries in the build directory.
 ```
-
-You should now see a built binary in the build directory. In order to run the program, open back up MSYS and run it from there.
+You should now see a built library and a set of binaries in the build directory.
 
 ## Running
 The Routes-Exec executable takes in the start and destination for the route from the command line. Here is an example:
@@ -87,13 +89,17 @@ Then run the REST server with
 ```
 This will start the server on the port 8080 and provides two API calls. The first is to queue the calculation of a new route. To do this make a GET request with the format
 ```
-http://localhost:8080/compute?start=lat,long&dest=lat,long
+GET http://localhost:8080/compute?start=lat,long&dest=lat,long
 ```
 Where lon is the desired longitude, lat is the desired latitude. This request will return a number, which should be saved by your client. To retrieve the route call
 ```
-http://localhost:8080/retrieve?id=unique
+GET http://localhost:8080/retrieve?id=unique
 ```
 Where unique is the number that was returned from the call to compute. This will return one of two things. It will either return "false", which indicates that the route is still in the queue or is still computing, or it will return a JSON string with the control points of the route. After the JSON is returned the server will discard the computed route and calling it again.
+```
+GET http://localhost:8080/max-route-length
+````
+Since we use OpenCL textures to represent the elevation data on the GPU, we are limited by the max texture size allowed by the GPU hardware. This will return the longest possible route in meters based on that limit.
 
 ## Data
 Data is pulled from the USGS, and is 1 arc second 3D elevation products. You can find all USGS data at https://viewer.nationalmap.gov/basic/

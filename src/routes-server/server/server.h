@@ -47,7 +47,7 @@ class RoutesServer {
          * @param session
          * The session input from restbed.
          */
-        static void handleCORS(const std::shared_ptr<restbed::Session> session);
+        static void handleCORS(const std::shared_ptr<restbed::Session>& session);
 
         /**
          * This function handles the GET request for computation of the route. This function shouldn't be called from
@@ -57,7 +57,7 @@ class RoutesServer {
          * The session input from restbed.
          *
          */
-        static void handleCompute(const std::shared_ptr<restbed::Session> session);
+        static void handleCompute(const std::shared_ptr<restbed::Session>& session);
 
         /**
          * This function handles the GET request for retrieval of the route. This function shouldn't be called from
@@ -67,7 +67,17 @@ class RoutesServer {
          * The session input from restbed.
          *
          */
-        static void handleRetrieval(const std::shared_ptr <restbed::Session> session);
+        static void handleRetrieval(const std::shared_ptr <restbed::Session>& session);
+    
+        /**
+         * This function handles the GET request for the max route distance. This function shouldn't be called from
+         * anywhere, restbed calls it.
+         *
+         * @param session
+         * The session input from restbed.
+         *
+         */
+        static void handleMaxRoute(const std::shared_ptr <restbed::Session>& session);
 
         /**
          * Since the restbed server is blocking, this is called by the server to give a thread that can continue
@@ -86,6 +96,18 @@ class RoutesServer {
          *
          */
         static std::string vectorToJSON(const std::vector<glm::vec3> points);
+    
+        /**
+         * This is a simple method to make sure that every outgoing response is CORS complient by addind in the required headers.
+         *
+         * @param session
+         * The session input from restbed.
+         *
+         * @param message
+         * The message to be sent to the client
+         *
+         */
+        static void sendResponse(const std::shared_ptr<restbed::Session>& session, const std::string& message);
 
         /** A thread to perform route calculation on. */
         static std::thread calculation_thread;
