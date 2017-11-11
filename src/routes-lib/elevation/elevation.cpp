@@ -98,6 +98,15 @@ void ElevationData::_StaticGDAL::calcMinMax() {
 
 ElevationData::ElevationData(const glm::dvec2& start, const glm::dvec2& dest) {
 
+    // Before we do anything we do a sanity check
+    if (!routeInsideData(start, dest)) {
+
+        std::cout << "Attempted to compute a route that was not in the dataset\n";
+        throw std::runtime_error("Attempted to compute a route that was not in the dataset");
+
+    }
+
+
     // Get the size and then make the image
     calcCroppedSize(start, dest);
     createOpenCLImage();
@@ -200,6 +209,30 @@ glm::dvec3 ElevationData::pixelsToMetersAndElevation(const glm::ivec2& pos_pixel
         throw std::runtime_error("There was an error reading from the dataset");
 
     return pos_meters_sample;
+
+}
+
+bool ElevationData::routeInsideData(const glm::dvec2& start, const glm::dvec2& dest) {
+
+    // Get the origin and extent as points
+    glm::dvec2 origin = pixelsToLongitudeLatitude(glm::ivec2(0));
+    glm::dvec2 extent = pixelsToLongitudeLatitude(glm::ivec2(_StaticGDAL::_gdal_dataset->GetRasterXSize(),
+                                                             _StaticGDAL::_gdal_dataset->GetRasterYSize()));
+
+    std::cout << glm::to_string(origin) << " " << glm::to_string(extent) << std::endl;
+    std::cout << glm::to_string(start) << " " << glm::to_string(dest) << std::endl;
+
+    // Check if start is outside
+    if (start.x < origin.x || start.x > extent.x ||
+            start.y > origin.y || start.y < extent.y)
+        return false;
+
+    // Check if dest is outside
+    if (dest.x < dest.x || dest.x > dest.x ||
+            dest.y > dest.y || dest.y < dest.y)
+        return false;
+
+    return true;
 
 }
 

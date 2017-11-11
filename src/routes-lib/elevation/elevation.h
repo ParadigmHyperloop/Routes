@@ -188,6 +188,21 @@ class ElevationData {
 
     private:
 
+       /*
+        * Returns a boolean whether or not this route can be computed by the dataset that is on the disk.
+        *
+        * @param start
+        * The starting position in longitude latitude of the route.
+        *
+        * @param dest
+        * The ending position in longitude latitude of the route.
+        *
+        * @return
+        * true if the route is contained inside the data, false otherwise.
+        *
+        */
+        bool routeInsideData(const glm::dvec2& start, const glm::dvec2& dest);
+
         /**
         * When creating the OpenCL texture we only want to take as little data as we need. This function takes in the start and end of a route
         * and computes _crop_origin and _crop_extent to encapsulate the route with padding equal to ROUTE_PADDING.

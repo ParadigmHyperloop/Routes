@@ -7,7 +7,7 @@
 std::vector<glm::vec3> Routes::calculateRoute(glm::vec2 start, glm::vec2 dest) {
 
     std::cout << "Calculating a route\n";
-    
+
     // Stitch together the data
     ElevationData data = ElevationData(start, dest);
 

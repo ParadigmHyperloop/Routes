@@ -30,9 +30,19 @@ void RoutesQueue::calculateRoutes() {
     _RouteItem item;
     while (_routes.pop(item)) {
 
-        // Calculate the route and insert it into the map
-        // This can be done because the [] operator behaves like it is const for the purposes of thread safety
-        _completed[item.id] = Routes::calculateRoute(item.start, item.dest);
+        try {
+
+            // Calculate the route and insert it into the map
+            // This can be done because the [] operator behaves like it is const for the purposes of thread safety
+            _completed[item.id] = Routes::calculateRoute(item.start, item.dest);
+
+        } catch (std::runtime_error e) {
+
+            // Print out that the server had an exception
+            std::cout << "Exception: " << e.what() << std::endl;
+            _completed[item.id] = {glm::vec3(std::numeric_limits<float>::max())};
+
+        }
 
     }
 
