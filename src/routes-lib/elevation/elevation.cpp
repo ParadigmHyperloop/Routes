@@ -3,6 +3,7 @@
 //
 
 #include "elevation.h"
+#include <stdio.h>
 
 ElevationData::_StaticGDAL ElevationData::_init;
 
@@ -40,8 +41,9 @@ ElevationData::_StaticGDAL::_StaticGDAL() {
 
 ElevationData::_StaticGDAL::~_StaticGDAL() {
     
-    // Close the GDAL dataset
-    GDALClose(_gdal_dataset);
+    // Close the GDAL dataset if its open
+    if (GDALDumpOpenDatasets(stdout))
+        GDALClose(_gdal_dataset);
     
 }
 
