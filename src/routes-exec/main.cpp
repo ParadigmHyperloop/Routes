@@ -49,7 +49,7 @@ int main(int argc, const char* argv[]) {
                 system(build_cmd.c_str());
 
                 // Generate the stats for it
-                system("cmd /S /C gdalinfo ../data/db.vtf -stats");
+                //system("cmd /S /C gdalinfo ../data/db.vtf -stats");
 
             #else
 
@@ -57,7 +57,7 @@ int main(int argc, const char* argv[]) {
                 system("gdalbuildvrt ../data/db.vtf ../data/*.img");
 
                 // Generate the stats for it
-                system("gdalinfo ../data/db.vtf -stats");
+                //system("gdalinfo ../data/db.vtf -stats");
 
             #endif
 

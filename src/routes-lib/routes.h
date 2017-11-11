@@ -36,6 +36,20 @@ class Routes {
          */
         static std::vector<glm::vec3> calculateRoute(glm::vec2 start, glm::vec2 dest);
 
+    private:
+
+    /**
+     * In some areas we have a no data value in the elevation data. In this case we have no idea what to compute
+     * the Z of the route to be. For now we check for this case and throw a std::runtime_error if this happens.
+     *
+     * @param point
+     * The point to be checked for validity.
+     *
+     * @return
+     * True if the point was valid, false if otherwise.
+     */
+        static bool validatePoint(const glm::vec3& point);
+
 };
 
 #endif //ROUTES_ROUTES_H

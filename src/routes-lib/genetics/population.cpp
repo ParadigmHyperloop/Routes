@@ -424,8 +424,8 @@ void Population::generateRandomPoint(glm::vec4& to_gen) const {
     glm::vec4 progressed = _direction * percent + _start;
 
     // Generate a random deviation
-    glm::vec4 deviation = progressed + glm::vec4(glm::linearRand(0.0f, MAX_STRAIGHT_DEVIATION),
-                                                 glm::linearRand(0.0f, MAX_STRAIGHT_DEVIATION),
+    glm::vec4 deviation = progressed + glm::vec4(glm::linearRand(-MAX_STRAIGHT_DEVIATION, MAX_STRAIGHT_DEVIATION),
+                                                 glm::linearRand(-MAX_STRAIGHT_DEVIATION, MAX_STRAIGHT_DEVIATION),
                                                  0.0f, 0.0f);
 
     // Final vector, clamp to width and height
