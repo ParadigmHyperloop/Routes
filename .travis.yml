@@ -20,5 +20,3 @@ install: ./travis.sh
 
 script: 
 - cd build && make
-- ./Routes-Exec --rebuild
-- make check
