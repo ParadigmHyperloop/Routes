@@ -20,20 +20,20 @@
     <body>
         <div id = "overlay">
             <div class = "overlay-content">
-			
-				<h1 id="big-title" style="color: white; opacity: 0.0;">Hi, my name is <b id="genie-name" style="opacity: 0.0; color: rgb(0,107,255)">Genie</b></h1>
-				<br>
-				<h5 id="little-title" style="opacity: 0.0;">I'm a parallelized <b id="genetic" style="opacity: 0.0; color: rgb(0,107,255); font-weight: 900;">genetic</b> <div id="sub-rest" style="opacity: 0.0; display: inline;">algorithm built for computing hyperloop routes</div></h5>
-				<br>
-				<h5 id="where-to" style="opacity: 0.0;">Where would you like to go?</h5>
-				<br>
-			
+
+                <h1 id="big-title" style="color: white; opacity: 0.0;">Hi, my name is <b id="genie-name" style="opacity: 0.0; color: rgb(0,107,255)">Genie</b></h1>
+                <br>
+                <h5 id="little-title" style="opacity: 0.0;">I'm a parallelized <b id="genetic" style="opacity: 0.0; color: rgb(0,107,255); font-weight: 900;">genetic</b> <div id="sub-rest" style="opacity: 0.0; display: inline;">algorithm built for computing hyperloop routes</div></h5>
+                <br>
+                <h5 id="where-to" style="opacity: 0.0;">Where would you like to go?</h5>
+
                 <div id ="locationField">
                     <input id="autocomplete" class="form-control" placeholder = "Start location" type="test">
                     <input id="autocomplete2" class="form-control" placeholder = "End location" type="test">
                 </div>
 
                 <button id = "calculate" type="button" class="btn btn-lg" onclick="push()">Calculate</button>
+                <button id = "cancel" type="button" class="btn btn-lg" onclick="hideOverlay()">Cancel</button>
             </div>
         </div>
 
@@ -60,7 +60,7 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
 
         <script src="scripts/config.js" type="text/javascript"></script>
-		<script src="scripts/calculate-visual.js" type="text/javascript"></script>
+        <script src="scripts/calculate-visual.js" type="text/javascript"></script>
         <script src="scripts/calculate.js" type="text/javascript"></script>
 
         <script async defer

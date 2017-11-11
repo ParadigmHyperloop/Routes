@@ -190,8 +190,7 @@ function push() {
 //    switch to map view
     zoomToLocation();
     $("#loading_blob").show();
-    $("#overlay").css("width","0%");
-
+    hideOverlay();
     
 //    format start and end for the api call
     let s_lat = autocomplete.getPlace().geometry.location.lat()
@@ -200,11 +199,14 @@ function push() {
     let e_lng = autocomplete2.getPlace().geometry.location.lng()
     let s = s_lng + "," + s_lat
     let e = e_lng + "," + e_lat
-    console.log(s,e)
 
     $.ajax(getComputeRequest(s,e,handleIdentifier));
 
     changeSaying();
+}
+
+function hideOverlay(){
+    $("#overlay").css("width","0%");
 }
 
 function zoomToLocation(){

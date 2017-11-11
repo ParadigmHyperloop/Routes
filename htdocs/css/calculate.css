@@ -3,7 +3,7 @@
     top: 250px;
     left: 50%;
     margin-left: -100pt;
-    
+
     font-family: 'Lato';
     font-weight: 700;
     color: #a6a6a6;
@@ -24,7 +24,7 @@
 }
 
 #map-holder {
-     width: 100%; height: 100%;
+    width: 100%; height: 100%;
 }
 
 #new-route {
@@ -47,13 +47,30 @@
 }
 
 .overlay-content {
-	
-	color: white;
     position: relative;
     top: 25%; /* 25% from the top */
     width: 100%; /* 100% width */
     text-align: center; /* Centered text/links */
     margin-top: 30px; /* 30px top margin to avoid conflict with the close button on smaller screens */
+}
+
+.overlay-content span{
+    opacity: 0.0;
+    color: white;
+    font-weight: 600;
+}
+
+.overlay-title{
+    font-size: 64px;
+    margin-bottom: 10px;
+}
+
+.overlay-content h1{
+    margin-bottom: 30px;
+}
+
+.genie-color{
+    color: #006bff;
 }
 
 .overlay-content input{
@@ -77,6 +94,10 @@
     background-image: none !important;
     height: 0px;
 }
+
+
+
+
 
 
 
