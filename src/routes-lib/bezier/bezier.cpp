@@ -72,6 +72,18 @@ std::vector<glm::vec3> Bezier::evaluateEntireBezierCurve(const std::vector<glm::
 
 }
 
+float Bezier::bezierLength(const std::vector<glm::vec3>& points) {
+    float l = 0.0;
+
+    for(int i = 0; i < points.size() - 1; i++)
+        l += glm::length(points[i+1] - points[i]);
+
+    return l;
+}
+
+
+
+
 int Bezier::calcBinomialCoefficient(int n, int i) {
 
     // Special case to prevent divide by zero

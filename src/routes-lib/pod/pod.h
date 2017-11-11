@@ -6,6 +6,8 @@
 #define ROUTES_POD_H
 
 #include <math.h>
+#include <glm/vec3.hpp>
+#include <vector>
 
 /** Lowercase g in physics (the gravitational acceleration constant) in meters / second^2. */
 #define g 9.81
@@ -17,7 +19,7 @@
 #define EXCAVATION_DEPTH 10.0f
 
 /** The default max speed of a hyperloop pod in meters / second. */
-#define DEFAULT_POD_MAX_SPEED 343.0f
+#define DEFAULT_POD_MAX_SPEED 339.75f
 
 class Pod {
 
@@ -34,12 +36,25 @@ class Pod {
         /**
         * Calculates the minimum radius of curvature that the track may have in meters.
         * This is based on the maximum speed of the hyperloop pod in meters / second
-        * and a max lateral acceleration of 1/2 g
+        * and a max lateral acceleration of g
         *
         * @return
         * The minimum radius of curvature that should be allowed for human comfort on the track.
         */
         float minCurveRadius() const;
+
+       /**
+        * Calculates the time it takes to traverse the route, based solely on the length
+         * of the track and the max speed of the pod.
+         *
+        * @param length ]
+        * the length of the curve in meters
+        *
+        * @return
+        * the time it takes to traverse the curve in seconds.
+        */
+        float timeForCurve(float length);
+
 
     private:
 
