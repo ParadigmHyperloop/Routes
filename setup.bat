@@ -35,9 +35,9 @@ DEL /S /Q boost.zip
 DEL /S /Q unzip.exe
 
 # Remove libraries that get built and we dont need
-DEL /S /Q lib/*boost_prg_exec_monitor*
-DEL /S /Q lib/*boost_test_exec_monitor*
-DEL /S /Q lib/*boost_timer*
+DEL /S /Q lib\*boost_prg_exec_monitor*
+DEL /S /Q lib\*boost_test_exec_monitor*
+DEL /S /Q lib\*boost_timer*
 
 : Grab GLM
 git clone https://github.com/g-truc/glm.git
