@@ -63,8 +63,8 @@ function initAutocomplete(){
     autocomplete = new google.maps.places.Autocomplete((document.getElementById('autocomplete')),
                                                        {types: ['geocode']});
     autocomplete2 = new google.maps.places.Autocomplete((document.getElementById('autocomplete2')),
-                                                       {types: ['geocode']});
-    
+                                                        {types: ['geocode']});
+
 
 }
 
@@ -201,11 +201,9 @@ function handleIdentifier(result) {
 
 function push() {
     zoomToLocation();
-    
+
     $("#overlay").css("width","0%");
-    
-    
-    
+
     //    $.ajax(getComputeRequest("-119.001666666700032,35.001666666664143,550.0", 
     //                             "-118.5000000,34.5000000,145.0", 
     //                             handleIdentifier));
@@ -216,16 +214,9 @@ function push() {
 }
 
 function zoomToLocation(){
-    
-    var startlat = autocomplete.getPlace().geometry.location.lat();
-    var startlong = autocomplete.getPlace().geometry.location.lng();
-    
-    var endlat = autocomplete2.getPlace().geometry.location.lat();
-    var endlong = autocomplete2.getPlace().geometry.location.lng();
-    
-    var centerlat = (startlat + endlat)/2;
-    var centerlong = (startlong + endlong)/2;
-    
-    map.setCenter({ lat: centerlat, lng: centerlong })
-    console.log(centerlong)
+    var bounds = new google.maps.LatLngBounds();
+    bounds.extend(autocomplete.getPlace().geometry.location)
+    bounds.extend(autocomplete2.getPlace().geometry.location)
+    map.fitBounds(bounds);
+    map.setCenter(bounds.getCenter());    
 }
