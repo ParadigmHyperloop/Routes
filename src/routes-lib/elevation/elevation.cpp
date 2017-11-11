@@ -4,72 +4,130 @@
 
 #include "elevation.h"
 
-bool ElevationData::_is_initialized = ElevationData::initGDAL();
+ElevationData::_StaticGDAL ElevationData::_init;
 
-bool ElevationData::initGDAL() {
+GDALDataset* ElevationData::_StaticGDAL::_gdal_dataset;
+GDALRasterBand* ElevationData::_StaticGDAL::_gdal_raster_band;
 
+double ElevationData::_StaticGDAL::_gdal_transform[6];
+
+int ElevationData::_StaticGDAL::_width;
+int ElevationData::_StaticGDAL::_height;
+
+double ElevationData::_StaticGDAL::_width_meters;
+double ElevationData::_StaticGDAL::_height_meters;
+double ElevationData::_StaticGDAL::_elevation_min;
+double ElevationData::_StaticGDAL::_elevation_max;
+double ElevationData::_StaticGDAL::_pixelToMeterConversions[2];
+
+ElevationData::_StaticGDAL::_StaticGDAL() {
+    
     // Register all of the file formats for GDAL
     GDALAllRegister();
+    
+    // Open up the GDAL dataset
+    _gdal_dataset = (GDALDataset*)GDALOpenShared(GDAL_DB_PATH, GA_ReadOnly);
+    if (!_gdal_dataset)
+        throw std::runtime_error("The databse could not be loaded from the disk. Make sure to build it first.");
+    
+    std::cout << "Statically initializing the GDAL Data\n";
+    
+    // Get the raster band
+    _gdal_raster_band = _gdal_dataset->GetRasterBand(1);
+    
+    calcConversions();
+    calcStats();
+    calcMinMax();
+    
+}
 
-    return true;
+ElevationData::_StaticGDAL::~_StaticGDAL() {
+    
+    // Close the GDAL dataset
+    GDALClose(_gdal_dataset);
+    
+}
+
+void ElevationData::_StaticGDAL::calcConversions() {
+    
+    // First read the transform from GDAL (we assume that we get something)
+    _gdal_dataset->GetGeoTransform(_gdal_transform);
+    
+    // Calculate conversion factors based on the size of pixels in degrees.
+    // This uses a simplified formula of degrees -> arcseconds -> meters
+    double degrees_to_meters = EARTH_RADIUS * M_PI / 180.0;
+    
+    // X conversion
+    _pixelToMeterConversions[0] = degrees_to_meters * (double)_gdal_transform[1];
+    
+    // Y Conversion - we use abs because GDAL can store it in degrees
+    _pixelToMeterConversions[1] = degrees_to_meters * fabs((double)_gdal_transform[5]);
+    
+}
+
+void ElevationData::_StaticGDAL::calcStats() {
+    
+    // Get the width and height in pixels
+    _width =  _gdal_dataset->GetRasterXSize();
+    _height = _gdal_dataset->GetRasterYSize();
+    
+    // Get the width and height in meters using the conversions
+    _width_meters  = _width * _pixelToMeterConversions[0];
+    _height_meters = _height * _pixelToMeterConversions[1];
+    
+}
+
+void ElevationData::_StaticGDAL::calcMinMax() {
+    
+    double gdal_min_max[2] = {0.0, 0.0};
+    int succ[2] = {0, 0};
+    
+    gdal_min_max[0] = _gdal_raster_band->GetMinimum(&succ[0]);
+    gdal_min_max[1] = _gdal_raster_band->GetMaximum(&succ[1]);
+    
+    if (!succ[0] || !succ[1])
+        _gdal_raster_band->ComputeRasterMinMax(true, gdal_min_max);
+    
+    // Save the min and max
+    _elevation_min = gdal_min_max[0];
+    _elevation_max = gdal_min_max[1];
+    
+}
+
+/***********************************************************************************************************************************************/
+
+ElevationData::ElevationData(const glm::dvec2& start, const glm::dvec2& dest) {
+
+    // Get the size and then make the image
+    calcCroppedSize(start, dest);
+    createOpenCLImage();
 
 }
 
-ElevationData::ElevationData(const std::string& file_path, const glm::dvec3& start, const glm::dvec3& dest) {
+int ElevationData::getWidth() const { return _StaticGDAL::_width; }
+int ElevationData::getHeight() const { return _StaticGDAL::_height; }
 
-    // Get the dataset from the disk
-    _gdal_dataset = (GDALDataset*)GDALOpenShared(file_path.c_str(), GA_ReadOnly);
-    if (_gdal_dataset) {
+double ElevationData::getWidthInMeters() const { return _StaticGDAL::_width_meters; }
+double ElevationData::getHeightInMeters() const { return _StaticGDAL::_height_meters; }
 
-        // Get the raster band
-        _gdal_raster_band = _gdal_dataset->GetRasterBand(1);
-
-        calcCroppedSize(start, dest);
-
-        calcConversions();
-        calcStats();
-        createOpenCLImage();
-
-        calcMinMax();
-
-
-    } else std::cout << "Error loading the GDAL dataset from the disk\n";
-
-}
-
-ElevationData::~ElevationData() {
-
-    // Raster band is owned by the dataset so it doesnt need to be deallocated
-    // Only get rid of it if it exists. There is a default constructor for stitching where it will not.
-    if (_gdal_dataset)
-        GDALClose(_gdal_dataset);
-
-}
-
-int ElevationData::getWidth() const { return _width; }
-int ElevationData::getHeight() const { return _height; }
-
-double ElevationData::getWidthInMeters() const { return _width_meters; }
-double ElevationData::getHeightInMeters() const { return _height_meters; }
-
-double ElevationData::getMinElevation() const { return _elevation_min; }
-double ElevationData::getMaxElevation() const { return _elevation_max; }
+double ElevationData::getMinElevation() const { return _StaticGDAL::_elevation_min; }
+double ElevationData::getMaxElevation() const { return _StaticGDAL::_elevation_max; }
 
 const boost::compute::image2d& ElevationData::getOpenCLImage() const { return _opencl_image; }
 
 glm::dvec2 ElevationData::convertPixelsToMeters(const glm::ivec2& pos_pixels) const {
 
     // Multiply by the conversion factors
-    return glm::dvec2((double)pos_pixels.x * pixelToMeterConversions[0],
-                      (double)pos_pixels.y * pixelToMeterConversions[1]);
+    return glm::dvec2((double)pos_pixels.x * _StaticGDAL::_pixelToMeterConversions[0],
+                      (double)pos_pixels.y * _StaticGDAL::_pixelToMeterConversions[1]);
 
 }
 
 glm::ivec2 ElevationData::metersToPixels(const glm::dvec2 &pos_meters) const {
 
     // Divide by the conversion factors
-    return glm::ivec2(pos_meters.x / pixelToMeterConversions[0],
-                      pos_meters.y / pixelToMeterConversions[1]);
+    return glm::ivec2(pos_meters.x / _StaticGDAL::_pixelToMeterConversions[0],
+                      pos_meters.y / _StaticGDAL::_pixelToMeterConversions[1]);
 
 }
 
@@ -87,8 +145,8 @@ glm::dvec2 ElevationData::pixelsToLongitudeLatitude(const glm::ivec2& pos_pixels
 
     // Convert using the GDAL transform
     // Formula can be found in the GDAL tutorial
-    return glm::dvec2(_gdal_transform[0] + (double)pos_pixels.x * _gdal_transform[1],
-                      _gdal_transform[3] + (double)pos_pixels.y * _gdal_transform[5]);
+    return glm::dvec2(_StaticGDAL::_gdal_transform[0] + (double)pos_pixels.x * _StaticGDAL::_gdal_transform[1],
+                      _StaticGDAL::_gdal_transform[3] + (double)pos_pixels.y * _StaticGDAL::_gdal_transform[5]);
 
 }
 
@@ -105,8 +163,8 @@ glm::dvec2 ElevationData::longitudeLatitudeToMeters(const glm::dvec2 lat_lon) co
 glm::ivec2 ElevationData::longitudeLatitudeToPixels(const glm::dvec2 lat_lon) const {
 
     // First convert to pixels using the gdal transform
-    return glm::ivec2((lat_lon.x - _gdal_transform[0]) / _gdal_transform[1],
-                      (lat_lon.y - _gdal_transform[3]) / _gdal_transform[5]);
+    return glm::ivec2((lat_lon.x - _StaticGDAL::_gdal_transform[0]) / _StaticGDAL::_gdal_transform[1],
+                      (lat_lon.y - _StaticGDAL::_gdal_transform[3]) / _StaticGDAL::_gdal_transform[5]);
 
 }
 
@@ -119,7 +177,7 @@ glm::dvec3 ElevationData::metersToMetersAndElevation(const glm::dvec2& pos_meter
     glm::ivec2 pos_pixels = metersToPixels(pos_meters);
 
     // Do the sample
-    CPLErr err = _gdal_raster_band->RasterIO(GF_Read, pos_pixels.x, pos_pixels.y, 1, 1, &z, 1, 1, GDT_Float32, 0, 0);
+    CPLErr err = _StaticGDAL::_gdal_raster_band->RasterIO(GF_Read, pos_pixels.x, pos_pixels.y, 1, 1, &z, 1, 1, GDT_Float32, 0, 0);
     if (err)
         throw std::runtime_error("There was an error reading from the dataset");
 
@@ -137,7 +195,7 @@ glm::dvec3 ElevationData::pixelsToMetersAndElevation(const glm::ivec2& pos_pixel
     glm::dvec3 pos_meters_sample = glm::dvec3(pos_meters.x, pos_meters.y, 0.0);
 
     // Now get the sample instead of calling metersToMetersAndElevation because GDAL samples in pixels
-    CPLErr err = _gdal_raster_band->RasterIO(GF_Read, pos_pixels.x, pos_pixels.y, 1, 1, &pos_meters_sample.z, 1, 1, GDT_Float32, 0, 0);
+    CPLErr err = _StaticGDAL::_gdal_raster_band->RasterIO(GF_Read, pos_pixels.x, pos_pixels.y, 1, 1, &pos_meters_sample.z, 1, 1, GDT_Float32, 0, 0);
     if (err)
         throw std::runtime_error("There was an error reading from the dataset");
 
@@ -145,7 +203,7 @@ glm::dvec3 ElevationData::pixelsToMetersAndElevation(const glm::ivec2& pos_pixel
 
 }
 
-void ElevationData::calcCroppedSize(const glm::dvec3& start, const glm::dvec3& dest) {
+void ElevationData::calcCroppedSize(const glm::dvec2& start, const glm::dvec2& dest) {
 
     // Get the origin of the cropped data.
     // On the X this is the min because as you go left, X gets more negative
@@ -161,56 +219,10 @@ void ElevationData::calcCroppedSize(const glm::dvec3& start, const glm::dvec3& d
 
     // Add padding on
     _crop_origin += glm::dvec2(-ROUTE_PADDING,
-                               ROUTE_PADDING);
+                                ROUTE_PADDING);
 
     _crop_extent += glm::dvec2( ROUTE_PADDING,
                                 -ROUTE_PADDING);
-
-}
-
-void ElevationData::calcConversions() {
-
-    // First read the transform from GDAL (we assume that we get something)
-    _gdal_dataset->GetGeoTransform(_gdal_transform);
-
-    // Calculate conversion factors based on the size of pixels in degrees.
-    // This uses a simplified formula of degrees -> arcseconds -> meters
-    double degrees_to_meters = EARTH_RADIUS * M_PI / 180.0;
-
-    // X conversion
-    pixelToMeterConversions[0] = degrees_to_meters * (double)_gdal_transform[1];
-
-    // Y Conversion - we use abs because GDAL can store it in degrees
-    pixelToMeterConversions[1] = degrees_to_meters * fabs((double)_gdal_transform[5]);
-
-}
-
-void ElevationData::calcStats() {
-
-    // Get the width and height in pixels
-    _width =  _gdal_dataset->GetRasterXSize();
-    _height = _gdal_dataset->GetRasterYSize();
-
-    // Get the width and height in meters using the conversions
-    _width_meters  = _width * pixelToMeterConversions[0];
-    _height_meters = _height * pixelToMeterConversions[1];
-
-}
-
-void ElevationData::calcMinMax() {
-
-    double gdal_min_max[2] = {0.0, 0.0};
-    int succ[2] = {0, 0};
-
-    gdal_min_max[0] = _gdal_raster_band->GetMinimum(&succ[0]);
-    gdal_min_max[1] = _gdal_raster_band->GetMaximum(&succ[1]);
-
-    if (!succ[0] || !succ[1])
-        _gdal_raster_band->ComputeRasterMinMax(true, gdal_min_max);
-
-    // Save the min and max
-    _elevation_min = gdal_min_max[0];
-    _elevation_max = gdal_min_max[1];
 
 }
 
@@ -221,10 +233,10 @@ void ElevationData::createOpenCLImage() {
     glm::ivec2 crop_extent_p = longitudeLatitudeToPixels(_crop_extent);
 
     // Make sure that the coordinates are inside the raster image
-    glm::ivec2 crop_origin_c = glm::ivec2(glm::clamp(crop_origin_p.x, 0, _gdal_dataset->GetRasterXSize()),
-                                          glm::clamp(crop_origin_p.y, 0, _gdal_dataset->GetRasterYSize()));
-    glm::ivec2 crop_extent_c = glm::ivec2(glm::clamp(crop_extent_p.x, 0, _gdal_dataset->GetRasterXSize()),
-                                          glm::clamp(crop_extent_p.y, 0, _gdal_dataset->GetRasterYSize()));
+    glm::ivec2 crop_origin_c = glm::ivec2(glm::clamp(crop_origin_p.x, 0, _StaticGDAL::_gdal_dataset->GetRasterXSize()),
+                                          glm::clamp(crop_origin_p.y, 0, _StaticGDAL::_gdal_dataset->GetRasterYSize()));
+    glm::ivec2 crop_extent_c = glm::ivec2(glm::clamp(crop_extent_p.x, 0, _StaticGDAL::_gdal_dataset->GetRasterXSize()),
+                                          glm::clamp(crop_extent_p.y, 0, _StaticGDAL::_gdal_dataset->GetRasterYSize()));
 
     // Calculate the adjusted width and height
     glm::ivec2 size = crop_extent_c - crop_origin_c;
@@ -235,14 +247,12 @@ void ElevationData::createOpenCLImage() {
 
     for (int i = 0; i < size.y; i++) {
 
-        CPLErr err = _gdal_raster_band->RasterIO(GF_Read, crop_origin_c.x, i + crop_origin_c.y, size.x,
-                                                 1, &image_data[size.x * i], size.x, 1, GDT_Float32, 0, 0);
+        CPLErr err = _StaticGDAL::_gdal_raster_band->RasterIO(GF_Read, crop_origin_c.x, i + crop_origin_c.y, size.x,
+                                                                       1, &image_data[size.x * i], size.x, 1, GDT_Float32, 0, 0);
         if (err)
             throw std::runtime_error("There was an error reading from the dataset");
 
     }
-
-    std::cout << image_data[10000] << std::endl;
 
     // Create the OpenCL image
     boost::compute::image_format format = boost::compute::image_format(CL_INTENSITY, CL_FLOAT);
@@ -258,3 +268,14 @@ glm::dvec2 ElevationData::getCroppedSizeMeters() const {
 }
 
 glm::vec2 ElevationData::getCroppedOriginMeters() const { return longitudeLatitudeToMeters(_crop_origin); }
+
+double ElevationData::getLongestAllowedRoute() {
+    
+    // Querry OpenCL for the max texutre height. We assume that the max texture size is a square.
+    size_t max_size = Kernel::getDevice().get_info<CL_DEVICE_IMAGE2D_MAX_WIDTH>();
+    
+    // Multiply it by both of the meter conversions and return the smaller one
+    return glm::min((float)max_size * _StaticGDAL::_pixelToMeterConversions[0],
+                    (float)max_size * _StaticGDAL::_pixelToMeterConversions[1]);
+
+}

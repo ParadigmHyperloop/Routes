@@ -44,8 +44,7 @@ IF (WIN32)
   message(STATUS ${GDAL_LIBRARY})
   target_link_libraries(Routes ${OpenCL_LIBRARIES}
                                ${GDAL_LIBRARY}
-                               ${LIBRARIES}
-                               -lpthread)
+                               ${LIBRARIES})
 
   add_custom_command(TARGET copy PRE_BUILD
                      COMMAND ${CMAKE_COMMAND} -E
@@ -95,8 +94,7 @@ IF (WIN32)
   message(WARNING ${GDAL_LIBRARY})
   target_link_libraries(Routes-Exec ${OpenCL_LIBRARIES}
                                     ${GDAL_LIBRARY}
-                                    ${LIBRARIES}
-                                    -lpthread)
+                                    ${LIBRARIES})
 
 ELSE()
 
@@ -126,8 +124,7 @@ IF (WIN32)
   message(STATUS ${GDAL_LIBRARY})
   target_link_libraries(Routes-Server ${OpenCL_LIBRARIES}
                                       ${GDAL_LIBRARY}
-                                      ${LIBRARIES}
-                                      -lpthread)
+                                      ${LIBRARIES})
 
 ELSE()
 
@@ -137,6 +134,48 @@ ELSE()
                                       -lpthread)
 
 ENDIF()
+
+# Create a test suite
+enable_testing()
+
+FILE(GLOB_RECURSE HS ${CMAKE_SOURCE_DIR}/src/routes-tests/*.h*)
+FILE(GLOB_RECURSE SOURCES ${CMAKE_SOURCE_DIR}/src/routes-tests/*.cpp)
+
+add_executable(Routes-Tests ${HS}
+                             ${SOURCES})
+
+add_dependencies(Routes-Tests Routes)
+
+# Build it with the library
+include_directories(Routes-Tests ${CMAKE_BINARY_DIR}/include)
+target_link_libraries(Routes-Tests ${CMAKE_BINARY_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}Routes${CMAKE_STATIC_LIBRARY_SUFFIX})
+
+# Link in the other libraries
+IF (WIN32)
+
+  message(STATUS ${GDAL_LIBRARY})
+  target_link_libraries(Routes-Tests ${OpenCL_LIBRARIES}
+                                      ${GDAL_LIBRARY}
+                                      ${LIBRARIES})
+
+ELSE()
+
+  target_link_libraries(Routes-Tests ${OPENCL_LIBRARIES}
+                                      ${GDAL_LIBRARY}
+                                      ${LIBRARIES}
+                                      -lpthread)
+
+ENDIF()
+
+add_test(Routes-TestSuite Routes-Tests)
+
+# Add the check target because the built in test one is a pain
+# Taken from https://stackoverflow.com/questions/5709914/using-cmake-how-do-i-get-verbose-output-from-ctest/31124523#31124523
+add_custom_target(check 
+        COMMAND ${CMAKE_COMMAND} -E env CTEST_OUTPUT_ON_FAILURE=1
+            ${CMAKE_CTEST_COMMAND} -C $<CONFIG>
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    DEPENDS Routes-Tests)
 
 # Fix the Xcode build so that everything is put into the binary directory
 set_target_properties(Routes PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
@@ -150,3 +189,8 @@ set_target_properties(Routes-Server PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE 
 set_target_properties(Routes-Exec PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set_target_properties(Routes-Exec PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR})
 set_target_properties(Routes-Exec PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR})
+
+set_target_properties(Routes-Tests PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+set_target_properties(Routes-Tests PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR})
+set_target_properties(Routes-Tests PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR})
+

@@ -1,7 +1,7 @@
 var searchData=
 [
   ['g',['g',['../pod_8h.html#a167d2c0ec9b943d55f2124f7442b2f6d',1,'pod.h']]],
-  ['generatehtmlforpath',['generateHTMLForPath',['../class_h_t_m_l.html#a7cd31d05ec60ad2155a751933c4588cd',1,'HTML']]],
+  ['gdal_5fdb_5fpath',['GDAL_DB_PATH',['../elevation_8h.html#a2c46dc8f6114b53c6b7b9689b2ba1cac',1,'elevation.h']]],
   ['generatepopulation',['generatePopulation',['../class_population.html#ae3a4c2457d9276367f242330d8497cb1',1,'Population']]],
   ['generaterandompoint',['generateRandomPoint',['../class_population.html#abe7ee50b9ccf97dc23c0da85197b5068',1,'Population']]],
   ['genetics',['Genetics',['../class_genetics.html',1,'']]],
@@ -11,10 +11,13 @@ var searchData=
   ['getbinomialcoefficients',['getBinomialCoefficients',['../class_bezier.html#af8184ad8c9c23625005c40efe7f74d13',1,'Bezier']]],
   ['getcompletedroute',['getCompletedRoute',['../class_routes_queue.html#a8e579ab43c560d2e9bb2809e9a5b08f7',1,'RoutesQueue']]],
   ['getcontext',['getContext',['../class_kernel.html#a52489f89ded060d514b7e5d12f23e720',1,'Kernel']]],
+  ['getcroppedoriginmeters',['getCroppedOriginMeters',['../class_elevation_data.html#af812976b708595d3b8eedcfabc2d1740',1,'ElevationData']]],
   ['getcroppedsizemeters',['getCroppedSizeMeters',['../class_elevation_data.html#ad5b1a62dcad25588ee8518dfe8f1be03',1,'ElevationData']]],
+  ['getdevice',['getDevice',['../class_kernel.html#ac37be0a4f242722eaba8b60a2fc3c42a',1,'Kernel']]],
   ['getheight',['getHeight',['../class_elevation_data.html#a57d19e4a6ebe4f2d0b971438d60d8ee3',1,'ElevationData']]],
   ['getheightinmeters',['getHeightInMeters',['../class_elevation_data.html#a2db4b1c1fd0d20772b4e16daee2a1ee3',1,'ElevationData']]],
   ['getindividual',['getIndividual',['../class_population.html#a28e723c1694a1a831f46dfa454850ee3',1,'Population']]],
+  ['getlongestallowedroute',['getLongestAllowedRoute',['../class_elevation_data.html#a1a454bcc94c9364692e63063abc5e544',1,'ElevationData']]],
   ['getmaxelevation',['getMaxElevation',['../class_elevation_data.html#a1cb421b09d097a08a596538fac44a02f',1,'ElevationData']]],
   ['getminelevation',['getMinElevation',['../class_elevation_data.html#ac1939e5ac1005fb060bd7eabf72ca229',1,'ElevationData']]],
   ['getopenclimage',['getOpenCLImage',['../class_elevation_data.html#ad8b2c4db5db23e9dfd88bfbf11097b01',1,'ElevationData']]],
