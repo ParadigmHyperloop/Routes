@@ -5,7 +5,6 @@ var searchData=
   ['calcconversions',['calcConversions',['../class_elevation_data_1_1___static_g_d_a_l.html#a4f587db1cccb6fa7f5525ed0057196a0',1,'ElevationData::_StaticGDAL']]],
   ['calccroppedsize',['calcCroppedSize',['../class_elevation_data.html#ab041efcad231e72739b517838a9d251b',1,'ElevationData']]],
   ['calcgenomesize',['calcGenomeSize',['../class_population.html#a52a41d7911ed22285e95244f3f780fbb',1,'Population']]],
-  ['calcminmax',['calcMinMax',['../class_elevation_data_1_1___static_g_d_a_l.html#af77b4848d0ab5e323c1f17f6753204fe',1,'ElevationData::_StaticGDAL']]],
   ['calcstats',['calcStats',['../class_elevation_data_1_1___static_g_d_a_l.html#a3cb0fd8dad451466b74835aa3fffa2b1',1,'ElevationData::_StaticGDAL']]],
   ['calculateroute',['calculateRoute',['../class_routes.html#ae2a60ebc21f42e861959ee955995345b',1,'Routes']]],
   ['calculateroutes',['calculateRoutes',['../class_routes_queue.html#a221ea6e4c3d367c5af5a0372abb135c5',1,'RoutesQueue']]],

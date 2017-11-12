@@ -75,6 +75,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ac3020ec13e22c8aca271f1582718e3b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6d1251a997b3e47ffc0f2380726213f9"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pod.html#a6d1251a997b3e47ffc0f2380726213f9">minCurveRadius</a> () const</td></tr>
 <tr class="separator:a6d1251a997b3e47ffc0f2380726213f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a30818fa003ba6d8cb9aa441f47a219ce"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pod.html#a30818fa003ba6d8cb9aa441f47a219ce">timeForCurve</a> (float length)</td></tr>
+<tr class="separator:a30818fa003ba6d8cb9aa441f47a219ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -122,8 +124,34 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Calculates the minimum radius of curvature that the track may have in meters. This is based on the maximum speed of the hyperloop pod in meters / second and a max lateral acceleration of 1/2 g</p>
+<p>Calculates the minimum radius of curvature that the track may have in meters. This is based on the maximum speed of the hyperloop pod in meters / second and a max lateral acceleration of g</p>
 <dl class="section return"><dt>Returns</dt><dd>The minimum radius of curvature that should be allowed for human comfort on the track. </dd></dl>
+
+</div>
+</div>
+<a id="a30818fa003ba6d8cb9aa441f47a219ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a30818fa003ba6d8cb9aa441f47a219ce">&#9670;&nbsp;</a></span>timeForCurve()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Pod::timeForCurve </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>length</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Calculates the time it takes to traverse the route, based solely on the length of the track and the max speed of the pod.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">length</td><td>] the length of the curve in meters</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the time it takes to traverse the curve in seconds. </dd></dl>
 
 </div>
 </div>

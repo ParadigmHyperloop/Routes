@@ -81,8 +81,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a4f587db1cccb6fa7f5525ed0057196a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3cb0fd8dad451466b74835aa3fffa2b1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data_1_1___static_g_d_a_l.html#a3cb0fd8dad451466b74835aa3fffa2b1">calcStats</a> ()</td></tr>
 <tr class="separator:a3cb0fd8dad451466b74835aa3fffa2b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af77b4848d0ab5e323c1f17f6753204fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data_1_1___static_g_d_a_l.html#af77b4848d0ab5e323c1f17f6753204fe">calcMinMax</a> ()</td></tr>
-<tr class="separator:af77b4848d0ab5e323c1f17f6753204fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -100,10 +98,6 @@ Static Public Attributes</h2></td></tr>
 <tr class="separator:a977d536604a196d7f5fdb17a05df72a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2de51e030d0b9c1199fde36ed4ff177d"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data_1_1___static_g_d_a_l.html#a2de51e030d0b9c1199fde36ed4ff177d">_height_meters</a></td></tr>
 <tr class="separator:a2de51e030d0b9c1199fde36ed4ff177d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7d3b5b38f1ce8f6043590862ac8af25d"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data_1_1___static_g_d_a_l.html#a7d3b5b38f1ce8f6043590862ac8af25d">_elevation_min</a></td></tr>
-<tr class="separator:a7d3b5b38f1ce8f6043590862ac8af25d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a258a023940474c32b52252b8e88a1dd8"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data_1_1___static_g_d_a_l.html#a258a023940474c32b52252b8e88a1dd8">_elevation_max</a></td></tr>
-<tr class="separator:a258a023940474c32b52252b8e88a1dd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9f074de396faee13b1c60a587ab23aa7"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data_1_1___static_g_d_a_l.html#a9f074de396faee13b1c60a587ab23aa7">_pixelToMeterConversions</a> [2]</td></tr>
 <tr class="separator:a9f074de396faee13b1c60a587ab23aa7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -165,24 +159,6 @@ Static Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="af77b4848d0ab5e323c1f17f6753204fe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af77b4848d0ab5e323c1f17f6753204fe">&#9670;&nbsp;</a></span>calcMinMax()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void ElevationData::_StaticGDAL::calcMinMax </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>This is a workaround to a current bug with GDAL. Some GIS files have "NoData" values which are massive numbers. GDAL is supposed to ignore these, but for some reason when computing min and max it does not. This function uses an OpenCL <a class="el" href="class_kernel.html">Kernel</a> to get the min and max manually, ignoring these values. </p>
-
-</div>
-</div>
 <a id="a3cb0fd8dad451466b74835aa3fffa2b1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a3cb0fd8dad451466b74835aa3fffa2b1">&#9670;&nbsp;</a></span>calcStats()</h2>
 
@@ -202,52 +178,6 @@ Static Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a258a023940474c32b52252b8e88a1dd8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a258a023940474c32b52252b8e88a1dd8">&#9670;&nbsp;</a></span>_elevation_max</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">double ElevationData::_StaticGDAL::_elevation_max</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>The maximum elevation in meters of the terrain in the raster image in meters </p>
-
-</div>
-</div>
-<a id="a7d3b5b38f1ce8f6043590862ac8af25d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7d3b5b38f1ce8f6043590862ac8af25d">&#9670;&nbsp;</a></span>_elevation_min</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">double ElevationData::_StaticGDAL::_elevation_min</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>The minimum elevation in meters of the terrain in the raster image in meters </p>
-
-</div>
-</div>
 <a id="a467237f8076ce0e78c58b7a33d36fcd0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a467237f8076ce0e78c58b7a33d36fcd0">&#9670;&nbsp;</a></span>_gdal_dataset</h2>
 

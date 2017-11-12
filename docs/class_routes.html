@@ -60,6 +60,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="class_routes-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">Routes Class Reference</div>  </div>
@@ -72,6 +73,11 @@ $(function() {
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:ae2a60ebc21f42e861959ee955995345b"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; glm::vec3 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_routes.html#ae2a60ebc21f42e861959ee955995345b">calculateRoute</a> (glm::vec2 start, glm::vec2 dest)</td></tr>
 <tr class="separator:ae2a60ebc21f42e861959ee955995345b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
+Static Private Member Functions</h2></td></tr>
+<tr class="memitem:a89839f085d435dcc2b8d8b5ba478589a"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_routes.html#a89839f085d435dcc2b8d8b5ba478589a">validatePoint</a> (const glm::vec3 &amp;point)</td></tr>
+<tr class="separator:a89839f085d435dcc2b8d8b5ba478589a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This is a simple class to handle the complete calculation of a route. </p>
@@ -118,6 +124,40 @@ Static Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The computed points of the route in longitude latitude and elevation. </dd></dl>
+
+</div>
+</div>
+<a id="a89839f085d435dcc2b8d8b5ba478589a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89839f085d435dcc2b8d8b5ba478589a">&#9670;&nbsp;</a></span>validatePoint()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Routes::validatePoint </td>
+          <td>(</td>
+          <td class="paramtype">const glm::vec3 &amp;&#160;</td>
+          <td class="paramname"><em>point</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>In some areas we have a no data value in the elevation data. In this case we have no idea what to compute the Z of the route to be. For now we check for this case and throw a std::runtime_error if this happens.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">point</td><td>The point to be checked for validity.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the point was valid, false if otherwise. </dd></dl>
 
 </div>
 </div>

@@ -171,7 +171,7 @@ class Population {
 
         /**
          * Cross the genes of individual a with individual a. The result is a new genome
-         * that is the linear interpolation of the genome of a and b.
+         * that is the linear interpolation of a random amount of the genome of a and b.
          *
          * @param a
          * The index of one individual in _individuals;
@@ -180,7 +180,6 @@ class Population {
          * The index of another individual in _individuals;
          *
          * @param new_genome
-         *
          *
          * @return
          * The new genome, a random mix of individual a and individual b. Does not contain an individual header.
@@ -264,7 +263,7 @@ class Population {
          * all paths have the same degree.
          * This stores the compute coefficients on the GPU.
          */
-        boost::compute::vector<long> _opencl_binomials;
+        boost::compute::vector<int> _opencl_binomials;
 
         /**
          * The reference to the elevation data that this population operates on.

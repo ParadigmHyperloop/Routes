@@ -124,6 +124,8 @@ Static Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
+<tr class="memitem:aa82adc9fb9646248618210f8d2d969d8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#aa82adc9fb9646248618210f8d2d969d8">routeInsideData</a> (const glm::dvec2 &amp;start, const glm::dvec2 &amp;dest)</td></tr>
+<tr class="separator:aa82adc9fb9646248618210f8d2d969d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab041efcad231e72739b517838a9d251b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#ab041efcad231e72739b517838a9d251b">calcCroppedSize</a> (const glm::dvec2 &amp;start, const glm::dvec2 &amp;dest)</td></tr>
 <tr class="separator:ab041efcad231e72739b517838a9d251b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acee010de2feef7305f2ecbfa0675230a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#acee010de2feef7305f2ecbfa0675230a">createOpenCLImage</a> ()</td></tr>
@@ -131,6 +133,10 @@ Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:a5b46dc79d04d3da2cddb7904641fd28d"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#a5b46dc79d04d3da2cddb7904641fd28d">_elevation_min</a></td></tr>
+<tr class="separator:a5b46dc79d04d3da2cddb7904641fd28d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0a44d39e94c31b4ddd0a7986c15d6f4"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#ad0a44d39e94c31b4ddd0a7986c15d6f4">_elevation_max</a></td></tr>
+<tr class="separator:ad0a44d39e94c31b4ddd0a7986c15d6f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad42dfc2217591d33fd89ac7f5aa35daf"><td class="memItemLeft" align="right" valign="top">glm::dvec2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#ad42dfc2217591d33fd89ac7f5aa35daf">_crop_origin</a></td></tr>
 <tr class="separator:ad42dfc2217591d33fd89ac7f5aa35daf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa6c3aadbed8d4003b2d57df7d3d00c1"><td class="memItemLeft" align="right" valign="top">glm::dvec2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_elevation_data.html#afa6c3aadbed8d4003b2d57df7d3d00c1">_crop_extent</a></td></tr>
@@ -275,7 +281,7 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Translate the GDAL data into an OpenCL texture </p>
+<p>Translate the GDAL data into an OpenCL texture. This function also uses an OpenCL kernel to calculate the local min and max elevation instead of the global min and max to decrease the sample space. </p>
 
 </div>
 </div>
@@ -666,6 +672,42 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="aa82adc9fb9646248618210f8d2d969d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa82adc9fb9646248618210f8d2d969d8">&#9670;&nbsp;</a></span>routeInsideData()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool ElevationData::routeInsideData </td>
+          <td>(</td>
+          <td class="paramtype">const glm::dvec2 &amp;&#160;</td>
+          <td class="paramname"><em>start</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const glm::dvec2 &amp;&#160;</td>
+          <td class="paramname"><em>dest</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
 <a id="afa6c3aadbed8d4003b2d57df7d3d00c1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afa6c3aadbed8d4003b2d57df7d3d00c1">&#9670;&nbsp;</a></span>_crop_extent</h2>
@@ -710,6 +752,52 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>The origin of the subset of data that was taken to encapsulate the route in longitude latitude </p>
+
+</div>
+</div>
+<a id="ad0a44d39e94c31b4ddd0a7986c15d6f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0a44d39e94c31b4ddd0a7986c15d6f4">&#9670;&nbsp;</a></span>_elevation_max</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double ElevationData::_elevation_max</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The maximum elevation in meters of the terrain in the raster image in meters </p>
+
+</div>
+</div>
+<a id="a5b46dc79d04d3da2cddb7904641fd28d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b46dc79d04d3da2cddb7904641fd28d">&#9670;&nbsp;</a></span>_elevation_min</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double ElevationData::_elevation_min</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The minimum elevation in meters of the terrain in the raster image in meters </p>
 
 </div>
 </div>

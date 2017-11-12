@@ -25,7 +25,7 @@ class Bezier {
          * @return
          * The complete array of binomial coefficients, should be of degree length + 1.
          */
-        static const std::vector<long>& getBinomialCoefficients(int degree);
+        static const std::vector<int>& getBinomialCoefficients(int degree);
 
         /**
          * This evaluates a bezier curve at a given point on the curve.
@@ -75,7 +75,7 @@ class Bezier {
          * @return
          * The binomial coefficient.
          */
-        static long calcBinomialCoefficient(int n, int i);
+        static int calcBinomialCoefficient(int n, int i);
 
         static float bezierLength(const std::vector<glm::vec3>& points);
 
@@ -87,7 +87,7 @@ class Bezier {
          * We save all the sets of the binomial coefficients that are calculated so we don't had to
          * do it again.
          */
-        static std::map<int, std::vector<long>> binomial_coeffs;
+        static std::map<int, std::vector<int>> binomial_coeffs;
 
 };
 
