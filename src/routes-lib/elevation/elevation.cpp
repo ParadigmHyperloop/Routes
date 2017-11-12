@@ -24,8 +24,9 @@ ElevationData::_StaticGDAL::_StaticGDAL() {
     // Register all of the file formats for GDAL
     GDALAllRegister();
     
-    // We dont throw an error here because this funciton is still called when we rebuild and we dont want to crash
-    if (boost::filesystem::exists(GDAL_DB_PATH)) {
+    // We don't throw an error here because this function is still called when we rebuild and we don't want to crash
+    // Would love to use boost::filesystem::exists() here but it throws an exception and hasn't been fixed.
+    if (std::ifstream(GDAL_DB_PATH)) {
         
         // Open up the GDAL dataset
         _gdal_dataset = (GDALDataset*)GDALOpenShared(GDAL_DB_PATH, GA_ReadOnly);
