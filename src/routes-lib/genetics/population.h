@@ -264,7 +264,7 @@ class Population {
          * all paths have the same degree.
          * This stores the compute coefficients on the GPU.
          */
-        boost::compute::vector<int> _opencl_binomials;
+        boost::compute::vector<long> _opencl_binomials;
 
         /**
          * The reference to the elevation data that this population operates on.

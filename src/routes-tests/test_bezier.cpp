@@ -34,14 +34,15 @@ BOOST_AUTO_TEST_CASE(test_bezier_CPU) {
 BOOST_AUTO_TEST_CASE(test_bezier_binom) {
     
     // Check binomial coeffs becasue we ran into some issues with overflows
+    BOOST_CHECK_EQUAL(Bezier::calcBinomialCoefficient(20, 1), 20);
     BOOST_CHECK_EQUAL(Bezier::calcBinomialCoefficient(20, 10), 184756);
+    BOOST_CHECK_EQUAL(Bezier::calcBinomialCoefficient(20, 19), 20);
+    BOOST_CHECK_EQUAL(Bezier::calcBinomialCoefficient(20, 20), 1);
     
-}
-
-BOOST_AUTO_TEST_CASE_EXPECTED_FAILURES(test_bezier_binom_overflow, 1)
-BOOST_AUTO_TEST_CASE(test_bezier_binom_overflow) {
-
     BOOST_CHECK_EQUAL(Bezier::calcBinomialCoefficient(30, 15), 155117520);
+    BOOST_CHECK_EQUAL(Bezier::calcBinomialCoefficient(40, 20), 137846528820);
+    BOOST_CHECK_EQUAL(Bezier::calcBinomialCoefficient(40, 40), 1);
+    BOOST_CHECK_EQUAL(Bezier::calcBinomialCoefficient(45, 22), 4116715363800);
     
 }
 
@@ -53,7 +54,7 @@ BOOST_AUTO_TEST_CASE(test_bezier_GPU) {
     static const std::string source = BOOST_COMPUTE_STRINGIZE_SOURCE(
             
         // Evaluates the bezier curve made by the given control points and start and dest at parametric value s
-        float4 evaluateBezierCurve(float4* controls, int offset, int points, float s, __global int* binomial_coeffs) {
+        float4 evaluateBezierCurve(float4* controls, int offset, int points, float s, __global long* binomial_coeffs) {
          
              float one_minus_s = 1.0 - s;
             
@@ -77,7 +78,7 @@ BOOST_AUTO_TEST_CASE(test_bezier_GPU) {
          
         }
                                                                      
-         __kernel void bezier(__global float4* out, __global int* binomial_coeffs) {
+         __kernel void bezier(__global float4* out, __global long* binomial_coeffs) {
              
              float4 controls[3];
              controls[0] = (float4)(0.0, 0.0, 0.0, 0.0);
@@ -93,8 +94,8 @@ BOOST_AUTO_TEST_CASE(test_bezier_GPU) {
     boost::compute::vector<glm::vec4> buffer = boost::compute::vector<glm::vec4>(1, ctx);
     std::vector<glm::vec4> buffer_CPU = std::vector<glm::vec4>(1);
     
-    std::vector<int> coeff_CPU = Bezier::getBinomialCoefficients(2);
-    boost::compute::vector<int> coeff = boost::compute::vector<int>(coeff_CPU.size(), ctx);
+    std::vector<long> coeff_CPU = Bezier::getBinomialCoefficients(2);
+    boost::compute::vector<long> coeff = boost::compute::vector<long>(coeff_CPU.size(), ctx);
     
     boost::compute::copy(coeff_CPU.begin(), coeff_CPU.end(), coeff.begin(), queue);
     
@@ -103,8 +104,6 @@ BOOST_AUTO_TEST_CASE(test_bezier_GPU) {
     kernel.execute1D(0, 1);
     
     boost::compute::copy(buffer.begin(), buffer.end(), buffer_CPU.begin(), queue);
-    
-    std::cout << glm::to_string(buffer_CPU[0]) << std::endl;
     
     // Computers always lie
     BOOST_CHECK_CLOSE(buffer_CPU[0].x, 0.45, 1);

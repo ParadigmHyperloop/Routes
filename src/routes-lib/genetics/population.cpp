@@ -154,7 +154,7 @@ void Population::evaluateCost(const Pod& pod) {
     static const std::string source = BOOST_COMPUTE_STRINGIZE_SOURCE(
 
         // Evaluates the bezier curve made by the given control points and start and dest at parametric value s
-        float4 evaluateBezierCurve(__global float4* controls, int offset, int points, float s, __global int* binomial_coeffs) {
+        float4 evaluateBezierCurve(__global float4* controls, int offset, int points, float s, __global long* binomial_coeffs) {
 
             float one_minus_s = 1.0 - s;
 
@@ -199,7 +199,7 @@ void Population::evaluateCost(const Pod& pod) {
         // Computes the cost of a path
         __kernel void cost(__read_only image2d_t image, __global float4* individuals, int path_length,
                            float max_grade_allowed, float min_curve_allowed, float excavation_depth, float width,
-                           float height, __global int* binomial_coeffs,
+                           float height, __global long* binomial_coeffs,
                            float num_points_1, int points_per_worker, float origin_x, float origin_y) {
 
             const sampler_t sampler = CLK_NORMALIZED_COORDS_TRUE | CLK_ADDRESS_CLAMP_TO_EDGE | CLK_FILTER_NEAREST;
@@ -409,8 +409,8 @@ void Population::mutateGenome(glm::vec4* genome) {
 void Population::calcBinomialCoefficients() {
 
     // For degree we have _genome_size + 2 points, so we use that minus 1 for the degree
-    const std::vector<int>& binomials = Bezier::getBinomialCoefficients(_genome_size + 1);
-    _opencl_binomials = boost::compute::vector<int>(_genome_size + 2, Kernel::getContext());
+    const std::vector<long>& binomials = Bezier::getBinomialCoefficients(_genome_size + 1);
+    _opencl_binomials = boost::compute::vector<long>(_genome_size + 2, Kernel::getContext());
 
     // Upload to the GPU
     boost::compute::copy(binomials.begin(), binomials.end(), _opencl_binomials.begin(), Kernel::getQueue());
