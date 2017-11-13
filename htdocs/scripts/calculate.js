@@ -96,11 +96,11 @@ function changeSaying() {
 function getComputeRequest(start, dest, succ) {
 
     // Return the dictonary with the parameters filled in
-    console.log("http://hyperroutes.duckdns.org:8080/compute?start=" + start + "&dest=" + dest)
+    console.log(config.url + ":8080/compute?start=" + start + "&dest=" + dest)
     return {
 
         type: "GET",
-        url: "http://hyperroutes.duckdns.org:8080/compute?start=" + start + "&dest=" + dest,
+        url: config.url + ":8080/compute?start=" + start + "&dest=" + dest,
 
         contentType: "text/plain",
 
@@ -116,7 +116,7 @@ function getCheckRequest(_ident, succ, fail) {
     return {
 
         type: "GET",
-        url: "http://hyperroutes.duckdns.org:8080/retrieve?id=" + _ident,
+        url: config.url + ":8080/retrieve?id=" + _ident,
 
         contentType: "text/plain",
 
