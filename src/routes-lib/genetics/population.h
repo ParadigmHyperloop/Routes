@@ -5,8 +5,9 @@
 #ifndef ROUTES_POPULATION_H
 #define ROUTES_POPULATION_H
 
+#include <chrono>
 #include <boost/compute/container/vector.hpp>
-#include <glm/gtc/random.hpp>
+#include <random>
 #include <time.h>
 
 #include "../bezier/bezier.h"
@@ -55,9 +56,9 @@ struct Individual {
     glm::vec4* header;
 
     /**
-    * The pointer to the genome of the individual. This is an array of glm::vec4 with length equal
-    * to num_genes.
-    */
+     * The pointer to the genome of the individual. This is an array of glm::vec4 with length equal
+     * to num_genes.
+     */
     glm::vec4* path;
 
     /** The pointer to the full path of the individual. This contains the start, the genome and the destination. */
@@ -93,7 +94,6 @@ struct Individual {
  *
  * Population stores all of the individuals in one std::vector<glm::vec4> for efficient uploading to the GPU.
  * A single individual can be accessed with the Individual struct convenience.
-
  */
 class Population {
 
@@ -204,16 +204,30 @@ class Population {
          */
         void calcBinomialCoefficients();
 
-       /**
-        * This function computes a constrained random point. We do this because it is most likely that the best
-        * route is one that is very close to a straight line. Therefore we constrain the sample space to within
-        * MAX_STRAIGHT_DEVIATION to speed up the convergence. This is especially important for stitching datasets
-        * where the unconstrained sample space is much larger.
-        *
-        * @param to_gen
-        * A vector that should be the receiving end of the generation.
-        */
-        void generateRandomPoint(glm::vec4& to_gen) const;
+        /**
+         * This function computes a constrained random point. We do this because it is most likely that the best
+         * route is one that is very close to a straight line. Therefore we constrain the sample space to within
+         * MAX_STRAIGHT_DEVIATION to speed up the convergence. This is especially important for stitching datasets
+         * where the unconstrained sample space is much larger.
+         *
+         * @param to_gen
+         * A vector that should be the receiving end of the generation.
+         */
+        void generateRandomPoint(glm::vec4& to_gen);
+    
+        /**
+         * Generates a random float in the range [low, high] using the Mersenne Twister algorithm.
+         *
+         * @param low
+         * The lower bound that the random number could be.
+         *
+         * @param high
+         * The upper bound that the random number could be.
+         *
+         * @return
+         * A random float in the range [low, height]
+         */
+        float generateRandomFloat(float low, float high);
 
         /** An array of glm::vec4s that's the size of _genome_size. Used to avoid repetitive heap allocations. */
         glm::vec4* dummy_genome;
@@ -237,9 +251,9 @@ class Population {
         glm::vec4 _dest;
 
         /**
-        * The direction vector of the path that this population is built for.
-        * Measured in meters.
-        */
+         * The direction vector of the path that this population is built for.
+         * Measured in meters.
+         */
         glm::vec4 _direction;
 
         /**
@@ -272,6 +286,8 @@ class Population {
          */
         const ElevationData& _data;
 
+        /** The Mersenne Twister that is used for random generation of points */
+        std::mt19937 _twister;
 
 };
 

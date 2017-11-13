@@ -106,8 +106,8 @@ void Population::breedIndividuals() {
     for (i = 0; i < (_pop_size * 0.8); i++) {
 
 
-        int mom = glm::linearRand(0, mothers);
-        int dad = glm::linearRand(0, fathers);
+        int mom = generateRandomFloat(0, mothers);
+        int dad = generateRandomFloat(0, fathers);
 
         glm::vec4* bred = crossoverIndividual(mom, dad);
         memcpy(new_population.data() + (i * _individual_size + 2), bred, sizeof(glm::vec4) * _genome_size);
@@ -342,7 +342,7 @@ void Population::generatePopulation() {
 
     // Random seed
     std::hash<int> hasher;
-    srand(hasher(time(0)));
+    _twister = std::mt19937(hasher(std::chrono::high_resolution_clock::now().time_since_epoch().count()));
 
     // Go through each individual
     for (int i = 0; i < _pop_size; i++) {
@@ -376,7 +376,7 @@ glm::vec4* Population::crossoverIndividual(int a, int b) {
     for (int i = 0; i < _genome_size; i++) {
 
         // Get a random amount to cross the two by
-        dummy_genome[i] = glm::mix(a_genome[i], b_genome[i], glm::linearRand(0.0, 1.0));
+        dummy_genome[i] = glm::mix(a_genome[i], b_genome[i], generateRandomFloat(0.0, 1.0));
 
     }
 
@@ -390,10 +390,10 @@ glm::vec4* Population::crossoverIndividual(int a, int b) {
 void Population::mutateGenome(glm::vec4* genome) {
 
     // 81% chance that this genome will be mutated
-    if (glm::linearRand(0.0, 1.0) > 0.23) {
+    if (generateRandomFloat(0.0, 1.0) > 0.23) {
         
         // Choose a single random point to mutate and then choose a random component
-        int point = glm::linearRand(0, _genome_size - 1);
+        int point = generateRandomFloat(0, _genome_size - 1);
         
         glm::vec4* point_ptr = genome + point;
         
@@ -415,15 +415,15 @@ void Population::calcBinomialCoefficients() {
 
 }
 
-void Population::generateRandomPoint(glm::vec4& to_gen) const {
+void Population::generateRandomPoint(glm::vec4& to_gen) {
 
     // First we move along the direction vector by a random amount
-    float percent = glm::linearRand(0.0, 1.0);
+    float percent = generateRandomFloat(0.0, 1.0);
     glm::vec4 progressed = _direction * percent + _start;
 
     // Generate a random deviation
-    glm::vec4 deviation = progressed + glm::vec4(glm::linearRand(-MAX_STRAIGHT_DEVIATION, MAX_STRAIGHT_DEVIATION),
-                                                 glm::linearRand(-MAX_STRAIGHT_DEVIATION, MAX_STRAIGHT_DEVIATION),
+    glm::vec4 deviation = progressed + glm::vec4(generateRandomFloat(-MAX_STRAIGHT_DEVIATION, MAX_STRAIGHT_DEVIATION),
+                                                 generateRandomFloat(-MAX_STRAIGHT_DEVIATION, MAX_STRAIGHT_DEVIATION),
                                                  0.0f, 0.0f);
 
     // Get cropped info
@@ -433,7 +433,17 @@ void Population::generateRandomPoint(glm::vec4& to_gen) const {
     // Final vector, clamp to width and height
     to_gen = glm::vec4(glm::clamp(deviation.x, cropped_origin.x, cropped_origin.x + cropped_size.x),
                        glm::clamp(deviation.y, cropped_origin.y, cropped_origin.y + cropped_size.y),
-                       glm::linearRand(_data.getMinElevation() - TRACK_ABOVE_BELOW_EXTREMA,
-                                       _data.getMaxElevation() + TRACK_ABOVE_BELOW_EXTREMA), 0.0);
+                       generateRandomFloat(_data.getMinElevation() - TRACK_ABOVE_BELOW_EXTREMA,
+                                           _data.getMaxElevation() + TRACK_ABOVE_BELOW_EXTREMA), 0.0);
 
+}
+
+float Population::generateRandomFloat(float low, float high) {
+    
+    // Get the twister value from [0,1]
+    float random = (float)_twister() / (float)4294967296;
+    
+    // Convert and return
+    return (random * (high - low)) + low;
+    
 }
