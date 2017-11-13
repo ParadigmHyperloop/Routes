@@ -48,9 +48,6 @@ class Bezier {
          * @param points
          * The array of points that serve as the control points for the curve.
          *
-         * @param num_controls
-         * The number of points contained in the points array.
-         *
          * @param num_desired
          * The number of times that the curve should be evaluated and also the number of
          * points that are to be returned.
