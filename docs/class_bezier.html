@@ -60,6 +60,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="class_bezier-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -81,6 +82,11 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a9f8ca35c731b6bbec7d50465e987f7e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0f1637970f67da01acc269122af56550"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bezier.html#a0f1637970f67da01acc269122af56550">bezierLength</a> (const std::vector&lt; glm::vec3 &gt; &amp;points)</td></tr>
 <tr class="separator:a0f1637970f67da01acc269122af56550"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
+Static Private Member Functions</h2></td></tr>
+<tr class="memitem:af73a77f705ddcd1028fc74b5805c5f41"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bezier.html#af73a77f705ddcd1028fc74b5805c5f41">doEvaluate</a> (glm::vec3 &amp;out_point, float s, int degree, const std::vector&lt; glm::vec3 &gt; &amp;controls, const std::vector&lt; int &gt; &amp;binoms)</td></tr>
+<tr class="separator:af73a77f705ddcd1028fc74b5805c5f41"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
 Static Private Attributes</h2></td></tr>
@@ -113,6 +119,14 @@ Static Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<p>Calculates the aproximate length of a bezier curve. Calculates using the sum of the straight line distances of the given points.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">points</td><td>Points from evaluateBezierCurve or evaluateEntireBezierCurve that are on the curve.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The aproximate length of the bezier curve in whatever unit the given points were in. </dd></dl>
 
 </div>
 </div>
@@ -161,6 +175,71 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="af73a77f705ddcd1028fc74b5805c5f41"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af73a77f705ddcd1028fc74b5805c5f41">&#9670;&nbsp;</a></span>doEvaluate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Bezier::doEvaluate </td>
+          <td>(</td>
+          <td class="paramtype">glm::vec3 &amp;&#160;</td>
+          <td class="paramname"><em>out_point</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>s</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>degree</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; glm::vec3 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>controls</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; int &gt; &amp;&#160;</td>
+          <td class="paramname"><em>binoms</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This function is what actually does the evaluation of the bezier curve. The resulting point is a point that is on the bezier curve.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">out_point</td><td>A reference who's content will be set to the evaluated point. Should start out as glm::vec3(0.0, 0.0, 0.0).</td></tr>
+    <tr><td class="paramname">s</td><td>The parametric parameter; in other words how far along the curve to evaluate. Should be in the range [0, 1].</td></tr>
+    <tr><td class="paramname">degree</td><td>The degree of the bezier curve. Should be controls.size() - 1.</td></tr>
+    <tr><td class="paramname">controls</td><td>The control points of the curve that should be evaluated.</td></tr>
+    <tr><td class="paramname">binoms</td><td>The binomial coefficients for the curve of the given degree. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="acac673f89e94e16fd9547ca03ed5117c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#acac673f89e94e16fd9547ca03ed5117c">&#9670;&nbsp;</a></span>evaluateBezierCurve()</h2>
 
@@ -198,8 +277,7 @@ Static Private Attributes</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">points</td><td>The array of points that serve as the control points for the curve.</td></tr>
-    <tr><td class="paramname">num_points</td><td>The number of points contained in the points array.</td></tr>
-    <tr><td class="paramname">s</td><td>The parametric parameter; in other words how far along the curve to evlauate. Should be in the range [0, 1].</td></tr>
+    <tr><td class="paramname">s</td><td>The parametric parameter; in other words how far along the curve to evaluate. Should be in the range [0, 1].</td></tr>
   </table>
   </dd>
 </dl>
@@ -244,12 +322,11 @@ Static Private Attributes</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">points</td><td>The array of points that serve as the control points for the curve.</td></tr>
-    <tr><td class="paramname">num_controls</td><td>The number of points contained in the points array.</td></tr>
     <tr><td class="paramname">num_desired</td><td>The number of times that the curve should be evaluated and also the number of points that are to be returned.</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The evaluated points. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>num_desired points that are on the bezier curve. </dd></dl>
 
 </div>
 </div>
