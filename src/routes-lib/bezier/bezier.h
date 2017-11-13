@@ -33,11 +33,8 @@ class Bezier {
          * @param points
          * The array of points that serve as the control points for the curve.
          *
-         * @param num_points
-         * The number of points contained in the points array.
-         *
          * @param s
-         * The parametric parameter; in other words how far along the curve to evlauate.
+         * The parametric parameter; in other words how far along the curve to evaluate.
          * Should be in the range [0, 1].
          *
          * @return

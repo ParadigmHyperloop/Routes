@@ -43,17 +43,17 @@ class Pod {
         */
         float minCurveRadius() const;
 
-       /**
-        * Calculates the time it takes to traverse the route, based solely on the length
-         * of the track and the max speed of the pod.
+        /**
+         * Calculates the time to travel the route in seconds using a modified binary search
          *
-        * @param length ]
-        * the length of the curve in meters
-        *
-        * @return
-        * the time it takes to traverse the curve in seconds.
-        */
-        float timeForCurve(float length);
+         *
+         * @param points
+         * The points of the bezier curve
+         *
+         * @return
+         * The time required to treavel on a given hyperloop
+         */
+        float timeForCurve(const std::vector<glm::vec3>& points);
 
 
     private:
