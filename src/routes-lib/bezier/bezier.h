@@ -7,8 +7,8 @@
 
 #include <glm/glm.hpp>
 #include <iostream>
-#include <vector>
 #include <map>
+#include <vector>
 
 /** This class provides utils to evaluate a bezier curve, rather than rewrite the code in more than one class. */
 class Bezier {
@@ -72,7 +72,7 @@ class Bezier {
         static int calcBinomialCoefficient(int n, int i);
 
         /**
-         * Calculates the aproximate length of a bezier curve. Calculates using the sum of the straight line distances of the given points.
+         * Calculates the approximate length of a bezier curve. Calculates using the sum of the straight line distances of the given points.
          *
          * @param points
          * Points from evaluateBezierCurve or evaluateEntireBezierCurve that are on the curve.

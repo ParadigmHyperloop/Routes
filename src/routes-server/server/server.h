@@ -24,6 +24,10 @@
  *
  * GET server_addr/retrieve?id=unique where unique is the identifier returned by compute/ This will either return
  * the computed route's control points or false
+ *
+ * GET server_addr/max-route-length
+ * Returns the theretical max length of a route that can be computed with this compute device. Response is in meters.
+ *
  */
 class RoutesServer {
 
@@ -67,8 +71,8 @@ class RoutesServer {
          * The session input from restbed.
          *
          */
-        static void handleRetrieval(const std::shared_ptr <restbed::Session>& session);
-    
+        static void handleRetrieval(const std::shared_ptr<restbed::Session>& session);
+
         /**
          * This function handles the GET request for the max route distance. This function shouldn't be called from
          * anywhere, restbed calls it.
@@ -77,7 +81,7 @@ class RoutesServer {
          * The session input from restbed.
          *
          */
-        static void handleMaxRoute(const std::shared_ptr <restbed::Session>& session);
+        static void handleMaxRoute(const std::shared_ptr<restbed::Session>& session);
 
         /**
          * Since the restbed server is blocking, this is called by the server to give a thread that can continue
@@ -87,7 +91,7 @@ class RoutesServer {
          * The restbed service.
          */
         static void onServerReady(restbed::Service &service);
-    
+
         /**
          * Converts a vector of glm::vec3's to a JSON string.
          *
@@ -96,7 +100,7 @@ class RoutesServer {
          *
          */
         static std::string vectorToJSON(const std::vector<glm::vec3> points);
-    
+
         /**
          * This is a simple method to make sure that every outgoing response is CORS complient by addind in the required headers.
          *

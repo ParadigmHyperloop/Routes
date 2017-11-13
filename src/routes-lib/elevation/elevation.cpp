@@ -85,7 +85,7 @@ void ElevationData::_StaticGDAL::calcStats() {
 ElevationData::ElevationData(const glm::dvec2& start, const glm::dvec2& dest) {
 
     if (!_StaticGDAL::_gdal_dataset)
-        throw std::runtime_error("The databse could not be loaded from the disk. Make sure to build it first.");
+        throw std::runtime_error("The database could not be loaded from the disk. Make sure to build it first.");
     
     // Before we do anything we do a sanity check
     if (!routeInsideData(start, dest)) {

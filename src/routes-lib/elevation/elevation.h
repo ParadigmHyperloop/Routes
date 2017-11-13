@@ -7,10 +7,11 @@
 
 #define GLM_ENABLE_EXPERIMENTAL
 
-#include <glm/glm.hpp>
-#include <glm/gtx/string_cast.hpp>
 #include <boost/filesystem.hpp>
 #include <gdal_priv.h>
+#include <glm/glm.hpp>
+#include <glm/gtx/string_cast.hpp>
+
 #include "../opencl/kernel.h"
 
 /** */
@@ -59,7 +60,7 @@ class ElevationData {
         double getWidthInMeters() const;
 
         /** Gets the entire height of the raster image in meters */
-       double getHeightInMeters() const;
+        double getHeightInMeters() const;
 
         /** Gets the minimum height found in the entire raster image in meters */
         double getMinElevation() const;
@@ -241,7 +242,7 @@ class ElevationData {
 /***********************************************************************************************************************************************/
 
         /**
-         * Since all of the GDAL data can be referneced by a single file with the same attributes all of that is handled in this class.
+         * Since all of the GDAL data can be referenced by a single file with the same attributes all of that is handled in this class.
          * It is a private class of ElevationData and is used as a static object to essentially perform static destruction and construction.
          *
          */

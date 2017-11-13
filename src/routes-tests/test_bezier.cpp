@@ -33,7 +33,7 @@ BOOST_AUTO_TEST_CASE(test_bezier_CPU) {
 
 BOOST_AUTO_TEST_CASE(test_bezier_binom) {
     
-    // Check binomial coeffs becasue we ran into some issues with overflows
+    // Check binomial coeffs because we ran into some issues with overflows
     BOOST_CHECK_EQUAL(Bezier::calcBinomialCoefficient(20, 1), 20);
     BOOST_CHECK_EQUAL(Bezier::calcBinomialCoefficient(20, 10), 184756);
     BOOST_CHECK_EQUAL(Bezier::calcBinomialCoefficient(20, 19), 20);

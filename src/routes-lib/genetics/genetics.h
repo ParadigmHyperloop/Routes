@@ -25,7 +25,7 @@ class Genetics {
          * The information about the hyperloop pod. Determines how curved the track can be.
          *
          * @return
-         * The points of the calculated path in meters. This will need to be converted to latitude and longitide
+         * The points of the calculated path in meters. This will need to be converted to latitude and longitude
          * to be properly displayed.
          */
         static std::vector<glm::vec3> solve(Population& pop, Pod& pod, int generations);

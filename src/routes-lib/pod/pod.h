@@ -5,8 +5,8 @@
 #ifndef ROUTES_POD_H
 #define ROUTES_POD_H
 
-#include <math.h>
 #include <glm/vec3.hpp>
+#include <math.h>
 #include <vector>
 
 /** Lowercase g in physics (the gravitational acceleration constant) in meters / second^2. */
@@ -26,11 +26,11 @@ class Pod {
     public:
 
         /**
-         * Creates a new Pod object with the given max speed.
-         *
-         * @param max_speed
-         * The max speed of the hyperloop pod in meters / second.
-         */
+        * Creates a new Pod object with the given max speed.
+        *
+        * @param max_speed
+        * The max speed of the hyperloop pod in meters / second.
+        */
         Pod(float max_speed = DEFAULT_POD_MAX_SPEED);
 
         /**

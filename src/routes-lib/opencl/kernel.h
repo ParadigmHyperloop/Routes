@@ -108,7 +108,7 @@ class Kernel {
          * Gets a const reference to the current device (hopefully a GPU).
          *
          * @return
-         * The const refernece to the device
+         * The const reference to the device
          *
          */
         inline static const boost::compute::device& getDevice() { return _opencl_device; }

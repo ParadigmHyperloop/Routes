@@ -29,7 +29,7 @@ git clone https://github.com/ParadigmHyperloop/Routes.git
 cd Routes
 sudo ./setup.sh
 ```
-This will clone GDAL, compile it, and install it. It will also compile restbed and add it to the lib folder. This will take a while and is also why `./setup.sh` requires sudo. It will also download boost 1.6.5 and glm, copying all of the headers into the include directory.
+This will clone GDAL, compile it, and install it. It will also compile restbed and add it to the lib folder. This will take a while and is also why `./setup.sh` requires sudo. It will also download boost 1.6.5, restbed and glm, copying all of the headers into the include directory and compiling the necessary libraries.
 
 
 After setup finishes, run these commands to actually build the Routes project.
@@ -118,4 +118,4 @@ cd build
 OpenCL is used in this project because the genetic algorithm benefits from parallel processing on the GPU. If your system does not have a dedicated GPU (or at least a decent integrated one), running the algorithm on a CPU will most likely be very slow, and is not recommended.
 
 ## Reference
-This algorithm is an OpenCL implementation of the paper by Casey J. Handmer. This paper can be found at https://arxiv.org/pdf/1503.01524.pdf
+This algorithm is originally based off of an algorithm demonstrated by Casey J. Handmer. This paper can be found at https://arxiv.org/pdf/1503.01524.pdf

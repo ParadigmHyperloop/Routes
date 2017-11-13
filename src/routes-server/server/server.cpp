@@ -41,7 +41,6 @@ void RoutesServer::startServer(int port) {
     // Start the server
     service->start(settings);
 
-
 }
 
 void RoutesServer::handleCORS(const std::shared_ptr<restbed::Session>& session) {
@@ -111,7 +110,6 @@ void RoutesServer::handleRetrieval(const std::shared_ptr<restbed::Session>& sess
 
     }
 
-
 }
 
 void RoutesServer::handleMaxRoute(const std::shared_ptr <restbed::Session>& session) {
@@ -170,7 +168,6 @@ std::string RoutesServer::vectorToJSON(const std::vector<glm::vec3> points) {
             JSON += ", \n";
         
     }
-    
     
     return JSON + "]";
     
