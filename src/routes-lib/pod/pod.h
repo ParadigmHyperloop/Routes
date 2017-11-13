@@ -55,7 +55,6 @@ class Pod {
          */
         float timeForCurve(const std::vector<glm::vec3>& points);
 
-
     private:
 
         /** The max speed in meters / second of this pod. */

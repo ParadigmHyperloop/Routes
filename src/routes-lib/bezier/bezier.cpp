@@ -30,17 +30,9 @@ glm::vec3 Bezier::evaluateBezierCurve(const std::vector<glm::vec3>& points, floa
     int degree = points.size() - 1;
     const std::vector<int>& binoms = getBinomialCoefficients(degree);
 
-    float one_minus_s = 1.0 - s;
-    glm::vec3 point = glm::vec3(0.0);
-
-    // Evaluate using the explicit definition of a bezier curve https://en.wikipedia.org/wiki/Bézier_curve#Explicit_definition
-    for (int i = 0; i <  points.size(); i++) {
-
-        float t_and_one_minus = glm::pow(one_minus_s, degree - i) * glm::pow(s, i);
-	    point += points[i] * t_and_one_minus * (float)binoms[i];
-
-    }
-
+    glm::vec3 point = glm::vec3(0.0, 0.0, 0.0);
+    doEvaluate(point, s, degree, points, binoms);
+    
     return point;
 
 }
@@ -56,19 +48,8 @@ std::vector<glm::vec3> Bezier::evaluateEntireBezierCurve(const std::vector<glm::
 
     for (int p = 0; p < num_desired; p++) {
 
-         float s = (float)p / (float)(num_desired - 1);
-         float one_minus_s = 1.0 - s;
-         glm::vec3 point = glm::vec3(0.0);
-
-         // Evaluate using the explicit definition of a bezier curve https://en.wikipedia.org/wiki/Bézier_curve#Explicit_definition
-         for (int i = 0; i < points.size(); i++) {
-
-             float t_and_one_minus = glm::pow(one_minus_s, degree - i) * glm::pow(s, i);
-	         point += points[i] * t_and_one_minus * (float)binoms[i];
-
-         }
-
-         points_calc[p] = point;
+        float s = (float)p / (float)(num_desired - 1);
+        doEvaluate(points_calc[p], s, degree, points, binoms);
 
     }
 
@@ -77,16 +58,29 @@ std::vector<glm::vec3> Bezier::evaluateEntireBezierCurve(const std::vector<glm::
 }
 
 float Bezier::bezierLength(const std::vector<glm::vec3>& points) {
-    float l = 0.0;
+    
+    float length = 0.0;
 
     for(int i = 0; i < points.size() - 1; i++)
-        l += glm::length(points[i+1] - points[i]);
+        length += glm::length(points[i+1] - points[i]);
 
-    return l;
+    return length;
+    
 }
 
-
-
+void Bezier::doEvaluate(glm::vec3& out_point, float s, int degree, const std::vector<glm::vec3>& controls, const std::vector<int>& binoms) {
+    
+    float one_minus_s = 1.0 - s;
+    
+    // Evaluate using the explicit definition of a bezier curve https://en.wikipedia.org/wiki/Bézier_curve#Explicit_definition
+    for (int i = 0; i < controls.size(); i++) {
+        
+        float t_and_one_minus = glm::pow(one_minus_s, degree - i) * glm::pow(s, i);
+        out_point += controls[i] * t_and_one_minus * (float)binoms[i];
+        
+    }
+    
+}
 
 int Bezier::calcBinomialCoefficient(int n, int i) {
 
