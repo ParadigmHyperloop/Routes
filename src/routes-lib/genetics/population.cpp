@@ -426,9 +426,13 @@ void Population::generateRandomPoint(glm::vec4& to_gen) const {
                                                  glm::linearRand(-MAX_STRAIGHT_DEVIATION, MAX_STRAIGHT_DEVIATION),
                                                  0.0f, 0.0f);
 
+    // Get cropped info
+    glm::vec2 cropped_origin = _data.getCroppedOriginMeters();
+    glm::vec2 cropped_size   = _data.getCroppedSizeMeters();
+
     // Final vector, clamp to width and height
-    to_gen = glm::vec4(glm::clamp((double)deviation.x, 0.0, _data.getWidthInMeters()),
-                       glm::clamp((double)deviation.y, 0.0, _data.getHeightInMeters()),
+    to_gen = glm::vec4(glm::clamp(deviation.x, cropped_origin.x, cropped_origin.x + cropped_size.x),
+                       glm::clamp(deviation.y, cropped_origin.y, cropped_origin.y + cropped_size.y),
                        glm::linearRand(_data.getMinElevation() - TRACK_ABOVE_BELOW_EXTREMA,
                                        _data.getMaxElevation() + TRACK_ABOVE_BELOW_EXTREMA), 0.0);
 
