@@ -23,13 +23,13 @@ class Spline {
          * knots.
          *
          * @param controls
-         * The control points that make up the B-Spline
+         * The control points that make up the B-Spline.
          *
          * @param knots
-         * The knot vector
+         * The knot vector.
          *
          * @param t
-         * The parametric parameter of the B-spline curve
+         * The parametric parameter of the B-spline curve. Should be in the range [*knots.begin(), *knots.end()].
          */
         static glm::vec3 evaluateSpline(const std::vector<glm::vec3>& controls, const std::vector<float>& knots, float t);
     
@@ -38,26 +38,39 @@ class Spline {
         /**
          * Performs De Boor's algorithm recursively to evaluate a B-Spline.
          * Algorithm can be found at https://en.wikipedia.org/wiki/De_Boor%27s_algorithm
-         *
-         * @param k
-         * The degree of the B-spline curve.
-         *
-         * @param n
-         * The number of control points - 1
+         * There appears to be different representation of variables depending on what article you are reading. The parameters here match the ones
+         * outlined in the Wikipedia article.
          *
          * @param i
-         * i in DeBoor's algorithm.
+         * The i value in De Boor's algorithm according to the Wikipedia article.
+         *
+         * @param r
+         * The r value in De Boor's algorithm according to the Wikipedia article.
+         *
+         * @param p
+         * The degree of the B-spline.
          *
          * @param controls
-         * The control points that make up the B-Spline
+         * The control points that make up the B-Spline.
          *
          * @param knots
-         * The knot vector
+         * The knot vector.
          *
          * @param t
-         * The parametric parameter of the B-spline curve
+         * The parametric parameter of the B-spline curve. Should be in the range [*knots.begin(), *knots.end()].
          */
-        static glm::vec3 deBoors(int k, int n, int i, const std::vector<glm::vec3>& controls, const std::vector<float>& knots, float t);
+        static glm::vec3 deBoors(int i, int r, int p, const std::vector<glm::vec3>& controls, const std::vector<float>& knots, float t);
+    
+        /**
+         * This determines which range created by the knots t lies in.
+         *
+         * @param knots
+         * The knot vector.
+         *
+         * @param t
+         * The parametric parameter of the B-spline curve. Should be in the range [*knots.begin(), *knots.end()].
+         */
+        static int determineK(const std::vector<float>& knots, float t);
     
 };
 

@@ -100,7 +100,8 @@ Static Private Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This class sets up a HTTP (not HTTPS!) REST server for computing routes.</p>
 <p>Acceptable requests: GET server_addr/compute?start=lat,lon,h&amp;dest=lat,lon,h where lat and lon are latitude and longitude respectively and h is the elevation above sea level in meters. This returns a unique identifier that needs to be saved for later to get the finished route.</p>
-<p>GET server_addr/retrieve?id=unique where unique is the identifier returned by compute/ This will either return the computed route's control points or false </p>
+<p>GET server_addr/retrieve?id=unique where unique is the identifier returned by compute/ This will either return the computed route's control points or false</p>
+<p>GET server_addr/max-route-length Returns the theretical max length of a route that can be computed with this compute device. Response is in meters. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="af2d7303fef41a6c2468fdab21de930cf"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af2d7303fef41a6c2468fdab21de930cf">&#9670;&nbsp;</a></span>handleCompute()</h2>
