@@ -67,5 +67,4 @@ BOOST_AUTO_TEST_CASE(test_elevation_sampling) {
 
     BOOST_CHECK_CLOSE(buffer_CPU[0], sample_CPU.z, 5.0);
     
-    
 }

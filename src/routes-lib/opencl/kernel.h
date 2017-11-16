@@ -5,6 +5,8 @@
 #ifndef ROUTES_KERNEL_H
 #define ROUTES_KERNEL_H
 
+#define BOOST_COMPUTE_DEBUG_KERNEL_COMPILATION
+
 #include <boost/compute.hpp>
 #include <glm/glm.hpp>
 

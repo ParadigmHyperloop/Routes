@@ -70,14 +70,12 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;<a class="el" href="bezier_8h_source.html">bezier/bezier.h</a>&gt;</code><br />
+<code>#include &lt;<a class="el" href="kernel_8h_source.html">opencl/kernel.h</a>&gt;</code><br />
 <code>#include &lt;<a class="el" href="spline_8h_source.html">spline/spline.h</a>&gt;</code><br />
 <code>#include &lt;boost/test/unit_test.hpp&gt;</code><br />
-<code>#include &lt;glm/gtx/string_cast.hpp&gt;</code><br />
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:abd75661fe7969e19439052a5f69ba5d1"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__spline_8cpp.html#abd75661fe7969e19439052a5f69ba5d1">GLM_ENABLE_EXPERIMENTAL</a></td></tr>
-<tr class="separator:abd75661fe7969e19439052a5f69ba5d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ba2e6a718eb29b15a93f1e69de8adbf"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__spline_8cpp.html#a1ba2e6a718eb29b15a93f1e69de8adbf">VEC_CLOSE_EQUAL</a>(a,  b,  p)</td></tr>
 <tr class="separator:a1ba2e6a718eb29b15a93f1e69de8adbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -85,22 +83,10 @@ Macros</h2></td></tr>
 Functions</h2></td></tr>
 <tr class="memitem:a5b93f99d4d87235450f55bf99b433e37"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__spline_8cpp.html#a5b93f99d4d87235450f55bf99b433e37">BOOST_AUTO_TEST_CASE</a> (test_spline_CPU)</td></tr>
 <tr class="separator:a5b93f99d4d87235450f55bf99b433e37"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a062bfb8da28dabd0037d40edc1d6c4d0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="test__spline_8cpp.html#a062bfb8da28dabd0037d40edc1d6c4d0">BOOST_AUTO_TEST_CASE</a> (test_spline_GPU)</td></tr>
+<tr class="separator:a062bfb8da28dabd0037d40edc1d6c4d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
-<a id="abd75661fe7969e19439052a5f69ba5d1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abd75661fe7969e19439052a5f69ba5d1">&#9670;&nbsp;</a></span>GLM_ENABLE_EXPERIMENTAL</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define GLM_ENABLE_EXPERIMENTAL</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a1ba2e6a718eb29b15a93f1e69de8adbf"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1ba2e6a718eb29b15a93f1e69de8adbf">&#9670;&nbsp;</a></span>VEC_CLOSE_EQUAL</h2>
 
@@ -137,7 +123,7 @@ Functions</h2></td></tr>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="a5b93f99d4d87235450f55bf99b433e37"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5b93f99d4d87235450f55bf99b433e37">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b93f99d4d87235450f55bf99b433e37">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -146,6 +132,24 @@ Functions</h2></td></tr>
           <td class="memname">BOOST_AUTO_TEST_CASE </td>
           <td>(</td>
           <td class="paramtype">test_spline_CPU&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a062bfb8da28dabd0037d40edc1d6c4d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a062bfb8da28dabd0037d40edc1d6c4d0">&#9670;&nbsp;</a></span>BOOST_AUTO_TEST_CASE() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">BOOST_AUTO_TEST_CASE </td>
+          <td>(</td>
+          <td class="paramtype">test_spline_GPU&#160;</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>

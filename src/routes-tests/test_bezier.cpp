@@ -8,6 +8,11 @@
 #include <boost/test/unit_test.hpp>
 #include <routes.h>
 
+#define VEC_CLOSE_EQUAL(a, b, p) \
+            BOOST_CHECK_CLOSE(a.x, b.x, p); \
+            BOOST_CHECK_CLOSE(a.y, b.y, p); \
+            BOOST_CHECK_CLOSE(a.z, b.z, p); \
+
 BOOST_AUTO_TEST_CASE(test_bezier_CPU) {
  
     // Test evaluation of the point
@@ -104,8 +109,6 @@ BOOST_AUTO_TEST_CASE(test_bezier_GPU) {
     boost::compute::copy(buffer.begin(), buffer.end(), buffer_CPU.begin(), queue);
     
     // Computers always lie
-    BOOST_CHECK_CLOSE(buffer_CPU[0].x, 0.45, 1);
-    BOOST_CHECK_CLOSE(buffer_CPU[0].y, 1.3,  1);
-    BOOST_CHECK_CLOSE(buffer_CPU[0].z, 0.35, 1);
+    VEC_CLOSE_EQUAL(buffer_CPU[0], glm::vec3(0.45, 1.3, 0.35), 1)
     
 }
