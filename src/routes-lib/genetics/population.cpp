@@ -199,7 +199,7 @@ void Population::evaluateCost(const Pod& pod) {
         __kernel void cost(__read_only image2d_t image, __global float4* individuals, int path_length,
                            float max_grade_allowed, float min_curve_allowed, float excavation_depth, float width,
                            float height, __global int* binomial_coeffs,
-                           float num_points_1, int points_per_worker, float origin_x, float origin_y) {
+                           float num_points_1, int points_per_worker) {
 
             const sampler_t sampler = CLK_NORMALIZED_COORDS_TRUE | CLK_ADDRESS_CLAMP_TO_EDGE | CLK_FILTER_NEAREST;
             const float pylon_cost = 116.0;
@@ -239,7 +239,7 @@ void Population::evaluateCost(const Pod& pod) {
                 float4 bezier_point = evaluateBezierCurve(individuals, path, path_length, (float)p / num_points_1, binomial_coeffs);
 
                 // Get pylon height with a sample from the image
-                float2 nrm_device = (float2)((bezier_point.x - origin_x) / width, (bezier_point.y - origin_y) / height);
+                float2 nrm_device = (float2)(bezier_point.x / width, bezier_point.y / height);
                 float height = read_imagef(image, sampler, nrm_device).x;
 
                 // Compute spacing, only x and y distance
@@ -309,14 +309,13 @@ void Population::evaluateCost(const Pod& pod) {
 
     // Get the data to allow for proper texture sampling
     glm::vec2 size_crop = _data.getCroppedSizeMeters();
-    glm::vec2 origin = _data.getCroppedOriginMeters();
 
     // Create a temporary kernel and execute it
     static Kernel kernel = Kernel(source, "cost");
     kernel.setArgs(_data.getOpenCLImage(), _opencl_individuals.get_buffer(), _genome_size + 2,
                    MAX_SLOPE_GRADE, pod.minCurveRadius(), EXCAVATION_DEPTH, size_crop.x,
                    size_crop.y, _opencl_binomials.get_buffer(),
-                   _num_evaluation_points_1, _num_evaluation_points / 50, origin.y, origin.y);
+                   _num_evaluation_points_1, _num_evaluation_points / 50);
 
     // Execute the 2D kernel with a work size of 5. 5 threads working on a single individual
     kernel.execute2D(glm::vec<2, size_t>(0, 0),

@@ -52,7 +52,7 @@ BOOST_AUTO_TEST_CASE(test_elevation_sampling) {
     );
     
     // Figure out where to sample from
-    glm::dvec2 sample_coord_g = glm::vec2(sample_CPU.x, sample_CPU.y) - data.getCroppedOriginMeters();
+    glm::dvec2 sample_coord_g = glm::vec2(sample_CPU.x, sample_CPU.y);
     glm::dvec2 size = data.getCroppedSizeMeters();
     boost::compute::float2_ sample_coord = boost::compute::float2_(sample_coord_g.x / size.x, sample_coord_g.y / size.y);
     

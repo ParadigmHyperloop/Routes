@@ -144,8 +144,8 @@ void RoutesServer::sendResponse(const std::shared_ptr<restbed::Session>& session
     
     session->close(restbed::OK, message.c_str(),
                    {{"Access-Control-Allow-Origin",  "*"},
-                       {"Content-Length", std::to_string(message.length())},
-                       {"Connection", "close"}});
+                    {"Content-Length", std::to_string(message.length())},
+                    {"Connection", "close"}});
     
 }
 
