@@ -57,6 +57,19 @@ curl -L https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/IMG/n35w119.
 unzip -o -q n35w119.zip
 cd ..
 
+# Download Eigen
+curl -L http://bitbucket.org/eigen/eigen/get/3.3.4.tar.gz --output ei.tar.gz
+tar -xvzf ei.tar.gz
+rm ei.tar.gz
+cd ei*
+mkdir build
+cd build
+cmake .. -DCMAKE_INSTALL_PREFIX=./Ei
+make install
+cd ../../
+cp -r ei*/build/Ei/include/ include/
+rm -rf ei*
+
 curl -sSL https://cmake.org/files/v3.8/cmake-3.8.2-Linux-x86_64.tar.gz | sudo tar -xzC /opt
 
 mkdir build
