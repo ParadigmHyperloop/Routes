@@ -7,36 +7,57 @@
 
 #include "multinormal.h"
 
-boost::numeric::ublas::matrix<float> MultiNormal::choleskyDecomposition(const boost::numeric::ublas::matrix<float>& A) {
+std::mt19937 MultiNormal::_twister;
+std::normal_distribution<float> MultiNormal::_standard_distro(0.0, 1.0);
+
+MultiNormal::MultiNormal(const Eigen::MatrixXf& covariance_matrix, Eigen::VectorXf m) : _m(m) {
     
-    // First create the output matrix L
-    boost::numeric::ublas::matrix<float> L = boost::numeric::ublas::zero_matrix<float>(A.size1(), A.size2());
+    // Update the twister to make sure we get consistantly random results
+    // Hashing makes everything better :)
+    std::hash<int> hasher;
+    _twister = std::mt19937(hasher(std::chrono::high_resolution_clock::now().time_since_epoch().count()));
     
-    // Loop through each of the rows
-    for (int i = 0; i < A.size1(); i++) {
-        
-        // Go through every number in the row
-        for (int j = 0; j <= i; j++) {
-            
-            // First formula, perform sumnation
-            float sum = 0.0;
-            
-            for (int k = 0; k < j; k++)
-                sum += L(i, k) * L(j, k);
-            
-            // Two different things are done depending on if this is a diagonal, that is i == j
-            float result;
-            if (i == j)
-                result = sqrt(A(j, j) - sum);
-            else
-                result = (A(i, j) - sum) * (1.0 / L(j, j));
-            
-            L(i, j) = result;
-            
-        }
+    // Decompose the covariance matrix
+    Eigen::LLT<Eigen::MatrixXf> decomp(covariance_matrix);
+    
+    if (decomp.info()==Eigen::Success)
+        _A = decomp.matrixL();
+    else {
+      
+        Eigen::SelfAdjointEigenSolver<Eigen::MatrixXf> eigen_decomp(covariance_matrix);
+        _A = eigen_decomp.eigenvectors() * eigen_decomp.eigenvalues().cwiseSqrt().asDiagonal();
         
     }
     
-    return L;
+    // For some reason we need to tranpose the A matrix, honestly I have no idea why this works
+    _A.transposeInPlace();
+    
+}
 
+std::vector<Eigen::VectorXf> MultiNormal::generateRandomSamples(int count) {
+ 
+    // Create a vector and fill it with samples
+    std::vector<Eigen::VectorXf> samples(count);
+    
+    for (int i = 0; i < count; i++) {
+        
+        // Make sure the vector is initialized to the right size
+        samples[i] = Eigen::VectorXf(_m.size());
+        doSample(samples[i]);
+        
+    }
+    
+    return samples;
+    
+}
+
+void MultiNormal::doSample(Eigen::VectorXf& out_sample) {
+    
+    // First we fill the vector with randomly generated values from the standard distribution
+    for (int i = 0; i < out_sample.size(); i++)
+        out_sample(i) = _standard_distro(_twister);
+    
+    // Transform the sample by the decomposed covariance and then add the mean vector
+    out_sample = _m + (out_sample.transpose() * _A).transpose();
+    
 }

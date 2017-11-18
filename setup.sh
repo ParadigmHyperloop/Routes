@@ -67,3 +67,16 @@ cp -r restbed/distribution/library/ lib/
 cp -r restbed/distribution/include/ include/
 rm -rf restbed
 
+# Download Eigen
+curl -L http://bitbucket.org/eigen/eigen/get/3.3.4.tar.gz --output ei.tar.gz
+tar -xvzf ei.tar.gz
+rm ei.tar.gz
+cd ei*
+mkdir build
+cd build
+cmake .. -DCMAKE_INSTALL_PREFIX=./Ei
+make install
+cd ../../
+cp -r ei*/build/Ei/include/ include/
+rm -rf ei*
+

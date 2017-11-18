@@ -98,7 +98,6 @@ void Population::breedIndividuals() {
     int mothers = (int)(_pop_size * 0.2);
     int fathers = (int)(_pop_size * 0.2);
 
-
     std::vector<glm::vec4> new_population = std::vector<glm::vec4>(_individuals.size());
 
     // Breed 80% of the population from the mother and father

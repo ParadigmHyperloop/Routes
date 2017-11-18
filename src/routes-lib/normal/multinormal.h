@@ -8,7 +8,11 @@
 #ifndef multinormal_h
 #define multinormal_h
 
-#include <boost/numeric/ublas/matrix.hpp>
+#include <chrono>
+#include <eigen3/Eigen/Eigen>
+#include <iostream>
+#include <random>
+#include <vector>
 
 /** */
 
@@ -17,24 +21,57 @@ class MultiNormal {
     
     public:
     
-        /*
-         * Performs the Cholesky decomposition decomposition on a matrix; that is finding a matrix that when multiplied by the transpose of that matrix
-         * produces the original matrix.
-         * Algorithm details can be found at https://en.wikipedia.org/wiki/Cholesky_decomposition#The_Cholesky.E2.80.93Banachiewicz_and_Cholesky.E2.80.93Crout_algorithms
+        /**
+         * A simple default constructor for creating a multivariate normal distribution.
+         * Once the covariance matrix and mean vector are set they cannot be changed.
          *
-         * @param A
-         * The input matrix, A in the formula.
+         * @param covariance_matrix
+         * The covarience matrix of the multivariate normal distribution
          *
-         * @return
-         * The output matrix such that return * transpose(return) will result in A.
+         * @param m
+         * The mean vector of the multivariate normal distribution
          */
-        static boost::numeric::ublas::matrix<float> choleskyDecomposition(const boost::numeric::ublas::matrix<float>& A);
+        MultiNormal(const Eigen::MatrixXf& covariance_matrix, Eigen::VectorXf m);
     
+        /**
+         * Samples from the distribution count number of times.
+         *
+         * @param count
+         * The number of samples to return in the resulting vector
+         */
+        std::vector<Eigen::VectorXf> generateRandomSamples(int count);
     
+    private:
     
+        /**
+         * Generates a random sample from the distribution.
+         *
+         * @param out_sample
+         * The resulting N-dimension vector that represents a random sample from the multivariate normal distribution.
+         */
+        void doSample(Eigen::VectorXf& out_sample);
     
+        /**
+         * A Mersenne Twister object that is shared between all MultiNormal objects. The seed is updated whenever a new
+         * instance of MultiNormal is created.
+         */
+        static std::mt19937 _twister;
     
+        /**
+         * Since sampling from a multivariate normal distribution basically is a transformation of a bunch of samples from
+         * independant standard normal distributions, we only need one normal distribution to do any sampling.
+         * It has mean 0 and a standard deviation of 1.
+         */
+        static std::normal_distribution<float> _standard_distro;
     
+        /**
+         * Represents the decomposition of the covariance matrix. Multiplying a vector with independent random samples from the
+         * standard normal distribution will yeild a sample from the multivariate normal distribution.
+         */
+        Eigen::MatrixXf _A;
+    
+        /** The mean vector of the multivariate normal distribution. */
+        Eigen::VectorXf _m;
     
 };
 
