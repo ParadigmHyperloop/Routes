@@ -29,8 +29,13 @@ MultiNormal::MultiNormal(const Eigen::MatrixXf& covariance_matrix, Eigen::Vector
         
     }
     
+    std::cout << covariance_matrix << std::endl << "-----------------------------------\n";
+    std::cout << _A                << std::endl << "-----------------------------------\n";
+    
     // For some reason we need to tranpose the A matrix, honestly I have no idea why this works
     _A.transposeInPlace();
+    
+    std::cout << _A << std::endl;
     
 }
 

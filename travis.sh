@@ -67,8 +67,12 @@ cd build
 cmake .. -DCMAKE_INSTALL_PREFIX=./Ei
 make install
 cd ../../
-cp -r ei*/build/Ei/include/ include/
+cp -r ei*/build/Ei/include/eigen3 include/eigen3
 rm -rf ei*
+
+cd include 
+ls
+cd ..
 
 curl -sSL https://cmake.org/files/v3.8/cmake-3.8.2-Linux-x86_64.tar.gz | sudo tar -xzC /opt
 

@@ -3,6 +3,7 @@ var searchData=
   ['generatepopulation',['generatePopulation',['../class_population.html#ae3a4c2457d9276367f242330d8497cb1',1,'Population']]],
   ['generaterandomfloat',['generateRandomFloat',['../class_population.html#a9b3b0068290480da7cd682f00933ac3e',1,'Population']]],
   ['generaterandompoint',['generateRandomPoint',['../class_population.html#a3d0c584fff6a8fcb6d053d56b8d418f7',1,'Population']]],
+  ['generaterandomsamples',['generateRandomSamples',['../class_multi_normal.html#ada6b0b6f45d12449b6f9f2f894b2f492',1,'MultiNormal']]],
   ['getbinomialcoefficients',['getBinomialCoefficients',['../class_bezier.html#af8184ad8c9c23625005c40efe7f74d13',1,'Bezier']]],
   ['getcompletedroute',['getCompletedRoute',['../class_routes_queue.html#a8e579ab43c560d2e9bb2809e9a5b08f7',1,'RoutesQueue']]],
   ['getcontext',['getContext',['../class_kernel.html#a52489f89ded060d514b7e5d12f23e720',1,'Kernel']]],

@@ -14,11 +14,13 @@ BOOST_AUTO_TEST_CASE(test_multinormal) {
     
     // Create a multivariate normal distribution that has mean of 2 and standard deviation of 4 for 2 dimensions.
     // We then check to make sure the output has the same mean and standard deviation (aproximately)
-    Eigen::Vector2f m;
-    m << 2.0f, 2.0f;
+    Eigen::Vector3f m;
+    m << 2.0f, 2.0f, 2.0f;
     
-    Eigen::Matrix2f covariance;
-    covariance << 1.0f, 1.0f, 1.0f, 1.0f;
+    Eigen::Matrix3f covariance;
+    covariance << 2.0f, 1.0f, 0.5f,
+                  1.0f, 2.0f, 1.0f,
+                  0.5f, 1.0f, 2.0f;
     
     MultiNormal normal = MultiNormal(covariance, m);
     
@@ -26,19 +28,15 @@ BOOST_AUTO_TEST_CASE(test_multinormal) {
     std::vector<Eigen::VectorXf> samples = normal.generateRandomSamples(N);
     
     // Make sure that we have a distribution that is like the one we supplied
-    Eigen::Vector2f m_prime;
-    Eigen::Matrix2f covariance_prime;
+    Eigen::Vector3f m_prime;
+    Eigen::Matrix3f covariance_prime;
     
     m_prime.setZero();
     covariance_prime.setZero();
     
-    for (int i = 0; i < N; i++) {
-        
-        // Sum all samples
-        m_prime(0) += samples[i](0, 0);
-        m_prime(1) += samples[i](1, 0);
-    
-    }
+    // Sum all samples
+    for (int i = 0; i < N; i++)
+        m_prime += samples[i];
     
     // Divide
     m_prime /= N;
@@ -46,6 +44,7 @@ BOOST_AUTO_TEST_CASE(test_multinormal) {
     // We give it 5% because its random
     BOOST_CHECK_CLOSE(m_prime(0), 2.0f, 5);
     BOOST_CHECK_CLOSE(m_prime(1), 2.0f, 5);
+    BOOST_CHECK_CLOSE(m_prime(2), 2.0f, 5);
     
     // Compute covariance matrix, this is a little less trivial
      for (int i = 0; i < N; i++)
@@ -53,9 +52,16 @@ BOOST_AUTO_TEST_CASE(test_multinormal) {
     
     covariance_prime /= N;
     
-    BOOST_CHECK_CLOSE(covariance_prime(0, 0), 1.0f, 5);
+    BOOST_CHECK_CLOSE(covariance_prime(0, 0), 2.0f, 5);
     BOOST_CHECK_CLOSE(covariance_prime(0, 1), 1.0f, 5);
+    BOOST_CHECK_CLOSE(covariance_prime(0, 2), 0.5f, 5);
+    
     BOOST_CHECK_CLOSE(covariance_prime(1, 0), 1.0f, 5);
-    BOOST_CHECK_CLOSE(covariance_prime(1, 1), 1.0f, 5);
+    BOOST_CHECK_CLOSE(covariance_prime(1, 1), 2.0f, 5);
+    BOOST_CHECK_CLOSE(covariance_prime(1, 2), 1.0f, 5);
+    
+    BOOST_CHECK_CLOSE(covariance_prime(2, 0), 0.5f, 5);
+    BOOST_CHECK_CLOSE(covariance_prime(2, 1), 1.0f, 5);
+    BOOST_CHECK_CLOSE(covariance_prime(2, 2), 2.0f, 5);
     
 }

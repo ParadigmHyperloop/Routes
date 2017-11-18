@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Hyperloop Routes: File Members</title>
+<title>Hyperloop Routes: src/routes-lib/normal/multinormal.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -42,7 +42,6 @@ $(function() {
 });
 </script>
 <div id="main-nav"></div>
-</div><!-- top -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -57,64 +56,31 @@ $(function() {
 </iframe>
 </div>
 
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="dir_33510ed548da05c7a0d64f1200c89087.html">routes-lib</a></li><li class="navelem"><a class="el" href="dir_9058da93899d73bf6206cf9ec6206cc3.html">normal</a></li>  </ul>
+</div>
+</div><!-- top -->
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">Classes</a>  </div>
+  <div class="headertitle">
+<div class="title">multinormal.h File Reference</div>  </div>
+</div><!--header-->
 <div class="contents">
-&#160;<ul>
-<li>BOOST_COMPUTE_DEBUG_KERNEL_COMPILATION
-: <a class="el" href="kernel_8h.html#aba3358f2c8a14e39fab56d0e64f6e17d">kernel.h</a>
-</li>
-<li>BOOST_TEST_MODULE
-: <a class="el" href="test__elevation_8cpp.html#a6b2a3852db8bb19ab6909bac01859985">test_elevation.cpp</a>
-</li>
-<li>DEFAULT_POD_MAX_SPEED
-: <a class="el" href="pod_8h.html#a45776de3dcaf557eb046900decba5249">pod.h</a>
-</li>
-<li>EARTH_RADIUS
-: <a class="el" href="elevation_8h.html#aacdf1719d113d68a71127426f7c730cd">elevation.h</a>
-</li>
-<li>EXCAVATION_DEPTH
-: <a class="el" href="pod_8h.html#ae4adb5dee6386c072d6040a979e5b405">pod.h</a>
-</li>
-<li>g
-: <a class="el" href="pod_8h.html#a167d2c0ec9b943d55f2124f7442b2f6d">pod.h</a>
-</li>
-<li>GDAL_DB_PATH
-: <a class="el" href="elevation_8h.html#a2c46dc8f6114b53c6b7b9689b2ba1cac">elevation.h</a>
-</li>
-<li>GLM_ENABLE_EXPERIMENTAL
-: <a class="el" href="elevation_8h.html#abd75661fe7969e19439052a5f69ba5d1">elevation.h</a>
-</li>
-<li>LENGTH_TO_GENOME
-: <a class="el" href="population_8h.html#a17816c3d2f274b8b02deb9738da01035">population.h</a>
-</li>
-<li>MAX_SLOPE_GRADE
-: <a class="el" href="pod_8h.html#a8191f33de6b15bf953b2a80e9d704e63">pod.h</a>
-</li>
-<li>MAX_STRAIGHT_DEVIATION
-: <a class="el" href="population_8h.html#a995dc8039bc2f74e15aafc595d0e5808">population.h</a>
-</li>
-<li>METERS_TO_POINT_CONVERSION
-: <a class="el" href="population_8h.html#acfcee9c17743fdcd5c1a217c1b94961f">population.h</a>
-</li>
-<li>N
-: <a class="el" href="test__multinormal_8cpp.html#a0240ac851181b84ac374872dc5434ee4">test_multinormal.cpp</a>
-</li>
-<li>NUM_GENERATIONS
-: <a class="el" href="routes_8h.html#a4b47b6cd274e96fea0d4ad67b4d74b93">routes.h</a>
-</li>
-<li>POP_SIZE
-: <a class="el" href="routes_8h.html#aea5b3e4c9df97408e95b67cdf3f992fb">routes.h</a>
-</li>
-<li>ROUTE_PADDING
-: <a class="el" href="elevation_8h.html#afbea235ff44d2e6147808af94710cf36">elevation.h</a>
-</li>
-<li>TRACK_ABOVE_BELOW_EXTREMA
-: <a class="el" href="population_8h.html#ada0398b27c35ebe568d6a615bf7538a7">population.h</a>
-</li>
-<li>VEC_CLOSE_EQUAL
-: <a class="el" href="test__bezier_8cpp.html#a1ba2e6a718eb29b15a93f1e69de8adbf">test_bezier.cpp</a>
-, <a class="el" href="test__spline_8cpp.html#a1ba2e6a718eb29b15a93f1e69de8adbf">test_spline.cpp</a>
-</li>
-</ul>
+<div class="textblock"><code>#include &lt;chrono&gt;</code><br />
+<code>#include &lt;eigen3/Eigen/Eigen&gt;</code><br />
+<code>#include &lt;iostream&gt;</code><br />
+<code>#include &lt;random&gt;</code><br />
+<code>#include &lt;vector&gt;</code><br />
+</div>
+<p><a href="multinormal_8h_source.html">Go to the source code of this file.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_multi_normal.html">MultiNormal</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

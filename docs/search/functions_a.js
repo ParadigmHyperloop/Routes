@@ -5,5 +5,6 @@ var searchData=
   ['meterstometersandelevation',['metersToMetersAndElevation',['../class_elevation_data.html#a576a7875766bac0620235c159b8a13a7',1,'ElevationData']]],
   ['meterstopixels',['metersToPixels',['../class_elevation_data.html#a7dd4e3a1085bbb2afc152e75e3a61260',1,'ElevationData']]],
   ['mincurveradius',['minCurveRadius',['../class_pod.html#a6d1251a997b3e47ffc0f2380726213f9',1,'Pod']]],
+  ['multinormal',['MultiNormal',['../class_multi_normal.html#a879473e6125da5a929b8f21523457830',1,'MultiNormal']]],
   ['mutategenome',['mutateGenome',['../class_population.html#a24cd0bffa59c510e04b6d3e7fd6a7625',1,'Population']]]
 ];

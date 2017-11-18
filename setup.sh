@@ -77,6 +77,6 @@ cd build
 cmake .. -DCMAKE_INSTALL_PREFIX=./Ei
 make install
 cd ../../
-cp -r ei*/build/Ei/include/ include/
+cp -r ei*/build/Ei/include/eigen3 include/eigen3
 rm -rf ei*
 

@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['pod',['Pod',['../class_pod.html',1,'']]],
-  ['population',['Population',['../class_population.html',1,'']]]
+  ['multinormal',['MultiNormal',['../class_multi_normal.html',1,'']]]
 ];
