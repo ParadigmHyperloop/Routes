@@ -46,8 +46,8 @@ ElevationData::_StaticGDAL::_StaticGDAL() {
 ElevationData::_StaticGDAL::~_StaticGDAL() {
     
     // Close the GDAL dataset if its open
-    if (GDALDumpOpenDatasets(stdout))
-        GDALClose(_gdal_dataset);
+//    if (GDALDumpOpenDatasets(stdout))
+//        GDALClose(_gdal_dataset);
     
 }
 

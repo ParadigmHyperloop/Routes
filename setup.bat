@@ -32,7 +32,6 @@ xcopy %source% %destination% /y /s
 echo cleaning up boost...
 RMDIR /S /Q boost_1_65_1
 DEL /S /Q boost.zip
-DEL /S /Q unzip.exe
 
 # Remove libraries that get built and we dont need
 DEL /S /Q lib\*boost_prg_exec_monitor*
@@ -69,3 +68,22 @@ set destination="lib\"
 xcopy %source% %destination% /y /s
 
 RMDIR /S /Q restbed
+
+: Get Eigen
+curl -L http://bitbucket.org/eigen/eigen/get/3.3.4.zip --output ei.zip
+unzip.exe ei.zip
+cd eigen-eigen-5a0156e40feb
+mkdir build
+cd build
+cmake .. -G "NMake Makefiles" -DCMAKE_INSTALL_PREFIX=./Ei
+nmake install
+cd ../../
+
+set source="eigen-eigen-5a0156e40feb\build\Ei\include\eigen3"
+set destination="include\eigen3\"
+xcopy %source% %destination% /y /s 
+RMDIR /S /Q eigen-eigen-5a0156e40feb
+
+
+DEL /S /Q unzip.exe
+DEL /S /Q ei.zip
