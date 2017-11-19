@@ -88,8 +88,13 @@ ElevationData::ElevationData(const glm::dvec2& start, const glm::dvec2& dest) {
         throw std::runtime_error("The database could not be loaded from the disk. Make sure to build it first.");
     
     // Before we do anything we do a sanity check
-//    if (!routeInsideData(start, dest))
-//        throw std::runtime_error("Attempted to compute a route that was not in the dataset");
+    if (!routeInsideData(start, dest)) {
+
+        std::cout << "Attempted to compute a route that was not in the dataset\n";
+        throw std::runtime_error("Attempted to compute a route that was not in the dataset");
+
+    }
+
 
     // Get the size and then make the image
     calcCroppedSize(start, dest);
@@ -138,8 +143,8 @@ glm::dvec2 ElevationData::pixelsToLongitudeLatitude(const glm::ivec2& pos_pixels
 
     // Convert using the GDAL transform
     // Formula can be found in the GDAL tutorial
-    return glm::dvec2(_crop_origin.x + (double)pos_pixels.x * _StaticGDAL::_gdal_transform[1],
-                      _crop_origin.y + (double)pos_pixels.y * _StaticGDAL::_gdal_transform[5]);
+    return glm::dvec2(_StaticGDAL::_gdal_transform[0] + (double)pos_pixels.x * _StaticGDAL::_gdal_transform[1],
+                      _StaticGDAL::_gdal_transform[3] + (double)pos_pixels.y * _StaticGDAL::_gdal_transform[5]);
 
 }
 
@@ -156,8 +161,8 @@ glm::dvec2 ElevationData::longitudeLatitudeToMeters(const glm::dvec2 lat_lon) co
 glm::ivec2 ElevationData::longitudeLatitudeToPixels(const glm::dvec2 lat_lon) const {
 
     // First convert to pixels using the gdal transform
-    return glm::ivec2((lat_lon.x - _crop_origin.x) / _StaticGDAL::_gdal_transform[1],
-                      (lat_lon.y - _crop_origin.y) / _StaticGDAL::_gdal_transform[5]);
+    return glm::ivec2((lat_lon.x - _StaticGDAL::_gdal_transform[0]) / _StaticGDAL::_gdal_transform[1],
+                      (lat_lon.y - _StaticGDAL::_gdal_transform[3]) / _StaticGDAL::_gdal_transform[5]);
 
 }
 
@@ -199,13 +204,10 @@ glm::dvec3 ElevationData::pixelsToMetersAndElevation(const glm::ivec2& pos_pixel
 bool ElevationData::routeInsideData(const glm::dvec2& start, const glm::dvec2& dest) {
 
     // Get the origin and extent as points
-    // Cant use the functions because Pixels -> Latitude longitude is relative to the cropped origin
-    glm::dvec2 origin = glm::dvec2(_StaticGDAL::_gdal_transform[0],
-                                   _StaticGDAL::_gdal_transform[3]);
-    
-    glm::dvec2 extent = glm::dvec2(_StaticGDAL::_gdal_transform[0] + (double)_StaticGDAL::_gdal_dataset->GetRasterXSize() * _StaticGDAL::_gdal_transform[1],
-                                   _StaticGDAL::_gdal_transform[3] + (double)_StaticGDAL::_gdal_dataset->GetRasterYSize() * _StaticGDAL::_gdal_transform[5]);
-    
+    glm::dvec2 origin = pixelsToLongitudeLatitude(glm::ivec2(0));
+    glm::dvec2 extent = pixelsToLongitudeLatitude(glm::ivec2(_StaticGDAL::_gdal_dataset->GetRasterXSize(),
+                                                             _StaticGDAL::_gdal_dataset->GetRasterYSize()));
+
     // Check if start is outside
     if (start.x < origin.x || start.x > extent.x ||
             start.y > origin.y || start.y < extent.y)
