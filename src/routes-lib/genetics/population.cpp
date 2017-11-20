@@ -26,9 +26,6 @@ Population::Population(int pop_size, glm::vec4 start, glm::vec4 dest, const Elev
     // Calculate the binomial coefficients for evaluating the bezier paths
     calcBinomialCoefficients();
 
-    // Make a dummy genome
-    dummy_genome = new glm::vec4[_genome_size];
-
     // Figure out how many points this route should be evaluated on.
     // We also make sure it is a multiple of workers
     glm::dvec2 cropped_size = data.getCroppedSizeMeters();
@@ -42,8 +39,6 @@ Population::Population(int pop_size, glm::vec4 start, glm::vec4 dest, const Elev
     generatePopulation();
 
 }
-
-Population::~Population() { delete dummy_genome; }
 
 Individual Population::getIndividual(int index) {
 
@@ -88,59 +83,6 @@ void Population::sortIndividuals() {
 
     // Save the sorted array
     _individuals = sorted_individuals;
-
-}
-
-void Population::breedIndividuals() {
-
-    // Get a random number of mother and fathers from the top 20%
-    // Ensure there is 1 mother and 1 father every time though
-    int mothers = (int)(_pop_size * 0.2);
-    int fathers = (int)(_pop_size * 0.2);
-
-    std::vector<glm::vec4> new_population = std::vector<glm::vec4>(_individuals.size());
-
-    // Breed 80% of the population from the mother and father
-    int i;
-    for (i = 0; i < (_pop_size * 0.8); i++) {
-
-
-        int mom = generateRandomFloat(0, mothers);
-        int dad = generateRandomFloat(0, fathers);
-
-        glm::vec4* bred = crossoverIndividual(mom, dad);
-        memcpy(new_population.data() + (i * _individual_size + 2), bred, sizeof(glm::vec4) * _genome_size);
-
-        // Set the start and the destination
-        new_population[i * _individual_size + 1] = _start;
-
-        // Set the start and the destination
-        new_population[i * _individual_size + 2 + _genome_size] = _dest;
-
-    }
-
-    // Generate new individuals (20%)
-    for (; i < _pop_size; i++) {
-
-        // Adds + 1 to ignore the header
-        int individual_start = i * _individual_size + 2;
-
-        for (int j = 0; j < _genome_size; j++)
-            generateRandomPoint(new_population[individual_start + j]);
-
-        // Set the start and the destination
-        new_population[individual_start - 1] = _start;
-
-        // Set the start and the destination
-        new_population[individual_start + _genome_size] = _dest;
-
-    }
-
-    // Save the new population
-    _individuals = new_population;
-
-    // Copy to GPU
-    boost::compute::copy(new_population.begin(), new_population.end(), _opencl_individuals.begin(), Kernel::getQueue());
 
 }
 
@@ -361,67 +303,7 @@ void Population::calcGenomeSize() {
 
 void Population::generatePopulation() {
 
-    // Random seed
-    std::hash<int> hasher;
-    _twister = std::mt19937(hasher(std::chrono::high_resolution_clock::now().time_since_epoch().count()));
 
-    // Go through each individual
-    for (int i = 0; i < _pop_size; i++) {
-
-        // Adds + 2 to ignore the header and start
-        int individual_start = i * _individual_size + 2;
-
-        // Set the start and the destination
-        _individuals[individual_start - 1] = _start;
-
-        // Set the start and the destination
-        _individuals[individual_start + _genome_size] = _dest;
-
-        for (int j = 0; j < _genome_size; j++)
-            generateRandomPoint(_individuals[individual_start + j]);
-
-    }
-
-    // Upload the population onto the GPU
-    boost::compute::copy(_individuals.begin(), _individuals.end(), _opencl_individuals.begin(), Kernel::getQueue());
-
-}
-
-glm::vec4* Population::crossoverIndividual(int a, int b) {
-
-    // Get memory location of a's genom, add 2 to ignore the header and start
-    glm::vec4* a_genome = _individuals.data() + (a * _individual_size + 2);
-    glm::vec4* b_genome = _individuals.data() + (b * _individual_size + 2);
-
-    // Crossover each gene
-    for (int i = 0; i < _genome_size; i++) {
-
-        // Get a random amount to cross the two by
-        dummy_genome[i] = glm::mix(a_genome[i], b_genome[i], generateRandomFloat(0.0, 1.0));
-
-    }
-
-    // Do some mutation
-    mutateGenome(dummy_genome);
-
-    return dummy_genome;
-
-}
-
-void Population::mutateGenome(glm::vec4* genome) {
-
-    // 81% chance that this genome will be mutated
-    if (generateRandomFloat(0.0, 1.0) > 0.23) {
-        
-        // Choose a single random point to mutate and then choose a random component
-        int point = generateRandomFloat(0, _genome_size - 1);
-        
-        glm::vec4* point_ptr = genome + point;
-        
-        // Do the mutation
-        generateRandomPoint((*point_ptr));
-        
-    }
 
 }
 
@@ -436,36 +318,3 @@ void Population::calcBinomialCoefficients() {
 
 }
 
-void Population::generateRandomPoint(glm::vec4& to_gen) {
-
-    // First we move along the direction vector by a random amount
-    float percent = generateRandomFloat(0.0, 1.0);
-    glm::vec4 progressed = _direction * percent + _start;
-
-    // Generate a random deviation
-    glm::vec4 deviation = progressed + glm::vec4(generateRandomFloat(-MAX_STRAIGHT_DEVIATION, MAX_STRAIGHT_DEVIATION),
-                                                 generateRandomFloat(-MAX_STRAIGHT_DEVIATION, MAX_STRAIGHT_DEVIATION),
-                                                 0.0f, 0.0f);
-
-    // Get cropped info
-    glm::vec2 cropped_origin = _data.getCroppedOriginMeters();
-    glm::vec2 cropped_size   = _data.getCroppedSizeMeters();
-
-    // Final vector, clamp to width and height
-    to_gen = glm::vec4(glm::clamp(deviation.x, cropped_origin.x, cropped_origin.x + cropped_size.x),
-                       glm::clamp(deviation.y, cropped_origin.y, cropped_origin.y + cropped_size.y),
-                       generateRandomFloat(_data.getMinElevation() - TRACK_ABOVE_BELOW_EXTREMA,
-                                           _data.getMaxElevation() + TRACK_ABOVE_BELOW_EXTREMA), 0.0);
-
-}
-
-float Population::generateRandomFloat(float low, float high) {
-    
-    // Get the twister value from [0,1]
-    float random = (float)_twister() / (float)4294967296;
-    
-    // Convert and return
-    return (random * (high - low)) + low;
-    
-}
-          

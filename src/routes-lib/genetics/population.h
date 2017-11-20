@@ -117,9 +117,6 @@ class Population {
          */
         Population(int pop_size, glm::vec4 start, glm::vec4 dest, const ElevationData& data);
 
-        /** dummy_genome is allocated on the heap, so delete that here */
-        ~Population();
-
         /**
          * Retrieves an individual from the population. This assumes that the population data
          * has already been copied back to the CPU.
@@ -137,13 +134,6 @@ class Population {
          * the most fit individual. Currently this is done on the CPU, which is not optimal, but it is simpler.
          */
         void sortIndividuals();
-
-        /**
-         * Breeds the top 20% of the individuals together to generate a new, more fit population. Only 80%
-         * of the population is bred, 20% if randomly generated to avoid stagnation.
-         * Assumes that _individuals are already sorted.
-         */
-        void breedIndividuals();
 
         /**
          * This function is what makes the genetic algorithm work.
@@ -169,69 +159,14 @@ class Population {
          * This is done on the CPU, but hopefully can be done on the GPU eventually.
          */
         void generatePopulation();
-
-        /**
-         * Cross the genes of individual a with individual a. The result is a new genome
-         * that is the linear interpolation of a random amount of the genome of a and b.
-         *
-         * @param a
-         * The index of one individual in _individuals;
-         *
-         * @param b
-         * The index of another individual in _individuals;
-         *
-         * @param new_genome
-         *
-         * @return
-         * The new genome, a random mix of individual a and individual b. Does not contain an individual header.
-         */
-        glm::vec4* crossoverIndividual(int a, int b);
-
-        /**
-         * In order to avoid stagnation and explore more possible solutions, mutation is introduced.
-         * The function randomly replaces points in the genome with completely new points.
-         *
-         * @param genome
-         * The genome to mutate.
-         *
-         */
-        void mutateGenome(glm::vec4* genome);
-
+    
         /**
          * To evaluate the bezier curve, binomial coefficients are required.
          * These need factorials, so it would be slow to compute them. Instead we do it once, offline because
          * all paths have the same degree. This computes those coefficients.
          */
         void calcBinomialCoefficients();
-
-        /**
-         * This function computes a constrained random point. We do this because it is most likely that the best
-         * route is one that is very close to a straight line. Therefore we constrain the sample space to within
-         * MAX_STRAIGHT_DEVIATION to speed up the convergence. This is especially important for stitching datasets
-         * where the unconstrained sample space is much larger.
-         *
-         * @param to_gen
-         * A vector that should be the receiving end of the generation.
-         */
-        void generateRandomPoint(glm::vec4& to_gen);
     
-        /**
-         * Generates a random float in the range [low, high] using the Mersenne Twister algorithm.
-         *
-         * @param low
-         * The lower bound that the random number could be.
-         *
-         * @param high
-         * The upper bound that the random number could be.
-         *
-         * @return
-         * A random float in the range [low, height]
-         */
-        float generateRandomFloat(float low, float high);
-
-        /** An array of glm::vec4s that's the size of _genome_size. Used to avoid repetitive heap allocations. */
-        glm::vec4* dummy_genome;
-
         /** The number of individuals that should be in this population */
         int _pop_size;
 
@@ -285,9 +220,6 @@ class Population {
          * Its stored as const because nothing should ever be done to the data except reading.
          */
         const ElevationData& _data;
-
-        /** The Mersenne Twister that is used for random generation of points */
-        std::mt19937 _twister;
 
 };
 
