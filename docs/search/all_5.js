@@ -3,8 +3,6 @@ var searchData=
   ['g',['g',['../pod_8h.html#a167d2c0ec9b943d55f2124f7442b2f6d',1,'pod.h']]],
   ['gdal_5fdb_5fpath',['GDAL_DB_PATH',['../elevation_8h.html#a2c46dc8f6114b53c6b7b9689b2ba1cac',1,'elevation.h']]],
   ['generatepopulation',['generatePopulation',['../class_population.html#ae3a4c2457d9276367f242330d8497cb1',1,'Population']]],
-  ['generaterandomfloat',['generateRandomFloat',['../class_population.html#a9b3b0068290480da7cd682f00933ac3e',1,'Population']]],
-  ['generaterandompoint',['generateRandomPoint',['../class_population.html#a3d0c584fff6a8fcb6d053d56b8d418f7',1,'Population']]],
   ['generaterandomsamples',['generateRandomSamples',['../class_multi_normal.html#ada6b0b6f45d12449b6f9f2f894b2f492',1,'MultiNormal']]],
   ['genetics',['Genetics',['../class_genetics.html',1,'']]],
   ['genetics_2ecpp',['genetics.cpp',['../genetics_8cpp.html',1,'']]],

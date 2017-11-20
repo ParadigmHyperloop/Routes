@@ -9,6 +9,5 @@ var searchData=
   ['calculateroute',['calculateRoute',['../class_routes.html#ae2a60ebc21f42e861959ee955995345b',1,'Routes']]],
   ['calculateroutes',['calculateRoutes',['../class_routes_queue.html#a221ea6e4c3d367c5af5a0372abb135c5',1,'RoutesQueue']]],
   ['convertpixelstometers',['convertPixelsToMeters',['../class_elevation_data.html#a519db51fa0a56aae327a6f34fc269c56',1,'ElevationData']]],
-  ['createopenclimage',['createOpenCLImage',['../class_elevation_data.html#acee010de2feef7305f2ecbfa0675230a',1,'ElevationData']]],
-  ['crossoverindividual',['crossoverIndividual',['../class_population.html#a94a73718ff797a1420aa28a7018779b0',1,'Population']]]
+  ['createopenclimage',['createOpenCLImage',['../class_elevation_data.html#acee010de2feef7305f2ecbfa0675230a',1,'ElevationData']]]
 ];

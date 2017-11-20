@@ -2,6 +2,7 @@ var searchData=
 [
   ['_5fa',['_A',['../class_multi_normal.html#a9ff2bde3c9bf0262ed042cde75fcca59',1,'MultiNormal']]],
   ['_5fcompleted',['_completed',['../class_routes_queue.html#af4956405c4fb878eb2d8578d17763a80',1,'RoutesQueue']]],
+  ['_5fcovar_5fmatrix',['_covar_matrix',['../class_population.html#a7d78dbb7e414f6cf843b94b61fabb5e2',1,'Population']]],
   ['_5fcrop_5fextent',['_crop_extent',['../class_elevation_data.html#afa6c3aadbed8d4003b2d57df7d3d00c1',1,'ElevationData']]],
   ['_5fcrop_5forigin',['_crop_origin',['../class_elevation_data.html#ad42dfc2217591d33fd89ac7f5aa35daf',1,'ElevationData']]],
   ['_5fdata',['_data',['../class_population.html#a38141fe6b682fc55d396cc4d781d1228',1,'Population']]],
@@ -22,6 +23,7 @@ var searchData=
   ['_5fis_5finitialized',['_is_initialized',['../class_kernel.html#ad3ec114105efa539756f02af36ad8749',1,'Kernel']]],
   ['_5fm',['_m',['../class_multi_normal.html#aacb9e66ec3fc6cf681e0e7269d4e8ce2',1,'MultiNormal']]],
   ['_5fmax_5fspeed',['_max_speed',['../class_pod.html#acca59281981c944e3159eba166106083',1,'Pod']]],
+  ['_5fmean',['_mean',['../class_population.html#a00614fb4a39e2be35f7cead3adcff6d0',1,'Population']]],
   ['_5fnum_5fevaluation_5fpoints',['_num_evaluation_points',['../class_population.html#ab24376531403464de7b208146cd3244a',1,'Population']]],
   ['_5fnum_5fevaluation_5fpoints_5f1',['_num_evaluation_points_1',['../class_population.html#abcdd0b795c6d89d3a0e34dcd3632bf81',1,'Population']]],
   ['_5fopencl_5fbinomials',['_opencl_binomials',['../class_population.html#a74a1237b5e1fc78e9a1267fac07ad350',1,'Population']]],
@@ -37,11 +39,12 @@ var searchData=
   ['_5fpop_5fsize',['_pop_size',['../class_population.html#a9f43eeeaf6bd2ec02b5063bbbbaf78b1',1,'Population']]],
   ['_5frouteitem',['_RouteItem',['../struct_routes_queue_1_1___route_item.html',1,'RoutesQueue']]],
   ['_5froutes',['_routes',['../class_routes_queue.html#a30b6768768b434d9a13a1b90e069a6e3',1,'RoutesQueue']]],
+  ['_5fsigma',['_sigma',['../class_population.html#abe008a0b33a70380d25ab453581c4924',1,'Population::_sigma()'],['../class_multi_normal.html#af6f423cbb72b0b71175f1c2eba717edf',1,'MultiNormal::_sigma()']]],
   ['_5fstandard_5fdistro',['_standard_distro',['../class_multi_normal.html#ab66bb765ff813cf9b805c728cab911a9',1,'MultiNormal']]],
   ['_5fstart',['_start',['../class_population.html#a4e0aeaa0a40d1c84026b31ac7eb0c794',1,'Population']]],
   ['_5fstate',['_state',['../class_c_m_d.html#a6514aa4a90837f1b1d54bf8b3dc7165e',1,'CMD']]],
   ['_5fstaticgdal',['_StaticGDAL',['../class_elevation_data_1_1___static_g_d_a_l.html',1,'ElevationData::_StaticGDAL'],['../class_elevation_data_1_1___static_g_d_a_l.html#a79b026bc4dc17acf2dad22be6ddb912b',1,'ElevationData::_StaticGDAL::_StaticGDAL()']]],
-  ['_5ftwister',['_twister',['../class_population.html#ab9cdc09d9f5d691f151277558557e7fd',1,'Population::_twister()'],['../class_multi_normal.html#aa38d4c9d0a057ca64399107707f9809a',1,'MultiNormal::_twister()']]],
+  ['_5ftwister',['_twister',['../class_multi_normal.html#aa38d4c9d0a057ca64399107707f9809a',1,'MultiNormal']]],
   ['_5fwidth',['_width',['../class_elevation_data_1_1___static_g_d_a_l.html#a291571816205df02889e20a87f91ef2c',1,'ElevationData::_StaticGDAL']]],
   ['_5fwidth_5fmeters',['_width_meters',['../class_elevation_data_1_1___static_g_d_a_l.html#a977d536604a196d7f5fdb17a05df72a2',1,'ElevationData::_StaticGDAL']]]
 ];

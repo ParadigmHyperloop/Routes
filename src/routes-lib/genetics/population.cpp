@@ -4,13 +4,8 @@
 
 #include "population.h"
 
-Population::Population(int pop_size, glm::vec4 start, glm::vec4 dest, const ElevationData& data) : _data(data) {
-
-    // Save constants
-    _pop_size = pop_size;
-    _start = start;
-    _dest = dest;
-    _direction = _dest -_start;
+Population::Population(int pop_size, glm::vec4 start, glm::vec4 dest, const ElevationData& data) : _pop_size(pop_size), _start(start),
+    _dest(dest), _direction(_dest - _start), _data(data) {
 
     // Figure out how many points we need for this route
     calcGenomeSize();

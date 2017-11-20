@@ -95,7 +95,6 @@ ElevationData::ElevationData(const glm::dvec2& start, const glm::dvec2& dest) {
 
     }
 
-
     // Get the size and then make the image
     calcCroppedSize(start, dest);
     createOpenCLImage();

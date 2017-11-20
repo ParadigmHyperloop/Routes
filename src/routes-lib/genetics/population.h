@@ -12,6 +12,7 @@
 
 #include "../bezier/bezier.h"
 #include "../elevation/elevation.h"
+#include "../normal/multinormal.h"
 #include "../pod/pod.h"
 
 
@@ -220,6 +221,26 @@ class Population {
          * Its stored as const because nothing should ever be done to the data except reading.
          */
         const ElevationData& _data;
+    
+/************************************************************************************************************************************************/
+    
+        /**
+         * This represents the current mean vector of the populatio. In other words, this is the favorite solution the the population.
+         * The vector is legnth _genome_size * 3, 3 components for each point in the bezier curve (X, Y, Z).
+         */
+        Eigen::VectorXf _mean;
+    
+        /**
+         * The covariance matrix of the population. This contains the information about how the multivariate normal distribution is shaped.
+         * This is a _genome_size * 3 X _genome_size * 3 matrix, 3 components for each point in the bezier curve (X, Y, Z).
+         */
+        Eigen::MatrixXf _covar_matrix;
+    
+        /**
+         * The current step size. This is how far the next generation will move.
+         * The vector is legnth _genome_size * 3, 3 components for each point in the bezier curve (X, Y, Z).
+         */
+        Eigen::VectorXf _sigma;
 
 };
 
