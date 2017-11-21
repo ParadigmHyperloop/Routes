@@ -8,6 +8,7 @@
 #include <glm/vec3.hpp>
 #include <math.h>
 #include <vector>
+#include "../bezier/bezier.h"
 
 /** Lowercase g in physics (the gravitational acceleration constant) in meters / second^2. */
 #define g 9.81
@@ -42,6 +43,24 @@ class Pod {
         * The minimum radius of curvature that should be allowed for human comfort on the track.
         */
         float minCurveRadius() const;
+
+        /**
+         * Calculates the centripetal acceleration at a point in m/s^2
+         *
+         * @param p0
+         *
+         * The point before the point of interest
+         * @param p1
+         *
+         * The point of interest
+         * @param p2
+         * The point after the point of interest
+         *
+         * @return
+         * The centripetal acceleration at a point in m/s^2
+         *
+         */
+        float calcCentripetalAccel(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2);
 
         /**
          * Calculates the time to travel the route in seconds using a modified binary search
