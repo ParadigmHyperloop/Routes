@@ -63,14 +63,13 @@ class Pod {
         float calcCentripetalAccel(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2);
 
         /**
-         * Calculates the time to travel the route in seconds using a modified binary search
-         *
+         * Calculates the time to travel the route in seconds
          *
          * @param points
          * The points of the bezier curve
          *
          * @return
-         * The time required to treavel on a given hyperloop
+         * The time required to travel on a given hyperloop route
          */
         float timeForCurve(const std::vector<glm::vec3>& points);
 
