@@ -83,6 +83,55 @@ class Bezier {
          */
         static float bezierLength(const std::vector<glm::vec3>& points);
 
+        /**
+         * Calculates the curvature around a point p1
+         *
+         * @param p0
+         * The point before the point of interest
+         *
+         * @param p1
+         * The point whose curvature is being evaluated
+         *
+         * @param p2
+         * The point after the point of interest
+         *
+         * @return
+         * The curvature at a point
+         *
+         */
+        static float calcCurvature(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2);
+
+        /**
+         * Calculates the radius of curvature around point p1
+         *
+         * @param p0
+         * The point before the point of interes
+         *
+         * @param p1
+         * The point whose Radius of curvature is being evaluated
+         *
+         * @param p2
+         * The point after the point of interest
+         *
+         * @return
+         * The radius of curvature around a point
+         *
+         */
+        static float radiusOfCurvature(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2);
+
+        /**
+         * Calculates the average distance between the points on the bezier curve
+         *
+         * @param points
+         * The points of the bezier curve
+         *
+         * @return
+         * The average distance between the points on the curve
+         *
+         */
+        static float avgDistanceBetweenPoints(const std::vector<glm::vec3>& points);
+
+
     private:
 
         /**
