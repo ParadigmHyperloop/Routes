@@ -10,6 +10,7 @@ var searchData=
   ['calculateroutes',['calculateRoutes',['../class_routes_queue.html#a221ea6e4c3d367c5af5a0372abb135c5',1,'RoutesQueue']]],
   ['calculating',['Calculating',['../cmd_8h.html#a904d04369d91d823ba6d593e0a458626a925be70b04b82d260deb312914338e99',1,'cmd.h']]],
   ['calculation_5fthread',['calculation_thread',['../class_routes_server.html#aaac121c1ec3a5f42f688354f73072758',1,'RoutesServer']]],
+  ['calcweights',['calcWeights',['../class_population.html#a25be9ccf8ba11a1230564b3674d1c2ff',1,'Population']]],
   ['cmd',['CMD',['../class_c_m_d.html',1,'']]],
   ['cmd_2ecpp',['cmd.cpp',['../cmd_8cpp.html',1,'']]],
   ['cmd_2eh',['cmd.h',['../cmd_8h.html',1,'']]],

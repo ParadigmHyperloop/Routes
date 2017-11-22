@@ -30,8 +30,9 @@ Population::Population(int pop_size, glm::vec4 start, glm::vec4 dest, const Elev
     std::cout << "Using " << _num_evaluation_points << " points of evaluation" << std::endl;
     _num_evaluation_points_1 = (float)_num_evaluation_points - 1.0f;
 
-    // Generate the population
-    generatePopulation();
+    // First we init the params, then generate a starter population
+    initParams();
+    samplePopulation();
 
 }
 
@@ -50,6 +51,13 @@ Individual Population::getIndividual(int index) {
 
     return ind;
 
+}
+
+void Population::step() {
+    
+    
+    
+    
 }
 
 void Population::sortIndividuals() {
@@ -296,10 +304,29 @@ void Population::calcGenomeSize() {
 
 }
 
-void Population::generatePopulation() {
+void Population::initParams() {
+    
+    
+}
 
+void Population::bestGuess() {
+    
+    
+}
 
+void Population::calcWeights() {
+    
+    
+}
 
+void Population::samplePopulation() {
+    
+    
+}
+
+void Population::updateParams() {
+    
+    
 }
 
 void Population::calcBinomialCoefficients() {

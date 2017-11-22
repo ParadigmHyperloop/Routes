@@ -8,6 +8,7 @@ var searchData=
   ['calcstats',['calcStats',['../class_elevation_data_1_1___static_g_d_a_l.html#a3cb0fd8dad451466b74835aa3fffa2b1',1,'ElevationData::_StaticGDAL']]],
   ['calculateroute',['calculateRoute',['../class_routes.html#ae2a60ebc21f42e861959ee955995345b',1,'Routes']]],
   ['calculateroutes',['calculateRoutes',['../class_routes_queue.html#a221ea6e4c3d367c5af5a0372abb135c5',1,'RoutesQueue']]],
+  ['calcweights',['calcWeights',['../class_population.html#a25be9ccf8ba11a1230564b3674d1c2ff',1,'Population']]],
   ['convertpixelstometers',['convertPixelsToMeters',['../class_elevation_data.html#a519db51fa0a56aae327a6f34fc269c56',1,'ElevationData']]],
   ['createopenclimage',['createOpenCLImage',['../class_elevation_data.html#acee010de2feef7305f2ecbfa0675230a',1,'ElevationData']]]
 ];

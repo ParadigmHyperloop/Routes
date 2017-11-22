@@ -7,15 +7,8 @@
 std::vector<glm::vec3> Genetics::solve(Population& pop, Pod& pod, int generations) {
 
     // Run the simulation for then given amount of generations
-    for (int i = 0; i < generations; i++) {
-
-        // Sort the individuals to determine who is most fit
-        pop.evaluateCost(pod);
-
-        // Sort the individuals by cost
-        pop.sortIndividuals();
-
-    }
+    for (int i = 0; i < generations; i++)
+        pop.step();
 
     // Sort one last time
     pop.sortIndividuals();

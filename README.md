@@ -16,6 +16,7 @@ The algorithm itself is a genetic algorithm. This essentially simulates natural 
 - Boost  http://www.boost.org
 - OpenGL Mathematics (GLM) https://glm.g-truc.net/0.9.8/index.html
 - OpenCL https://www.khronos.org/opencl/
+- Eigen http://eigen.tuxfamily.org/
 
 ## Setup Instructions
 
