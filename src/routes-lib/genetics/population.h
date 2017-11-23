@@ -183,6 +183,12 @@ class Population {
         void calcWeights();
     
         /**
+         * Sigma represents how spread out the distribution will be, in other words the step size.
+         * Because the sample space in Z is smaller than X and Y, sigma should reflect that initially
+         */
+        void calcInitialSigma();
+    
+        /**
          * This samples an entirely new population. We use the calculate / starting covariance matrix, the best solution (m) and the step size.
          * A multivariate normal distribution is temporarily constructed from these parameters and then the population is sampled from it.
          */
@@ -256,6 +262,9 @@ class Population {
         const ElevationData& _data;
     
 /************************************************************************************************************************************************/
+    
+        /** The number of individuals that are selected from each generation that are the best solutions */
+        int _mu;
     
         /**
          * This represents the current mean vector of the populatio. In other words, this is the favorite solution the the population.

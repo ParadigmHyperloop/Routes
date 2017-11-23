@@ -306,21 +306,95 @@ void Population::calcGenomeSize() {
 
 void Population::initParams() {
     
+    // Calculate mu to be 1/4 of the total population
+    _mu = _pop_size * 0.25;
+    
+    // Init the mean to the best guess (a straight line)
+    bestGuess();
+    
+    // Calculate the weights for the selected population (mu)
+    calcWeights();
+    
+    // Covariance matrix starts as the identity matrix
+    // Multiply by three to make sure that we have room for X, Y and Z
+    _covar_matrix = Eigen::MatrixXf::Identity(_genome_size * 3, _genome_size * 3);
+    
+    // Calculate the initial step size
+    calcInitialSigma();
     
 }
 
 void Population::bestGuess() {
     
+    // We choose a linear spacing of points along a straihgt line from the start to destination 
+    _mean = Eigen::VectorXf(_genome_size * 3);
+    
+    for (int i = 1; i <= _genome_size; i++) {
+    
+        // Figure out how far along the direciton line we are
+        float percent = (float)i / (float)(_genome_size + 1);
+        
+        // Set the mean
+        int i_adjusted = (i - 1) * 3;
+        _mean(i_adjusted    ) = _start.x + _direction.x * percent;
+        _mean(i_adjusted + 1) = _start.y + _direction.y * percent;
+        _mean(i_adjusted + 2) = _start.z + _direction.z * percent;
+        
+    }
     
 }
 
 void Population::calcWeights() {
+    
+    // When we update the mean and covariance matrix, we weight each solution unevenly.
+    // Sum of all values in _weights should equal 1
+    // Sum of 1/pow(_weights, 2) should be about _pop_size / 4
+    _weights = std::vector<float>(_mu);
+    float sum = 0.0;
+    
+    for (int i = 0; i < _mu; i++) {
+        
+        _weights[i] = log2(_mu + 0.5) - log2(i - 1);
+        sum += _weights[i];
+        
+    }
+    
+    // Normalize to make sure that it adds up to 1
+    for (int i = 0; i < _mu; i++)
+        _weights[i] /= sum;
+    
+}
+
+void Population::calcInitialSigma() {
+    
+    // Initialize sigma
+    _sigma = Eigen::VectorXf(_genome_size * 3);
     
     
 }
 
 void Population::samplePopulation() {
     
+    // Create a MND
+    MultiNormal dist = MultiNormal(_covar_matrix, _mean, _sigma);
+    std::vector<Eigen::VectorXf> samples = dist.generateRandomSamples(_pop_size);
+    
+    // Convert the samples over to a set of vectors and update the population
+    for (int i = 0; i < _pop_size; i++) {
+        
+        for (int j = 0; j < _genome_size; j++) {
+            
+            // Get a reference to the right gene in the genome of the ith individual
+            glm::vec4& point = _individuals[i * _individual_size + 2 + j];
+            
+            // Set the values in the glm::vec4 to be correct
+            point.x = samples[i](j * 3    );
+            point.x = samples[i](j * 3 + 1);
+            point.x = samples[i](j * 3 + 2);
+            
+        }
+        
+    }
     
 }
 
