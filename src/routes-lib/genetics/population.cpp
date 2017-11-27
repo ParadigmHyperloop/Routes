@@ -53,10 +53,17 @@ Individual Population::getIndividual(int index) {
 
 }
 
-void Population::step() {
+void Population::step(const Pod& pod) {
     
+    // Evaluate the cost and sort so the most fit solutions are in the front
+    evaluateCost(pod);
+    sortIndividuals();
     
-    
+    // Update the params
+    updateParams();
+
+    // Sample a new generation
+    samplePopulation();
     
 }
 
@@ -322,6 +329,10 @@ void Population::initParams() {
     // Calculate the initial step size
     calcInitialSigma();
     
+    // Set the two evolution paths to the zero vector
+    _p_covar = Eigen::VectorXf::Zero(_genome_size * 3);
+    _p_sigma = Eigen::VectorXf::Zero(_genome_size * 3);
+    
 }
 
 void Population::bestGuess() {
@@ -363,6 +374,14 @@ void Population::calcWeights() {
     for (int i = 0; i < _mu; i++)
         _weights[i] /= sum;
     
+    // Calculate _mu_weight to be the sum of 1/poq(_weights, 2)
+    sum = 0.0;
+    
+    for (int i = 0; i < _mu; i++)
+        sum += 1.0 / glm::pow(_weights[i], 2.0f);
+    
+    _mu_weight = sum;
+    
 }
 
 void Population::calcInitialSigma() {
@@ -370,6 +389,19 @@ void Population::calcInitialSigma() {
     // Initialize sigma
     _sigma = Eigen::VectorXf(_genome_size * 3);
     
+    // First we figure out what the actual values should be
+    glm::vec3 sigma_parts = glm::vec3(_data.getCroppedSizeMeters().x                      / INITIAL_SIGMA_DIVISOR,
+                                      _data.getCroppedSizeMeters().y                      / INITIAL_SIGMA_DIVISOR,
+                                      (_data.getMaxElevation() - _data.getMinElevation()) / INITIAL_SIGMA_DIVISOR);
+    
+    // Apply it to the X Y and Z for each point
+    for (int i = 0; i < _genome_size; i++) {
+        
+        _sigma(i * 3    ) = sigma_parts.x;
+        _sigma(i * 3 + 1) = sigma_parts.y;
+        _sigma(i * 3 + 2) = sigma_parts.z;
+        
+    }
     
 }
 
@@ -400,6 +432,33 @@ void Population::samplePopulation() {
 
 void Population::updateParams() {
     
+    // Save the mean from the last gen so we can use it to update the paths
+    _mean_prime = _mean;
+    updateMean();
+    
+}
+
+void Population::updateMean() {
+    
+    _mean = Eigen::VectorXf::Zero(_genome_size * 3);
+    
+    for (int i = 0; i < _mu; i++) {
+        
+        // Figure out where the individual starts in
+        int individual_start = i * _individual_size + 2;
+        
+        // Go through each point and add it to the correct place in the mean
+        for (int p = 0; p < _genome_size; p++) {
+            
+            // Since the sum of all of the values in _weights adds to 1, we dont need to divde
+            // the mean by _mu at the end.
+            _mean(p * 3    ) += _individuals[individual_start + p].x * _weights[i];
+            _mean(p * 3 + 1) += _individuals[individual_start + p].y * _weights[i];
+            _mean(p * 3 + 2) += _individuals[individual_start + p].z * _weights[i];
+            
+        }
+        
+    }
     
 }
 

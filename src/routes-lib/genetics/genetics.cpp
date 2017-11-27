@@ -8,7 +8,7 @@ std::vector<glm::vec3> Genetics::solve(Population& pop, Pod& pod, int generation
 
     // Run the simulation for then given amount of generations
     for (int i = 0; i < generations; i++)
-        pop.step();
+        pop.step(pod);
 
     // Sort one last time
     pop.sortIndividuals();

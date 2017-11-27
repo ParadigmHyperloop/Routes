@@ -15,7 +15,6 @@
 #include "../normal/multinormal.h"
 #include "../pod/pod.h"
 
-
 /** */
 
 /**
@@ -41,6 +40,14 @@
  * by a constant. This constant is small so we get few points for a lot of meters.
  */
 #define LENGTH_TO_GENOME 0.0274360619f
+
+/**
+ * This value is used to help calculate the initial step size of the population.
+ * The X sigma is the croped width divided by INITIAL_SIGMA_DIVISOR,
+ * The Y sigma is the cropped height divided by INITIAL_SIGMA_DIVISOR,
+ * and the Z sigma is the max elevation delta / INITIAL_SIGMA_DIVISOR.
+ */
+#define INITIAL_SIGMA_DIVISOR 30.0f
 
 /**
  * Individual is a convenience so that individuals can be treated as units rather than
@@ -135,8 +142,11 @@ class Population {
          * - Rank the current population
          * - Update the CMA-ES params
          * - Sample a new population
+         *
+         * @param pod
+         * The pod object containing the specs of the pod. Right now just uses max speed.
          */
-        void step();
+        void step(const Pod& pod);
     
         /**
          * This function sorts the individuals in ascending order based on the cost. _individuals[0] becomes
@@ -199,6 +209,13 @@ class Population {
          * We use "," selection, meaning we only sample from the current generation.
          */
         void updateParams();
+    
+        /**
+         * This function re-calculates the mean vector of the population.
+         * The only individuals that are used in this calculation are the _mu most fit ones.
+         * Each individual is weighted by its corresponding _weights value based on its index.
+         */
+        void updateMean();
     
         /**
          * To evaluate the bezier curve, binomial coefficients are required.
@@ -266,11 +283,17 @@ class Population {
         /** The number of individuals that are selected from each generation that are the best solutions */
         int _mu;
     
+        /** This is the sum of 1/_weights^2 */
+        float _mu_weight;
+    
         /**
          * This represents the current mean vector of the populatio. In other words, this is the favorite solution the the population.
          * The vector is legnth _genome_size * 3, 3 components for each point in the bezier curve (X, Y, Z).
          */
         Eigen::VectorXf _mean;
+    
+        /** This is used to store the mean of the previous generation. */
+        Eigen::VectorXf _mean_prime;
     
         /**
          * The covariance matrix of the population. This contains the information about how the multivariate normal distribution is shaped.
@@ -289,6 +312,18 @@ class Population {
          * _weights[0] is the highest weight, meant for the best solution.
          */
         std::vector<float> _weights;
+    
+        /**
+         * The evolution path for the covariance matrix. This is used to adapt the covariance matrix each step
+         * so that successful search steps varry closer to the favorable solution.
+         */
+        Eigen::VectorXf _p_covar;
+    
+        /**
+         * The evolution path for the step size (sigma). This is used to adapt the step size each step
+         * so that successful do not prematurely converge.
+         */
+        Eigen::VectorXf _p_sigma;
 
 };
 
