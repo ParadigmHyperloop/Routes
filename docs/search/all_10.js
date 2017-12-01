@@ -12,5 +12,6 @@ var searchData=
   ['spline_2eh',['spline.h',['../spline_8h.html',1,'']]],
   ['start',['start',['../class_c_m_d.html#affe332e96b27fc4ac88329be84db14cd',1,'CMD::start()'],['../struct_routes_queue_1_1___route_item.html#a33134462dddd8632b1d5dc361054a062',1,'RoutesQueue::_RouteItem::start()']]],
   ['startserver',['startServer',['../class_routes_server.html#af62764a777011be3aed79e0dfece82b6',1,'RoutesServer']]],
-  ['step',['step',['../class_population.html#a819892fa6d241f5ffa2261c97d52f78c',1,'Population']]]
+  ['step',['step',['../class_population.html#a6aa7bc5b1eaa2a67041185a2ca92cc4f',1,'Population']]],
+  ['step_5fdampening',['STEP_DAMPENING',['../population_8h.html#a5c9252d678dbd8ac90d4df613d04209f',1,'population.h']]]
 ];

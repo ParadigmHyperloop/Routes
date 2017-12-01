@@ -76,8 +76,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:af036b67dfca03fa520b1e0c14a847973"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a28e723c1694a1a831f46dfa454850ee3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_individual.html">Individual</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a28e723c1694a1a831f46dfa454850ee3">getIndividual</a> (int index)</td></tr>
 <tr class="separator:a28e723c1694a1a831f46dfa454850ee3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a819892fa6d241f5ffa2261c97d52f78c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a819892fa6d241f5ffa2261c97d52f78c">step</a> ()</td></tr>
-<tr class="separator:a819892fa6d241f5ffa2261c97d52f78c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6aa7bc5b1eaa2a67041185a2ca92cc4f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a6aa7bc5b1eaa2a67041185a2ca92cc4f">step</a> (const <a class="el" href="class_pod.html">Pod</a> &amp;pod)</td></tr>
+<tr class="separator:a6aa7bc5b1eaa2a67041185a2ca92cc4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ae5934795f9ec9ee1f6c320828d4f03"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a6ae5934795f9ec9ee1f6c320828d4f03">sortIndividuals</a> ()</td></tr>
 <tr class="separator:a6ae5934795f9ec9ee1f6c320828d4f03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -93,10 +93,20 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a3e008515bf22e73d5c4de35d4ca66659"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25be9ccf8ba11a1230564b3674d1c2ff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a25be9ccf8ba11a1230564b3674d1c2ff">calcWeights</a> ()</td></tr>
 <tr class="separator:a25be9ccf8ba11a1230564b3674d1c2ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afab1fb0fa49ffb149e1c7ed65ab9fce6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#afab1fb0fa49ffb149e1c7ed65ab9fce6">calcInitialSigma</a> ()</td></tr>
+<tr class="separator:afab1fb0fa49ffb149e1c7ed65ab9fce6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd7667302d37a169fb71e258bfed4bf5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#abd7667302d37a169fb71e258bfed4bf5">calculateStratParameters</a> ()</td></tr>
+<tr class="separator:abd7667302d37a169fb71e258bfed4bf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae9808f1c42383f6015c672bb7b9ba030"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#ae9808f1c42383f6015c672bb7b9ba030">samplePopulation</a> ()</td></tr>
 <tr class="separator:ae9808f1c42383f6015c672bb7b9ba030"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0561b5f1371f832ac14019dd49ce34a9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a0561b5f1371f832ac14019dd49ce34a9">updateParams</a> ()</td></tr>
 <tr class="separator:a0561b5f1371f832ac14019dd49ce34a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4054bc28d496288dad3230d81a98ce8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#ae4054bc28d496288dad3230d81a98ce8">updateMean</a> ()</td></tr>
+<tr class="separator:ae4054bc28d496288dad3230d81a98ce8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d4d26c6c88802481af7dde6dea2d58f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a4d4d26c6c88802481af7dde6dea2d58f">updatePSigma</a> ()</td></tr>
+<tr class="separator:a4d4d26c6c88802481af7dde6dea2d58f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42901c197b3073b39a52227ff48a2fc0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a42901c197b3073b39a52227ff48a2fc0">updateSigma</a> ()</td></tr>
+<tr class="separator:a42901c197b3073b39a52227ff48a2fc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af11b90b5e90c7d41126702d5292cffac"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#af11b90b5e90c7d41126702d5292cffac">calcBinomialCoefficients</a> ()</td></tr>
 <tr class="separator:af11b90b5e90c7d41126702d5292cffac"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -126,14 +136,26 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a74a1237b5e1fc78e9a1267fac07ad350"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a38141fe6b682fc55d396cc4d781d1228"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="class_elevation_data.html">ElevationData</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a38141fe6b682fc55d396cc4d781d1228">_data</a></td></tr>
 <tr class="separator:a38141fe6b682fc55d396cc4d781d1228"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c0141e952544cd4f4335d090a3d5b1c"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a0c0141e952544cd4f4335d090a3d5b1c">_mu</a></td></tr>
+<tr class="separator:a0c0141e952544cd4f4335d090a3d5b1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a370b53f84d4c1f3057de05e66451efcc"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a370b53f84d4c1f3057de05e66451efcc">_mu_weight</a></td></tr>
+<tr class="separator:a370b53f84d4c1f3057de05e66451efcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a00614fb4a39e2be35f7cead3adcff6d0"><td class="memItemLeft" align="right" valign="top">Eigen::VectorXf&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a00614fb4a39e2be35f7cead3adcff6d0">_mean</a></td></tr>
 <tr class="separator:a00614fb4a39e2be35f7cead3adcff6d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab01cc20d23527fee669ec387db93cadc"><td class="memItemLeft" align="right" valign="top">Eigen::VectorXf&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#ab01cc20d23527fee669ec387db93cadc">_mean_prime</a></td></tr>
+<tr class="separator:ab01cc20d23527fee669ec387db93cadc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d78dbb7e414f6cf843b94b61fabb5e2"><td class="memItemLeft" align="right" valign="top">Eigen::MatrixXf&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a7d78dbb7e414f6cf843b94b61fabb5e2">_covar_matrix</a></td></tr>
 <tr class="separator:a7d78dbb7e414f6cf843b94b61fabb5e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe008a0b33a70380d25ab453581c4924"><td class="memItemLeft" align="right" valign="top">Eigen::VectorXf&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#abe008a0b33a70380d25ab453581c4924">_sigma</a></td></tr>
 <tr class="separator:abe008a0b33a70380d25ab453581c4924"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f77c5ffb1f52964c960c7e271b4c366"><td class="memItemLeft" align="right" valign="top">std::vector&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a8f77c5ffb1f52964c960c7e271b4c366">_weights</a></td></tr>
 <tr class="separator:a8f77c5ffb1f52964c960c7e271b4c366"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0931fa5a92840898ee33c71fba45cb16"><td class="memItemLeft" align="right" valign="top">Eigen::VectorXf&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a0931fa5a92840898ee33c71fba45cb16">_p_covar</a></td></tr>
+<tr class="separator:a0931fa5a92840898ee33c71fba45cb16"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad661d43eda84475eee9c96db2642c36f"><td class="memItemLeft" align="right" valign="top">Eigen::VectorXf&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#ad661d43eda84475eee9c96db2642c36f">_p_sigma</a></td></tr>
+<tr class="separator:ad661d43eda84475eee9c96db2642c36f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae95922bb0daba8561806186c1a2c68dc"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#ae95922bb0daba8561806186c1a2c68dc">_c_sigma</a></td></tr>
+<tr class="separator:ae95922bb0daba8561806186c1a2c68dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This class is responsible for holding individuals and breeding them. The current representation of an individual is as follows:</p>
@@ -269,6 +291,58 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>This function calculates the size of the genome. This is based off the length of the route that this population represent and has a square root relationship. </p>
+
+</div>
+</div>
+<a id="afab1fb0fa49ffb149e1c7ed65ab9fce6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afab1fb0fa49ffb149e1c7ed65ab9fce6">&#9670;&nbsp;</a></span>calcInitialSigma()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Population::calcInitialSigma </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Sigma represents how spread out the distribution will be, in other words the step size. Because the sample space in Z is smaller than X and Y, sigma should reflect that initially </p>
+
+</div>
+</div>
+<a id="abd7667302d37a169fb71e258bfed4bf5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd7667302d37a169fb71e258bfed4bf5">&#9670;&nbsp;</a></span>calculateStratParameters()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Population::calculateStratParameters </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This function calculates some of the evolutionary parameters that remain constant </p>
 
 </div>
 </div>
@@ -427,8 +501,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a819892fa6d241f5ffa2261c97d52f78c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a819892fa6d241f5ffa2261c97d52f78c">&#9670;&nbsp;</a></span>step()</h2>
+<a id="a6aa7bc5b1eaa2a67041185a2ca92cc4f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6aa7bc5b1eaa2a67041185a2ca92cc4f">&#9670;&nbsp;</a></span>step()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -436,7 +510,8 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">void Population::step </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">const <a class="el" href="class_pod.html">Pod</a> &amp;&#160;</td>
+          <td class="paramname"><em>pod</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -444,8 +519,40 @@ Private Attributes</h2></td></tr>
 <p>Simulates the population for an entire generation. The steps are as follows:</p><ul>
 <li>Rank the current population</li>
 <li>Update the CMA-ES params</li>
-<li>Sample a new population </li>
+<li>Sample a new population</li>
 </ul>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pod</td><td>The pod object containing the specs of the pod. Right now just uses max speed. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ae4054bc28d496288dad3230d81a98ce8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4054bc28d496288dad3230d81a98ce8">&#9670;&nbsp;</a></span>updateMean()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Population::updateMean </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This function re-calculates the mean vector of the population. The only individuals that are used in this calculation are the _mu most fit ones. Each individual is weighted by its corresponding _weights value based on its index. </p>
 
 </div>
 </div>
@@ -475,7 +582,82 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a4d4d26c6c88802481af7dde6dea2d58f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d4d26c6c88802481af7dde6dea2d58f">&#9670;&nbsp;</a></span>updatePSigma()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Population::updatePSigma </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This function updates the evolutionary path for sigma. We do this by using the covariance matrix and some evolutionary stratagy params. </p>
+
+</div>
+</div>
+<a id="a42901c197b3073b39a52227ff48a2fc0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a42901c197b3073b39a52227ff48a2fc0">&#9670;&nbsp;</a></span>updateSigma()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Population::updateSigma </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Updates the step size for the population using path length control. This adapts the step size to quickly converge on a solution. </p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="ae95922bb0daba8561806186c1a2c68dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae95922bb0daba8561806186c1a2c68dc">&#9670;&nbsp;</a></span>_c_sigma</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Population::_c_sigma</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The inverse of _c_sigma is the the backward time horizon for the evolution path for the step size. </p>
+
+</div>
+</div>
 <a id="a7d78dbb7e414f6cf843b94b61fabb5e2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7d78dbb7e414f6cf843b94b61fabb5e2">&#9670;&nbsp;</a></span>_covar_matrix</h2>
 
@@ -660,6 +842,75 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ab01cc20d23527fee669ec387db93cadc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab01cc20d23527fee669ec387db93cadc">&#9670;&nbsp;</a></span>_mean_prime</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Eigen::VectorXf Population::_mean_prime</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This is used to store the mean of the previous generation. </p>
+
+</div>
+</div>
+<a id="a0c0141e952544cd4f4335d090a3d5b1c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c0141e952544cd4f4335d090a3d5b1c">&#9670;&nbsp;</a></span>_mu</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Population::_mu</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The number of individuals that are selected from each generation that are the best solutions </p>
+
+</div>
+</div>
+<a id="a370b53f84d4c1f3057de05e66451efcc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a370b53f84d4c1f3057de05e66451efcc">&#9670;&nbsp;</a></span>_mu_weight</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Population::_mu_weight</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This is the sum of 1/_weights^2 </p>
+
+</div>
+</div>
 <a id="ab24376531403464de7b208146cd3244a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab24376531403464de7b208146cd3244a">&#9670;&nbsp;</a></span>_num_evaluation_points</h2>
 
@@ -749,6 +1000,52 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>The GPU uploaded version of the individual data </p>
+
+</div>
+</div>
+<a id="a0931fa5a92840898ee33c71fba45cb16"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0931fa5a92840898ee33c71fba45cb16">&#9670;&nbsp;</a></span>_p_covar</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Eigen::VectorXf Population::_p_covar</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The evolution path for the covariance matrix. This is used to adapt the covariance matrix each step so that successful search steps varry closer to the favorable solution. </p>
+
+</div>
+</div>
+<a id="ad661d43eda84475eee9c96db2642c36f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad661d43eda84475eee9c96db2642c36f">&#9670;&nbsp;</a></span>_p_sigma</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Eigen::VectorXf Population::_p_sigma</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The evolution path for the step size (sigma). This is used to adapt the step size each step so that successful do not prematurely converge. </p>
 
 </div>
 </div>

@@ -97,8 +97,27 @@ Macros</h2></td></tr>
 <tr class="separator:acfcee9c17743fdcd5c1a217c1b94961f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a17816c3d2f274b8b02deb9738da01035"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="population_8h.html#a17816c3d2f274b8b02deb9738da01035">LENGTH_TO_GENOME</a>&#160;&#160;&#160;0.0274360619f</td></tr>
 <tr class="separator:a17816c3d2f274b8b02deb9738da01035"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c17a11cd32591232924b8b51817b940"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="population_8h.html#a5c17a11cd32591232924b8b51817b940">INITIAL_SIGMA_DIVISOR</a>&#160;&#160;&#160;30.0f</td></tr>
+<tr class="separator:a5c17a11cd32591232924b8b51817b940"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c9252d678dbd8ac90d4df613d04209f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="population_8h.html#a5c9252d678dbd8ac90d4df613d04209f">STEP_DAMPENING</a>&#160;&#160;&#160;.967f</td></tr>
+<tr class="separator:a5c9252d678dbd8ac90d4df613d04209f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a5c17a11cd32591232924b8b51817b940"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c17a11cd32591232924b8b51817b940">&#9670;&nbsp;</a></span>INITIAL_SIGMA_DIVISOR</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define INITIAL_SIGMA_DIVISOR&#160;&#160;&#160;30.0f</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>This value is used to help calculate the initial step size of the population. The X sigma is the croped width divided by INITIAL_SIGMA_DIVISOR, The Y sigma is the cropped height divided by INITIAL_SIGMA_DIVISOR, and the Z sigma is the max elevation delta / INITIAL_SIGMA_DIVISOR. </p>
+
+</div>
+</div>
 <a id="a17816c3d2f274b8b02deb9738da01035"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a17816c3d2f274b8b02deb9738da01035">&#9670;&nbsp;</a></span>LENGTH_TO_GENOME</h2>
 
@@ -141,6 +160,21 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>In order to get the number of points that a particular path should be evaluated along, we run a converstion. This factor converts meters to number of points of evaluation. </p>
+
+</div>
+</div>
+<a id="a5c9252d678dbd8ac90d4df613d04209f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c9252d678dbd8ac90d4df613d04209f">&#9670;&nbsp;</a></span>STEP_DAMPENING</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define STEP_DAMPENING&#160;&#160;&#160;.967f</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Represents the dampening parameter for the step size. This value should be close to 1 </p>
 
 </div>
 </div>

@@ -329,6 +329,9 @@ void Population::initParams() {
     // Calculate the initial step size
     calcInitialSigma();
     
+    // Calculate strat params
+    calculateStratParameters();
+    
     // Set the two evolution paths to the zero vector
     _p_covar = Eigen::VectorXf::Zero(_genome_size * 3);
     _p_sigma = Eigen::VectorXf::Zero(_genome_size * 3);
@@ -365,7 +368,7 @@ void Population::calcWeights() {
     
     for (int i = 0; i < _mu; i++) {
         
-        _weights[i] = log2(_mu + 0.5) - log2(i - 1);
+        _weights[i] = log(_mu + 0.5) - log(i + 1);
         sum += _weights[i];
         
     }
@@ -378,9 +381,9 @@ void Population::calcWeights() {
     sum = 0.0;
     
     for (int i = 0; i < _mu; i++)
-        sum += 1.0 / glm::pow(_weights[i], 2.0f);
+        sum += glm::pow(_weights[i], 2.0f);
     
-    _mu_weight = sum;
+    _mu_weight = 1.0 / sum;
     
 }
 
@@ -402,6 +405,14 @@ void Population::calcInitialSigma() {
         _sigma(i * 3 + 2) = sigma_parts.z;
         
     }
+    
+}
+
+void Population::calculateStratParameters() {
+    
+    // Calc c_sigma
+    _c_sigma = (_mu_weight + 2.0) / (_genome_size + _mu_weight + 5.0);
+    
     
 }
 
@@ -432,13 +443,22 @@ void Population::samplePopulation() {
 
 void Population::updateParams() {
     
-    // Save the mean from the last gen so we can use it to update the paths
-    _mean_prime = _mean;
+    // Update the mean
     updateMean();
+    
+    // Update the step size path
+    updatePSigma();
+    
+    
+    // Update the step size
+    updateSigma();
     
 }
 
 void Population::updateMean() {
+    
+    // Save the mean from the last gen so we can use it to update the paths
+    _mean_prime = _mean;
     
     _mean = Eigen::VectorXf::Zero(_genome_size * 3);
     
@@ -459,6 +479,41 @@ void Population::updateMean() {
         }
         
     }
+    
+}
+
+void Population::updatePSigma() {
+    
+    // Calculate the discount factor and its complement
+    float discount = 1.0 - _c_sigma;
+    float discount_comp = sqrt(1.0 - (discount * discount));
+    
+    // Calculate the mean displacement
+    Eigen::VectorXf mean_displacement(_genome_size * 3);
+    mean_displacement = (_mean - _mean_prime).cwiseQuotient(_sigma);
+    float sqrt_mew_weight = sqrt(_mu_weight);
+    
+    // Get the inverse square root of the covariance matrix
+    Eigen::SelfAdjointEigenSolver<Eigen::MatrixXf> solver(_covar_matrix);
+    Eigen::MatrixXf inv_sqrt_C(solver.operatorInverseSqrt());
+    
+    _p_sigma = discount * _p_sigma + discount_comp * sqrt_mew_weight * inv_sqrt_C * mean_displacement;
+    
+}
+
+void Population::updateSigma() {
+    
+    // Calculate ratio between the decay and the dampening
+    float ratio = _c_sigma / STEP_DAMPENING;
+    
+    // Get the expected value of the identity distribution in N dimensions
+    float expected = sqrt(_genome_size * 3.0) * (1.0 - 1.0 / (_genome_size * 12.0) + 1.0 / (21.0 * glm::pow((_genome_size * 3.0), 2.0)));
+    
+    // Get the magnitude of the sigma path
+    float mag = _sigma.norm();
+    
+    // Update sigma
+    _sigma = _sigma * glm::pow(M_E, ratio * (mag / expected - 1.0));
     
 }
 

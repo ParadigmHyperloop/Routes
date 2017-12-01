@@ -49,6 +49,9 @@
  */
 #define INITIAL_SIGMA_DIVISOR 30.0f
 
+/** Represents the dampening parameter for the step size. This value should be close to 1 */
+#define STEP_DAMPENING .967f
+
 /**
  * Individual is a convenience so that individuals can be treated as units rather than
  * as a single float vector, which is how they are stored.
@@ -198,6 +201,9 @@ class Population {
          */
         void calcInitialSigma();
     
+        /** This function calculates some of the evolutionary parameters that remain constant */
+        void calculateStratParameters();
+    
         /**
          * This samples an entirely new population. We use the calculate / starting covariance matrix, the best solution (m) and the step size.
          * A multivariate normal distribution is temporarily constructed from these parameters and then the population is sampled from it.
@@ -216,6 +222,18 @@ class Population {
          * Each individual is weighted by its corresponding _weights value based on its index.
          */
         void updateMean();
+    
+        /**
+         * This function updates the evolutionary path for sigma.
+         * We do this by using the covariance matrix and some evolutionary stratagy params.
+         */
+        void updatePSigma();
+    
+        /**
+         * Updates the step size for the population using path length control. This adapts the step size to quickly converge on a
+         * solution.
+         */
+        void updateSigma();
     
         /**
          * To evaluate the bezier curve, binomial coefficients are required.
@@ -324,6 +342,10 @@ class Population {
          * so that successful do not prematurely converge.
          */
         Eigen::VectorXf _p_sigma;
+    
+        /** The inverse of _c_sigma is the the backward time horizon for the evolution path for the step size. */
+        float _c_sigma;
+    
 
 };
 

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['length_5fto_5fgenome',['LENGTH_TO_GENOME',['../population_8h.html#a17816c3d2f274b8b02deb9738da01035',1,'population.h']]]
+  ['initial_5fsigma_5fdivisor',['INITIAL_SIGMA_DIVISOR',['../population_8h.html#a5c17a11cd32591232924b8b51817b940',1,'population.h']]]
 ];
