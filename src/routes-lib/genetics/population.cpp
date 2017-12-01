@@ -465,16 +465,16 @@ void Population::updateParams() {
     updateMean();
 
     // Update the step size path
-   updatePSigma();
+    updatePSigma();
 
-   // Update the covariance matrix path
-   updatePCovar();
+    // Update the covariance matrix path
+    updatePCovar();
 
-   // Update the covariance matrix
-   updateCovar();
+    // Update the covariance matrix
+    updateCovar();
 
-   // Update the step size
-   updateSigma();
+    // Update the step size
+    updateSigma();
 
 }
 
@@ -602,7 +602,7 @@ void Population::updateSigma() {
     float expected = sqrt(_genome_size * 3.0) * (1.0 - 1.0 / (_genome_size * 12.0) + 1.0 / (21.0 * glm::pow((_genome_size * 3.0), 2.0)));
 
     // Get the magnitude of the sigma path
-    float mag = _sigma.norm();
+    float mag = _p_sigma.norm();
 
     // Update sigma
     _sigma = _sigma * glm::pow(M_E, ratio * (mag / expected - 1.0));
