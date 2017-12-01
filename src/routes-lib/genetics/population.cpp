@@ -467,11 +467,16 @@ void Population::updateParams() {
     // Update the step size path
    updatePSigma();
 
+<<<<<<< HEAD
    // Update the covariance matrix path
    updatePCovar();
 
    // Update the covariance matrix
    updateCovar();
+=======
+   // Update the covariance matrix
+   updatePCovar();
+>>>>>>> CMA
 
    // Update the step size
    updateSigma();
