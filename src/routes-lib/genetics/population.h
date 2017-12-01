@@ -18,18 +18,6 @@
 /** */
 
 /**
- * The max distance above or below the max and min of elevation data a population is allowed
- * to generate a track at.
- */
-#define TRACK_ABOVE_BELOW_EXTREMA 10.0f
-
-/**
- * Since we assume that paths are relatively close to straight lines, we decide on a maximum deviation from a straight
- * line that a path can initially generate from. This number represents the max deviation in meters.
- */
-#define MAX_STRAIGHT_DEVIATION 15000.0f
-
-/**
  * In order to get the number of points that a particular path should be evaluated along, we run a converstion.
  * This factor converts meters to number of points of evaluation.
  */
@@ -43,11 +31,15 @@
 
 /**
  * This value is used to help calculate the initial step size of the population.
- * The X sigma is the croped width divided by INITIAL_SIGMA_DIVISOR,
- * The Y sigma is the cropped height divided by INITIAL_SIGMA_DIVISOR,
  * and the Z sigma is the max elevation delta / INITIAL_SIGMA_DIVISOR.
  */
 #define INITIAL_SIGMA_DIVISOR 30.0f
+
+/**
+ * This serves as the initial value for the X and Y of all the points for sigma.
+ * We use 5km as a pretty tight bounding around the straight line (initial mean)
+ */
+#define INITAL_SIGMA_XY 5000.0f
 
 /** Represents the dampening parameter for the step size. This value should be close to 1 */
 #define STEP_DAMPENING .967f

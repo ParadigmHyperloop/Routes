@@ -89,20 +89,33 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:ada0398b27c35ebe568d6a615bf7538a7"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="population_8h.html#ada0398b27c35ebe568d6a615bf7538a7">TRACK_ABOVE_BELOW_EXTREMA</a>&#160;&#160;&#160;10.0f</td></tr>
-<tr class="separator:ada0398b27c35ebe568d6a615bf7538a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a995dc8039bc2f74e15aafc595d0e5808"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="population_8h.html#a995dc8039bc2f74e15aafc595d0e5808">MAX_STRAIGHT_DEVIATION</a>&#160;&#160;&#160;15000.0f</td></tr>
-<tr class="separator:a995dc8039bc2f74e15aafc595d0e5808"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acfcee9c17743fdcd5c1a217c1b94961f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="population_8h.html#acfcee9c17743fdcd5c1a217c1b94961f">METERS_TO_POINT_CONVERSION</a>&#160;&#160;&#160;30.1867567568f</td></tr>
 <tr class="separator:acfcee9c17743fdcd5c1a217c1b94961f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a17816c3d2f274b8b02deb9738da01035"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="population_8h.html#a17816c3d2f274b8b02deb9738da01035">LENGTH_TO_GENOME</a>&#160;&#160;&#160;0.0274360619f</td></tr>
 <tr class="separator:a17816c3d2f274b8b02deb9738da01035"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c17a11cd32591232924b8b51817b940"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="population_8h.html#a5c17a11cd32591232924b8b51817b940">INITIAL_SIGMA_DIVISOR</a>&#160;&#160;&#160;30.0f</td></tr>
 <tr class="separator:a5c17a11cd32591232924b8b51817b940"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c8a15f63a82de8e1286350ee3c1365d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="population_8h.html#a6c8a15f63a82de8e1286350ee3c1365d">INITAL_SIGMA_XY</a>&#160;&#160;&#160;5000.0f</td></tr>
+<tr class="separator:a6c8a15f63a82de8e1286350ee3c1365d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c9252d678dbd8ac90d4df613d04209f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="population_8h.html#a5c9252d678dbd8ac90d4df613d04209f">STEP_DAMPENING</a>&#160;&#160;&#160;.967f</td></tr>
 <tr class="separator:a5c9252d678dbd8ac90d4df613d04209f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="a6c8a15f63a82de8e1286350ee3c1365d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c8a15f63a82de8e1286350ee3c1365d">&#9670;&nbsp;</a></span>INITAL_SIGMA_XY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define INITAL_SIGMA_XY&#160;&#160;&#160;5000.0f</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>This serves as the initial value for the X and Y of all the points for sigma. We use 5km as a pretty tight bounding around the straight line (initial mean) </p>
+
+</div>
+</div>
 <a id="a5c17a11cd32591232924b8b51817b940"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5c17a11cd32591232924b8b51817b940">&#9670;&nbsp;</a></span>INITIAL_SIGMA_DIVISOR</h2>
 
@@ -114,7 +127,7 @@ Macros</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>This value is used to help calculate the initial step size of the population. The X sigma is the croped width divided by INITIAL_SIGMA_DIVISOR, The Y sigma is the cropped height divided by INITIAL_SIGMA_DIVISOR, and the Z sigma is the max elevation delta / INITIAL_SIGMA_DIVISOR. </p>
+<p>This value is used to help calculate the initial step size of the population. and the Z sigma is the max elevation delta / INITIAL_SIGMA_DIVISOR. </p>
 
 </div>
 </div>
@@ -130,21 +143,6 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>To calculate the length of the genome we take the square root of the length of the route and then multiply it by a constant. This constant is small so we get few points for a lot of meters. </p>
-
-</div>
-</div>
-<a id="a995dc8039bc2f74e15aafc595d0e5808"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a995dc8039bc2f74e15aafc595d0e5808">&#9670;&nbsp;</a></span>MAX_STRAIGHT_DEVIATION</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define MAX_STRAIGHT_DEVIATION&#160;&#160;&#160;15000.0f</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Since we assume that paths are relatively close to straight lines, we decide on a maximum deviation from a straight line that a path can initially generate from. This number represents the max deviation in meters. </p>
 
 </div>
 </div>
@@ -175,21 +173,6 @@ Macros</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Represents the dampening parameter for the step size. This value should be close to 1 </p>
-
-</div>
-</div>
-<a id="ada0398b27c35ebe568d6a615bf7538a7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ada0398b27c35ebe568d6a615bf7538a7">&#9670;&nbsp;</a></span>TRACK_ABOVE_BELOW_EXTREMA</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">#define TRACK_ABOVE_BELOW_EXTREMA&#160;&#160;&#160;10.0f</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>The max distance above or below the max and min of elevation data a population is allowed to generate a track at. </p>
 
 </div>
 </div>

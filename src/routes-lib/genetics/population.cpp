@@ -292,6 +292,9 @@ void Population::evaluateCost(const Pod& pod) {
                    size_crop.y, _opencl_binomials.get_buffer(),
                    _num_evaluation_points_1, _num_evaluation_points / 50, origin.y, origin.y);
 
+    // Upload the data
+    boost::compute::copy(_individuals.begin(), _individuals.end(), _opencl_individuals.begin(), queue);
+    
     // Execute the 2D kernel with a work size of 5. 5 threads working on a single individual
     kernel.execute2D(glm::vec<2, size_t>(0, 0),
                      glm::vec<2, size_t>(_pop_size, 50),
@@ -377,6 +380,10 @@ void Population::calcWeights() {
     for (int i = 0; i < _mu; i++)
         _weights[i] /= sum;
     
+    sum = 0.0;
+        for (int i = 0; i < _mu; i++)
+            sum += _weights[i];
+    
     // Calculate _mu_weight to be the sum of 1/poq(_weights, 2)
     sum = 0.0;
     
@@ -393,8 +400,8 @@ void Population::calcInitialSigma() {
     _sigma = Eigen::VectorXf(_genome_size * 3);
     
     // First we figure out what the actual values should be
-    glm::vec3 sigma_parts = glm::vec3(_data.getCroppedSizeMeters().x                      / INITIAL_SIGMA_DIVISOR,
-                                      _data.getCroppedSizeMeters().y                      / INITIAL_SIGMA_DIVISOR,
+    glm::vec3 sigma_parts = glm::vec3(INITAL_SIGMA_XY,
+                                      INITAL_SIGMA_XY,
                                       (_data.getMaxElevation() - _data.getMinElevation()) / INITIAL_SIGMA_DIVISOR);
     
     // Apply it to the X Y and Z for each point
@@ -425,6 +432,9 @@ void Population::samplePopulation() {
     // Convert the samples over to a set of vectors and update the population
     for (int i = 0; i < _pop_size; i++) {
         
+        _individuals[i * _individual_size + 1] = _start;
+        _individuals[i * _individual_size + 2 + _genome_size] = _dest;
+        
         for (int j = 0; j < _genome_size; j++) {
             
             // Get a reference to the right gene in the genome of the ith individual
@@ -432,8 +442,8 @@ void Population::samplePopulation() {
             
             // Set the values in the glm::vec4 to be correct
             point.x = samples[i](j * 3    );
-            point.x = samples[i](j * 3 + 1);
-            point.x = samples[i](j * 3 + 2);
+            point.y = samples[i](j * 3 + 1);
+            point.z = samples[i](j * 3 + 2);
             
         }
         
@@ -447,11 +457,11 @@ void Population::updateParams() {
     updateMean();
     
     // Update the step size path
-    updatePSigma();
+//    updatePSigma();
     
     
     // Update the step size
-    updateSigma();
+//    updateSigma();
     
 }
 
