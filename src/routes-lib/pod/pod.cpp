@@ -13,7 +13,7 @@ Pod::Pod(float max_speed) {
 
 float Pod::minCurveRadius() const { return pow (_max_speed, 2.0) / g; }
 
-float Pod::calcCentripetalAccel(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2) {
+float Pod::calcCentripetalAccel(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2) const {
 
     float accel = 0.0;
 
@@ -22,23 +22,22 @@ float Pod::calcCentripetalAccel(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2) {
     return accel;
 }
 
-float Pod::timeForCurve (const std::vector<glm::vec3>& points) {
+float Pod::timeForCurve(const std::vector<glm::vec3>& points) const {
 
     float time = 0.0;
 
     std::vector<glm::vec3> interestPoints;
 
-    //add points whose centripetal acceleration is greater than g to a vec3
+    // Add points whose centripetal acceleration is greater than g to a vec3
     for(int i = 1; i < points.size() - 2; i++) {
         if(calcCentripetalAccel(points[i-1], points[i], points[i+1]) > g)
             interestPoints[i] = points[i];
     }
 
     std::vector<float> accel_at_point;
-
     std::vector<float> vel_at_point;
 
-    //the distance between the first interest point and the beginning of the route.
+    // The distance between the first interest point and the beginning of the route.
     int backtrack_init = 0;
 
     for(int round = 0; round < interestPoints.size(); round++){
@@ -48,43 +47,43 @@ float Pod::timeForCurve (const std::vector<glm::vec3>& points) {
         }
     }
 
-    //the amount to backtrack from an interest point to start slowing down
+    // The amount to backtrack from an interest point to start slowing down
     int backtrack = backtrack_init / 2;
 
-    //Calculate the acceleration at each point
+    // Calculate the acceleration at each point
     for(int i = 0; i < points.size() - 1; i++) {
 
-        //Calculate the acceleration at each point and add it to a vector
+        // Calculate the acceleration at each point and add it to a vector
         if(i = 0) {
             accel_at_point[0] = 0.0;
             vel_at_point[0] = 0.0;
         }
         else if(calcCentripetalAccel(points[i-1], points[i], points[i+1]) < g) {
-            //sets the acceleration at a point to the centripetal acceleration at a point if it does not have a
-            //centripetal acceleration greater than or equal to g.
+            // Sets the acceleration at a point to the centripetal acceleration at a point if it does not have a
+            // centripetal acceleration greater than or equal to g.
             accel_at_point[i] = calcCentripetalAccel(points[i - 1], points[i], points[i + 1]);
 
-            //sets the velocity at all points where the centripetal accleration is less than g to the max speed
+            // Sets the velocity at all points where the centripetal accleration is less than g to the max speed
             vel_at_point[i] = _max_speed;
 
         }
         else if(calcCentripetalAccel(points[i-1], points[i], points[i+1]) >= g){
             accel_at_point[i] = .9 * g;
 
-            //Calculate the new velocity at point i if point i caused an acceleration that was greater than g.
+            // Calculate the new velocity at point i if point i caused an acceleration that was greater than g.
             vel_at_point[i] = sqrt(pow(_max_speed, 2) + 2 * (-.2 * g) * (Bezier::avgDistanceBetweenPoints(points) * backtrack));
 
-            //calculates the velocities before an interest point
+            // Calculates the velocities before an interest point
             for(int j = floor((i/2) + 1); j < i; j++)
                 vel_at_point[j] = vel_at_point[i/2] - j * (.2 * g);
 
-            //calculates the velocities after an interest point
+            // Calculates the velocities after an interest point
             for(int k = i + 1; k < 2 * i || k < (points.size() - 1); k++)
                 vel_at_point[k] = vel_at_point[i] + k * (.2 * g);
         }
     }
 
-    //accumulates the time by multiplying the velocity at a point by the average distance between the points
+    // Accumulates the time by multiplying the velocity at a point by the average distance between the points
     for(int t = 0; t < points.size() - 1; t++)
         time += vel_at_point[t] * Bezier::avgDistanceBetweenPoints(points);
 
