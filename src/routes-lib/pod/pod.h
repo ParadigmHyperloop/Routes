@@ -60,7 +60,7 @@ class Pod {
          * The centripetal acceleration at a point in m/s^2
          *
          */
-        float calcCentripetalAccel(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2);
+        float calcCentripetalAccel(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2) const;
 
         /**
          * Calculates the time to travel the route in seconds
@@ -71,7 +71,7 @@ class Pod {
          * @return
          * The time required to travel on a given hyperloop route
          */
-        float timeForCurve(const std::vector<glm::vec3>& points);
+        float timeForCurve(const std::vector<glm::vec3>& points) const;
 
     private:
 
