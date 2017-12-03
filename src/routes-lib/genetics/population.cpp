@@ -371,7 +371,7 @@ void Population::calcWeights() {
 
     for (int i = 0; i < _mu; i++) {
 
-        _weights[i] = log(_mu + 0.5) - log(i + 1);
+        _weights[i] = 1.0 / (float)_mu;
         sum += _weights[i];
 
     }
@@ -379,10 +379,6 @@ void Population::calcWeights() {
     // Normalize to make sure that it adds up to 1
     for (int i = 0; i < _mu; i++)
         _weights[i] /= sum;
-
-    sum = 0.0;
-        for (int i = 0; i < _mu; i++)
-            sum += _weights[i];
 
     // Calculate _mu_weight to be the sum of 1/poq(_weights, 2)
     sum = 0.0;
@@ -417,17 +413,17 @@ void Population::calcInitialSigma() {
 
 void Population::calculateStratParameters() {
 
-    float N = _genome_size * 3.0;
+    float N = _mean.size();
 
     // Calc c_sigma
-    _c_sigma = (_mu_weight + 2.0) / (N + _mu_weight + 5.0);
+    _c_sigma = 4.0 / N;
 
     // Calc c_covar
-    _c_covar = (4.0 + _mu_weight / N) / (N + 4.0 + 2.0 * _mu_weight / N);
+    _c_covar = 4.0 / N;
 
     // Calculate a few other params for the covariance matrix updating
-    _c1 = 2.0 / (glm::pow(N + 1.3, 2.0) + _mu_weight);
-    _c_mu = glm::min(1.0 - _c1, 2.0 * (_mu_weight - 2.0 + 1.0 / _mu_weight) / (glm::pow(N + 2.0, 2.0) + _mu_weight));
+    _c1 = 2.0 / (N * N);
+    _c_mu = glm::clamp(_mu_weight / (N * N), 0.0f, 1.0f - _c1);
 
 }
 
@@ -443,15 +439,15 @@ void Population::samplePopulation() {
         _individuals[i * _individual_size + 1] = _start;
         _individuals[i * _individual_size + 2 + _genome_size] = _dest;
 
-        for (int j = 0; j < _genome_size; j++) {
+        for (int p = 0; p < _genome_size; p++) {
 
             // Get a reference to the right gene in the genome of the ith individual
-            glm::vec4& point = _individuals[i * _individual_size + 2 + j];
+            glm::vec4& point = _individuals[i * _individual_size + 2 + p];
 
             // Set the values in the glm::vec4 to be correct
-            point.x = samples[i](j * 3    );
-            point.y = samples[i](j * 3 + 1);
-            point.z = samples[i](j * 3 + 2);
+            point.x = samples[i](p * 3    );
+            point.y = samples[i](p * 3 + 1);
+            point.z = samples[i](p * 3 + 2);
 
         }
 
@@ -463,7 +459,7 @@ void Population::updateParams() {
 
     // Update the mean
     updateMean();
-
+    
     // Update the step size path
     updatePSigma();
 
@@ -472,10 +468,10 @@ void Population::updateParams() {
 
     // Update the covariance matrix
     updateCovar();
-
+    
     // Update the step size
     updateSigma();
-
+    
 }
 
 void Population::updateMean() {
@@ -483,21 +479,20 @@ void Population::updateMean() {
     // Save the mean from the last gen so we can use it to update the paths
     _mean_prime = _mean;
 
-    _mean = Eigen::VectorXf::Zero(_genome_size * 3);
+    _mean = Eigen::VectorXf::Zero(_mean.size());
 
     for (int i = 0; i < _mu; i++) {
-
-        // Figure out where the individual starts in
-        int individual_start = i * _individual_size + 2;
 
         // Go through each point and add it to the correct place in the mean
         for (int p = 0; p < _genome_size; p++) {
 
+            glm::vec4& point = _individuals[i * _individual_size + 2 + p];
+            
             // Since the sum of all of the values in _weights adds to 1, we dont need to divde
             // the mean by _mu at the end.
-            _mean(p * 3    ) += _individuals[individual_start + p].x * _weights[i];
-            _mean(p * 3 + 1) += _individuals[individual_start + p].y * _weights[i];
-            _mean(p * 3 + 2) += _individuals[individual_start + p].z * _weights[i];
+            _mean(p * 3    ) += point.x * _weights[i];
+            _mean(p * 3 + 1) += point.y * _weights[i];
+            _mean(p * 3 + 2) += point.z * _weights[i];
 
         }
 
@@ -512,14 +507,19 @@ void Population::updatePSigma() {
     float discount_comp = sqrt(1.0 - (discount * discount));
 
     // Calculate the mean displacement
-    Eigen::VectorXf mean_displacement(_genome_size * 3);
-    mean_displacement = (_mean - _mean_prime).cwiseQuotient(_sigma);
+    Eigen::VectorXf mean_displacement(_mean.size());
+    mean_displacement = (_mean - _mean_prime);
+    
+    // Divide by sigma
+    for (int i = 0; i < mean_displacement.size(); i++)
+        mean_displacement(i) = mean_displacement(i) / _sigma(i);
+    
     float sqrt_mew_weight = sqrt(_mu_weight);
 
     // Get the inverse square root of the covariance matrix
     Eigen::SelfAdjointEigenSolver<Eigen::MatrixXf> solver(_covar_matrix);
     Eigen::MatrixXf inv_sqrt_C(solver.operatorInverseSqrt());
-
+    
     _p_sigma = discount * _p_sigma + discount_comp * sqrt_mew_weight * inv_sqrt_C * mean_displacement;
 
 }
@@ -531,13 +531,18 @@ void Population::updatePCovar() {
     float discount_comp = sqrt(1.0 - (discount * discount));
 
     // Calculate the mean displacement
-    Eigen::VectorXf mean_displacement(_genome_size * 3);
-    mean_displacement = (_mean - _mean_prime).cwiseQuotient(_sigma);
+    Eigen::VectorXf mean_displacement(_mean.size());
+    mean_displacement = (_mean - _mean_prime);
+
+    // Divide by sigma
+    for (int i = 0; i < mean_displacement.size(); i++)
+        mean_displacement(i) = mean_displacement(i) / _sigma(i);
+    
     float sqrt_mew_weight = sqrt(_mu_weight);
 
     // Figure out the indictor function
     float indicator = 0.0;
-    if (_p_sigma.norm() <= sqrt((float)_genome_size * 3.0) * ALPHA)
+    if (_p_sigma.norm() <= sqrt((float)_mean.size()) * ALPHA)
         indicator = 1.0;
 
     _p_covar = discount * _p_covar + indicator * discount_comp * sqrt_mew_weight * mean_displacement;
@@ -547,12 +552,12 @@ void Population::updatePCovar() {
 void Population::updateCovar() {
 
     // Calculate the actual new covariance matrix
-    Eigen::MatrixXf covariance_prime(_genome_size * 3, _genome_size * 3);
+    Eigen::MatrixXf covariance_prime(_mean.size(),_mean.size());
     covariance_prime.setZero();
 
     for (int i = 0; i < _mu; i++) {
 
-        Eigen::VectorXf individ = Eigen::VectorXf::Zero(_genome_size * 3);
+        Eigen::VectorXf individ = Eigen::VectorXf::Zero(_mean.size());
 
         // Figure out where the individual starts in
         int individual_start = i * _individual_size + 2;
@@ -568,19 +573,22 @@ void Population::updateCovar() {
         }
 
         // Add to the matrix
-        Eigen::VectorXf adjusted = (individ - _mean).cwiseQuotient(_sigma);
+        Eigen::VectorXf adjusted = (individ - _mean);
+        
+        // Divide by sigma
+        for (int k = 0; k < adjusted.size(); k++)
+            adjusted(k) = adjusted(k) / _sigma(k);
+        
         covariance_prime += adjusted * adjusted.transpose() * _weights[i];
 
     }
-
-    covariance_prime *= _c_mu;
 
     // Calculate the rank one matrix
     Eigen::MatrixXf rank_one = _c1 * _p_covar * _p_covar.transpose();
 
     // Calculate cs
     float indicator = 0.0;
-    if (_p_sigma.norm() * _p_sigma.norm() <= sqrt((float)_genome_size * 3.0) * ALPHA)
+    if (_p_sigma.norm() * _p_sigma.norm() <= sqrt((float)_mean.size()) * ALPHA)
         indicator = 1.0;
 
     float cs = (1.0 - indicator) * _c1 * _c_covar * (2.0 - _c_covar);
@@ -589,7 +597,7 @@ void Population::updateCovar() {
     float discount = 1.0 - _c1 - _c_mu + cs;
 
     // Update the MatrixXf
-    _covar_matrix = discount * _covar_matrix + rank_one + covariance_prime;
+    _covar_matrix = discount * _covar_matrix + rank_one + _c_mu * covariance_prime;
 
 }
 
@@ -599,7 +607,8 @@ void Population::updateSigma() {
     float ratio = _c_sigma / STEP_DAMPENING;
 
     // Get the expected value of the identity distribution in N dimensions
-    float expected = sqrt(_genome_size * 3.0) * (1.0 - 1.0 / (_genome_size * 12.0) + 1.0 / (21.0 * glm::pow((_genome_size * 3.0), 2.0)));
+    float N = (float)_mean.size();
+    float expected = sqrt(N) * (1.0 - 1.0 / (N * 4.0) + 1.0 / (21.0 * glm::pow(N, 2.0)));
 
     // Get the magnitude of the sigma path
     float mag = _p_sigma.norm();

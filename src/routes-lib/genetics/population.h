@@ -33,7 +33,7 @@
  * This value is used to help calculate the initial step size of the population.
  * and the Z sigma is the max elevation delta / INITIAL_SIGMA_DIVISOR.
  */
-#define INITIAL_SIGMA_DIVISOR 30.0f
+#define INITIAL_SIGMA_DIVISOR 10.0f
 
 /**
  * This serves as the initial value for the X and Y of all the points for sigma.
@@ -42,7 +42,7 @@
 #define INITAL_SIGMA_XY 5000.0f
 
 /** Represents the dampening parameter for the step size. This value should be close to 1 */
-#define STEP_DAMPENING .967f
+#define STEP_DAMPENING 1.5f
 
 /** The interval multiplier for the square root of _genome_size * 3 for the indicator function. */
 #define ALPHA 1.5f
@@ -152,8 +152,6 @@ class Population {
          */
         void sortIndividuals();
 
-    private:
-
         /**
          * This function is what makes the genetic algorithm work.
          * For every individual a cost is evaluated. This represents how good their genome is as a solution.
@@ -164,6 +162,8 @@ class Population {
          *
          */
         void evaluateCost(const Pod& pod);
+    
+    private:
 
          /**
           * This function calculates the size of the genome.

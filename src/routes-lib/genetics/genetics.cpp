@@ -7,10 +7,18 @@
 std::vector<glm::vec3> Genetics::solve(Population& pop, Pod& pod, int generations) {
 
     // Run the simulation for then given amount of generations
-    for (int i = 0; i < generations; i++)
+    for (int i = 0; i < generations; i++) {
+        
+        if (i % 20 == 0)
+            std::cout << "Finished gen " << i << std::endl;
+        
         pop.step(pod);
+        
+        
+    }
 
     // Sort one last time
+    pop.evaluateCost(pod);
     pop.sortIndividuals();
 
     // Format a path so we can print it in python
