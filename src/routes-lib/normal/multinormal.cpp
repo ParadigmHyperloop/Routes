@@ -10,7 +10,7 @@
 std::mt19937 MultiNormal::_twister;
 std::normal_distribution<float> MultiNormal::_standard_distro(0.0, 1.0);
 
-MultiNormal::MultiNormal(const Eigen::MatrixXf& covariance_matrix, const Eigen::VectorXf& m, const Eigen::VectorXf& sigma) : _m(m), _sigma(sigma) {
+MultiNormal::MultiNormal(const Eigen::MatrixXf& covariance_matrix, const Eigen::VectorXf& sigma) : _sigma(sigma) {
     
     // Update the twister to make sure we get consistantly random results
     // Hashing makes everything better :)
@@ -39,7 +39,7 @@ std::vector<Eigen::VectorXf> MultiNormal::generateRandomSamples(int count) {
     for (int i = 0; i < count; i++) {
         
         // Make sure the vector is initialized to the right size
-        samples[i] = Eigen::VectorXf(_m.size());
+        samples[i] = Eigen::VectorXf(_sigma.size());
         doSample(samples[i]);
         
     }
@@ -55,6 +55,6 @@ void MultiNormal::doSample(Eigen::VectorXf& out_sample) {
         out_sample(i) = _standard_distro(_twister);
     
     // Transform the sample by the decomposed covariance and then add the mean vector
-    out_sample = _m + (_A * out_sample).cwiseProduct(_sigma);
+    out_sample = (_A * out_sample).cwiseProduct(_sigma);
     
 }

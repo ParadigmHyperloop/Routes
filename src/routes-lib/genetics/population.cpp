@@ -48,6 +48,8 @@ Individual Population::getIndividual(int index) {
     // Account for the header
     ind.path = header_loc + 1;
     ind.genome = header_loc + 2;
+    
+    ind.index = index;
 
     return ind;
 
@@ -83,16 +85,22 @@ void Population::sortIndividuals() {
     });
 
     // Create a new vector so we don't destroy any data
-    std::vector<glm::vec4> sorted_individuals = std::vector<glm::vec4>(_individuals.size());
+    std::vector<glm::vec4> sorted_individuals   = std::vector<glm::vec4>      (_individuals.size());
+    std::vector<Eigen::VectorXf> sorted_samples = std::vector<Eigen::VectorXf>(_pop_size);
+    
     for (int i = 0; i < _pop_size; i++) {
 
         // Copy the sorted individual into the new array
         memcpy(sorted_individuals.data() + i * _individual_size, individuals_s[i].header, sizeof(glm::vec4) * _individual_size);
+        
+        // Copy the sample
+        sorted_samples[i] = samples[individuals_s[i].index];
 
     }
 
     // Save the sorted array
     _individuals = sorted_individuals;
+    samples = sorted_samples;
 
 }
 
@@ -159,8 +167,8 @@ void Population::evaluateCost(const Pod& pod) {
             const float curve_weight = 300000.0;
             const float grade_weight = 100.0;
 
-            __local float curve_sums [50];
-//            __local float min_curves [50];
+//            __local float curve_sums [50];
+            __local float min_curves [50];
             __local float max_grades [50];
             __local float track_costs[50];
 
@@ -170,8 +178,8 @@ void Population::evaluateCost(const Pod& pod) {
 
             int path = i * (path_length + 1) + 1;
 
-//            float min_curve = 10000000000000.0;
-            float curve_sum = 0.0;
+            float min_curve = 10000000000000.0;
+//            float curve_sum = 0.0;
 
             float track_cost = 0.0;
             float steepest_grade = 0.0;
@@ -208,8 +216,8 @@ void Population::evaluateCost(const Pod& pod) {
                 if (p > 1) {
 
                     float curve = curvature(last_last, last_point, bezier_point);
-                    curve_sum += 1.0 / curve * curve_weight;
-//                    min_curve = min(min_curve, curve);
+//                    curve_sum += curve * curve_weight;
+                    min_curve = min(min_curve, curve);
 
                 }
 
@@ -244,8 +252,8 @@ void Population::evaluateCost(const Pod& pod) {
             }
 
             // Write to the buffer
-            curve_sums [w] = curve_sum;
-//            min_curves [w] = min_curve;
+//            curve_sums [w] = curve_sum;
+            min_curves [w] = min_curve;
             max_grades [w] = steepest_grade;
             track_costs[w] = track_cost;
 
@@ -257,8 +265,8 @@ void Population::evaluateCost(const Pod& pod) {
                 // Figure out the final cost for everything. This would be equivalent to using one thread
                 for (int m = 1; m < 50; m++) {
 
-                     curve_sum += curve_sums[m];
-//                     min_curve = min(min_curve, min_curves[m]);
+//                     curve_sum += curve_sums[m];
+                     min_curve = min(min_curve, min_curves[m]);
                      steepest_grade = max(steepest_grade, max_grades[m]);
                      track_cost += track_costs[m];
 
@@ -270,7 +278,7 @@ void Population::evaluateCost(const Pod& pod) {
 
                 // Calculate the curvature cost
                 // Right now we are simply using the sum of curvature (not radius of curvature)
-                float curve_cost = curve_sum;
+                float curve_cost = 0.3 * (min_curve_allowed - min_curve + fabs(min_curve_allowed - min_curve));
 
                 // Get total cost
                 float total_cost = grade_cost + track_cost + curve_cost;
@@ -305,6 +313,21 @@ void Population::evaluateCost(const Pod& pod) {
 
 }
 
+std::vector<glm::vec3> Population::getSolution() const {
+    
+    std::vector<glm::vec3> solution = std::vector<glm::vec3>(_genome_size + 2);
+    solution[0]                = glm::vec3(_start.x, _start.y, _start.z);
+    solution[_genome_size + 1] = glm::vec3(_dest.x, _dest.y, _dest.z);
+    
+    for (int i = 0; i < _genome_size; i++)
+        solution[i + 1] = glm::vec3(_mean(i * 3    ),
+                                    _mean(i * 3 + 1),
+                                    _mean(i * 3 + 2));
+    
+    return solution;
+    
+}
+
 void Population::calcGenomeSize() {
 
     // The genome size has a square root relationship with the length of the route
@@ -316,8 +339,8 @@ void Population::calcGenomeSize() {
 
 void Population::initParams() {
 
-    // Calculate mu to be 1/4 of the total population
-    _mu = _pop_size * 0.25;
+    // Calculate mu to be 2% of the total population
+    _mu = _pop_size * 0.02;
 
     // Init the mean to the best guess (a straight line)
     bestGuess();
@@ -371,7 +394,7 @@ void Population::calcWeights() {
 
     for (int i = 0; i < _mu; i++) {
 
-        _weights[i] = 1.0 / (float)_mu;
+        _weights[i] = log(_mu + 0.5) - log(i + 1);
         sum += _weights[i];
 
     }
@@ -380,7 +403,7 @@ void Population::calcWeights() {
     for (int i = 0; i < _mu; i++)
         _weights[i] /= sum;
 
-    // Calculate _mu_weight to be the sum of 1/poq(_weights, 2)
+    // Calculate _mu_weight to be the sum of 1/pow(_weights, 2)
     sum = 0.0;
 
     for (int i = 0; i < _mu; i++)
@@ -416,22 +439,22 @@ void Population::calculateStratParameters() {
     float N = _mean.size();
 
     // Calc c_sigma
-    _c_sigma = 4.0 / N;
+    _c_sigma = (_mu_weight + 2.0) / (N + _mu_weight + 5.0);
 
     // Calc c_covar
-    _c_covar = 4.0 / N;
+    _c_covar = (4.0+ _mu_weight / N) / (N + 4.0 + 2.0 * _mu_weight / N );
 
     // Calculate a few other params for the covariance matrix updating
-    _c1 = 2.0 / (N * N);
-    _c_mu = glm::clamp(_mu_weight / (N * N), 0.0f, 1.0f - _c1);
+    _c1 = 2.0 / ((N + 1.3) * (N + 1.3) + _mu_weight);
+    _c_mu = glm::clamp(2.0f * (_mu_weight - 2.0f + 1.0f / _mu_weight) / ((N + 2.0f) * (N + 2.0f) + _mu_weight), 0.0f, 1.0f - _c1);
 
 }
 
 void Population::samplePopulation() {
 
     // Create a MND
-    MultiNormal dist = MultiNormal(_covar_matrix, _mean, _sigma);
-    std::vector<Eigen::VectorXf> samples = dist.generateRandomSamples(_pop_size);
+    MultiNormal dist = MultiNormal(_covar_matrix, _sigma);
+    samples = dist.generateRandomSamples(_pop_size);
 
     // Convert the samples over to a set of vectors and update the population
     for (int i = 0; i < _pop_size; i++) {
@@ -445,9 +468,9 @@ void Population::samplePopulation() {
             glm::vec4& point = _individuals[i * _individual_size + 2 + p];
 
             // Set the values in the glm::vec4 to be correct
-            point.x = samples[i](p * 3    );
-            point.y = samples[i](p * 3 + 1);
-            point.z = samples[i](p * 3 + 2);
+            point.x = samples[i](p * 3    ) + _mean(p * 3    );
+            point.y = samples[i](p * 3 + 1) + _mean(p * 3 + 1);
+            point.z = samples[i](p * 3 + 2) + _mean(p * 3 + 2);
 
         }
 
@@ -456,7 +479,7 @@ void Population::samplePopulation() {
 }
 
 void Population::updateParams() {
-
+    
     // Update the mean
     updateMean();
     
@@ -481,22 +504,10 @@ void Population::updateMean() {
 
     _mean = Eigen::VectorXf::Zero(_mean.size());
 
-    for (int i = 0; i < _mu; i++) {
-
-        // Go through each point and add it to the correct place in the mean
-        for (int p = 0; p < _genome_size; p++) {
-
-            glm::vec4& point = _individuals[i * _individual_size + 2 + p];
-            
-            // Since the sum of all of the values in _weights adds to 1, we dont need to divde
-            // the mean by _mu at the end.
-            _mean(p * 3    ) += point.x * _weights[i];
-            _mean(p * 3 + 1) += point.y * _weights[i];
-            _mean(p * 3 + 2) += point.z * _weights[i];
-
-        }
-
-    }
+    for (int i = 0; i < _mu; i++)
+        _mean += samples[i] * _weights[i];
+    
+    _mean += _mean_prime;
 
 }
 
@@ -552,28 +563,12 @@ void Population::updatePCovar() {
 void Population::updateCovar() {
 
     // Calculate the actual new covariance matrix
-    Eigen::MatrixXf covariance_prime(_mean.size(),_mean.size());
+    Eigen::MatrixXf covariance_prime(_mean.size(), _mean.size());
     covariance_prime.setZero();
 
     for (int i = 0; i < _mu; i++) {
 
-        Eigen::VectorXf individ = Eigen::VectorXf::Zero(_mean.size());
-
-        // Figure out where the individual starts in
-        int individual_start = i * _individual_size + 2;
-
-        // Go through each point and add it to the correct place in Eigen vector
-        for (int p = 0; p < _genome_size; p++) {
-
-            // Set the corret values in the Eigen vector for X Y and Z
-            individ(p * 3    ) = _individuals[individual_start + p].x;
-            individ(p * 3 + 1) = _individuals[individual_start + p].y;
-            individ(p * 3 + 2) = _individuals[individual_start + p].z;
-
-        }
-
-        // Add to the matrix
-        Eigen::VectorXf adjusted = (individ - _mean);
+        Eigen::VectorXf adjusted = samples[i];
         
         // Divide by sigma
         for (int k = 0; k < adjusted.size(); k++)
@@ -598,6 +593,7 @@ void Population::updateCovar() {
 
     // Update the MatrixXf
     _covar_matrix = discount * _covar_matrix + rank_one + _c_mu * covariance_prime;
+    
 
 }
 

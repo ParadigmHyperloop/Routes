@@ -16,6 +16,7 @@ var searchData=
   ['getopenclimage',['getOpenCLImage',['../class_elevation_data.html#ad8b2c4db5db23e9dfd88bfbf11097b01',1,'ElevationData']]],
   ['getprogram',['getProgram',['../class_kernel.html#acdcf2c3d857cf7bbf74aedf1f61c2502',1,'Kernel']]],
   ['getqueue',['getQueue',['../class_kernel.html#aa5273e14f07845343045a53124b0d057',1,'Kernel']]],
+  ['getsolution',['getSolution',['../class_population.html#a0c1a14e15c5fe4aa14f1511aa58df967',1,'Population']]],
   ['getstate',['getState',['../class_c_m_d.html#a78241396d0dfc04b988e64e7eb8caede',1,'CMD']]],
   ['getwidth',['getWidth',['../class_elevation_data.html#a2321308f5d5c2d272d0637721e549dbe',1,'ElevationData']]],
   ['getwidthinmeters',['getWidthInMeters',['../class_elevation_data.html#abb0f737b5cf0b294423b302b29ae35ab',1,'ElevationData']]]

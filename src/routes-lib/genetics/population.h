@@ -33,13 +33,13 @@
  * This value is used to help calculate the initial step size of the population.
  * and the Z sigma is the max elevation delta / INITIAL_SIGMA_DIVISOR.
  */
-#define INITIAL_SIGMA_DIVISOR 10.0f
+#define INITIAL_SIGMA_DIVISOR 20.0f
 
 /**
  * This serves as the initial value for the X and Y of all the points for sigma.
  * We use 5km as a pretty tight bounding around the straight line (initial mean)
  */
-#define INITAL_SIGMA_XY 5000.0f
+#define INITAL_SIGMA_XY 2500.0f
 
 /** Represents the dampening parameter for the step size. This value should be close to 1 */
 #define STEP_DAMPENING 1.5f
@@ -75,6 +75,9 @@ struct Individual {
      * All individuals in the same population have the same number of genes.
      */
     size_t num_genes;
+    
+    /** The inidividual's index in the _individuals vector */
+    int index;
 
 };
 
@@ -162,6 +165,14 @@ class Population {
          *
          */
         void evaluateCost(const Pod& pod);
+    
+        /**
+         * This returns the computed solution to the route (the mean).
+         *
+         * @return
+         * The control points of the completed route containing the start and destination.
+         */
+        std::vector<glm::vec3> getSolution() const;
     
     private:
 
@@ -362,6 +373,12 @@ class Population {
         /** The learning rate for the rank mu update of the covariance matrix */
         float _c_mu;
 
+        /**
+         * The samples from the distribution minus the mean. We seperate this from the completed, evaluatable population to decrease
+         * the chance of numerical error because we are dealing with large numbers.
+         */
+        std::vector<Eigen::VectorXf> samples;
+    
 };
 
 #endif //ROUTES_POPULATION_H

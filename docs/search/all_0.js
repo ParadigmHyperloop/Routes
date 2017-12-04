@@ -1,6 +1,9 @@
 var searchData=
 [
   ['_5fa',['_A',['../class_multi_normal.html#a9ff2bde3c9bf0262ed042cde75fcca59',1,'MultiNormal']]],
+  ['_5fc1',['_c1',['../class_population.html#a0d53c91ce41885642a6f55cfe750cc1b',1,'Population']]],
+  ['_5fc_5fcovar',['_c_covar',['../class_population.html#a5de21aa44d44a2c2a151136c71adbfb0',1,'Population']]],
+  ['_5fc_5fmu',['_c_mu',['../class_population.html#ab93df09035bd07eb75a10291e932437d',1,'Population']]],
   ['_5fc_5fsigma',['_c_sigma',['../class_population.html#ae95922bb0daba8561806186c1a2c68dc',1,'Population']]],
   ['_5fcompleted',['_completed',['../class_routes_queue.html#af4956405c4fb878eb2d8578d17763a80',1,'RoutesQueue']]],
   ['_5fcovar_5fmatrix',['_covar_matrix',['../class_population.html#a7d78dbb7e414f6cf843b94b61fabb5e2',1,'Population']]],
@@ -22,7 +25,6 @@ var searchData=
   ['_5findividuals',['_individuals',['../class_population.html#aeac36ea8d0adf5d86de7b450854020c5',1,'Population']]],
   ['_5finit',['_init',['../class_elevation_data.html#a3b18b270f0f0a6e181bd4add2d571a0b',1,'ElevationData']]],
   ['_5fis_5finitialized',['_is_initialized',['../class_kernel.html#ad3ec114105efa539756f02af36ad8749',1,'Kernel']]],
-  ['_5fm',['_m',['../class_multi_normal.html#aacb9e66ec3fc6cf681e0e7269d4e8ce2',1,'MultiNormal']]],
   ['_5fmax_5fspeed',['_max_speed',['../class_pod.html#acca59281981c944e3159eba166106083',1,'Pod']]],
   ['_5fmean',['_mean',['../class_population.html#a00614fb4a39e2be35f7cead3adcff6d0',1,'Population']]],
   ['_5fmean_5fprime',['_mean_prime',['../class_population.html#ab01cc20d23527fee669ec387db93cadc',1,'Population']]],

@@ -34,7 +34,7 @@ class MultiNormal {
          * @param sigma
          * The step size of the distribution
          */
-        MultiNormal(const Eigen::MatrixXf& covariance_matrix, const Eigen::VectorXf& m, const Eigen::VectorXf& sigma);
+        MultiNormal(const Eigen::MatrixXf& covariance_matrix, const Eigen::VectorXf& sigma);
     
         /**
          * Samples from the distribution count number of times.
@@ -72,9 +72,6 @@ class MultiNormal {
          * standard normal distribution will yeild a sample from the multivariate normal distribution.
          */
         Eigen::MatrixXf _A;
-    
-        /** The mean vector of the multivariate normal distribution. */
-        Eigen::VectorXf _m;
     
         /** The step size of the distribution */
         Eigen::VectorXf _sigma;

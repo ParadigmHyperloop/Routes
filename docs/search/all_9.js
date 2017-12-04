@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['length_5fto_5fgenome',['LENGTH_TO_GENOME',['../population_8h.html#a17816c3d2f274b8b02deb9738da01035',1,'population.h']]],
-  ['longitudelatitudetometers',['longitudeLatitudeToMeters',['../class_elevation_data.html#a24ceb21e418b0a72128c9ca36caea160',1,'ElevationData']]],
-  ['longitudelatitudetopixels',['longitudeLatitudeToPixels',['../class_elevation_data.html#ad49862885f5126072f31f50e1d2253f4',1,'ElevationData']]]
+  ['kernel',['Kernel',['../class_kernel.html',1,'Kernel'],['../class_kernel.html#a0e137f5646f930df1a646306cc119170',1,'Kernel::Kernel(const std::string &amp;program, const std::string name)'],['../class_kernel.html#a8dbc456fce5b42316efcfcfe71136431',1,'Kernel::Kernel(const boost::compute::program &amp;program, const std::string name)']]],
+  ['kernel_2ecpp',['kernel.cpp',['../kernel_8cpp.html',1,'']]],
+  ['kernel_2eh',['kernel.h',['../kernel_8h.html',1,'']]]
 ];

@@ -93,14 +93,31 @@ Macros</h2></td></tr>
 <tr class="separator:acfcee9c17743fdcd5c1a217c1b94961f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a17816c3d2f274b8b02deb9738da01035"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="population_8h.html#a17816c3d2f274b8b02deb9738da01035">LENGTH_TO_GENOME</a>&#160;&#160;&#160;0.0274360619f</td></tr>
 <tr class="separator:a17816c3d2f274b8b02deb9738da01035"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5c17a11cd32591232924b8b51817b940"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="population_8h.html#a5c17a11cd32591232924b8b51817b940">INITIAL_SIGMA_DIVISOR</a>&#160;&#160;&#160;30.0f</td></tr>
+<tr class="memitem:a5c17a11cd32591232924b8b51817b940"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="population_8h.html#a5c17a11cd32591232924b8b51817b940">INITIAL_SIGMA_DIVISOR</a>&#160;&#160;&#160;20.0f</td></tr>
 <tr class="separator:a5c17a11cd32591232924b8b51817b940"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6c8a15f63a82de8e1286350ee3c1365d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="population_8h.html#a6c8a15f63a82de8e1286350ee3c1365d">INITAL_SIGMA_XY</a>&#160;&#160;&#160;5000.0f</td></tr>
+<tr class="memitem:a6c8a15f63a82de8e1286350ee3c1365d"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="population_8h.html#a6c8a15f63a82de8e1286350ee3c1365d">INITAL_SIGMA_XY</a>&#160;&#160;&#160;2500.0f</td></tr>
 <tr class="separator:a6c8a15f63a82de8e1286350ee3c1365d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5c9252d678dbd8ac90d4df613d04209f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="population_8h.html#a5c9252d678dbd8ac90d4df613d04209f">STEP_DAMPENING</a>&#160;&#160;&#160;.967f</td></tr>
+<tr class="memitem:a5c9252d678dbd8ac90d4df613d04209f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="population_8h.html#a5c9252d678dbd8ac90d4df613d04209f">STEP_DAMPENING</a>&#160;&#160;&#160;1.5f</td></tr>
 <tr class="separator:a5c9252d678dbd8ac90d4df613d04209f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5abd28c44c29b7397c84f1fec4b1d84"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="population_8h.html#af5abd28c44c29b7397c84f1fec4b1d84">ALPHA</a>&#160;&#160;&#160;1.5f</td></tr>
+<tr class="separator:af5abd28c44c29b7397c84f1fec4b1d84"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="af5abd28c44c29b7397c84f1fec4b1d84"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5abd28c44c29b7397c84f1fec4b1d84">&#9670;&nbsp;</a></span>ALPHA</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ALPHA&#160;&#160;&#160;1.5f</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The interval multiplier for the square root of _genome_size * 3 for the indicator function. </p>
+
+</div>
+</div>
 <a id="a6c8a15f63a82de8e1286350ee3c1365d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6c8a15f63a82de8e1286350ee3c1365d">&#9670;&nbsp;</a></span>INITAL_SIGMA_XY</h2>
 
@@ -108,7 +125,7 @@ Macros</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define INITAL_SIGMA_XY&#160;&#160;&#160;5000.0f</td>
+          <td class="memname">#define INITAL_SIGMA_XY&#160;&#160;&#160;2500.0f</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -123,7 +140,7 @@ Macros</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define INITIAL_SIGMA_DIVISOR&#160;&#160;&#160;30.0f</td>
+          <td class="memname">#define INITIAL_SIGMA_DIVISOR&#160;&#160;&#160;20.0f</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -168,7 +185,7 @@ Macros</h2></td></tr>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define STEP_DAMPENING&#160;&#160;&#160;.967f</td>
+          <td class="memname">#define STEP_DAMPENING&#160;&#160;&#160;1.5f</td>
         </tr>
       </table>
 </div><div class="memdoc">

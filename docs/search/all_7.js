@@ -1,10 +1,8 @@
 var searchData=
 [
-  ['id',['id',['../struct_routes_queue_1_1___route_item.html#a467444143cceb6175186f8e448954a66',1,'RoutesQueue::_RouteItem']]],
-  ['individual',['Individual',['../struct_individual.html',1,'']]],
-  ['inital_5fsigma_5fxy',['INITAL_SIGMA_XY',['../population_8h.html#a6c8a15f63a82de8e1286350ee3c1365d',1,'population.h']]],
-  ['initial_5fsigma_5fdivisor',['INITIAL_SIGMA_DIVISOR',['../population_8h.html#a5c17a11cd32591232924b8b51817b940',1,'population.h']]],
-  ['initopencl',['initOpenCL',['../class_kernel.html#aaf85aedc18138e6b5857e83658cf7582',1,'Kernel']]],
-  ['initparams',['initParams',['../class_population.html#af6fd879ac429afc818bcab64b4aef633',1,'Population']]],
-  ['isroutecompleted',['isRouteCompleted',['../class_routes_queue.html#a8f3ef306a73330317fec093c3bcd9c13',1,'RoutesQueue']]]
+  ['handlecompute',['handleCompute',['../class_routes_server.html#af2d7303fef41a6c2468fdab21de930cf',1,'RoutesServer']]],
+  ['handlecors',['handleCORS',['../class_routes_server.html#a67f2780dee289ff3314831afd96023e6',1,'RoutesServer']]],
+  ['handlemaxroute',['handleMaxRoute',['../class_routes_server.html#aacc658ce5d98fdd86b1fe315f92748f6',1,'RoutesServer']]],
+  ['handleretrieval',['handleRetrieval',['../class_routes_server.html#a1595a054d3e44385617983ab363b82e2',1,'RoutesServer']]],
+  ['header',['header',['../struct_individual.html#a52bb6c8f4b027a733426ca4011d6201a',1,'Individual']]]
 ];

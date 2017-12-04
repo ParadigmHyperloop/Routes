@@ -73,8 +73,8 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:abef95f22d87a05b78bd375c71557fcf0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_multi_normal.html#abef95f22d87a05b78bd375c71557fcf0">MultiNormal</a> (const Eigen::MatrixXf &amp;covariance_matrix, const Eigen::VectorXf &amp;m, const Eigen::VectorXf &amp;sigma)</td></tr>
-<tr class="separator:abef95f22d87a05b78bd375c71557fcf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a683bb2b132a43c07e1bd1f94aa2f3d4a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_multi_normal.html#a683bb2b132a43c07e1bd1f94aa2f3d4a">MultiNormal</a> (const Eigen::MatrixXf &amp;covariance_matrix, const Eigen::VectorXf &amp;sigma)</td></tr>
+<tr class="separator:a683bb2b132a43c07e1bd1f94aa2f3d4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ada6b0b6f45d12449b6f9f2f894b2f492"><td class="memItemLeft" align="right" valign="top">std::vector&lt; Eigen::VectorXf &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_multi_normal.html#ada6b0b6f45d12449b6f9f2f894b2f492">generateRandomSamples</a> (int count)</td></tr>
 <tr class="separator:ada6b0b6f45d12449b6f9f2f894b2f492"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -87,8 +87,6 @@ Private Member Functions</h2></td></tr>
 Private Attributes</h2></td></tr>
 <tr class="memitem:a9ff2bde3c9bf0262ed042cde75fcca59"><td class="memItemLeft" align="right" valign="top">Eigen::MatrixXf&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_multi_normal.html#a9ff2bde3c9bf0262ed042cde75fcca59">_A</a></td></tr>
 <tr class="separator:a9ff2bde3c9bf0262ed042cde75fcca59"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aacb9e66ec3fc6cf681e0e7269d4e8ce2"><td class="memItemLeft" align="right" valign="top">Eigen::VectorXf&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_multi_normal.html#aacb9e66ec3fc6cf681e0e7269d4e8ce2">_m</a></td></tr>
-<tr class="separator:aacb9e66ec3fc6cf681e0e7269d4e8ce2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af6f423cbb72b0b71175f1c2eba717edf"><td class="memItemLeft" align="right" valign="top">Eigen::VectorXf&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_multi_normal.html#af6f423cbb72b0b71175f1c2eba717edf">_sigma</a></td></tr>
 <tr class="separator:af6f423cbb72b0b71175f1c2eba717edf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -102,8 +100,8 @@ Static Private Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This class is responsible for sampling from a multivariate normal distribution. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="abef95f22d87a05b78bd375c71557fcf0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abef95f22d87a05b78bd375c71557fcf0">&#9670;&nbsp;</a></span>MultiNormal()</h2>
+<a id="a683bb2b132a43c07e1bd1f94aa2f3d4a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a683bb2b132a43c07e1bd1f94aa2f3d4a">&#9670;&nbsp;</a></span>MultiNormal()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -113,12 +111,6 @@ Static Private Attributes</h2></td></tr>
           <td>(</td>
           <td class="paramtype">const Eigen::MatrixXf &amp;&#160;</td>
           <td class="paramname"><em>covariance_matrix</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const Eigen::VectorXf &amp;&#160;</td>
-          <td class="paramname"><em>m</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -225,29 +217,6 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>Represents the decomposition of the covariance matrix. Multiplying a vector with independent random samples from the standard normal distribution will yeild a sample from the multivariate normal distribution. </p>
-
-</div>
-</div>
-<a id="aacb9e66ec3fc6cf681e0e7269d4e8ce2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aacb9e66ec3fc6cf681e0e7269d4e8ce2">&#9670;&nbsp;</a></span>_m</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Eigen::VectorXf MultiNormal::_m</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>The mean vector of the multivariate normal distribution. </p>
 
 </div>
 </div>

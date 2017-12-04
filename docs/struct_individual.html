@@ -78,6 +78,8 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a93363084997e9905d3d19e780e2de060"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25b92d76184a005a4f6a08113db31b87"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_individual.html#a25b92d76184a005a4f6a08113db31b87">num_genes</a></td></tr>
 <tr class="separator:a25b92d76184a005a4f6a08113db31b87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab8b2bfc3f97f837859d6066e0f5f6e07"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_individual.html#ab8b2bfc3f97f837859d6066e0f5f6e07">index</a></td></tr>
+<tr class="separator:ab8b2bfc3f97f837859d6066e0f5f6e07"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="struct_individual.html">Individual</a> is a convenience so that individuals can be treated as units rather than as a single float vector, which is how they are stored. <a class="el" href="struct_individual.html">Individual</a> is not used to store any new data, but rather reference other data. </p>
@@ -109,6 +111,21 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>A reference to this individual's header. The header contains the computed cost of the individual, so long as it has been downloaded from the GPU. Cost is stored in the X component and Y, Z and W are currently unused. </p>
+
+</div>
+</div>
+<a id="ab8b2bfc3f97f837859d6066e0f5f6e07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab8b2bfc3f97f837859d6066e0f5f6e07">&#9670;&nbsp;</a></span>index</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Individual::index</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The inidividual's index in the _individuals vector </p>
 
 </div>
 </div>

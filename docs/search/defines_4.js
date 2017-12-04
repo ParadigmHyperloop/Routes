@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['inital_5fsigma_5fxy',['INITAL_SIGMA_XY',['../population_8h.html#a6c8a15f63a82de8e1286350ee3c1365d',1,'population.h']]],
-  ['initial_5fsigma_5fdivisor',['INITIAL_SIGMA_DIVISOR',['../population_8h.html#a5c17a11cd32591232924b8b51817b940',1,'population.h']]]
+  ['g',['g',['../pod_8h.html#a167d2c0ec9b943d55f2124f7442b2f6d',1,'pod.h']]],
+  ['gdal_5fdb_5fpath',['GDAL_DB_PATH',['../elevation_8h.html#a2c46dc8f6114b53c6b7b9689b2ba1cac',1,'elevation.h']]],
+  ['glm_5fenable_5fexperimental',['GLM_ENABLE_EXPERIMENTAL',['../elevation_8h.html#abd75661fe7969e19439052a5f69ba5d1',1,'elevation.h']]]
 ];
