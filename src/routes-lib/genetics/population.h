@@ -15,6 +15,11 @@
 #include "../normal/multinormal.h"
 #include "../pod/pod.h"
 
+// Ensure that E is defined on Windows
+#ifndef M_E
+    #define M_E 2.71828182845904523536f
+#endif
+
 /** */
 
 /**
@@ -39,7 +44,7 @@
  * This serves as the initial value for the X and Y of all the points for sigma.
  * We use 5km as a pretty tight bounding around the straight line (initial mean)
  */
-#define INITAL_SIGMA_XY 2500.0f
+#define INITIAL_SIGMA_XY 2500.0f
 
 /** Represents the dampening parameter for the step size. This value should be close to 1 */
 #define STEP_DAMPENING 1.5f
@@ -76,7 +81,7 @@ struct Individual {
      */
     size_t num_genes;
     
-    /** The inidividual's index in the _individuals vector */
+    /** The individual's index in the _individuals vector */
     int index;
 
 };
@@ -187,6 +192,12 @@ class Population {
          * Parameters include the covariance matrix, the mean, the evolution path and the step size.
          */
         void initParams();
+
+        /**
+         * The samples vector is created once here. All samples that are done will overwrite the last ones to avoid memory copying.
+         * All elements in the vector are also initialized here.
+         */
+        void initSamples();
 
         /**
          * When CMA-ES first starts, the mean is supposed to be the "best guess" for the desired result. In our case, our best is a straight
@@ -323,7 +334,7 @@ class Population {
         float _mu_weight;
 
         /**
-         * This represents the current mean vector of the populatio. In other words, this is the favorite solution the the population.
+         * This represents the current mean vector of the population. In other words, this is the favorite solution the the population.
          * The vector is legnth _genome_size * 3, 3 components for each point in the bezier curve (X, Y, Z).
          */
         Eigen::VectorXf _mean;
@@ -339,7 +350,7 @@ class Population {
 
         /**
          * The current step size. This is how far the next generation will move.
-         * The vector is legnth _genome_size * 3, 3 components for each point in the bezier curve (X, Y, Z).
+         * The vector is length _genome_size * 3, 3 components for each point in the bezier curve (X, Y, Z).
          */
         Eigen::VectorXf _sigma;
 
@@ -351,7 +362,7 @@ class Population {
 
         /**
          * The evolution path for the covariance matrix. This is used to adapt the covariance matrix each step
-         * so that successful search steps varry closer to the favorable solution.
+         * so that successful search steps vary closer to the favorable solution.
          */
         Eigen::VectorXf _p_covar;
 
@@ -374,10 +385,10 @@ class Population {
         float _c_mu;
 
         /**
-         * The samples from the distribution minus the mean. We seperate this from the completed, evaluatable population to decrease
+         * The samples from the distribution minus the mean. We separate this from the completed, evalulatable population to decrease
          * the chance of numerical error because we are dealing with large numbers.
          */
-        std::vector<Eigen::VectorXf> samples;
+        std::vector<Eigen::VectorXf> _samples;
     
 };
 

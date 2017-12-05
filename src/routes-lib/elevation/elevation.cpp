@@ -191,7 +191,7 @@ glm::dvec3 ElevationData::pixelsToMetersAndElevation(const glm::ivec2& pos_pixel
     glm::dvec2 pos_meters = convertPixelsToMeters(pos_pixels);
     glm::dvec3 pos_meters_sample = glm::dvec3(pos_meters.x, pos_meters.y, 0.0);
 
-    // Now get the sample instead of calling metersToMetersAndElevation because GDAL samples in pixels
+    // Now get the sample instead of calling metersToMetersAndElevation because GDAL _samples in pixels
     CPLErr err = _StaticGDAL::_gdal_raster_band->RasterIO(GF_Read, pos_pixels.x, pos_pixels.y, 1, 1, &pos_meters_sample.z, 1, 1, GDT_Float32, 0, 0);
     if (err)
         throw std::runtime_error("There was an error reading from the dataset");

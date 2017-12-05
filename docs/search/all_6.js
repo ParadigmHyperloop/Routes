@@ -2,7 +2,7 @@ var searchData=
 [
   ['g',['g',['../pod_8h.html#a167d2c0ec9b943d55f2124f7442b2f6d',1,'pod.h']]],
   ['gdal_5fdb_5fpath',['GDAL_DB_PATH',['../elevation_8h.html#a2c46dc8f6114b53c6b7b9689b2ba1cac',1,'elevation.h']]],
-  ['generaterandomsamples',['generateRandomSamples',['../class_multi_normal.html#ada6b0b6f45d12449b6f9f2f894b2f492',1,'MultiNormal']]],
+  ['generaterandomsamples',['generateRandomSamples',['../class_multi_normal.html#ada6b0b6f45d12449b6f9f2f894b2f492',1,'MultiNormal::generateRandomSamples(int count)'],['../class_multi_normal.html#abfa19ddff0e2b4d1cf0b183d9789a989',1,'MultiNormal::generateRandomSamples(std::vector&lt; Eigen::VectorXf &gt; &amp;out)']]],
   ['genetics',['Genetics',['../class_genetics.html',1,'']]],
   ['genetics_2ecpp',['genetics.cpp',['../genetics_8cpp.html',1,'']]],
   ['genetics_2eh',['genetics.h',['../genetics_8h.html',1,'']]],

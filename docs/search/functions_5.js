@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['generaterandomsamples',['generateRandomSamples',['../class_multi_normal.html#ada6b0b6f45d12449b6f9f2f894b2f492',1,'MultiNormal']]],
+  ['generaterandomsamples',['generateRandomSamples',['../class_multi_normal.html#ada6b0b6f45d12449b6f9f2f894b2f492',1,'MultiNormal::generateRandomSamples(int count)'],['../class_multi_normal.html#abfa19ddff0e2b4d1cf0b183d9789a989',1,'MultiNormal::generateRandomSamples(std::vector&lt; Eigen::VectorXf &gt; &amp;out)']]],
   ['getbinomialcoefficients',['getBinomialCoefficients',['../class_bezier.html#af8184ad8c9c23625005c40efe7f74d13',1,'Bezier']]],
   ['getcompletedroute',['getCompletedRoute',['../class_routes_queue.html#a8e579ab43c560d2e9bb2809e9a5b08f7',1,'RoutesQueue']]],
   ['getcontext',['getContext',['../class_kernel.html#a52489f89ded060d514b7e5d12f23e720',1,'Kernel']]],

@@ -21,7 +21,7 @@ BOOST_AUTO_TEST_CASE(test_multinormal) {
     
     MultiNormal normal = MultiNormal(covariance, Eigen::Vector3f(2.0, 2.0, 2.0));
     
-    // Generate 10000 samples
+    // Generate 10000 _samples
     std::vector<Eigen::VectorXf> samples = normal.generateRandomSamples(N);
     
     // Make sure that we have a distribution that is like the one we supplied
@@ -31,7 +31,7 @@ BOOST_AUTO_TEST_CASE(test_multinormal) {
     m_prime.setZero();
     covariance_prime.setZero();
     
-    // Sum all samples
+    // Sum all _samples
     for (int i = 0; i < N; i++)
         m_prime += samples[i];
     

@@ -1,7 +1,6 @@
 var searchData=
 [
   ['samplepopulation',['samplePopulation',['../class_population.html#ae9808f1c42383f6015c672bb7b9ba030',1,'Population']]],
-  ['samples',['samples',['../class_population.html#acc9e033fc867aba1f3cf30fe5fad855b',1,'Population']]],
   ['sendresponse',['sendResponse',['../class_routes_server.html#abd4772fe18266496a65d2b4df9dcb8ac',1,'RoutesServer']]],
   ['server_2ecpp',['server.cpp',['../server_8cpp.html',1,'']]],
   ['server_2eh',['server.h',['../server_8h.html',1,'']]],

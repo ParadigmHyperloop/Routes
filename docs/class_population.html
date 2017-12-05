@@ -91,6 +91,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a52a41d7911ed22285e95244f3f780fbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af6fd879ac429afc818bcab64b4aef633"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#af6fd879ac429afc818bcab64b4aef633">initParams</a> ()</td></tr>
 <tr class="separator:af6fd879ac429afc818bcab64b4aef633"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b1fd0a6cad512857bf09896db783d90"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a5b1fd0a6cad512857bf09896db783d90">initSamples</a> ()</td></tr>
+<tr class="separator:a5b1fd0a6cad512857bf09896db783d90"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3e008515bf22e73d5c4de35d4ca66659"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a3e008515bf22e73d5c4de35d4ca66659">bestGuess</a> ()</td></tr>
 <tr class="separator:a3e008515bf22e73d5c4de35d4ca66659"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a25be9ccf8ba11a1230564b3674d1c2ff"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a25be9ccf8ba11a1230564b3674d1c2ff">calcWeights</a> ()</td></tr>
@@ -168,8 +170,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a0d53c91ce41885642a6f55cfe750cc1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab93df09035bd07eb75a10291e932437d"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#ab93df09035bd07eb75a10291e932437d">_c_mu</a></td></tr>
 <tr class="separator:ab93df09035bd07eb75a10291e932437d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acc9e033fc867aba1f3cf30fe5fad855b"><td class="memItemLeft" align="right" valign="top">std::vector&lt; Eigen::VectorXf &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#acc9e033fc867aba1f3cf30fe5fad855b">samples</a></td></tr>
-<tr class="separator:acc9e033fc867aba1f3cf30fe5fad855b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae32c16e86ca6f39eecfff2e8edaff66e"><td class="memItemLeft" align="right" valign="top">std::vector&lt; Eigen::VectorXf &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#ae32c16e86ca6f39eecfff2e8edaff66e">_samples</a></td></tr>
+<tr class="separator:ae32c16e86ca6f39eecfff2e8edaff66e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This class is responsible for holding individuals and breeding them. The current representation of an individual is as follows:</p>
@@ -479,6 +481,32 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>This function initializes the parameters for CMA-ES. Parameters include the covariance matrix, the mean, the evolution path and the step size. </p>
+
+</div>
+</div>
+<a id="a5b1fd0a6cad512857bf09896db783d90"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b1fd0a6cad512857bf09896db783d90">&#9670;&nbsp;</a></span>initSamples()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Population::initSamples </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The samples vector is created once here. All samples that are done will overwrite the last ones to avoid memory copying. All elements in the vector are also initialized here. </p>
 
 </div>
 </div>
@@ -984,7 +1012,7 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>This represents the current mean vector of the populatio. In other words, this is the favorite solution the the population. The vector is legnth _genome_size * 3, 3 components for each point in the bezier curve (X, Y, Z). </p>
+<p>This represents the current mean vector of the population. In other words, this is the favorite solution the the population. The vector is legnth _genome_size * 3, 3 components for each point in the bezier curve (X, Y, Z). </p>
 
 </div>
 </div>
@@ -1168,7 +1196,7 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>The evolution path for the covariance matrix. This is used to adapt the covariance matrix each step so that successful search steps varry closer to the favorable solution. </p>
+<p>The evolution path for the covariance matrix. This is used to adapt the covariance matrix each step so that successful search steps vary closer to the favorable solution. </p>
 
 </div>
 </div>
@@ -1218,6 +1246,29 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ae32c16e86ca6f39eecfff2e8edaff66e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae32c16e86ca6f39eecfff2e8edaff66e">&#9670;&nbsp;</a></span>_samples</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;Eigen::VectorXf&gt; Population::_samples</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The samples from the distribution minus the mean. We separate this from the completed, evalulatable population to decrease the chance of numerical error because we are dealing with large numbers. </p>
+
+</div>
+</div>
 <a id="abe008a0b33a70380d25ab453581c4924"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abe008a0b33a70380d25ab453581c4924">&#9670;&nbsp;</a></span>_sigma</h2>
 
@@ -1237,7 +1288,7 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>The current step size. This is how far the next generation will move. The vector is legnth _genome_size * 3, 3 components for each point in the bezier curve (X, Y, Z). </p>
+<p>The current step size. This is how far the next generation will move. The vector is length _genome_size * 3, 3 components for each point in the bezier curve (X, Y, Z). </p>
 
 </div>
 </div>
@@ -1284,29 +1335,6 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>When we recalculate the mean vector from the best solutions, we do a weighting. This vector stores these weights where _weights[0] is the highest weight, meant for the best solution. </p>
-
-</div>
-</div>
-<a id="acc9e033fc867aba1f3cf30fe5fad855b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acc9e033fc867aba1f3cf30fe5fad855b">&#9670;&nbsp;</a></span>samples</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt;Eigen::VectorXf&gt; Population::samples</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>The samples from the distribution minus the mean. We seperate this from the completed, evaluatable population to decrease the chance of numerical error because we are dealing with large numbers. </p>
 
 </div>
 </div>

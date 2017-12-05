@@ -32,6 +32,7 @@ Population::Population(int pop_size, glm::vec4 start, glm::vec4 dest, const Elev
 
     // First we init the params, then generate a starter population
     initParams();
+    initSamples();
     samplePopulation();
 
 }
@@ -58,14 +59,34 @@ Individual Population::getIndividual(int index) {
 void Population::step(const Pod& pod) {
 
     // Evaluate the cost and sort so the most fit solutions are in the front
+
+//    long long int start = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+
     evaluateCost(pod);
+
+//    long long int end = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+//    std::cout << "Cost took " << end - start << std::endl;
+//    start = end;
+
     sortIndividuals();
+
+//    end = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+//    std::cout << "Sort took " << end - start << std::endl;
+//    start = end;
 
     // Update the params
     updateParams();
 
+//    end = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+//    std::cout << "Params took " << end - start << std::endl;
+//    start = end;
+
     // Sample a new generation
     samplePopulation();
+
+//    end = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+//    std::cout << "Sample took " << end - start << std::endl;
+//    start = end;
 
 }
 
@@ -94,13 +115,13 @@ void Population::sortIndividuals() {
         memcpy(sorted_individuals.data() + i * _individual_size, individuals_s[i].header, sizeof(glm::vec4) * _individual_size);
         
         // Copy the sample
-        sorted_samples[i] = samples[individuals_s[i].index];
+        sorted_samples[i] = _samples[individuals_s[i].index];
 
     }
 
     // Save the sorted array
     _individuals = sorted_individuals;
-    samples = sorted_samples;
+    _samples = sorted_samples;
 
 }
 
@@ -165,7 +186,7 @@ void Population::evaluateCost(const Pod& pod) {
             const float pylon_cost = 0.000116;
             const float tunnel_cost = 0.310;
             const float curve_weight = 0.3;
-            const float curve_sum_weight = 0.3;
+            const float curve_sum_weight = 0.4;
             const float grade_weight = 100.0;
 
             __local float curve_sums [50];
@@ -334,16 +355,16 @@ std::vector<glm::vec3> Population::getSolution() const {
 void Population::calcGenomeSize() {
 
     // The genome size has a square root relationship with the length of the route
-    float sqrt_lenth = sqrt(glm::length(_direction));
-    _genome_size = std::round(sqrt_lenth * LENGTH_TO_GENOME);
+    float sqrt_length = sqrt(glm::length(_direction));
+    _genome_size = std::round(sqrt_length * LENGTH_TO_GENOME);
     std::cout << "Genome size: " << _genome_size << std::endl;
 
 }
 
 void Population::initParams() {
 
-    // Calculate mu to be 2% of the total population
-    _mu = _pop_size * 0.02;
+    // Choose mu to be a fixed number of individuals
+    _mu = 15;
 
     // Init the mean to the best guess (a straight line)
     bestGuess();
@@ -367,14 +388,33 @@ void Population::initParams() {
 
 }
 
+void Population::initSamples() {
+
+    // Samples should be the same size as the population
+    _samples = std::vector<Eigen::VectorXf>(_pop_size);
+
+    for (int i = 0; i < _pop_size; i++)
+        _samples[i] = Eigen::VectorXf::Zero(_genome_size * 3);
+
+    // Make sure that individuals have the start and destination all set up. This will never change so we can do it
+    // once.
+    for (int i = 0; i < _pop_size; i++) {
+
+        _individuals[i * _individual_size + 1] = _start;
+        _individuals[i * _individual_size + 2 + _genome_size] = _dest;
+
+    }
+
+}
+
 void Population::bestGuess() {
 
-    // We choose a linear spacing of points along a straihgt line from the start to destination
+    // We choose a linear spacing of points along a straight line from the start to destination
     _mean = Eigen::VectorXf(_genome_size * 3);
 
     for (int i = 1; i <= _genome_size; i++) {
 
-        // Figure out how far along the direciton line we are
+        // Figure out how far along the direction line we are
         float percent = (float)i / (float)(_genome_size + 1);
 
         // Set the mean
@@ -422,8 +462,8 @@ void Population::calcInitialSigma() {
     _sigma = Eigen::VectorXf(_genome_size * 3);
 
     // First we figure out what the actual values should be
-    glm::vec3 sigma_parts = glm::vec3(INITAL_SIGMA_XY,
-                                      INITAL_SIGMA_XY,
+    glm::vec3 sigma_parts = glm::vec3(INITIAL_SIGMA_XY,
+                                      INITIAL_SIGMA_XY,
                                       (_data.getMaxElevation() - _data.getMinElevation()) / INITIAL_SIGMA_DIVISOR);
 
     // Apply it to the X Y and Z for each point
@@ -457,25 +497,19 @@ void Population::samplePopulation() {
 
     // Create a MND
     MultiNormal dist = MultiNormal(_covar_matrix, _sigma);
-    samples = dist.generateRandomSamples(_pop_size);
+    dist.generateRandomSamples(_samples);
 
-    // Convert the samples over to a set of vectors and update the population
+    // Convert the _samples over to a set of vectors and update the population
     for (int i = 0; i < _pop_size; i++) {
 
-        _individuals[i * _individual_size + 1] = _start;
-        _individuals[i * _individual_size + 2 + _genome_size] = _dest;
+        // Add the mean because the samples don't have it
+        Eigen::VectorXf actual = _samples[i] + _mean;
 
-        for (int p = 0; p < _genome_size; p++) {
-
-            // Get a reference to the right gene in the genome of the ith individual
-            glm::vec4& point = _individuals[i * _individual_size + 2 + p];
-
-            // Set the values in the glm::vec4 to be correct
-            point.x = samples[i](p * 3    ) + _mean(p * 3    );
-            point.y = samples[i](p * 3 + 1) + _mean(p * 3 + 1);
-            point.z = samples[i](p * 3 + 2) + _mean(p * 3 + 2);
-
-        }
+        // Use memory copies to put the right data in the the _individuals vector because its slightly faster
+        // We need to do it in a for loop because the _individuals is vec4 and there are only 3 components for each control point
+        // In the Eigen vectors that we build
+        for (int p = 0; p < _genome_size; p++)
+            memcpy(&_individuals[i * _individual_size + 2 + p][0], actual.data() + p * 3, sizeof(float) * 3);
 
     }
 
@@ -498,8 +532,6 @@ void Population::updateParams() {
     // Update the step size
     updateSigma();
     
-    std::cout << _individuals[0].x << std::endl;
-    
 }
 
 void Population::updateMean() {
@@ -510,7 +542,7 @@ void Population::updateMean() {
     _mean = Eigen::VectorXf::Zero(_mean.size());
 
     for (int i = 0; i < _mu; i++)
-        _mean += samples[i] * _weights[i];
+        _mean += _samples[i] * _weights[i];
     
     _mean += _mean_prime;
 
@@ -556,7 +588,7 @@ void Population::updatePCovar() {
     
     float sqrt_mew_weight = sqrt(_mu_weight);
 
-    // Figure out the indictor function
+    // Figure out the indicator function
     float indicator = 0.0;
     if (_p_sigma.norm() <= sqrt((float)_mean.size()) * ALPHA)
         indicator = 1.0;
@@ -573,7 +605,7 @@ void Population::updateCovar() {
 
     for (int i = 0; i < _mu; i++) {
 
-        Eigen::VectorXf adjusted = samples[i];
+        Eigen::VectorXf adjusted = _samples[i];
         
         // Divide by sigma
         for (int k = 0; k < adjusted.size(); k++)

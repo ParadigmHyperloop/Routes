@@ -47,6 +47,7 @@ var searchData=
   ['_5fpop_5fsize',['_pop_size',['../class_population.html#a9f43eeeaf6bd2ec02b5063bbbbaf78b1',1,'Population']]],
   ['_5frouteitem',['_RouteItem',['../struct_routes_queue_1_1___route_item.html',1,'RoutesQueue']]],
   ['_5froutes',['_routes',['../class_routes_queue.html#a30b6768768b434d9a13a1b90e069a6e3',1,'RoutesQueue']]],
+  ['_5fsamples',['_samples',['../class_population.html#ae32c16e86ca6f39eecfff2e8edaff66e',1,'Population']]],
   ['_5fsigma',['_sigma',['../class_population.html#abe008a0b33a70380d25ab453581c4924',1,'Population::_sigma()'],['../class_multi_normal.html#af6f423cbb72b0b71175f1c2eba717edf',1,'MultiNormal::_sigma()']]],
   ['_5fstandard_5fdistro',['_standard_distro',['../class_multi_normal.html#ab66bb765ff813cf9b805c728cab911a9',1,'MultiNormal']]],
   ['_5fstart',['_start',['../class_population.html#a4e0aeaa0a40d1c84026b31ac7eb0c794',1,'Population']]],

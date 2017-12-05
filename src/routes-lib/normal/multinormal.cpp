@@ -12,7 +12,7 @@ std::normal_distribution<float> MultiNormal::_standard_distro(0.0, 1.0);
 
 MultiNormal::MultiNormal(const Eigen::MatrixXf& covariance_matrix, const Eigen::VectorXf& sigma) : _sigma(sigma) {
     
-    // Update the twister to make sure we get consistantly random results
+    // Update the twister to make sure we get consistently random results
     // Hashing makes everything better :)
     std::hash<int> hasher;
     _twister = std::mt19937(hasher(std::chrono::high_resolution_clock::now().time_since_epoch().count()));
@@ -33,7 +33,7 @@ MultiNormal::MultiNormal(const Eigen::MatrixXf& covariance_matrix, const Eigen::
 
 std::vector<Eigen::VectorXf> MultiNormal::generateRandomSamples(int count) {
  
-    // Create a vector and fill it with samples
+    // Create a vector and fill it with _samples
     std::vector<Eigen::VectorXf> samples(count);
     
     for (int i = 0; i < count; i++) {
@@ -46,6 +46,14 @@ std::vector<Eigen::VectorXf> MultiNormal::generateRandomSamples(int count) {
     
     return samples;
     
+}
+
+void MultiNormal::generateRandomSamples(std::vector<Eigen::VectorXf>& out) {
+
+    // Overwrite everything in the vector
+    for (int i = 0; i < out.size(); i++)
+        doSample(out[i]);
+
 }
 
 void MultiNormal::doSample(Eigen::VectorXf& out_sample) {
