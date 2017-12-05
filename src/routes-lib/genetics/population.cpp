@@ -164,10 +164,11 @@ void Population::evaluateCost(const Pod& pod) {
             const sampler_t sampler = CLK_NORMALIZED_COORDS_TRUE | CLK_ADDRESS_CLAMP_TO_EDGE | CLK_FILTER_NEAREST;
             const float pylon_cost = 0.000116;
             const float tunnel_cost = 0.310;
-            const float curve_weight = 300000.0;
+            const float curve_weight = 0.3;
+            const float curve_sum_weight = 0.3;
             const float grade_weight = 100.0;
 
-//            __local float curve_sums [50];
+            __local float curve_sums [50];
             __local float min_curves [50];
             __local float max_grades [50];
             __local float track_costs[50];
@@ -179,7 +180,7 @@ void Population::evaluateCost(const Pod& pod) {
             int path = i * (path_length + 1) + 1;
 
             float min_curve = 10000000000000.0;
-//            float curve_sum = 0.0;
+            float curve_sum = 0.0;
 
             float track_cost = 0.0;
             float steepest_grade = 0.0;
@@ -216,7 +217,6 @@ void Population::evaluateCost(const Pod& pod) {
                 if (p > 1) {
 
                     float curve = curvature(last_last, last_point, bezier_point);
-//                    curve_sum += curve * curve_weight;
                     min_curve = min(min_curve, curve);
 
                 }
@@ -224,6 +224,9 @@ void Population::evaluateCost(const Pod& pod) {
                 // Compute grade and track cost if there was spacing
                 if (spacing) {
 
+                    // Add distance
+                    curve_sum += length(bezier_point - last_point);
+                    
                     steepest_grade = max(steepest_grade, fabs(bezier_point.z - last_point.z) / spacing);
 
                     // Compute track cost
@@ -252,7 +255,7 @@ void Population::evaluateCost(const Pod& pod) {
             }
 
             // Write to the buffer
-//            curve_sums [w] = curve_sum;
+            curve_sums [w] = curve_sum;
             min_curves [w] = min_curve;
             max_grades [w] = steepest_grade;
             track_costs[w] = track_cost;
@@ -265,7 +268,7 @@ void Population::evaluateCost(const Pod& pod) {
                 // Figure out the final cost for everything. This would be equivalent to using one thread
                 for (int m = 1; m < 50; m++) {
 
-//                     curve_sum += curve_sums[m];
+                     curve_sum += curve_sums[m];
                      min_curve = min(min_curve, min_curves[m]);
                      steepest_grade = max(steepest_grade, max_grades[m]);
                      track_cost += track_costs[m];
@@ -278,7 +281,7 @@ void Population::evaluateCost(const Pod& pod) {
 
                 // Calculate the curvature cost
                 // Right now we are simply using the sum of curvature (not radius of curvature)
-                float curve_cost = 0.3 * (min_curve_allowed - min_curve + fabs(min_curve_allowed - min_curve));
+                float curve_cost = curve_weight * (min_curve_allowed - min_curve + fabs(min_curve_allowed - min_curve)) + curve_sum * curve_sum_weight;
 
                 // Get total cost
                 float total_cost = grade_cost + track_cost + curve_cost;
@@ -494,6 +497,8 @@ void Population::updateParams() {
     
     // Update the step size
     updateSigma();
+    
+    std::cout << _individuals[0].x << std::endl;
     
 }
 
