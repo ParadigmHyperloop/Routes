@@ -62,7 +62,6 @@ $(function() {
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
-<a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="class_multi_normal-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">MultiNormal Class Reference</div>  </div>
@@ -75,15 +74,15 @@ $(function() {
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a683bb2b132a43c07e1bd1f94aa2f3d4a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_multi_normal.html#a683bb2b132a43c07e1bd1f94aa2f3d4a">MultiNormal</a> (const Eigen::MatrixXf &amp;covariance_matrix, const Eigen::VectorXf &amp;sigma)</td></tr>
 <tr class="separator:a683bb2b132a43c07e1bd1f94aa2f3d4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ada6b0b6f45d12449b6f9f2f894b2f492"><td class="memItemLeft" align="right" valign="top">std::vector&lt; Eigen::VectorXf &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_multi_normal.html#ada6b0b6f45d12449b6f9f2f894b2f492">generateRandomSamples</a> (int count)</td></tr>
-<tr class="separator:ada6b0b6f45d12449b6f9f2f894b2f492"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abfa19ddff0e2b4d1cf0b183d9789a989"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_multi_normal.html#abfa19ddff0e2b4d1cf0b183d9789a989">generateRandomSamples</a> (std::vector&lt; Eigen::VectorXf &gt; &amp;out)</td></tr>
-<tr class="separator:abfa19ddff0e2b4d1cf0b183d9789a989"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f2a5156edccfc8abc46699366a59e7b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_multi_normal.html#a6f2a5156edccfc8abc46699366a59e7b">generateRandomSamples</a> (std::vector&lt; Eigen::VectorXf &gt; &amp;out, <a class="el" href="class_sample_generator.html">SampleGenerator</a> &amp;sampler)</td></tr>
+<tr class="separator:a6f2a5156edccfc8abc46699366a59e7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade52a2dd78876c7b0d5dca46e2473567"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_multi_normal.html#ade52a2dd78876c7b0d5dca46e2473567">generateRandomSamples</a> (std::vector&lt; Eigen::VectorXf &gt; &amp;out, std::vector&lt; <a class="el" href="class_sample_generator.html">SampleGenerator</a> *&gt; samplers)</td></tr>
+<tr class="separator:ade52a2dd78876c7b0d5dca46e2473567"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
-<tr class="memitem:a7fa23a9d2d6f237d4c749598e9c40d93"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_multi_normal.html#a7fa23a9d2d6f237d4c749598e9c40d93">doSample</a> (Eigen::VectorXf &amp;out_sample)</td></tr>
-<tr class="separator:a7fa23a9d2d6f237d4c749598e9c40d93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae071925b9d502b3d8055244d5d8e98fc"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_multi_normal.html#ae071925b9d502b3d8055244d5d8e98fc">doSample</a> (Eigen::VectorXf &amp;out_sample, <a class="el" href="class_sample_generator.html">SampleGenerator</a> &amp;sampler)</td></tr>
+<tr class="separator:ae071925b9d502b3d8055244d5d8e98fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -91,13 +90,6 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a9ff2bde3c9bf0262ed042cde75fcca59"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af6f423cbb72b0b71175f1c2eba717edf"><td class="memItemLeft" align="right" valign="top">Eigen::VectorXf&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_multi_normal.html#af6f423cbb72b0b71175f1c2eba717edf">_sigma</a></td></tr>
 <tr class="separator:af6f423cbb72b0b71175f1c2eba717edf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-attribs"></a>
-Static Private Attributes</h2></td></tr>
-<tr class="memitem:aa38d4c9d0a057ca64399107707f9809a"><td class="memItemLeft" align="right" valign="top">static std::mt19937&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_multi_normal.html#aa38d4c9d0a057ca64399107707f9809a">_twister</a></td></tr>
-<tr class="separator:aa38d4c9d0a057ca64399107707f9809a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab66bb765ff813cf9b805c728cab911a9"><td class="memItemLeft" align="right" valign="top">static std::normal_distribution&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_multi_normal.html#ab66bb765ff813cf9b805c728cab911a9">_standard_distro</a></td></tr>
-<tr class="separator:ab66bb765ff813cf9b805c728cab911a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This class is responsible for sampling from a multivariate normal distribution. </p>
@@ -140,8 +132,8 @@ Static Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a7fa23a9d2d6f237d4c749598e9c40d93"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7fa23a9d2d6f237d4c749598e9c40d93">&#9670;&nbsp;</a></span>doSample()</h2>
+<a id="ae071925b9d502b3d8055244d5d8e98fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae071925b9d502b3d8055244d5d8e98fc">&#9670;&nbsp;</a></span>doSample()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -153,8 +145,18 @@ Static Private Attributes</h2></td></tr>
           <td class="memname">void MultiNormal::doSample </td>
           <td>(</td>
           <td class="paramtype">Eigen::VectorXf &amp;&#160;</td>
-          <td class="paramname"><em>out_sample</em></td><td>)</td>
+          <td class="paramname"><em>out_sample</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="class_sample_generator.html">SampleGenerator</a> &amp;&#160;</td>
+          <td class="paramname"><em>sampler</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -166,41 +168,16 @@ Static Private Attributes</h2></td></tr>
 <p>Generates a random sample from the distribution.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">out_sample</td><td>The resulting N-dimension vector that represents a random sample from the multivariate normal distribution. </td></tr>
+    <tr><td class="paramname">out_sample</td><td>The resulting N-dimension vector that represents a random sample from the multivariate normal distribution.</td></tr>
+    <tr><td class="paramname">sampler</td><td>A generator that we can pull standard normal random samples from. </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="ada6b0b6f45d12449b6f9f2f894b2f492"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ada6b0b6f45d12449b6f9f2f894b2f492">&#9670;&nbsp;</a></span>generateRandomSamples() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt; Eigen::VectorXf &gt; MultiNormal::generateRandomSamples </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>count</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Samples from the distribution count number of times.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">count</td><td>The number of samples to return in the resulting vector</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The a vector of size count containing samples from the distribution </dd></dl>
-
-</div>
-</div>
-<a id="abfa19ddff0e2b4d1cf0b183d9789a989"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abfa19ddff0e2b4d1cf0b183d9789a989">&#9670;&nbsp;</a></span>generateRandomSamples() <span class="overload">[2/2]</span></h2>
+<a id="a6f2a5156edccfc8abc46699366a59e7b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f2a5156edccfc8abc46699366a59e7b">&#9670;&nbsp;</a></span>generateRandomSamples() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -209,15 +186,62 @@ Static Private Attributes</h2></td></tr>
           <td class="memname">void MultiNormal::generateRandomSamples </td>
           <td>(</td>
           <td class="paramtype">std::vector&lt; Eigen::VectorXf &gt; &amp;&#160;</td>
-          <td class="paramname"><em>out</em></td><td>)</td>
+          <td class="paramname"><em>out</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="class_sample_generator.html">SampleGenerator</a> &amp;&#160;</td>
+          <td class="paramname"><em>sampler</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Samples from the distribution count number of times.</p>
+<p>Fills the out vector with samples from this distribution.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">out</td><td>The output vector for the samples. It is assumed that all elements of the vector are initialized to the correct dimensions </td></tr>
+    <tr><td class="paramname">out</td><td>The output vector for the samples. It is assumed that all elements of the vector are initialized to the correct dimensions</td></tr>
+    <tr><td class="paramname">sampler</td><td>A generator that we can pull standard normal random samples from. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ade52a2dd78876c7b0d5dca46e2473567"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade52a2dd78876c7b0d5dca46e2473567">&#9670;&nbsp;</a></span>generateRandomSamples() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void MultiNormal::generateRandomSamples </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; Eigen::VectorXf &gt; &amp;&#160;</td>
+          <td class="paramname"><em>out</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::vector&lt; <a class="el" href="class_sample_generator.html">SampleGenerator</a> *&gt;&#160;</td>
+          <td class="paramname"><em>samplers</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Fills the out vector with samples from this distribution. This version of the function utilizes multiple threads and multiple SampleGenerators</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">out</td><td>The output vector for the samples. It is assumed that all elements of the vector are initialized to the correct dimensions</td></tr>
+    <tr><td class="paramname">samplers</td><td>Several generators that we can pull standard normal random samples from. The size of this vector determines the number of threads used. </td></tr>
   </table>
   </dd>
 </dl>
@@ -268,52 +292,6 @@ Static Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>The step size of the distribution </p>
-
-</div>
-</div>
-<a id="ab66bb765ff813cf9b805c728cab911a9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab66bb765ff813cf9b805c728cab911a9">&#9670;&nbsp;</a></span>_standard_distro</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::normal_distribution&lt; float &gt; MultiNormal::_standard_distro</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Since sampling from a multivariate normal distribution basically is a transformation of a bunch of samples from independent standard normal distributions, we only need one normal distribution to do any sampling. It has mean 0 and a standard deviation of 1. </p>
-
-</div>
-</div>
-<a id="aa38d4c9d0a057ca64399107707f9809a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa38d4c9d0a057ca64399107707f9809a">&#9670;&nbsp;</a></span>_twister</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::mt19937 MultiNormal::_twister</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>A Mersenne Twister object that is shared between all <a class="el" href="class_multi_normal.html">MultiNormal</a> objects. The seed is updated whenever a new instance of <a class="el" href="class_multi_normal.html">MultiNormal</a> is created. </p>
 
 </div>
 </div>

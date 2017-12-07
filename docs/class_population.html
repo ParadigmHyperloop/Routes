@@ -74,6 +74,8 @@ $(function() {
 Public Member Functions</h2></td></tr>
 <tr class="memitem:af036b67dfca03fa520b1e0c14a847973"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#af036b67dfca03fa520b1e0c14a847973">Population</a> (int pop_size, glm::vec4 start, glm::vec4 dest, const <a class="el" href="class_elevation_data.html">ElevationData</a> &amp;data)</td></tr>
 <tr class="separator:af036b67dfca03fa520b1e0c14a847973"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c8cedd0f038e41746fb6084639f5616"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a4c8cedd0f038e41746fb6084639f5616">~Population</a> ()</td></tr>
+<tr class="separator:a4c8cedd0f038e41746fb6084639f5616"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a28e723c1694a1a831f46dfa454850ee3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="struct_individual.html">Individual</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a28e723c1694a1a831f46dfa454850ee3">getIndividual</a> (int index)</td></tr>
 <tr class="separator:a28e723c1694a1a831f46dfa454850ee3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6aa7bc5b1eaa2a67041185a2ca92cc4f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a6aa7bc5b1eaa2a67041185a2ca92cc4f">step</a> (const <a class="el" href="class_pod.html">Pod</a> &amp;pod)</td></tr>
@@ -91,6 +93,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:a52a41d7911ed22285e95244f3f780fbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af6fd879ac429afc818bcab64b4aef633"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#af6fd879ac429afc818bcab64b4aef633">initParams</a> ()</td></tr>
 <tr class="separator:af6fd879ac429afc818bcab64b4aef633"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f8f46964400234c9c8a6d503178ef2e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a0f8f46964400234c9c8a6d503178ef2e">initSamplers</a> ()</td></tr>
+<tr class="separator:a0f8f46964400234c9c8a6d503178ef2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5b1fd0a6cad512857bf09896db783d90"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a5b1fd0a6cad512857bf09896db783d90">initSamples</a> ()</td></tr>
 <tr class="separator:a5b1fd0a6cad512857bf09896db783d90"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3e008515bf22e73d5c4de35d4ca66659"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a3e008515bf22e73d5c4de35d4ca66659">bestGuess</a> ()</td></tr>
@@ -172,6 +176,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:ab93df09035bd07eb75a10291e932437d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae32c16e86ca6f39eecfff2e8edaff66e"><td class="memItemLeft" align="right" valign="top">std::vector&lt; Eigen::VectorXf &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#ae32c16e86ca6f39eecfff2e8edaff66e">_samples</a></td></tr>
 <tr class="separator:ae32c16e86ca6f39eecfff2e8edaff66e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aedb0594cae875b623f916d6150781284"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="class_sample_generator.html">SampleGenerator</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#aedb0594cae875b623f916d6150781284">_sample_gens</a></td></tr>
+<tr class="separator:aedb0594cae875b623f916d6150781284"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This class is responsible for holding individuals and breeding them. The current representation of an individual is as follows:</p>
@@ -228,6 +234,24 @@ Private Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a4c8cedd0f038e41746fb6084639f5616"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c8cedd0f038e41746fb6084639f5616">&#9670;&nbsp;</a></span>~Population()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Population::~Population </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Simple destructor to delete heap allocated things </p>
 
 </div>
 </div>
@@ -481,6 +505,32 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>This function initializes the parameters for CMA-ES. Parameters include the covariance matrix, the mean, the evolution path and the step size. </p>
+
+</div>
+</div>
+<a id="a0f8f46964400234c9c8a6d503178ef2e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f8f46964400234c9c8a6d503178ef2e">&#9670;&nbsp;</a></span>initSamplers()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Population::initSamplers </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Becasue sampling from the multivariate normal distribution is so slow, we use some multithreading tricks to speed it up. Firstly, since all MVND's require samples from the standard normal distribution we create objects that generate these samples in another thread. Secondly we split the population up into NUM_SAMPLE_THREADS so that we can sample multiple individuals concurrently. This function creates the prerequisites for this. </p>
 
 </div>
 </div>
@@ -1243,6 +1293,29 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>The number of individuals that should be in this population </p>
+
+</div>
+</div>
+<a id="aedb0594cae875b623f916d6150781284"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aedb0594cae875b623f916d6150781284">&#9670;&nbsp;</a></span>_sample_gens</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="class_sample_generator.html">SampleGenerator</a>*&gt; Population::_sample_gens</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Several multithreaded standard normal sample generator to speed up population sampling </p>
 
 </div>
 </div>

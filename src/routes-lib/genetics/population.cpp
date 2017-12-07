@@ -10,9 +10,6 @@ Population::Population(int pop_size, glm::vec4 start, glm::vec4 dest, const Elev
     // Figure out how many points we need for this route
     calcGenomeSize();
 
-    // Make the sampler for standard normal samples
-    _sample_gen = new SampleGenerator(_genome_size * 3, _pop_size);
-
     // Figure out the number of vectors that make up the entire individual. This is the header, the start
     // and the destination
     _individual_size = _genome_size + 2 + 1;
@@ -35,12 +32,19 @@ Population::Population(int pop_size, glm::vec4 start, glm::vec4 dest, const Elev
 
     // First we init the params, then generate a starter population
     initParams();
+    initSamplers();
     initSamples();
     samplePopulation();
 
 }
 
-Population::~Population() { delete _sample_gen; }
+Population::~Population() {
+
+    // Delete the sample generators
+    for (int i = 0; i < NUM_SAMPLE_THREADS; i++)
+        delete _sample_gens[i];
+
+}
 
 Individual Population::getIndividual(int index) {
 
@@ -393,6 +397,15 @@ void Population::initParams() {
 
 }
 
+void Population::initSamplers() {
+
+    // Create the standard normal samplers
+    _sample_gens = std::vector<SampleGenerator*>(NUM_SAMPLE_THREADS);
+    for (int i = 0; i < NUM_SAMPLE_THREADS; i++)
+        _sample_gens[i] = new SampleGenerator(_genome_size * 3, _pop_size / NUM_SAMPLE_THREADS);
+
+}
+
 void Population::initSamples() {
 
     // Samples should be the same size as the population
@@ -501,8 +514,8 @@ void Population::calculateStratParameters() {
 void Population::samplePopulation() {
 
     // Create a MND
-    MultiNormal dist = MultiNormal(_covar_matrix, _sigma, *_sample_gen);
-    dist.generateRandomSamples(_samples);
+    MultiNormal dist = MultiNormal(_covar_matrix, _sigma);
+    dist.generateRandomSamples(_samples, _sample_gens);
 
     // Convert the _samples over to a set of vectors and update the population
     for (int i = 0; i < _pop_size; i++) {

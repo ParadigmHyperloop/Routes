@@ -52,6 +52,9 @@
 /** The interval multiplier for the square root of _genome_size * 3 for the indicator function. */
 #define ALPHA 1.5f
 
+/** The number of threads that are used to sample from the multivariate normal distribution */
+#define NUM_SAMPLE_THREADS 10
+
 /**
  * Individual is a convenience so that individuals can be treated as units rather than
  * as a single float vector, which is how they are stored.
@@ -195,6 +198,14 @@ class Population {
          * Parameters include the covariance matrix, the mean, the evolution path and the step size.
          */
         void initParams();
+
+        /**
+         * Becasue sampling from the multivariate normal distribution is so slow, we use some multithreading tricks to speed it up.
+         * Firstly, since all MVND's require samples from the standard normal distribution we create objects that generate these samples in another thread.
+         * Secondly we split the population up into NUM_SAMPLE_THREADS so that we can sample multiple individuals concurrently.
+         * This function creates the prerequisites for this.
+         */
+        void initSamplers();
 
         /**
          * The samples vector is created once here. All samples that are done will overwrite the last ones to avoid memory copying.
@@ -393,8 +404,8 @@ class Population {
          */
         std::vector<Eigen::VectorXf> _samples;
 
-        /** A multithreaded standard normal sample generator to speed up population sampling */
-        SampleGenerator* _sample_gen;
+        /** Several multithreaded standard normal sample generator to speed up population sampling */
+        std::vector<SampleGenerator*> _sample_gens;
     
 };
 

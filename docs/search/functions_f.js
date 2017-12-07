@@ -1,5 +1,6 @@
 var searchData=
 [
+  ['samplegenerator',['SampleGenerator',['../class_sample_generator.html#aa909346dd3f56ee29b053804789da0ac',1,'SampleGenerator']]],
   ['samplepopulation',['samplePopulation',['../class_population.html#ae9808f1c42383f6015c672bb7b9ba030',1,'Population']]],
   ['sendresponse',['sendResponse',['../class_routes_server.html#abd4772fe18266496a65d2b4df9dcb8ac',1,'RoutesServer']]],
   ['setargs',['setArgs',['../class_kernel.html#af4e0fd31fe498b840a638ce5dc726c82',1,'Kernel']]],

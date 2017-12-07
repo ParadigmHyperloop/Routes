@@ -7,7 +7,7 @@
 
 #include "multinormal.h"
 
-MultiNormal::MultiNormal(const Eigen::MatrixXf& covariance_matrix, const Eigen::VectorXf& sigma, SampleGenerator& sampler) : _sigma(sigma), _sampler(sampler) {
+MultiNormal::MultiNormal(const Eigen::MatrixXf& covariance_matrix, const Eigen::VectorXf& sigma) : _sigma(sigma) {
 
     // Decompose the covariance matrix
     Eigen::LLT<Eigen::MatrixXf> decomp(covariance_matrix);
@@ -23,37 +23,48 @@ MultiNormal::MultiNormal(const Eigen::MatrixXf& covariance_matrix, const Eigen::
     
 }
 
-std::vector<Eigen::VectorXf> MultiNormal::generateRandomSamples(int count) {
- 
-    // Create a vector and fill it with _samples
-    std::vector<Eigen::VectorXf> samples(count);
-    
-    for (int i = 0; i < count; i++) {
-        
-        // Make sure the vector is initialized to the right size
-        samples[i] = Eigen::VectorXf(_sigma.size());
-        doSample(samples[i]);
-        
-    }
-    
-    return samples;
-    
-}
-
-void MultiNormal::generateRandomSamples(std::vector<Eigen::VectorXf>& out) {
+void MultiNormal::generateRandomSamples(std::vector<Eigen::VectorXf>& out, SampleGenerator& sampler) {
 
     // Overwrite everything in the vector
     for (int i = 0; i < out.size(); i++)
-        doSample(out[i]);
+        doSample(out[i], sampler);
 
 }
 
-void MultiNormal::doSample(Eigen::VectorXf& out_sample) {
+void MultiNormal::doSample(Eigen::VectorXf& out_sample, SampleGenerator& sampler) {
     
     // Grab a sample
-    _sampler.getSample(out_sample);
+    sampler.getSample(out_sample);
     
     // Transform the sample by the decomposed covariance and then add the mean vector
     out_sample = (_A * out_sample).cwiseProduct(_sigma);
     
+}
+
+void MultiNormal::generateRandomSamples(std::vector<Eigen::VectorXf>& out, std::vector<SampleGenerator*> samplers) {
+
+    // Determine params
+    int num_workers = samplers.size();
+    int work_size = out.size() / num_workers;
+
+    std::vector<std::thread> threads (num_workers);
+
+    for (int i = 0; i < num_workers; i++) {
+
+        threads[i] = std::thread([this, i, &out, &samplers, work_size] {
+
+            int start = i * work_size;
+            int end = glm::min(start + work_size, (int)out.size());
+
+            for (int p = start; p < end; p++)
+                doSample(out[p], *samplers[i]);
+
+        });
+
+    }
+
+    // Make sure everything finishes
+    for (int i = 0; i < num_workers; i++)
+        threads[i].join();
+
 }

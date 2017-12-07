@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['generaterandomsamples',['generateRandomSamples',['../class_multi_normal.html#ada6b0b6f45d12449b6f9f2f894b2f492',1,'MultiNormal::generateRandomSamples(int count)'],['../class_multi_normal.html#abfa19ddff0e2b4d1cf0b183d9789a989',1,'MultiNormal::generateRandomSamples(std::vector&lt; Eigen::VectorXf &gt; &amp;out)']]],
+  ['generaterandomsamples',['generateRandomSamples',['../class_multi_normal.html#a6f2a5156edccfc8abc46699366a59e7b',1,'MultiNormal::generateRandomSamples(std::vector&lt; Eigen::VectorXf &gt; &amp;out, SampleGenerator &amp;sampler)'],['../class_multi_normal.html#ade52a2dd78876c7b0d5dca46e2473567',1,'MultiNormal::generateRandomSamples(std::vector&lt; Eigen::VectorXf &gt; &amp;out, std::vector&lt; SampleGenerator *&gt; samplers)']]],
+  ['generatesamples',['generateSamples',['../class_sample_generator.html#a9aa8b4cd54d59f4189b5541c02ef334a',1,'SampleGenerator']]],
   ['getbinomialcoefficients',['getBinomialCoefficients',['../class_bezier.html#af8184ad8c9c23625005c40efe7f74d13',1,'Bezier']]],
   ['getcompletedroute',['getCompletedRoute',['../class_routes_queue.html#a8e579ab43c560d2e9bb2809e9a5b08f7',1,'RoutesQueue']]],
   ['getcontext',['getContext',['../class_kernel.html#a52489f89ded060d514b7e5d12f23e720',1,'Kernel']]],
@@ -16,6 +17,7 @@ var searchData=
   ['getopenclimage',['getOpenCLImage',['../class_elevation_data.html#ad8b2c4db5db23e9dfd88bfbf11097b01',1,'ElevationData']]],
   ['getprogram',['getProgram',['../class_kernel.html#acdcf2c3d857cf7bbf74aedf1f61c2502',1,'Kernel']]],
   ['getqueue',['getQueue',['../class_kernel.html#aa5273e14f07845343045a53124b0d057',1,'Kernel']]],
+  ['getsample',['getSample',['../class_sample_generator.html#a2014d6dab0da44681418fb59c52fc3d7',1,'SampleGenerator']]],
   ['getsolution',['getSolution',['../class_population.html#a0c1a14e15c5fe4aa14f1511aa58df967',1,'Population']]],
   ['getstate',['getState',['../class_c_m_d.html#a78241396d0dfc04b988e64e7eb8caede',1,'CMD']]],
   ['getwidth',['getWidth',['../class_elevation_data.html#a2321308f5d5c2d272d0637721e549dbe',1,'ElevationData']]],

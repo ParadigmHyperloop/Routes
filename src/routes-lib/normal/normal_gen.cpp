@@ -5,11 +5,10 @@
 #include "normal_gen.h"
 
 std::hash<int> hasher;
-std::mt19937 SampleGenerator::_twister = std::mt19937(hasher(std::chrono::high_resolution_clock::now().time_since_epoch().count()));;
-std::normal_distribution<float> SampleGenerator::_standard_distro(0.0, 1.0);
-
 SampleGenerator::SampleGenerator(int length, int retainer) : _length(length), _queue(new boost::lockfree::spsc_queue<Eigen::VectorXf>(retainer)),
-                                                             _sample_thread([this]{ generateSamples(); }) {}
+                                                             _sample_thread([this]{ generateSamples(); }),
+                                                             _twister(hasher(std::chrono::high_resolution_clock::now().time_since_epoch().count())),
+                                                             _standard_distro(0.0, 1.0) {}
 
 SampleGenerator::~SampleGenerator() {
 
@@ -54,7 +53,7 @@ void SampleGenerator::generateSamples() {
 
         }
 
-        /** Sleep for a bit */
+        // Sleep for a bit
         std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
     }

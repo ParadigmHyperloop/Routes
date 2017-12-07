@@ -70,18 +70,14 @@ class SampleGenerator {
         /** The thread that sampling is performed on */
         std::thread _sample_thread;
 
-        /**
-         * A Mersenne Twister object that is shared between all MultiNormal objects. The seed is updated whenever a new
-         * instance of MultiNormal is created.
-         */
-        static std::mt19937 _twister;
+        /** A Mersenne Twister object (a pseudorandom generator) that we pull the samples from. */
+        std::mt19937 _twister;
 
         /**
-         * Since sampling from a multivariate normal distribution basically is a transformation of a bunch of samples from
-         * independent standard normal distributions, we only need one normal distribution to do any sampling.
-         * It has mean 0 and a standard deviation of 1.
+         * The normal distribution that we sample from, AKA the standard normal distribution.
+         * This is by definition N(0, 1)
          */
-        static std::normal_distribution<float> _standard_distro;
+        std::normal_distribution<float> _standard_distro;
 
 };
 

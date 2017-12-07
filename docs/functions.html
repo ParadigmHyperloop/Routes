@@ -136,6 +136,9 @@ $(function() {
 <li>_is_initialized
 : <a class="el" href="class_kernel.html#ad3ec114105efa539756f02af36ad8749">Kernel</a>
 </li>
+<li>_length
+: <a class="el" href="class_sample_generator.html#a164d688f7c648db090db61e96e8aac31">SampleGenerator</a>
+</li>
 <li>_max_speed
 : <a class="el" href="class_pod.html#acca59281981c944e3159eba166106083">Pod</a>
 </li>
@@ -196,18 +199,30 @@ $(function() {
 <li>_pop_size
 : <a class="el" href="class_population.html#a9f43eeeaf6bd2ec02b5063bbbbaf78b1">Population</a>
 </li>
+<li>_queue
+: <a class="el" href="class_sample_generator.html#a366b3080c3aa4520fba343caa36105d4">SampleGenerator</a>
+</li>
 <li>_routes
 : <a class="el" href="class_routes_queue.html#a30b6768768b434d9a13a1b90e069a6e3">RoutesQueue</a>
 </li>
+<li>_sample_gens
+: <a class="el" href="class_population.html#aedb0594cae875b623f916d6150781284">Population</a>
+</li>
+<li>_sample_thread
+: <a class="el" href="class_sample_generator.html#a3836bbedc9fc4505c705ebc18ce720ae">SampleGenerator</a>
+</li>
 <li>_samples
 : <a class="el" href="class_population.html#ae32c16e86ca6f39eecfff2e8edaff66e">Population</a>
+</li>
+<li>_should_gen_samples
+: <a class="el" href="class_sample_generator.html#a5b5f31572a2141ecdb66d9596e382d20">SampleGenerator</a>
 </li>
 <li>_sigma
 : <a class="el" href="class_multi_normal.html#af6f423cbb72b0b71175f1c2eba717edf">MultiNormal</a>
 , <a class="el" href="class_population.html#abe008a0b33a70380d25ab453581c4924">Population</a>
 </li>
 <li>_standard_distro
-: <a class="el" href="class_multi_normal.html#ab66bb765ff813cf9b805c728cab911a9">MultiNormal</a>
+: <a class="el" href="class_sample_generator.html#a15f21650d5aa0c7feff549d9f66bf53a">SampleGenerator</a>
 </li>
 <li>_start
 : <a class="el" href="class_population.html#a4e0aeaa0a40d1c84026b31ac7eb0c794">Population</a>
@@ -219,7 +234,7 @@ $(function() {
 : <a class="el" href="class_elevation_data_1_1___static_g_d_a_l.html#a79b026bc4dc17acf2dad22be6ddb912b">ElevationData::_StaticGDAL</a>
 </li>
 <li>_twister
-: <a class="el" href="class_multi_normal.html#aa38d4c9d0a057ca64399107707f9809a">MultiNormal</a>
+: <a class="el" href="class_sample_generator.html#aa3aad649549054114b8ebcec949de2ae">SampleGenerator</a>
 </li>
 <li>_weights
 : <a class="el" href="class_population.html#a8f77c5ffb1f52964c960c7e271b4c366">Population</a>
@@ -307,7 +322,7 @@ $(function() {
 : <a class="el" href="class_bezier.html#af73a77f705ddcd1028fc74b5805c5f41">Bezier</a>
 </li>
 <li>doSample()
-: <a class="el" href="class_multi_normal.html#a7fa23a9d2d6f237d4c749598e9c40d93">MultiNormal</a>
+: <a class="el" href="class_multi_normal.html#ae071925b9d502b3d8055244d5d8e98fc">MultiNormal</a>
 </li>
 </ul>
 
@@ -339,7 +354,10 @@ $(function() {
 
 <h3><a id="index_g"></a>- g -</h3><ul>
 <li>generateRandomSamples()
-: <a class="el" href="class_multi_normal.html#ada6b0b6f45d12449b6f9f2f894b2f492">MultiNormal</a>
+: <a class="el" href="class_multi_normal.html#a6f2a5156edccfc8abc46699366a59e7b">MultiNormal</a>
+</li>
+<li>generateSamples()
+: <a class="el" href="class_sample_generator.html#a9aa8b4cd54d59f4189b5541c02ef334a">SampleGenerator</a>
 </li>
 <li>genome
 : <a class="el" href="struct_individual.html#a93363084997e9905d3d19e780e2de060">Individual</a>
@@ -389,6 +407,9 @@ $(function() {
 <li>getQueue()
 : <a class="el" href="class_kernel.html#aa5273e14f07845343045a53124b0d057">Kernel</a>
 </li>
+<li>getSample()
+: <a class="el" href="class_sample_generator.html#a2014d6dab0da44681418fb59c52fc3d7">SampleGenerator</a>
+</li>
 <li>getSolution()
 : <a class="el" href="class_population.html#a0c1a14e15c5fe4aa14f1511aa58df967">Population</a>
 </li>
@@ -435,6 +456,9 @@ $(function() {
 </li>
 <li>initParams()
 : <a class="el" href="class_population.html#af6fd879ac429afc818bcab64b4aef633">Population</a>
+</li>
+<li>initSamplers()
+: <a class="el" href="class_population.html#a0f8f46964400234c9c8a6d503178ef2e">Population</a>
 </li>
 <li>initSamples()
 : <a class="el" href="class_population.html#a5b1fd0a6cad512857bf09896db783d90">Population</a>
@@ -532,6 +556,9 @@ $(function() {
 
 
 <h3><a id="index_s"></a>- s -</h3><ul>
+<li>SampleGenerator()
+: <a class="el" href="class_sample_generator.html#aa909346dd3f56ee29b053804789da0ac">SampleGenerator</a>
+</li>
 <li>samplePopulation()
 : <a class="el" href="class_population.html#ae9808f1c42383f6015c672bb7b9ba030">Population</a>
 </li>
@@ -602,6 +629,12 @@ $(function() {
 <h3><a id="index_0x7e"></a>- ~ -</h3><ul>
 <li>~_StaticGDAL()
 : <a class="el" href="class_elevation_data_1_1___static_g_d_a_l.html#a46bf1b806cfb9c094e1bf832c1a784aa">ElevationData::_StaticGDAL</a>
+</li>
+<li>~Population()
+: <a class="el" href="class_population.html#a4c8cedd0f038e41746fb6084639f5616">Population</a>
+</li>
+<li>~SampleGenerator()
+: <a class="el" href="class_sample_generator.html#a7cb96d63cbab9c77763ffd1fe5edbf0d">SampleGenerator</a>
 </li>
 </ul>
 </div><!-- contents -->
