@@ -102,7 +102,7 @@ class RoutesQueue {
          * The map of the completed routes.
          * The key represents the unique identifier that was returned by the queueRoute function.
          * The value is the control points of the bezier curve of the route.
-         * Unorded map is used because it fits the thread safety requirements.
+         * Unordered map is used because it fits the thread safety requirements.
          */
         static std::unordered_map<size_t, std::vector<glm::vec3>> _completed;
 

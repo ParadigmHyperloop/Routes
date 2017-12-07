@@ -10,6 +10,9 @@ Population::Population(int pop_size, glm::vec4 start, glm::vec4 dest, const Elev
     // Figure out how many points we need for this route
     calcGenomeSize();
 
+    // Make the sampler for standard normal samples
+    _sample_gen = new SampleGenerator(_genome_size * 3, _pop_size);
+
     // Figure out the number of vectors that make up the entire individual. This is the header, the start
     // and the destination
     _individual_size = _genome_size + 2 + 1;
@@ -37,6 +40,8 @@ Population::Population(int pop_size, glm::vec4 start, glm::vec4 dest, const Elev
 
 }
 
+Population::~Population() { delete _sample_gen; }
+
 Individual Population::getIndividual(int index) {
 
     Individual ind;
@@ -60,8 +65,6 @@ void Population::step(const Pod& pod) {
 
     // Evaluate the cost and sort so the most fit solutions are in the front
 
-//    long long int start = std::chrono::high_resolution_clock::now().time_since_epoch().count();
-
     evaluateCost(pod);
 
 //    long long int end = std::chrono::high_resolution_clock::now().time_since_epoch().count();
@@ -81,10 +84,12 @@ void Population::step(const Pod& pod) {
 //    std::cout << "Params took " << end - start << std::endl;
 //    start = end;
 
+//    long long int start = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+
     // Sample a new generation
     samplePopulation();
 
-//    end = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+//    long long int end = std::chrono::high_resolution_clock::now().time_since_epoch().count();
 //    std::cout << "Sample took " << end - start << std::endl;
 //    start = end;
 
@@ -496,7 +501,7 @@ void Population::calculateStratParameters() {
 void Population::samplePopulation() {
 
     // Create a MND
-    MultiNormal dist = MultiNormal(_covar_matrix, _sigma);
+    MultiNormal dist = MultiNormal(_covar_matrix, _sigma, *_sample_gen);
     dist.generateRandomSamples(_samples);
 
     // Convert the _samples over to a set of vectors and update the population

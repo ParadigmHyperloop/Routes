@@ -131,6 +131,9 @@ class Population {
          */
         Population(int pop_size, glm::vec4 start, glm::vec4 dest, const ElevationData& data);
 
+        /** Simple destructor to delete heap allocated things */
+        ~Population();
+
         /**
          * Retrieves an individual from the population. This assumes that the population data
          * has already been copied back to the CPU.
@@ -389,6 +392,9 @@ class Population {
          * the chance of numerical error because we are dealing with large numbers.
          */
         std::vector<Eigen::VectorXf> _samples;
+
+        /** A multithreaded standard normal sample generator to speed up population sampling */
+        SampleGenerator* _sample_gen;
     
 };
 
