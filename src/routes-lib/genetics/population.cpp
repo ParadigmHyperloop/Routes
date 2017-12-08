@@ -512,20 +512,39 @@ void Population::samplePopulation() {
     // Create a MND
     MultiNormal dist = MultiNormal(_covar_matrix, _sigma);
     dist.generateRandomSamples(_samples, _sample_gens);
-
-    // Convert the _samples over to a set of vectors and update the population
-    for (int i = 0; i < _pop_size; i++) {
-
-        // Add the mean because the samples don't have it
-        Eigen::VectorXf actual = _samples[i] + _mean;
-
-        // Use memory copies to put the right data in the the _individuals vector because its slightly faster
-        // We need to do it in a for loop because the _individuals is vec4 and there are only 3 components for each control point
-        // In the Eigen vectors that we build
-        for (int p = 0; p < _genome_size; p++)
-            memcpy(&_individuals[i * _individual_size + 2 + p][0], actual.data() + p * 3, sizeof(float) * 3);
-
+    
+    // Convert the _samples over to a set of glm vectors and update the population
+    // Do so with multiple threads
+    std::vector<std::thread> threads = std::vector<std::thread>(NUM_SAMPLE_THREADS);
+    int worker_size = _pop_size / NUM_SAMPLE_THREADS;
+    
+    for (int i = 0; i < NUM_SAMPLE_THREADS; i++) {
+        
+        threads[i] = std::thread([this, i, worker_size] {
+            
+            int start = worker_size * i;
+            int end = glm::min(start + worker_size, _pop_size);
+            
+            for (int u = start; u < end; u++) {
+                
+                // Add the mean because the samples don't have it
+                Eigen::VectorXf actual = _samples[u] + _mean;
+                
+                // Use memory copies to put the right data in the the _individuals vector because its slightly faster
+                // We need to do it in a for loop because the _individuals is vec4 and there are only 3 components for each control point
+                // In the Eigen vectors that we build
+                for (int p = 0; p < _genome_size; p++)
+                    memcpy(&_individuals[u * _individual_size + 2 + p][0], actual.data() + p * 3, sizeof(float) * 3);
+                
+            }
+            
+        });
+        
     }
+    
+    // Make sure all of the threads finish
+    for (int i = 0; i < NUM_SAMPLE_THREADS; i++)
+        threads[i].join();
 
 }
 
