@@ -407,6 +407,9 @@ class Population {
         /** Several multithreaded standard normal sample generator to speed up population sampling */
         std::vector<SampleGenerator*> _sample_gens;
     
+        /** The _mu best multinormal samples from the population */
+        std::vector<Eigen::VectorXf> _best_samples;
+    
 };
 
 #endif //ROUTES_POPULATION_H

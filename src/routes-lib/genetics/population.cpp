@@ -17,6 +17,7 @@ Population::Population(int pop_size, glm::vec4 start, glm::vec4 dest, const Elev
     // Create the appropriate vectors
     _individuals = std::vector<glm::vec4>(pop_size * _individual_size);
     _opencl_individuals =  boost::compute::vector<glm::vec4>(_individuals.size(), Kernel::getContext());
+        
 
     // Calculate the binomial coefficients for evaluating the bezier paths
     calcBinomialCoefficients();
@@ -35,6 +36,9 @@ Population::Population(int pop_size, glm::vec4 start, glm::vec4 dest, const Elev
     initSamplers();
     initSamples();
     samplePopulation();
+        
+    // Create the best sample vector
+    _best_samples = std::vector<Eigen::VectorXf>(_mu);
 
 }
 
@@ -68,7 +72,8 @@ Individual Population::getIndividual(int index) {
 void Population::step(const Pod& pod) {
 
     // Evaluate the cost and sort so the most fit solutions are in the front
-
+//    long long int start = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+    
     evaluateCost(pod);
 
 //    long long int end = std::chrono::high_resolution_clock::now().time_since_epoch().count();
@@ -88,12 +93,10 @@ void Population::step(const Pod& pod) {
 //    std::cout << "Params took " << end - start << std::endl;
 //    start = end;
 
-//    long long int start = std::chrono::high_resolution_clock::now().time_since_epoch().count();
-
     // Sample a new generation
     samplePopulation();
 
-//    long long int end = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+//    end = std::chrono::high_resolution_clock::now().time_since_epoch().count();
 //    std::cout << "Sample took " << end - start << std::endl;
 //    start = end;
 
@@ -113,24 +116,10 @@ void Population::sortIndividuals() {
         return (*a.header).x < (*b.header).x;
 
     });
-
-    // Create a new vector so we don't destroy any data
-    std::vector<glm::vec4> sorted_individuals   = std::vector<glm::vec4>      (_individuals.size());
-    std::vector<Eigen::VectorXf> sorted_samples = std::vector<Eigen::VectorXf>(_pop_size);
     
-    for (int i = 0; i < _pop_size; i++) {
-
-        // Copy the sorted individual into the new array
-        memcpy(sorted_individuals.data() + i * _individual_size, individuals_s[i].header, sizeof(glm::vec4) * _individual_size);
-        
-        // Copy the sample
-        sorted_samples[i] = _samples[individuals_s[i].index];
-
-    }
-
-    // Save the sorted array
-    _individuals = sorted_individuals;
-    _samples = sorted_samples;
+    // Copy the best samples into a sorted array
+    for (int i = 0; i < _mu; i++)
+        _best_samples[i] = _samples[individuals_s[i].index];
 
 }
 
@@ -349,8 +338,8 @@ void Population::evaluateCost(const Pod& pod) {
 std::vector<glm::vec3> Population::getSolution() const {
     
     std::vector<glm::vec3> solution = std::vector<glm::vec3>(_genome_size + 2);
-    solution[0]                = glm::vec3(_start.x, _start.y, _start.z);
-    solution[_genome_size + 1] = glm::vec3(_dest.x, _dest.y, _dest.z);
+    solution[0]                     = glm::vec3(_start.x, _start.y, _start.z);
+    solution[_genome_size + 1]      = glm::vec3(_dest.x, _dest.y, _dest.z);
     
     for (int i = 0; i < _genome_size; i++)
         solution[i + 1] = glm::vec3(_mean(i * 3    ),
@@ -560,7 +549,7 @@ void Population::updateMean() {
     _mean = Eigen::VectorXf::Zero(_mean.size());
 
     for (int i = 0; i < _mu; i++)
-        _mean += _samples[i] * _weights[i];
+        _mean += _best_samples[i] * _weights[i];
     
     _mean += _mean_prime;
 
@@ -623,7 +612,7 @@ void Population::updateCovar() {
 
     for (int i = 0; i < _mu; i++) {
 
-        Eigen::VectorXf adjusted = _samples[i];
+        Eigen::VectorXf adjusted = _best_samples[i];
         
         // Divide by sigma
         for (int k = 0; k < adjusted.size(); k++)
