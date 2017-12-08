@@ -383,6 +383,11 @@ void Population::initParams() {
     // Set the two evolution paths to the zero vector
     _p_covar = Eigen::VectorXf::Zero(_genome_size * 3);
     _p_sigma = Eigen::VectorXf::Zero(_genome_size * 3);
+    
+    // Calculate the expected value of the standard normal distribution.
+    // This is purely based of the number of dimensions.
+    float N = (float)_mean.size();
+    _expected_value = sqrt(N) * (1.0 - 1.0 / (N * 4.0) + 1.0 / (21.0 * glm::pow(N, 2.0)));
 
 }
 
@@ -459,7 +464,9 @@ void Population::calcWeights() {
     for (int i = 0; i < _mu; i++)
         sum += glm::pow(_weights[i], 2.0f);
 
+    // Save some constant params we need to keep
     _mu_weight = 1.0 / sum;
+    _mu_weight_sqrt = sqrt(_mu_weight);
 
 }
 
@@ -544,7 +551,7 @@ void Population::updateParams() {
 void Population::updateMean() {
 
     // Save the mean from the last gen so we can use it to update the paths
-    _mean_prime = _mean;
+    Eigen::VectorXf _mean_prime = _mean;
 
     _mean = Eigen::VectorXf::Zero(_mean.size());
 
@@ -553,6 +560,14 @@ void Population::updateMean() {
     
     _mean += _mean_prime;
 
+    // Calculate mean displacement
+    _mean_displacement = (_mean - _mean_prime);
+    
+    // Divide by sigma
+    for (int i = 0; i < _mean_displacement.size(); i++)
+        _mean_displacement(i) = _mean_displacement(i) / _sigma(i);
+    
+    
 }
 
 void Population::updatePSigma() {
@@ -561,21 +576,11 @@ void Population::updatePSigma() {
     float discount = 1.0 - _c_sigma;
     float discount_comp = sqrt(1.0 - (discount * discount));
 
-    // Calculate the mean displacement
-    Eigen::VectorXf mean_displacement(_mean.size());
-    mean_displacement = (_mean - _mean_prime);
-    
-    // Divide by sigma
-    for (int i = 0; i < mean_displacement.size(); i++)
-        mean_displacement(i) = mean_displacement(i) / _sigma(i);
-    
-    float sqrt_mew_weight = sqrt(_mu_weight);
-
     // Get the inverse square root of the covariance matrix
     Eigen::SelfAdjointEigenSolver<Eigen::MatrixXf> solver(_covar_matrix);
     Eigen::MatrixXf inv_sqrt_C(solver.operatorInverseSqrt());
     
-    _p_sigma = discount * _p_sigma + discount_comp * sqrt_mew_weight * inv_sqrt_C * mean_displacement;
+    _p_sigma = discount * _p_sigma + discount_comp * _mu_weight_sqrt * inv_sqrt_C * _mean_displacement;
 
 }
 
@@ -585,22 +590,12 @@ void Population::updatePCovar() {
     float discount = 1.0 - _c_covar;
     float discount_comp = sqrt(1.0 - (discount * discount));
 
-    // Calculate the mean displacement
-    Eigen::VectorXf mean_displacement(_mean.size());
-    mean_displacement = (_mean - _mean_prime);
-
-    // Divide by sigma
-    for (int i = 0; i < mean_displacement.size(); i++)
-        mean_displacement(i) = mean_displacement(i) / _sigma(i);
-    
-    float sqrt_mew_weight = sqrt(_mu_weight);
-
     // Figure out the indicator function
     float indicator = 0.0;
     if (_p_sigma.norm() <= sqrt((float)_mean.size()) * ALPHA)
         indicator = 1.0;
 
-    _p_covar = discount * _p_covar + indicator * discount_comp * sqrt_mew_weight * mean_displacement;
+    _p_covar = discount * _p_covar + indicator * discount_comp * _mu_weight_sqrt * _mean_displacement;
 
 }
 
@@ -637,7 +632,6 @@ void Population::updateCovar() {
 
     // Update the MatrixXf
     _covar_matrix = discount * _covar_matrix + rank_one + _c_mu * covariance_prime;
-    
 
 }
 
@@ -646,15 +640,11 @@ void Population::updateSigma() {
     // Calculate ratio between the decay and the dampening
     float ratio = _c_sigma / STEP_DAMPENING;
 
-    // Get the expected value of the identity distribution in N dimensions
-    float N = (float)_mean.size();
-    float expected = sqrt(N) * (1.0 - 1.0 / (N * 4.0) + 1.0 / (21.0 * glm::pow(N, 2.0)));
-
     // Get the magnitude of the sigma path
     float mag = _p_sigma.norm();
 
     // Update sigma
-    _sigma = _sigma * glm::pow(M_E, ratio * (mag / expected - 1.0));
+    _sigma = _sigma * glm::pow(M_E, ratio * (mag / _expected_value - 1.0));
 
 }
 

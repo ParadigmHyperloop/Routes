@@ -346,6 +346,12 @@ class Population {
 
         /** This is the sum of 1/_weights^2 */
         float _mu_weight;
+    
+        /** The square root of _mu_weight */
+        float _mu_weight_sqrt;
+    
+        /** The expectedc value of the standard normal distribution. We use this to determine if we should shrink or grow sigma */
+        float _expected_value;
 
         /**
          * This represents the current mean vector of the population. In other words, this is the favorite solution the the population.
@@ -353,8 +359,8 @@ class Population {
          */
         Eigen::VectorXf _mean;
 
-        /** This is used to store the mean of the previous generation. */
-        Eigen::VectorXf _mean_prime;
+        /** The difference between the new mean and the last mean divided by the step size */
+        Eigen::VectorXf _mean_displacement;
 
         /**
          * The covariance matrix of the population. This contains the information about how the multivariate normal distribution is shaped.
