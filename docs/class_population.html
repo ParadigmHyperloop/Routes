@@ -152,10 +152,14 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a0c0141e952544cd4f4335d090a3d5b1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a370b53f84d4c1f3057de05e66451efcc"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a370b53f84d4c1f3057de05e66451efcc">_mu_weight</a></td></tr>
 <tr class="separator:a370b53f84d4c1f3057de05e66451efcc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a17c921264c9e85f5dccfe1bb4a320568"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a17c921264c9e85f5dccfe1bb4a320568">_mu_weight_sqrt</a></td></tr>
+<tr class="separator:a17c921264c9e85f5dccfe1bb4a320568"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3086bee14a54af16b7a814081249cd7a"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a3086bee14a54af16b7a814081249cd7a">_expected_value</a></td></tr>
+<tr class="separator:a3086bee14a54af16b7a814081249cd7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a00614fb4a39e2be35f7cead3adcff6d0"><td class="memItemLeft" align="right" valign="top">Eigen::VectorXf&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a00614fb4a39e2be35f7cead3adcff6d0">_mean</a></td></tr>
 <tr class="separator:a00614fb4a39e2be35f7cead3adcff6d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab01cc20d23527fee669ec387db93cadc"><td class="memItemLeft" align="right" valign="top">Eigen::VectorXf&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#ab01cc20d23527fee669ec387db93cadc">_mean_prime</a></td></tr>
-<tr class="separator:ab01cc20d23527fee669ec387db93cadc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a3198ef671dfee85ac9a91b25bd8ea4"><td class="memItemLeft" align="right" valign="top">Eigen::VectorXf&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a6a3198ef671dfee85ac9a91b25bd8ea4">_mean_displacement</a></td></tr>
+<tr class="separator:a6a3198ef671dfee85ac9a91b25bd8ea4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7d78dbb7e414f6cf843b94b61fabb5e2"><td class="memItemLeft" align="right" valign="top">Eigen::MatrixXf&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a7d78dbb7e414f6cf843b94b61fabb5e2">_covar_matrix</a></td></tr>
 <tr class="separator:a7d78dbb7e414f6cf843b94b61fabb5e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe008a0b33a70380d25ab453581c4924"><td class="memItemLeft" align="right" valign="top">Eigen::VectorXf&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#abe008a0b33a70380d25ab453581c4924">_sigma</a></td></tr>
@@ -178,6 +182,8 @@ Private Attributes</h2></td></tr>
 <tr class="separator:ae32c16e86ca6f39eecfff2e8edaff66e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aedb0594cae875b623f916d6150781284"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="class_sample_generator.html">SampleGenerator</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#aedb0594cae875b623f916d6150781284">_sample_gens</a></td></tr>
 <tr class="separator:aedb0594cae875b623f916d6150781284"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c777f0801dc3e53f74fd535bbe141be"><td class="memItemLeft" align="right" valign="top">std::vector&lt; Eigen::VectorXf &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a9c777f0801dc3e53f74fd535bbe141be">_best_samples</a></td></tr>
+<tr class="separator:a9c777f0801dc3e53f74fd535bbe141be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This class is responsible for holding individuals and breeding them. The current representation of an individual is as follows:</p>
@@ -790,6 +796,29 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a9c777f0801dc3e53f74fd535bbe141be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c777f0801dc3e53f74fd535bbe141be">&#9670;&nbsp;</a></span>_best_samples</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;Eigen::VectorXf&gt; Population::_best_samples</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The _mu best multinormal samples from the population </p>
+
+</div>
+</div>
 <a id="a0d53c91ce41885642a6f55cfe750cc1b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0d53c91ce41885642a6f55cfe750cc1b">&#9670;&nbsp;</a></span>_c1</h2>
 
@@ -974,6 +1003,29 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a3086bee14a54af16b7a814081249cd7a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3086bee14a54af16b7a814081249cd7a">&#9670;&nbsp;</a></span>_expected_value</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Population::_expected_value</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The expectedc value of the standard normal distribution. We use this to determine if we should shrink or grow sigma </p>
+
+</div>
+</div>
 <a id="ac06d8208ca52ed0af4383c699ea864e4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac06d8208ca52ed0af4383c699ea864e4">&#9670;&nbsp;</a></span>_genome_size</h2>
 
@@ -1066,8 +1118,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ab01cc20d23527fee669ec387db93cadc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab01cc20d23527fee669ec387db93cadc">&#9670;&nbsp;</a></span>_mean_prime</h2>
+<a id="a6a3198ef671dfee85ac9a91b25bd8ea4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a3198ef671dfee85ac9a91b25bd8ea4">&#9670;&nbsp;</a></span>_mean_displacement</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1076,7 +1128,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Eigen::VectorXf Population::_mean_prime</td>
+          <td class="memname">Eigen::VectorXf Population::_mean_displacement</td>
         </tr>
       </table>
   </td>
@@ -1085,7 +1137,7 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>This is used to store the mean of the previous generation. </p>
+<p>The difference between the new mean and the last mean divided by the step size </p>
 
 </div>
 </div>
@@ -1132,6 +1184,29 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>This is the sum of 1/_weights^2 </p>
+
+</div>
+</div>
+<a id="a17c921264c9e85f5dccfe1bb4a320568"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a17c921264c9e85f5dccfe1bb4a320568">&#9670;&nbsp;</a></span>_mu_weight_sqrt</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Population::_mu_weight_sqrt</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The square root of _mu_weight </p>
 
 </div>
 </div>

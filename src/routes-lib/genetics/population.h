@@ -55,6 +55,9 @@
 /** The number of threads that are used to sample from the multivariate normal distribution */
 #define NUM_SAMPLE_THREADS 10
 
+/** The number of divisions that the route is split up into for evaluation on the GPU */
+#define NUM_ROUTE_WORKERS 100
+
 /**
  * Individual is a convenience so that individuals can be treated as units rather than
  * as a single float vector, which is how they are stored.

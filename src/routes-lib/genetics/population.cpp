@@ -26,7 +26,7 @@ Population::Population(int pop_size, glm::vec4 start, glm::vec4 dest, const Elev
     // We also make sure it is a multiple of workers
     glm::dvec2 cropped_size = data.getCroppedSizeMeters();
     _num_evaluation_points = ceil(glm::max(cropped_size.x / METERS_TO_POINT_CONVERSION,
-                                           cropped_size.y / METERS_TO_POINT_CONVERSION) / 50.0) * 50;
+                                           cropped_size.y / METERS_TO_POINT_CONVERSION) / (float)NUM_ROUTE_WORKERS) * NUM_ROUTE_WORKERS;
 
     std::cout << "Using " << _num_evaluation_points << " points of evaluation" << std::endl;
     _num_evaluation_points_1 = (float)_num_evaluation_points - 1.0f;
@@ -187,10 +187,10 @@ void Population::evaluateCost(const Pod& pod) {
             const float curve_sum_weight = 0.4;
             const float grade_weight = 100.0;
 
-            __local float curve_sums [50];
-            __local float min_curves [50];
-            __local float max_grades [50];
-            __local float track_costs[50];
+            __local float curve_sums [100];
+            __local float min_curves [100];
+            __local float max_grades [100];
+            __local float track_costs[100];
 
             // Get an offset to the gnome
             size_t i = get_global_id(0);
@@ -285,7 +285,7 @@ void Population::evaluateCost(const Pod& pod) {
             if (!w) {
 
                 // Figure out the final cost for everything. This would be equivalent to using one thread
-                for (int m = 1; m < 50; m++) {
+                for (int m = 1; m < 100; m++) {
 
                      curve_sum += curve_sums[m];
                      min_curve = min(min_curve, min_curves[m]);
@@ -320,15 +320,15 @@ void Population::evaluateCost(const Pod& pod) {
     kernel.setArgs(_data.getOpenCLImage(), _opencl_individuals.get_buffer(), _genome_size + 2,
                    MAX_SLOPE_GRADE, pod.minCurveRadius(), EXCAVATION_DEPTH, size_crop.x,
                    size_crop.y, _opencl_binomials.get_buffer(),
-                   _num_evaluation_points_1, _num_evaluation_points / 50, origin.y, origin.y);
+                   _num_evaluation_points_1, _num_evaluation_points / NUM_ROUTE_WORKERS, origin.y, origin.y);
 
     // Upload the data
     boost::compute::copy(_individuals.begin(), _individuals.end(), _opencl_individuals.begin(), queue);
 
     // Execute the 2D kernel with a work size of 5. 5 threads working on a single individual
     kernel.execute2D(glm::vec<2, size_t>(0, 0),
-                     glm::vec<2, size_t>(_pop_size, 50),
-                     glm::vec<2, size_t>(1, 50));
+                     glm::vec<2, size_t>(_pop_size, NUM_ROUTE_WORKERS),
+                     glm::vec<2, size_t>(1, NUM_ROUTE_WORKERS));
 
     // Download the data
     boost::compute::copy(_opencl_individuals.begin(), _opencl_individuals.end(), _individuals.begin(), queue);

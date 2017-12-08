@@ -1,6 +1,7 @@
 var searchData=
 [
   ['_5fa',['_A',['../class_multi_normal.html#a9ff2bde3c9bf0262ed042cde75fcca59',1,'MultiNormal']]],
+  ['_5fbest_5fsamples',['_best_samples',['../class_population.html#a9c777f0801dc3e53f74fd535bbe141be',1,'Population']]],
   ['_5fc1',['_c1',['../class_population.html#a0d53c91ce41885642a6f55cfe750cc1b',1,'Population']]],
   ['_5fc_5fcovar',['_c_covar',['../class_population.html#a5de21aa44d44a2c2a151136c71adbfb0',1,'Population']]],
   ['_5fc_5fmu',['_c_mu',['../class_population.html#ab93df09035bd07eb75a10291e932437d',1,'Population']]],
@@ -14,6 +15,7 @@ var searchData=
   ['_5fdirection',['_direction',['../class_population.html#a12a9a8defaf210633a3575fbea984d39',1,'Population']]],
   ['_5felevation_5fmax',['_elevation_max',['../class_elevation_data.html#ad0a44d39e94c31b4ddd0a7986c15d6f4',1,'ElevationData']]],
   ['_5felevation_5fmin',['_elevation_min',['../class_elevation_data.html#a5b46dc79d04d3da2cddb7904641fd28d',1,'ElevationData']]],
+  ['_5fexpected_5fvalue',['_expected_value',['../class_population.html#a3086bee14a54af16b7a814081249cd7a',1,'Population']]],
   ['_5fgdal_5fdataset',['_gdal_dataset',['../class_elevation_data_1_1___static_g_d_a_l.html#a467237f8076ce0e78c58b7a33d36fcd0',1,'ElevationData::_StaticGDAL']]],
   ['_5fgdal_5fraster_5fband',['_gdal_raster_band',['../class_elevation_data_1_1___static_g_d_a_l.html#afb4c6ca01e23c027dc22d666147fcbe7',1,'ElevationData::_StaticGDAL']]],
   ['_5fgdal_5ftransform',['_gdal_transform',['../class_elevation_data_1_1___static_g_d_a_l.html#a5a5318c7ba646c5444192b192caa48aa',1,'ElevationData::_StaticGDAL']]],
@@ -28,9 +30,10 @@ var searchData=
   ['_5flength',['_length',['../class_sample_generator.html#a164d688f7c648db090db61e96e8aac31',1,'SampleGenerator']]],
   ['_5fmax_5fspeed',['_max_speed',['../class_pod.html#acca59281981c944e3159eba166106083',1,'Pod']]],
   ['_5fmean',['_mean',['../class_population.html#a00614fb4a39e2be35f7cead3adcff6d0',1,'Population']]],
-  ['_5fmean_5fprime',['_mean_prime',['../class_population.html#ab01cc20d23527fee669ec387db93cadc',1,'Population']]],
+  ['_5fmean_5fdisplacement',['_mean_displacement',['../class_population.html#a6a3198ef671dfee85ac9a91b25bd8ea4',1,'Population']]],
   ['_5fmu',['_mu',['../class_population.html#a0c0141e952544cd4f4335d090a3d5b1c',1,'Population']]],
   ['_5fmu_5fweight',['_mu_weight',['../class_population.html#a370b53f84d4c1f3057de05e66451efcc',1,'Population']]],
+  ['_5fmu_5fweight_5fsqrt',['_mu_weight_sqrt',['../class_population.html#a17c921264c9e85f5dccfe1bb4a320568',1,'Population']]],
   ['_5fnum_5fevaluation_5fpoints',['_num_evaluation_points',['../class_population.html#ab24376531403464de7b208146cd3244a',1,'Population']]],
   ['_5fnum_5fevaluation_5fpoints_5f1',['_num_evaluation_points_1',['../class_population.html#abcdd0b795c6d89d3a0e34dcd3632bf81',1,'Population']]],
   ['_5fopencl_5fbinomials',['_opencl_binomials',['../class_population.html#a74a1237b5e1fc78e9a1267fac07ad350',1,'Population']]],
