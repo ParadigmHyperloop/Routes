@@ -9,35 +9,20 @@ std::vector<glm::vec3> Genetics::solve(Population& pop, Pod& pod, int generation
     // Run the simulation for then given amount of generations
     for (int i = 0; i < generations; i++) {
 
-        // Sort the individuals to determine who is most fit
-        pop.evaluateCost(pod);
+        pop.step();
 
-        // Sort the individuals by cost
-        pop.sortIndividuals();
-
-        if (i % 20 == 0) {
-
-            Individual ind = pop.getIndividual(4);
-            std::cout << "Finished generation " << i << " Fittest: " << ind.header->x << std::endl;
-
-        }
-
-        // Generate a new population with the most fit being the mothers and father
-        if (i != generations - 1)
-            pop.breedIndividuals();
+        if (i % 20 == 0 && i != 0)
+            std::cout << "Finished generation " << i << " Fittest: " << pop.getGlobalBest()[0].x << std::endl;
 
     }
 
-    // Sort one last time
-    pop.sortIndividuals();
-
-    // Format a path so we can print it in python
-    Individual ind = pop.getIndividual(0);
+    // Get the pointer to the best, making sure to skip the header
+    glm::vec4* best = pop.getGlobalBest() + 1;
 
     // Transfer the bath over
-    std::vector<glm::vec3> out_path = std::vector<glm::vec3>(ind.num_genes + 2);
-    for (int i = 0; i < ind.num_genes + 2; i++)
-        out_path[i] = glm::vec3(ind.path[i].x, ind.path[i].y, ind.path[i].z);
+    std::vector<glm::vec3> out_path = std::vector<glm::vec3>(pop.getGenomeSize() + 2);
+    for (int i = 0; i < pop.getGenomeSize() + 2; i++)
+        out_path[i] = glm::vec3(best[i].x, best[i].y, best[i].z);
 
     return out_path;
 

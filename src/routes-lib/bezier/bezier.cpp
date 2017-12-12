@@ -83,22 +83,17 @@ float Bezier::calcCurvature(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2) {
     return fabs(denom / num);
 }
 
-float Bezier::radiusOfCurvature(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2) {
-
-    float r = 0.0;
-
-    r = 1 / calcCurvature(p0,p1,p2);
-}
+float Bezier::radiusOfCurvature(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2) { return 1.0 / calcCurvature(p0,p1,p2); }
 
 float Bezier::avgDistanceBetweenPoints(const std::vector<glm::vec3>& points) {
+    
     float total_length = 0.0;
     total_length = bezierLength(points);
 
     int num_points = 0;
     num_points = points.size();
 
-    float avg = 0.0;
-    avg = total_length / num_points;
+    return total_length / num_points;
 
 }
 

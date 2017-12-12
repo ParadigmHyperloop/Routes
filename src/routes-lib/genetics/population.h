@@ -41,6 +41,9 @@
  */
 #define LENGTH_TO_GENOME 0.0274360619f
 
+/** The clamping factor for the max particle velocity */
+#define KAPPA 0.2f
+
 /**
  * Individual is a convenience so that individuals can be treated as units rather than
  * as a single float vector, which is how they are stored.
@@ -114,11 +117,11 @@ class Population {
          *
          * @param data
          * The elevation data that this population is path-finding on
+         *
+         * @param pod
+         * The pod object containing the specs of the pod. Right now just uses max speed.
          */
-        Population(int pop_size, glm::vec4 start, glm::vec4 dest, const ElevationData& data);
-
-        /** dummy_genome is allocated on the heap, so delete that here */
-        ~Population();
+        Population(int pop_size, glm::vec4 start, glm::vec4 dest, const ElevationData& data, const Pod& pod);
 
         /**
          * Retrieves an individual from the population. This assumes that the population data
@@ -131,32 +134,33 @@ class Population {
          * An Individual struct; a convenience reference to the data in _individuals.
          */
         Individual getIndividual(int index);
-
-        /**
-         * This function sorts the individuals in ascending order based on the cost. _individuals[0] becomes
-         * the most fit individual. Currently this is done on the CPU, which is not optimal, but it is simpler.
-         */
-        void sortIndividuals();
-
-        /**
-         * Breeds the top 20% of the individuals together to generate a new, more fit population. Only 80%
-         * of the population is bred, 20% if randomly generated to avoid stagnation.
-         * Assumes that _individuals are already sorted.
-         */
-        void breedIndividuals();
-
+    
+        /** Performs one entire update of the swarm population */
+        void step();
+    
+        /** Gets the globally best solution */
+        inline glm::vec4* getGlobalBest() { return _global_best.data(); };
+    
+        /** Gets the genome size */
+        inline int getGenomeSize() { return _genome_size; }
+    
+    private:
+    
         /**
          * This function is what makes the genetic algorithm work.
          * For every individual a cost is evaluated. This represents how good their genome is as a solution.
          * This function performs this, using OpenCL.
-         *
-         * @param pod
-         * The pod object containing the specs of the pod. Right now just uses max speed.
-         *
          */
-        void evaluateCost(const Pod& pod);
+        void evaluateCost();
 
-    private:
+        /** Generates new velocities for all of the particles */
+        void generateVelocities();
+    
+        /** Adds the velocities onto all of the individuals */
+        void updatePositions();
+    
+        /** Updates the best solutions including individual and global */
+        void updateBestSolutions();
 
          /**
           * This function calculates the size of the genome.
@@ -164,38 +168,14 @@ class Population {
           */
         void calcGenomeSize();
 
+        /** Initializes the parameters for the swarm */
+        void initParams();
+
         /**
          * Generates the initial population using the parameters that were passed in via the constructor.
          * This is done on the CPU, but hopefully can be done on the GPU eventually.
          */
         void generatePopulation();
-
-        /**
-         * Cross the genes of individual a with individual a. The result is a new genome
-         * that is the linear interpolation of a random amount of the genome of a and b.
-         *
-         * @param a
-         * The index of one individual in _individuals;
-         *
-         * @param b
-         * The index of another individual in _individuals;
-         *
-         * @param new_genome
-         *
-         * @return
-         * The new genome, a random mix of individual a and individual b. Does not contain an individual header.
-         */
-        glm::vec4* crossoverIndividual(int a, int b);
-
-        /**
-         * In order to avoid stagnation and explore more possible solutions, mutation is introduced.
-         * The function randomly replaces points in the genome with completely new points.
-         *
-         * @param genome
-         * The genome to mutate.
-         *
-         */
-        void mutateGenome(glm::vec4* genome);
 
         /**
          * To evaluate the bezier curve, binomial coefficients are required.
@@ -228,9 +208,6 @@ class Population {
          * A random float in the range [low, height]
          */
         float generateRandomFloat(float low, float high);
-
-        /** An array of glm::vec4s that's the size of _genome_size. Used to avoid repetitive heap allocations. */
-        glm::vec4* dummy_genome;
 
         /** The number of individuals that should be in this population */
         int _pop_size;
@@ -268,6 +245,18 @@ class Population {
 
         /** The CPU storage of the individuals.*/
         std::vector<glm::vec4> _individuals;
+    
+        /**
+         * This vector represents the best solutions for each of the particles.
+         * This is the same size as _individuals and follows the same format
+         */
+        std::vector<glm::vec4> _best_individuals;
+    
+        /** The best individual that has been found through all of the generations */
+        std::vector<glm::vec4> _global_best;
+    
+        /** Contains the velocities for all of the paths */
+        std::vector<glm::vec4> _velocities;
 
         /** The GPU uploaded version of the individual data */
         boost::compute::vector<glm::vec4> _opencl_individuals;
@@ -288,7 +277,22 @@ class Population {
 
         /** The Mersenne Twister that is used for random generation of points */
         std::mt19937 _twister;
-
+    
+        /** A value that determines how much of the old velocity is retained between itterations */
+        float _omega;
+    
+        /** A value that determines how far each particle should travel back to its best inidividual solution */
+        float _c1;
+    
+        /** A value that determines how far each particle should travel back to the global best solution */
+        float _c2;
+    
+        /** Represents the maximum velocity that any control point can have. This limits the search space to inside of the texture */
+        glm::vec3 _max_vel;
+    
+        /** The objet that contians information about the capabilities of the pod */
+        const Pod& _pod;
+    
 };
 
 #endif //ROUTES_POPULATION_H
