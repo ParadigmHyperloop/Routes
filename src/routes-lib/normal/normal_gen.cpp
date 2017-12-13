@@ -6,9 +6,13 @@
 
 std::hash<int> hasher;
 SampleGenerator::SampleGenerator(int length, int retainer) : _queue(new boost::lockfree::spsc_queue<Eigen::VectorXf>(retainer)), _length(length),
-                                                             _sample_thread([this]{ generateSamples(); }),
                                                              _twister(hasher(std::chrono::high_resolution_clock::now().time_since_epoch().count())),
-                                                             _standard_distro(0.0, 1.0) {}
+                                                             _standard_distro(0.0, 1.0) {
+
+    // Start the sample thread
+    _sample_thread = std::thread([this]{ generateSamples(); });
+                                                                 
+}
 
 SampleGenerator::~SampleGenerator() {
 
