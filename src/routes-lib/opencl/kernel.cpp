@@ -35,7 +35,7 @@ Kernel::Kernel(const std::string& program, const std::string& name) {
 
 }
 
-Kernel::Kernel(std::ifstream& stream, const std::string& name) {
+Kernel::Kernel(std::ifstream stream, const std::string& name) {
 
     // Extract the program from the stream
     std::string program;

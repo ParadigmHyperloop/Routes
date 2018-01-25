@@ -42,7 +42,7 @@ class Kernel {
          * @param name
          * The name of the kernel function inside the program
          */
-        Kernel(std::ifstream& stream, const std::string& name);
+        Kernel(std::ifstream stream, const std::string& name);
 
         /**
          * An already compiled program to use for this kernel.
