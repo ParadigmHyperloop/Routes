@@ -48,8 +48,8 @@ __kernel void cost(__read_only image2d_t image, __global float4* individuals, in
                    float num_points_1, int points_per_worker, float origin_x, float origin_y, float straight_distance) {
 
     const sampler_t sampler = CLK_NORMALIZED_COORDS_TRUE | CLK_ADDRESS_CLAMP_TO_EDGE | CLK_FILTER_NEAREST;
-    const float pylon_cost = 0.000116;
-    const float tunnel_cost = 0.310;
+    const float pylon_cost = 1.16;
+    const float tunnel_cost = 3100.0;
 
     __local int curve_penalties[100];
     __local int grade_penalties[100];
@@ -165,16 +165,17 @@ __kernel void cost(__read_only image2d_t image, __global float4* individuals, in
         // To normalize the distance, divide by the straight line distance and then subtract 1.
         // This is equivalent to subtracting the straight line distance and then dividing since the min value is
         // the straight line distance.
-        float route_length_n = route_length / straight_distance - 1.0;
+        float route_length_n = clamp(route_length / straight_distance - 1.0, 0.0, 1.0);
 
         float curve_cost = (float)curve_penalty / (num_points_1 + 1.0);
         float grade_cost = (float)grade_penalty / (num_points_1 + 1.0);
 
         // Get total cost
-        float total_cost = track_cost_n + curve_cost + grade_cost + route_length_n * 2.0;
+        float total_cost = track_cost_n * 1.2 + curve_cost + grade_cost + route_length_n * 1.4;
 
         // Set the individual's header to contain its cost
         individuals[path - 1].x = total_cost;
+        individuals[path - 1].y = route_length_n;
 
     }
 

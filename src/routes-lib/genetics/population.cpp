@@ -73,7 +73,7 @@ void Population::step(const Pod& pod) {
 
     // Evaluate the cost and sort so the most fit solutions are in the front
 //    long long int start = std::chrono::high_resolution_clock::now().time_since_epoch().count();
-    
+
     evaluateCost(pod);
 
 //    long long int end = std::chrono::high_resolution_clock::now().time_since_epoch().count();
@@ -179,7 +179,7 @@ void Population::calcGenomeSize() {
 void Population::initParams() {
 
     // Choose mu to be a fixed number of individuals
-    _mu = 7;
+    _mu = 15;
 
     // Init the mean to the best guess (a straight line)
     bestGuess();
@@ -415,6 +415,12 @@ void Population::updatePSigma() {
     // Get the inverse square root of the covariance matrix
     Eigen::SelfAdjointEigenSolver<Eigen::MatrixXf> solver(_covar_matrix);
     Eigen::MatrixXf inv_sqrt_C(solver.operatorInverseSqrt());
+
+    // Ensure that nan is not in the square root
+    if (isnan(inv_sqrt_C(0, 0))) {
+        std::cout << "Nan in inv_sqrt covariance detected\n";
+        return;
+    }
     
     _p_sigma = discount * _p_sigma + discount_comp * _mu_weight_sqrt * inv_sqrt_C * _mean_displacement;
 

@@ -12,7 +12,7 @@ std::vector<glm::vec3> Genetics::solve(Population& pop, Pod& pod, int generation
         if (i % 20 == 0 && i) {
 
             Individual ind = pop.getIndividual(0);
-            std::cout << "Finished gen " << i << " cost: " << ind.header->x << std::endl;
+            std::cout << "Finished gen " << i << " cost: " << ind.header->x << ", track: " << ind.header->y << std::endl;
 
         }
         
