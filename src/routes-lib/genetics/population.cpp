@@ -137,7 +137,7 @@ void Population::evaluateCost(const Pod& pod) {
     kernel.setArgs(_data.getOpenCLImage(), _opencl_individuals.get_buffer(), _genome_size + 2,
                    MAX_SLOPE_GRADE, pod.minCurveRadius(), EXCAVATION_DEPTH, size_crop.x,
                    size_crop.y, _opencl_binomials.get_buffer(),
-                   _num_evaluation_points_1, _num_evaluation_points / NUM_ROUTE_WORKERS, origin.y, origin.y);
+                   _num_evaluation_points_1, _num_evaluation_points / NUM_ROUTE_WORKERS, origin.y, origin.y, glm::length(_direction));
 
     // Upload the data
     boost::compute::copy(_individuals.begin(), _individuals.end(), _opencl_individuals.begin(), queue);
@@ -179,7 +179,7 @@ void Population::calcGenomeSize() {
 void Population::initParams() {
 
     // Choose mu to be a fixed number of individuals
-    _mu = 15;
+    _mu = 7;
 
     // Init the mean to the best guess (a straight line)
     bestGuess();

@@ -45,18 +45,15 @@ float curvature(float4 p0, float4 p1, float4 p2) {
 __kernel void cost(__read_only image2d_t image, __global float4* individuals, int path_length,
                    float max_grade_allowed, float min_curve_allowed, float excavation_depth, float width,
                    float height, __global int* binomial_coeffs,
-                   float num_points_1, int points_per_worker, float origin_x, float origin_y) {
+                   float num_points_1, int points_per_worker, float origin_x, float origin_y, float straight_distance) {
 
     const sampler_t sampler = CLK_NORMALIZED_COORDS_TRUE | CLK_ADDRESS_CLAMP_TO_EDGE | CLK_FILTER_NEAREST;
     const float pylon_cost = 0.000116;
     const float tunnel_cost = 0.310;
-    const float curve_weight = 0.3;
-    const float curve_sum_weight = 0.4;
-    const float grade_weight = 100.0;
 
-    __local float curve_sums [100];
-    __local float min_curves [100];
-    __local float max_grades [100];
+    __local int curve_penalties[100];
+    __local int grade_penalties[100];
+    __local float segment_lengths [100];
     __local float track_costs[100];
 
     // Get an offset to the gnome
@@ -65,11 +62,10 @@ __kernel void cost(__read_only image2d_t image, __global float4* individuals, in
 
     int path = i * (path_length + 1) + 1;
 
-    float min_curve = 10000000000000.0;
-    float curve_sum = 0.0;
-
+    float route_length;
+    int curve_penalty = 0;
+    int grade_penalty = 0;
     float track_cost = 0.0;
-    float steepest_grade = 0.0;
 
     // Figure out where to start and end
     int start = w * points_per_worker;
@@ -102,18 +98,19 @@ __kernel void cost(__read_only image2d_t image, __global float4* individuals, in
         // Get curvature
         if (p > 1) {
 
-            float curve = curvature(last_last, last_point, bezier_point);
-            min_curve = min(min_curve, curve);
+            if (curvature(last_last, last_point, bezier_point) < min_curve_allowed)
+                ++curve_penalty;
 
         }
 
         // Compute grade and track cost if there was spacing
         if (spacing) {
 
-            // Add distance
-            curve_sum += length(bezier_point - last_point);
+            if (fabs(bezier_point.z - last_point.z) / spacing > max_grade_allowed)
+                ++grade_penalty;
 
-            steepest_grade = max(steepest_grade, fabs(bezier_point.z - last_point.z) / spacing);
+            // Add distance
+            route_length += length(bezier_point - last_point);
 
             // Compute track cost
             // First we get the pylon height which is the distance from the point on the track to the actual terrain
@@ -141,9 +138,9 @@ __kernel void cost(__read_only image2d_t image, __global float4* individuals, in
     }
 
     // Write to the buffer
-    curve_sums [w] = curve_sum;
-    min_curves [w] = min_curve;
-    max_grades [w] = steepest_grade;
+    curve_penalties[w] = curve_penalty;
+    grade_penalties[w] = grade_penalty;
+    segment_lengths[w] = route_length;
     track_costs[w] = track_cost;
 
     barrier(CLK_LOCAL_MEM_FENCE);
@@ -154,23 +151,27 @@ __kernel void cost(__read_only image2d_t image, __global float4* individuals, in
         // Figure out the final cost for everything. This would be equivalent to using one thread
         for (int m = 1; m < 100; m++) {
 
-             curve_sum += curve_sums[m];
-             min_curve = min(min_curve, min_curves[m]);
-             steepest_grade = max(steepest_grade, max_grades[m]);
+             curve_penalty += curve_penalties[m];
+             grade_penalty += grade_penalties[m];
+             route_length += segment_lengths[m];
              track_cost += track_costs[m];
 
         }
 
-        // Now that we have all of the information about the route, we can calculate the cost.
-        // Calculate grade cost, only apply a penalty if it is above 6%
-        float grade_cost = grade_weight * (steepest_grade - max_grade_allowed + fabs(max_grade_allowed - steepest_grade)) + 1.0;
+        // To normalize the track cost, divide by the distance of the entire route.
+        // Then we divide by the max cost per segment of track, which we assume is the tunneling cost
+        float track_cost_n = track_cost / (route_length * tunnel_cost);
 
-        // Calculate the curvature cost
-        // Right now we are simply using the sum of curvature (not radius of curvature)
-        float curve_cost = curve_weight * (min_curve_allowed - min_curve + fabs(min_curve_allowed - min_curve)) + curve_sum * curve_sum_weight;
+        // To normalize the distance, divide by the straight line distance and then subtract 1.
+        // This is equivalent to subtracting the straight line distance and then dividing since the min value is
+        // the straight line distance.
+        float route_length_n = route_length / straight_distance - 1.0;
+
+        float curve_cost = (float)curve_penalty / (num_points_1 + 1.0);
+        float grade_cost = (float)grade_penalty / (num_points_1 + 1.0);
 
         // Get total cost
-        float total_cost = grade_cost + track_cost + curve_cost;
+        float total_cost = track_cost_n + curve_cost + grade_cost + route_length_n * 2.0;
 
         // Set the individual's header to contain its cost
         individuals[path - 1].x = total_cost;
