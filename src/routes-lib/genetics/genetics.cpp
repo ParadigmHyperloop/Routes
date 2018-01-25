@@ -9,8 +9,12 @@ std::vector<glm::vec3> Genetics::solve(Population& pop, Pod& pod, int generation
     // Run the simulation for then given amount of generations
     for (int i = 0; i < generations; i++) {
         
-        if (i % 20 == 0 && i)
-            std::cout << "Finished gen " << i << std::endl;
+        if (i % 20 == 0 && i) {
+
+            Individual ind = pop.getIndividual(0);
+            std::cout << "Finished gen " << i << " cost: " << ind.header->x << std::endl;
+
+        }
         
         pop.step(pod);
         

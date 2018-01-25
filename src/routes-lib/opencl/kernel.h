@@ -8,6 +8,7 @@
 #define BOOST_COMPUTE_DEBUG_KERNEL_COMPILATION
 
 #include <boost/compute.hpp>
+#include <fstream>
 #include <glm/glm.hpp>
 
 /** */
@@ -29,7 +30,19 @@ class Kernel {
          * @param name
          * The name of the kernel function inside the program
          */
-        Kernel(const std::string& program, const std::string name);
+        Kernel(const std::string& program, const std::string& name);
+
+
+        /**
+         * Compiles a kernel from an external file
+         *
+         * @param stream
+         * The stream that points to the location on disk that the kernel program should be compiled from
+         *
+         * @param name
+         * The name of the kernel function inside the program
+         */
+        Kernel(std::ifstream& stream, const std::string& name);
 
         /**
          * An already compiled program to use for this kernel.
@@ -40,7 +53,7 @@ class Kernel {
          * @param name
          * The name of the kernel function inside the program
          */
-        Kernel(const boost::compute::program& program, const std::string name);
+        Kernel(const boost::compute::program& program, const std::string& name);
 
         /**
          * Sets the arguments on the kernel.
@@ -157,6 +170,17 @@ class Kernel {
         *  This is how parameters are passed from the CPU to the compute device.
         */
         static boost::shared_ptr<boost::compute::program_cache> _global_cache;
+
+        /**
+         * Compiles the program for this kernel from the given string.
+         *
+         * @param program
+         * The source of the kernel program
+         *
+         * @param name
+         * The name of the kernel inside of the source
+         */
+        void compileProgram(const std::string& program, const std::string& name);
 
 };
 
