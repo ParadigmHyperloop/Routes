@@ -179,7 +179,7 @@ void Population::calcGenomeSize() {
 void Population::initParams() {
 
     // Choose mu to be a fixed number of individuals
-    _mu = 15;
+    _mu = _pop_size * 0.15;
 
     // Init the mean to the best guess (a straight line)
     bestGuess();

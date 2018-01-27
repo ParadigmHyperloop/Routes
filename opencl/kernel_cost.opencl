@@ -165,7 +165,7 @@ __kernel void cost(__read_only image2d_t image, __global float4* individuals, in
         // To normalize the distance, divide by the straight line distance and then subtract 1.
         // This is equivalent to subtracting the straight line distance and then dividing since the min value is
         // the straight line distance.
-        float route_length_n = clamp(route_length / straight_distance - 1.0, 0.0, 1.0);
+        float route_length_n = clamp(route_length / straight_distance - 1.0f, 0.0f, 1.0f);
 
         float curve_cost = (float)curve_penalty / (num_points_1 + 1.0);
         float grade_cost = (float)grade_penalty / (num_points_1 + 1.0);
