@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css?family=Rubik');
+
+html {
+    
+    font-family: 'Rubik';
+    
+    color: white;
+    background-color: #191919;
+
+}
+
+body {
+    
+    margin: 0pt;
+    
+}
+
+.grad-text {
+    
+    display: inline;
+    
+    color: transparent;
+    background-image: linear-gradient(to bottom right, #FF5A43, #C00040);
+    -webkit-background-clip: text;
+    background-clip: text;
+    
+}

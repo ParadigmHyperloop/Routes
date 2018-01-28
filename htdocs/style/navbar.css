@@ -1,0 +1,23 @@
+#navbar {
+    
+    font-size: 24pt;
+    color: #545454;
+    
+    display: flex;
+    justify-content :flex-end;
+    align-items: center;
+    
+    width: 100%;
+    padding-top: 4pt;
+    padding-bottom: 4pt;
+    
+}
+
+#paradigm-logo {
+    
+    width: 75pt;
+    height: 75pt;
+    
+    padding-left: 4pt;
+    padding-right: 4pt;
+}
