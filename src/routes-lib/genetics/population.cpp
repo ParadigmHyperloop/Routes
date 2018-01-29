@@ -28,8 +28,8 @@ Population::Population(int pop_size, glm::vec4 start, glm::vec4 dest, const Elev
     // Figure out how many points this route should be evaluated on.
     // We also make sure it is a multiple of workers
     glm::dvec2 cropped_size = data.getCroppedSizeMeters();
-    _num_evaluation_points = (int)ceil(glm::max(cropped_size.x / METERS_TO_POINT_CONVERSION,
-                                                cropped_size.y / METERS_TO_POINT_CONVERSION) / (float)NUM_ROUTE_WORKERS) * NUM_ROUTE_WORKERS;
+    _num_evaluation_points = glm::max((int)ceil(glm::max(cropped_size.x / METERS_TO_POINT_CONVERSION,
+                                                         cropped_size.y / METERS_TO_POINT_CONVERSION) / (float)NUM_ROUTE_WORKERS) * NUM_ROUTE_WORKERS, 2400);
 
     std::cout << "Using " << _num_evaluation_points << " points of evaluation" << std::endl;
     _num_evaluation_points_1 = (float)_num_evaluation_points - 1.0f;
@@ -323,8 +323,8 @@ void Population::calculateStratParameters() {
     _c_covar = 4.0 / N;
 
     // Calculate a few other params for the covariance matrix updating
-    _c1 = 2.0f / ((N + 1.3f) * (N + 1.3f) + _mu_weight);
-    _c_mu = glm::clamp(2.0f * (_mu_weight - 2.0f + 1.0f / _mu_weight) / ((N + 2.0f) * (N + 2.0f) + _mu_weight), 0.0f, 1.0f - _c1);
+    _c1 = 2.0f / (N * N);
+    _c_mu = _mu_weight / (N * N);
 
 }
 
