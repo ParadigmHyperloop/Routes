@@ -1,15 +1,22 @@
 var sayings = ["Adding that [Musk-y] smell", 
-               "[Elon-gating] the track", 
                "Proving [Darwin] right", 
                "Counting the [1's] and 0's",
-               "Wishing upon a [star]",
-               "Praying to [Gaben]",
+               "[Elon-gating] the track", 
                "Tasting [victory]",
-               "[404] track not found",
+               "[Spinning] up the fans",
+               "[404] route not found",
+               "Dropping [production] tables",
                "[Mmmm]... bacon",
+               "Finding [{] a friend",
+               "[Re-thinking] decisions",
+               "Forgetting something [really] important",
                "[Sucking] out the air",
+               "Making [more] problems",
                "Hey look a [butterfly!]",
-               "Funneling in [electrons]"]
+               "Swizzling some [vectors]",
+               "Printing [\"Hello World\"]",
+               "Finding the [missing] semicolon",
+               "[Flipping] a few bits"]
 var saying_timer
 var current_saying
 
@@ -55,11 +62,9 @@ var offset = 0
 function initSayings() {
     
     for (var i = 0; i < loadedIndex; i++) 
-        $('#sayings').append("<div>" + sayings[i].replace("[", "<div class=\"grad-text\">").replace("]", "</div>") + "</div>")
+        $('#sayings').append("<div class=\"saying-row\">" + sayings[i].replace("[", "<div class=\"grad-text\">").replace("]", "</div>") + "</div>")
 
     $('#sayings').animate({scrollTop: 1}, 0)
-       
-        
     
 }
 
@@ -71,7 +76,7 @@ function changeSaying() {
     acc += offset;
     index++
     
-    $('#sayings').append("<div>" + sayings[loadedIndex % sayings.length].replace("[", "<div class=\"grad-text\">").replace("]", "</div>") + "</div>")
+    $('#sayings').append("<div class=\"saying-row\">" + sayings[loadedIndex % sayings.length].replace("[", "<div class=\"grad-text\">").replace("]", "</div>") + "</div>")
     loadedIndex++
     
     saying_timer = window.setTimeout(changeSaying, 2000)
@@ -124,11 +129,17 @@ function gotFinishedRoute(result) {
         strokeWeight: 4
     });
 
-    pathLine.setMap(map);
-    $('#overlay').hide();
+    pathLine.setMap(map)
+    $('#overlay').css({"opacity" : "0"})
+    setTimeout(hideOverlay, 1000)
 
 }
 
+function hideOverlay() {
+    
+    $('#overlay').hide()
+
+}
 
 function getComputeRequest(start, dest, succ) {
 

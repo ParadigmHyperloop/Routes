@@ -24,7 +24,7 @@ function compute() {
     localStorage.setItem("origin",      JSON.stringify(origin.getPlace().geometry.location));
     localStorage.setItem("destination", JSON.stringify(destination.getPlace().geometry.location));
 
-//     window.location.href = "route.html";
+     window.location.href = "route.html";
         
     
 }
