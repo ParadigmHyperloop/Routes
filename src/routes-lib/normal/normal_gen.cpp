@@ -4,7 +4,7 @@
 
 #include "normal_gen.h"
 
-std::hash<int> hasher;
+std::hash<long long int> hasher;
 SampleGenerator::SampleGenerator(int length, int retainer) : _queue(new boost::lockfree::spsc_queue<Eigen::VectorXf>(retainer)), _length(length),
                                                              _twister(hasher(std::chrono::high_resolution_clock::now().time_since_epoch().count())),
                                                              _standard_distro(0.0, 1.0) {
@@ -29,6 +29,7 @@ void SampleGenerator::getSample(Eigen::VectorXf& to_place) {
     // More than likely we are going to get a sample, but we need to ensure it.
     // If we failed to get one generate one on the calling thread
     if (!_queue->pop(to_place)) {
+
 
         for (int i = 0; i < _length; i++)
             to_place(i) = _standard_distro(_twister);
@@ -58,7 +59,7 @@ void SampleGenerator::generateSamples() {
         }
 
         // Sleep for a bit
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        std::this_thread::yield();
 
     }
 

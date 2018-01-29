@@ -68,6 +68,40 @@ float Bezier::bezierLength(const std::vector<glm::vec3>& points) {
     
 }
 
+float Bezier::calcCurvature(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2) {
+
+    glm::vec3 der_first0 = p1 - p0;
+    glm::vec3 der_first1 = p2 - p1;
+
+    // Get the second derivative
+    glm::vec3 der_second = der_first1 - der_first0;
+
+    // Calculate the denominator and numerator
+    float denom = glm::length(cross(der_first0, der_second));
+    float num = glm::pow(length(der_first0), 3);
+
+    return fabs(denom / num);
+}
+
+float Bezier::radiusOfCurvature(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2) {
+
+    float r = 0.0;
+
+    return 1 / calcCurvature(p0,p1,p2);
+}
+
+float Bezier::avgDistanceBetweenPoints(const std::vector<glm::vec3>& points) {
+    float total_length = 0.0;
+    total_length = bezierLength(points);
+
+    int num_points = 0;
+    num_points = points.size();
+
+    float avg = 0.0;
+    return total_length / num_points;
+
+}
+
 void Bezier::doEvaluate(glm::vec3& out_point, float s, int degree, const std::vector<glm::vec3>& controls, const std::vector<int>& binoms) {
     
     float one_minus_s = 1.0 - s;

@@ -8,7 +8,8 @@
 #include <ctime>
 #include <eigen3/Eigen/Eigen>
 #include <iostream>
-#include <random>
+#include <boost/random.hpp>
+#include <boost/random/normal_distribution.hpp>
 #include <boost/lockfree/spsc_queue.hpp>
 #include <thread>
 
@@ -71,13 +72,13 @@ class SampleGenerator {
         std::thread _sample_thread;
 
         /** A Mersenne Twister object (a pseudorandom generator) that we pull the samples from. */
-        std::mt19937 _twister;
+        boost::mt19937 _twister;
 
         /**
          * The normal distribution that we sample from, AKA the standard normal distribution.
          * This is by definition N(0, 1)
          */
-        std::normal_distribution<float> _standard_distro;
+        boost::normal_distribution<float> _standard_distro;
 
 };
 
