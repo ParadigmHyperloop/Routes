@@ -1,8 +1,7 @@
 var searchData=
 [
-  ['initopencl',['initOpenCL',['../class_kernel.html#aaf85aedc18138e6b5857e83658cf7582',1,'Kernel']]],
-  ['initparams',['initParams',['../class_population.html#af6fd879ac429afc818bcab64b4aef633',1,'Population']]],
-  ['initsamplers',['initSamplers',['../class_population.html#a0f8f46964400234c9c8a6d503178ef2e',1,'Population']]],
-  ['initsamples',['initSamples',['../class_population.html#a5b1fd0a6cad512857bf09896db783d90',1,'Population']]],
-  ['isroutecompleted',['isRouteCompleted',['../class_routes_queue.html#a8f3ef306a73330317fec093c3bcd9c13',1,'RoutesQueue']]]
+  ['handlecompute',['handleCompute',['../class_routes_server.html#af2d7303fef41a6c2468fdab21de930cf',1,'RoutesServer']]],
+  ['handlecors',['handleCORS',['../class_routes_server.html#a67f2780dee289ff3314831afd96023e6',1,'RoutesServer']]],
+  ['handlemaxroute',['handleMaxRoute',['../class_routes_server.html#aacc658ce5d98fdd86b1fe315f92748f6',1,'RoutesServer']]],
+  ['handleretrieval',['handleRetrieval',['../class_routes_server.html#a1595a054d3e44385617983ab363b82e2',1,'RoutesServer']]]
 ];

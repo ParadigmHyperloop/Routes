@@ -1,16 +1,6 @@
 var searchData=
 [
-  ['calcbinomialcoefficient',['calcBinomialCoefficient',['../class_bezier.html#a9f8ca35c731b6bbec7d50465e987f7e7',1,'Bezier']]],
-  ['calcbinomialcoefficients',['calcBinomialCoefficients',['../class_population.html#af11b90b5e90c7d41126702d5292cffac',1,'Population']]],
-  ['calcconversions',['calcConversions',['../class_elevation_data_1_1___static_g_d_a_l.html#a4f587db1cccb6fa7f5525ed0057196a0',1,'ElevationData::_StaticGDAL']]],
-  ['calccroppedsize',['calcCroppedSize',['../class_elevation_data.html#ab041efcad231e72739b517838a9d251b',1,'ElevationData']]],
-  ['calcgenomesize',['calcGenomeSize',['../class_population.html#a52a41d7911ed22285e95244f3f780fbb',1,'Population']]],
-  ['calcinitialsigma',['calcInitialSigma',['../class_population.html#afab1fb0fa49ffb149e1c7ed65ab9fce6',1,'Population']]],
-  ['calcstats',['calcStats',['../class_elevation_data_1_1___static_g_d_a_l.html#a3cb0fd8dad451466b74835aa3fffa2b1',1,'ElevationData::_StaticGDAL']]],
-  ['calculateroute',['calculateRoute',['../class_routes.html#ae2a60ebc21f42e861959ee955995345b',1,'Routes']]],
-  ['calculateroutes',['calculateRoutes',['../class_routes_queue.html#a221ea6e4c3d367c5af5a0372abb135c5',1,'RoutesQueue']]],
-  ['calculatestratparameters',['calculateStratParameters',['../class_population.html#abd7667302d37a169fb71e258bfed4bf5',1,'Population']]],
-  ['calcweights',['calcWeights',['../class_population.html#a25be9ccf8ba11a1230564b3674d1c2ff',1,'Population']]],
-  ['convertpixelstometers',['convertPixelsToMeters',['../class_elevation_data.html#a519db51fa0a56aae327a6f34fc269c56',1,'ElevationData']]],
-  ['createopenclimage',['createOpenCLImage',['../class_elevation_data.html#acee010de2feef7305f2ecbfa0675230a',1,'ElevationData']]]
+  ['bestguess',['bestGuess',['../class_population.html#a3e008515bf22e73d5c4de35d4ca66659',1,'Population']]],
+  ['bezierlength',['bezierLength',['../class_bezier.html#a0f1637970f67da01acc269122af56550',1,'Bezier']]],
+  ['boost_5fauto_5ftest_5fcase',['BOOST_AUTO_TEST_CASE',['../test__bezier_8cpp.html#a01bcf41d8f7bbab216dcada525b9a746',1,'BOOST_AUTO_TEST_CASE(test_bezier_CPU):&#160;test_bezier.cpp'],['../test__bezier_8cpp.html#a8dfc9f9e9609eaaab9820b0511a8edfd',1,'BOOST_AUTO_TEST_CASE(test_bezier_binom):&#160;test_bezier.cpp'],['../test__bezier_8cpp.html#a883dfc426341d5b817caea4253b14c36',1,'BOOST_AUTO_TEST_CASE(test_bezier_GPU):&#160;test_bezier.cpp'],['../test__elevation_8cpp.html#a8491dd24f884fc0c71b0d813bc85e5de',1,'BOOST_AUTO_TEST_CASE(test_elevation_conversions):&#160;test_elevation.cpp'],['../test__elevation_8cpp.html#a60cb9ab9ad48b995f596b58d72f7f804',1,'BOOST_AUTO_TEST_CASE(test_elevation_sampling):&#160;test_elevation.cpp'],['../test__multinormal_8cpp.html#a3f288a3031e471eb67b19406b2e34206',1,'BOOST_AUTO_TEST_CASE(test_multinormal):&#160;test_multinormal.cpp'],['../test__spline_8cpp.html#a5b93f99d4d87235450f55bf99b433e37',1,'BOOST_AUTO_TEST_CASE(test_spline_CPU):&#160;test_spline.cpp'],['../test__spline_8cpp.html#a062bfb8da28dabd0037d40edc1d6c4d0',1,'BOOST_AUTO_TEST_CASE(test_spline_GPU):&#160;test_spline.cpp']]]
 ];

@@ -82,6 +82,12 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a9f8ca35c731b6bbec7d50465e987f7e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0f1637970f67da01acc269122af56550"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bezier.html#a0f1637970f67da01acc269122af56550">bezierLength</a> (const std::vector&lt; glm::vec3 &gt; &amp;points)</td></tr>
 <tr class="separator:a0f1637970f67da01acc269122af56550"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a23e224044a2ab8b8b7d490304bc3122c"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bezier.html#a23e224044a2ab8b8b7d490304bc3122c">calcCurvature</a> (glm::vec3 p0, glm::vec3 p1, glm::vec3 p2)</td></tr>
+<tr class="separator:a23e224044a2ab8b8b7d490304bc3122c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0f158e9343e880f57bbdce8bb99bc2c"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bezier.html#ab0f158e9343e880f57bbdce8bb99bc2c">radiusOfCurvature</a> (glm::vec3 p0, glm::vec3 p1, glm::vec3 p2)</td></tr>
+<tr class="separator:ab0f158e9343e880f57bbdce8bb99bc2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c03d71a960c8f305a7c02f0b1fdde7c"><td class="memItemLeft" align="right" valign="top">static float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_bezier.html#a3c03d71a960c8f305a7c02f0b1fdde7c">avgDistanceBetweenPoints</a> (const std::vector&lt; glm::vec3 &gt; &amp;points)</td></tr>
+<tr class="separator:a3c03d71a960c8f305a7c02f0b1fdde7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
@@ -96,6 +102,40 @@ Static Private Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This class provides utils to evaluate a bezier curve, rather than rewrite the code in more than one class. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a3c03d71a960c8f305a7c02f0b1fdde7c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3c03d71a960c8f305a7c02f0b1fdde7c">&#9670;&nbsp;</a></span>avgDistanceBetweenPoints()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Bezier::avgDistanceBetweenPoints </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; glm::vec3 &gt; &amp;&#160;</td>
+          <td class="paramname"><em>points</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Calculates the average distance between the points on the bezier curve</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">points</td><td>The points of the bezier curve</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The average distance between the points on the curve </dd></dl>
+
+</div>
+</div>
 <a id="a0f1637970f67da01acc269122af56550"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0f1637970f67da01acc269122af56550">&#9670;&nbsp;</a></span>bezierLength()</h2>
 
@@ -172,6 +212,58 @@ Static Private Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The binomial coefficient. </dd></dl>
+
+</div>
+</div>
+<a id="a23e224044a2ab8b8b7d490304bc3122c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a23e224044a2ab8b8b7d490304bc3122c">&#9670;&nbsp;</a></span>calcCurvature()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Bezier::calcCurvature </td>
+          <td>(</td>
+          <td class="paramtype">glm::vec3&#160;</td>
+          <td class="paramname"><em>p0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">glm::vec3&#160;</td>
+          <td class="paramname"><em>p1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">glm::vec3&#160;</td>
+          <td class="paramname"><em>p2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Calculates the curvature around a point p1</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p0</td><td>The point before the point of interest</td></tr>
+    <tr><td class="paramname">p1</td><td>The point whose curvature is being evaluated</td></tr>
+    <tr><td class="paramname">p2</td><td>The point after the point of interest</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The curvature at a point </dd></dl>
 
 </div>
 </div>
@@ -361,6 +453,58 @@ Static Private Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The complete array of binomial coefficients, should be of degree length + 1. </dd></dl>
+
+</div>
+</div>
+<a id="ab0f158e9343e880f57bbdce8bb99bc2c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0f158e9343e880f57bbdce8bb99bc2c">&#9670;&nbsp;</a></span>radiusOfCurvature()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Bezier::radiusOfCurvature </td>
+          <td>(</td>
+          <td class="paramtype">glm::vec3&#160;</td>
+          <td class="paramname"><em>p0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">glm::vec3&#160;</td>
+          <td class="paramname"><em>p1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">glm::vec3&#160;</td>
+          <td class="paramname"><em>p2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Calculates the radius of curvature around point p1</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p0</td><td>The point before the point of interes</td></tr>
+    <tr><td class="paramname">p1</td><td>The point whose Radius of curvature is being evaluated</td></tr>
+    <tr><td class="paramname">p2</td><td>The point after the point of interest</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The radius of curvature around a point </dd></dl>
 
 </div>
 </div>
