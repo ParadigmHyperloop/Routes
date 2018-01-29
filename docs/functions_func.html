@@ -68,11 +68,11 @@ $(function() {
 
 
 <h3><a id="index_b"></a>- b -</h3><ul>
+<li>bestGuess()
+: <a class="el" href="class_population.html#a3e008515bf22e73d5c4de35d4ca66659">Population</a>
+</li>
 <li>bezierLength()
 : <a class="el" href="class_bezier.html#a0f1637970f67da01acc269122af56550">Bezier</a>
-</li>
-<li>breedIndividuals()
-: <a class="el" href="class_population.html#ad7c26bf974a26a3d12e882386c87aad4">Population</a>
 </li>
 </ul>
 
@@ -93,6 +93,9 @@ $(function() {
 <li>calcGenomeSize()
 : <a class="el" href="class_population.html#a52a41d7911ed22285e95244f3f780fbb">Population</a>
 </li>
+<li>calcInitialSigma()
+: <a class="el" href="class_population.html#afab1fb0fa49ffb149e1c7ed65ab9fce6">Population</a>
+</li>
 <li>calcStats()
 : <a class="el" href="class_elevation_data_1_1___static_g_d_a_l.html#a3cb0fd8dad451466b74835aa3fffa2b1">ElevationData::_StaticGDAL</a>
 </li>
@@ -102,14 +105,17 @@ $(function() {
 <li>calculateRoutes()
 : <a class="el" href="class_routes_queue.html#a221ea6e4c3d367c5af5a0372abb135c5">RoutesQueue</a>
 </li>
+<li>calculateStratParameters()
+: <a class="el" href="class_population.html#abd7667302d37a169fb71e258bfed4bf5">Population</a>
+</li>
+<li>calcWeights()
+: <a class="el" href="class_population.html#a25be9ccf8ba11a1230564b3674d1c2ff">Population</a>
+</li>
 <li>convertPixelsToMeters()
 : <a class="el" href="class_elevation_data.html#a519db51fa0a56aae327a6f34fc269c56">ElevationData</a>
 </li>
 <li>createOpenCLImage()
 : <a class="el" href="class_elevation_data.html#acee010de2feef7305f2ecbfa0675230a">ElevationData</a>
-</li>
-<li>crossoverIndividual()
-: <a class="el" href="class_population.html#a94a73718ff797a1420aa28a7018779b0">Population</a>
 </li>
 </ul>
 
@@ -125,7 +131,7 @@ $(function() {
 : <a class="el" href="class_bezier.html#af73a77f705ddcd1028fc74b5805c5f41">Bezier</a>
 </li>
 <li>doSample()
-: <a class="el" href="class_multi_normal.html#a7fa23a9d2d6f237d4c749598e9c40d93">MultiNormal</a>
+: <a class="el" href="class_multi_normal.html#ae071925b9d502b3d8055244d5d8e98fc">MultiNormal</a>
 </li>
 </ul>
 
@@ -156,17 +162,11 @@ $(function() {
 
 
 <h3><a id="index_g"></a>- g -</h3><ul>
-<li>generatePopulation()
-: <a class="el" href="class_population.html#ae3a4c2457d9276367f242330d8497cb1">Population</a>
-</li>
-<li>generateRandomFloat()
-: <a class="el" href="class_population.html#a9b3b0068290480da7cd682f00933ac3e">Population</a>
-</li>
-<li>generateRandomPoint()
-: <a class="el" href="class_population.html#a3d0c584fff6a8fcb6d053d56b8d418f7">Population</a>
-</li>
 <li>generateRandomSamples()
-: <a class="el" href="class_multi_normal.html#ada6b0b6f45d12449b6f9f2f894b2f492">MultiNormal</a>
+: <a class="el" href="class_multi_normal.html#a6f2a5156edccfc8abc46699366a59e7b">MultiNormal</a>
+</li>
+<li>generateSamples()
+: <a class="el" href="class_sample_generator.html#a9aa8b4cd54d59f4189b5541c02ef334a">SampleGenerator</a>
 </li>
 <li>getBinomialCoefficients()
 : <a class="el" href="class_bezier.html#af8184ad8c9c23625005c40efe7f74d13">Bezier</a>
@@ -213,6 +213,12 @@ $(function() {
 <li>getQueue()
 : <a class="el" href="class_kernel.html#aa5273e14f07845343045a53124b0d057">Kernel</a>
 </li>
+<li>getSample()
+: <a class="el" href="class_sample_generator.html#a2014d6dab0da44681418fb59c52fc3d7">SampleGenerator</a>
+</li>
+<li>getSolution()
+: <a class="el" href="class_population.html#a0c1a14e15c5fe4aa14f1511aa58df967">Population</a>
+</li>
 <li>getState()
 : <a class="el" href="class_c_m_d.html#a78241396d0dfc04b988e64e7eb8caede">CMD</a>
 </li>
@@ -244,6 +250,15 @@ $(function() {
 <h3><a id="index_i"></a>- i -</h3><ul>
 <li>initOpenCL()
 : <a class="el" href="class_kernel.html#aaf85aedc18138e6b5857e83658cf7582">Kernel</a>
+</li>
+<li>initParams()
+: <a class="el" href="class_population.html#af6fd879ac429afc818bcab64b4aef633">Population</a>
+</li>
+<li>initSamplers()
+: <a class="el" href="class_population.html#a0f8f46964400234c9c8a6d503178ef2e">Population</a>
+</li>
+<li>initSamples()
+: <a class="el" href="class_population.html#a5b1fd0a6cad512857bf09896db783d90">Population</a>
 </li>
 <li>isRouteCompleted()
 : <a class="el" href="class_routes_queue.html#a8f3ef306a73330317fec093c3bcd9c13">RoutesQueue</a>
@@ -282,10 +297,7 @@ $(function() {
 : <a class="el" href="class_pod.html#a6d1251a997b3e47ffc0f2380726213f9">Pod</a>
 </li>
 <li>MultiNormal()
-: <a class="el" href="class_multi_normal.html#a879473e6125da5a929b8f21523457830">MultiNormal</a>
-</li>
-<li>mutateGenome()
-: <a class="el" href="class_population.html#a24cd0bffa59c510e04b6d3e7fd6a7625">Population</a>
+: <a class="el" href="class_multi_normal.html#a683bb2b132a43c07e1bd1f94aa2f3d4a">MultiNormal</a>
 </li>
 </ul>
 
@@ -331,6 +343,12 @@ $(function() {
 
 
 <h3><a id="index_s"></a>- s -</h3><ul>
+<li>SampleGenerator()
+: <a class="el" href="class_sample_generator.html#aa909346dd3f56ee29b053804789da0ac">SampleGenerator</a>
+</li>
+<li>samplePopulation()
+: <a class="el" href="class_population.html#ae9808f1c42383f6015c672bb7b9ba030">Population</a>
+</li>
 <li>sendResponse()
 : <a class="el" href="class_routes_server.html#abd4772fe18266496a65d2b4df9dcb8ac">RoutesServer</a>
 </li>
@@ -346,12 +364,37 @@ $(function() {
 <li>startServer()
 : <a class="el" href="class_routes_server.html#af62764a777011be3aed79e0dfece82b6">RoutesServer</a>
 </li>
+<li>step()
+: <a class="el" href="class_population.html#a6aa7bc5b1eaa2a67041185a2ca92cc4f">Population</a>
+</li>
 </ul>
 
 
 <h3><a id="index_t"></a>- t -</h3><ul>
 <li>timeForCurve()
 : <a class="el" href="class_pod.html#ae45401e83f670d2c368f1e83375feb02">Pod</a>
+</li>
+</ul>
+
+
+<h3><a id="index_u"></a>- u -</h3><ul>
+<li>updateCovar()
+: <a class="el" href="class_population.html#a53ac834d13be47e7efaf1b110a8bbae9">Population</a>
+</li>
+<li>updateMean()
+: <a class="el" href="class_population.html#ae4054bc28d496288dad3230d81a98ce8">Population</a>
+</li>
+<li>updateParams()
+: <a class="el" href="class_population.html#a0561b5f1371f832ac14019dd49ce34a9">Population</a>
+</li>
+<li>updatePCovar()
+: <a class="el" href="class_population.html#a9824dc385f67d72126ebf0f2fc90e9d4">Population</a>
+</li>
+<li>updatePSigma()
+: <a class="el" href="class_population.html#a4d4d26c6c88802481af7dde6dea2d58f">Population</a>
+</li>
+<li>updateSigma()
+: <a class="el" href="class_population.html#a42901c197b3073b39a52227ff48a2fc0">Population</a>
 </li>
 </ul>
 
@@ -372,6 +415,9 @@ $(function() {
 </li>
 <li>~Population()
 : <a class="el" href="class_population.html#a4c8cedd0f038e41746fb6084639f5616">Population</a>
+</li>
+<li>~SampleGenerator()
+: <a class="el" href="class_sample_generator.html#a7cb96d63cbab9c77763ffd1fe5edbf0d">SampleGenerator</a>
 </li>
 </ul>
 </div><!-- contents -->

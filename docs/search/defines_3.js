@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['g',['g',['../pod_8h.html#a167d2c0ec9b943d55f2124f7442b2f6d',1,'pod.h']]],
-  ['gdal_5fdb_5fpath',['GDAL_DB_PATH',['../elevation_8h.html#a2c46dc8f6114b53c6b7b9689b2ba1cac',1,'elevation.h']]],
-  ['glm_5fenable_5fexperimental',['GLM_ENABLE_EXPERIMENTAL',['../elevation_8h.html#abd75661fe7969e19439052a5f69ba5d1',1,'elevation.h']]]
+  ['earth_5fradius',['EARTH_RADIUS',['../elevation_8h.html#aacdf1719d113d68a71127426f7c730cd',1,'elevation.h']]],
+  ['excavation_5fdepth',['EXCAVATION_DEPTH',['../pod_8h.html#ae4adb5dee6386c072d6040a979e5b405',1,'pod.h']]]
 ];

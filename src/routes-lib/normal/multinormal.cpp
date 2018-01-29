@@ -7,20 +7,12 @@
 
 #include "multinormal.h"
 
-std::mt19937 MultiNormal::_twister;
-std::normal_distribution<float> MultiNormal::_standard_distro(0.0, 1.0);
+MultiNormal::MultiNormal(const Eigen::MatrixXf& covariance_matrix, const Eigen::VectorXf& sigma) : _sigma(sigma) {
 
-MultiNormal::MultiNormal(const Eigen::MatrixXf& covariance_matrix, Eigen::VectorXf m) : _m(m) {
-    
-    // Update the twister to make sure we get consistantly random results
-    // Hashing makes everything better :)
-    std::hash<int> hasher;
-    _twister = std::mt19937(hasher(std::chrono::high_resolution_clock::now().time_since_epoch().count()));
-    
     // Decompose the covariance matrix
     Eigen::LLT<Eigen::MatrixXf> decomp(covariance_matrix);
     
-    if (decomp.info()==Eigen::Success)
+    if (decomp.info() == Eigen::Success)
         _A = decomp.matrixL();
     else {
       
@@ -29,35 +21,50 @@ MultiNormal::MultiNormal(const Eigen::MatrixXf& covariance_matrix, Eigen::Vector
         
     }
     
-    // For some reason we need to tranpose the A matrix, honestly I have no idea why this works
-    _A.transposeInPlace();
-    
 }
 
-std::vector<Eigen::VectorXf> MultiNormal::generateRandomSamples(int count) {
- 
-    // Create a vector and fill it with samples
-    std::vector<Eigen::VectorXf> samples(count);
-    
-    for (int i = 0; i < count; i++) {
-        
-        // Make sure the vector is initialized to the right size
-        samples[i] = Eigen::VectorXf(_m.size());
-        doSample(samples[i]);
-        
-    }
-    
-    return samples;
-    
+void MultiNormal::generateRandomSamples(std::vector<Eigen::VectorXf>& out, SampleGenerator& sampler) {
+
+    // Overwrite everything in the vector
+    for (int i = 0; i < out.size(); i++)
+        doSample(out[i], sampler);
+
 }
 
-void MultiNormal::doSample(Eigen::VectorXf& out_sample) {
+void MultiNormal::doSample(Eigen::VectorXf& out_sample, SampleGenerator& sampler) {
     
-    // First we fill the vector with randomly generated values from the standard distribution
-    for (int i = 0; i < out_sample.size(); i++)
-        out_sample(i) = _standard_distro(_twister);
+    // Grab a sample
+    sampler.getSample(out_sample);
     
     // Transform the sample by the decomposed covariance and then add the mean vector
-    out_sample = _m + (out_sample.transpose() * _A).transpose();
+    out_sample = (_A * out_sample).cwiseProduct(_sigma);
     
+}
+
+void MultiNormal::generateRandomSamples(std::vector<Eigen::VectorXf>& out, std::vector<SampleGenerator*> samplers) {
+
+    // Determine params
+    int num_workers = samplers.size();
+    int work_size = out.size() / num_workers;
+
+    std::vector<std::thread> threads ((size_t)num_workers);
+
+    for (int i = 0; i < num_workers; i++) {
+
+        threads[i] = std::thread([this, i, &out, &samplers, work_size] {
+
+            int start = i * work_size;
+            int end = glm::min(start + work_size, (int)out.size());
+
+            for (int p = start; p < end; p++)
+                doSample(out[p], *samplers[i]);
+
+        });
+
+    }
+
+    // Make sure everything finishes
+    for (int i = 0; i < num_workers; i++)
+        threads[i].join();
+
 }

@@ -9,10 +9,10 @@
 #define multinormal_h
 
 #include <chrono>
-#include <eigen3/Eigen/Eigen>
-#include <iostream>
-#include <random>
+#include <glm/glm.hpp>
 #include <vector>
+
+#include "normal_gen.h"
 
 /** */
 
@@ -26,20 +26,40 @@ class MultiNormal {
          * Once the covariance matrix and mean vector are set they cannot be changed.
          *
          * @param covariance_matrix
-         * The covarience matrix of the multivariate normal distribution
+         * The covariance matrix of the multivariate normal distribution
          *
          * @param m
          * The mean vector of the multivariate normal distribution
-         */
-        MultiNormal(const Eigen::MatrixXf& covariance_matrix, Eigen::VectorXf m);
-    
-        /**
-         * Samples from the distribution count number of times.
          *
-         * @param count
-         * The number of samples to return in the resulting vector
+         * @param sigma
+         * The step size of the distribution
+         *
          */
-        std::vector<Eigen::VectorXf> generateRandomSamples(int count);
+        MultiNormal(const Eigen::MatrixXf& covariance_matrix, const Eigen::VectorXf& sigma);
+
+        /**
+         * Fills the out vector with samples from this distribution.
+         *
+         * @param out
+         * The output vector for the samples. It is assumed that all elements of the vector are initialized to the correct dimensions
+         *
+         * @param sampler
+         * A generator that we can pull standard normal random samples from.
+         */
+        void generateRandomSamples(std::vector<Eigen::VectorXf>& out, SampleGenerator& sampler);
+
+        /**
+         * Fills the out vector with samples from this distribution.
+         * This version of the function utilizes multiple threads and multiple SampleGenerators
+         *
+         * @param out
+         * The output vector for the samples. It is assumed that all elements of the vector are initialized to the correct dimensions
+         *
+         * @param samplers
+         * Several generators that we can pull standard normal random samples from.
+         * The size of this vector determines the number of threads used.
+         */
+         void generateRandomSamples(std::vector<Eigen::VectorXf>& out, std::vector<SampleGenerator*> samplers);
     
     private:
     
@@ -48,21 +68,12 @@ class MultiNormal {
          *
          * @param out_sample
          * The resulting N-dimension vector that represents a random sample from the multivariate normal distribution.
+         *
+         * @param sampler
+         * A generator that we can pull standard normal random samples from.
+         *
          */
-        void doSample(Eigen::VectorXf& out_sample);
-    
-        /**
-         * A Mersenne Twister object that is shared between all MultiNormal objects. The seed is updated whenever a new
-         * instance of MultiNormal is created.
-         */
-        static std::mt19937 _twister;
-    
-        /**
-         * Since sampling from a multivariate normal distribution basically is a transformation of a bunch of samples from
-         * independant standard normal distributions, we only need one normal distribution to do any sampling.
-         * It has mean 0 and a standard deviation of 1.
-         */
-        static std::normal_distribution<float> _standard_distro;
+        void doSample(Eigen::VectorXf& out_sample, SampleGenerator& sampler);
     
         /**
          * Represents the decomposition of the covariance matrix. Multiplying a vector with independent random samples from the
@@ -70,8 +81,8 @@ class MultiNormal {
          */
         Eigen::MatrixXf _A;
     
-        /** The mean vector of the multivariate normal distribution. */
-        Eigen::VectorXf _m;
+        /** The step size of the distribution */
+        Eigen::VectorXf _sigma;
     
 };
 

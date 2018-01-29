@@ -12,22 +12,15 @@
 
 #include "../bezier/bezier.h"
 #include "../elevation/elevation.h"
+#include "../normal/multinormal.h"
 #include "../pod/pod.h"
 
+// Ensure that E is defined on Windows
+#ifndef M_E
+    #define M_E 2.71828182845904523536f
+#endif
 
 /** */
-
-/**
- * The max distance above or below the max and min of elevation data a population is allowed
- * to generate a track at.
- */
-#define TRACK_ABOVE_BELOW_EXTREMA 10.0f
-
-/**
- * Since we assume that paths are relatively close to straight lines, we decide on a maximum deviation from a straight
- * line that a path can initially generate from. This number represents the max deviation in meters.
- */
-#define MAX_STRAIGHT_DEVIATION 15000.0f
 
 /**
  * In order to get the number of points that a particular path should be evaluated along, we run a converstion.
@@ -40,6 +33,30 @@
  * by a constant. This constant is small so we get few points for a lot of meters.
  */
 #define LENGTH_TO_GENOME 0.0274360619f
+
+/**
+ * This value is used to help calculate the initial step size of the population.
+ * and the Z sigma is the max elevation delta / INITIAL_SIGMA_DIVISOR.
+ */
+#define INITIAL_SIGMA_DIVISOR 20.0f
+
+/**
+ * This serves as the initial value for the X and Y of all the points for sigma.
+ * We use 5km as a pretty tight bounding around the straight line (initial mean)
+ */
+#define INITIAL_SIGMA_XY 2500.0f
+
+/** Represents the dampening parameter for the step size. This value should be close to 1 */
+#define STEP_DAMPENING 1.1f
+
+/** The interval multiplier for the square root of _genome_size * 3 for the indicator function. */
+#define ALPHA 1.5f
+
+/** The number of threads that are used to sample from the multivariate normal distribution */
+#define NUM_SAMPLE_THREADS 10
+
+/** The number of divisions that the route is split up into for evaluation on the GPU */
+#define NUM_ROUTE_WORKERS 100
 
 /**
  * Individual is a convenience so that individuals can be treated as units rather than
@@ -69,6 +86,9 @@ struct Individual {
      * All individuals in the same population have the same number of genes.
      */
     size_t num_genes;
+    
+    /** The individual's index in the _individuals vector */
+    int index;
 
 };
 
@@ -117,7 +137,7 @@ class Population {
          */
         Population(int pop_size, glm::vec4 start, glm::vec4 dest, const ElevationData& data);
 
-        /** dummy_genome is allocated on the heap, so delete that here */
+        /** Simple destructor to delete heap allocated things */
         ~Population();
 
         /**
@@ -133,17 +153,21 @@ class Population {
         Individual getIndividual(int index);
 
         /**
+         * Simulates the population for an entire generation. The steps are as follows:
+         * - Rank the current population
+         * - Update the CMA-ES params
+         * - Sample a new population
+         *
+         * @param pod
+         * The pod object containing the specs of the pod. Right now just uses max speed.
+         */
+        void step(const Pod& pod);
+
+        /**
          * This function sorts the individuals in ascending order based on the cost. _individuals[0] becomes
          * the most fit individual. Currently this is done on the CPU, which is not optimal, but it is simpler.
          */
         void sortIndividuals();
-
-        /**
-         * Breeds the top 20% of the individuals together to generate a new, more fit population. Only 80%
-         * of the population is bred, 20% if randomly generated to avoid stagnation.
-         * Assumes that _individuals are already sorted.
-         */
-        void breedIndividuals();
 
         /**
          * This function is what makes the genetic algorithm work.
@@ -155,7 +179,15 @@ class Population {
          *
          */
         void evaluateCost(const Pod& pod);
-
+    
+        /**
+         * This returns the computed solution to the route (the mean).
+         *
+         * @return
+         * The control points of the completed route containing the start and destination.
+         */
+        std::vector<glm::vec3> getSolution() const;
+    
     private:
 
          /**
@@ -165,37 +197,89 @@ class Population {
         void calcGenomeSize();
 
         /**
-         * Generates the initial population using the parameters that were passed in via the constructor.
-         * This is done on the CPU, but hopefully can be done on the GPU eventually.
+         * This function initializes the parameters for CMA-ES.
+         * Parameters include the covariance matrix, the mean, the evolution path and the step size.
          */
-        void generatePopulation();
+        void initParams();
 
         /**
-         * Cross the genes of individual a with individual a. The result is a new genome
-         * that is the linear interpolation of a random amount of the genome of a and b.
-         *
-         * @param a
-         * The index of one individual in _individuals;
-         *
-         * @param b
-         * The index of another individual in _individuals;
-         *
-         * @param new_genome
-         *
-         * @return
-         * The new genome, a random mix of individual a and individual b. Does not contain an individual header.
+         * Becasue sampling from the multivariate normal distribution is so slow, we use some multithreading tricks to speed it up.
+         * Firstly, since all MVND's require samples from the standard normal distribution we create objects that generate these samples in another thread.
+         * Secondly we split the population up into NUM_SAMPLE_THREADS so that we can sample multiple individuals concurrently.
+         * This function creates the prerequisites for this.
          */
-        glm::vec4* crossoverIndividual(int a, int b);
+        void initSamplers();
 
         /**
-         * In order to avoid stagnation and explore more possible solutions, mutation is introduced.
-         * The function randomly replaces points in the genome with completely new points.
-         *
-         * @param genome
-         * The genome to mutate.
-         *
+         * The samples vector is created once here. All samples that are done will overwrite the last ones to avoid memory copying.
+         * All elements in the vector are also initialized here.
          */
-        void mutateGenome(glm::vec4* genome);
+        void initSamples();
+
+        /**
+         * When CMA-ES first starts, the mean is supposed to be the "best guess" for the desired result. In our case, our best is a straight
+         * line from the starting position to the destination.
+         * The mean vector generated by this function is a ordered distribution of linear steps toward the destination.
+         */
+        void bestGuess();
+
+        /**
+         * When we recalculate the mean vector from the best solutions, we do a weighting.
+         * This function calculates the weights for mew (the selected population) once, as it remains constant.
+         */
+        void calcWeights();
+
+        /**
+         * Sigma represents how spread out the distribution will be, in other words the step size.
+         * Because the sample space in Z is smaller than X and Y, sigma should reflect that initially
+         */
+        void calcInitialSigma();
+
+        /** This function calculates some of the evolutionary parameters that remain constant */
+        void calculateStratParameters();
+
+        /**
+         * This samples an entirely new population. We use the calculate / starting covariance matrix, the best solution (m) and the step size.
+         * A multivariate normal distribution is temporarily constructed from these parameters and then the population is sampled from it.
+         */
+        void samplePopulation();
+
+        /**
+         * This function updates the parameters of the distribution including the covariance matrix and mean vector based on the current population.
+         * We use "," selection, meaning we only sample from the current generation.
+         */
+        void updateParams();
+
+        /**
+         * This function re-calculates the mean vector of the population.
+         * The only individuals that are used in this calculation are the _mu most fit ones.
+         * Each individual is weighted by its corresponding _weights value based on its index.
+         */
+        void updateMean();
+
+        /**
+         * This function updates the evolutionary path for sigma.
+         * We do this by using the covariance matrix and some evolutionary stratagy params.
+         */
+        void updatePSigma();
+
+        /**
+         * This function updates the evolutionary path for the covariance matrix.
+         * We do this by using mostly the same factors as the sigma path but we also use the indicator function.
+         */
+        void updatePCovar();
+
+        /**
+         * Updates the covariance matrix for the population using path length control. This adapts the relationship between
+         * each of the points to converge on the best solution.
+         */
+        void updateCovar();
+
+        /**
+         * Updates the step size for the population using path length control. This adapts the step size to quickly converge on a
+         * solution.
+         */
+        void updateSigma();
 
         /**
          * To evaluate the bezier curve, binomial coefficients are required.
@@ -203,34 +287,6 @@ class Population {
          * all paths have the same degree. This computes those coefficients.
          */
         void calcBinomialCoefficients();
-
-        /**
-         * This function computes a constrained random point. We do this because it is most likely that the best
-         * route is one that is very close to a straight line. Therefore we constrain the sample space to within
-         * MAX_STRAIGHT_DEVIATION to speed up the convergence. This is especially important for stitching datasets
-         * where the unconstrained sample space is much larger.
-         *
-         * @param to_gen
-         * A vector that should be the receiving end of the generation.
-         */
-        void generateRandomPoint(glm::vec4& to_gen);
-    
-        /**
-         * Generates a random float in the range [low, high] using the Mersenne Twister algorithm.
-         *
-         * @param low
-         * The lower bound that the random number could be.
-         *
-         * @param high
-         * The upper bound that the random number could be.
-         *
-         * @return
-         * A random float in the range [low, height]
-         */
-        float generateRandomFloat(float low, float high);
-
-        /** An array of glm::vec4s that's the size of _genome_size. Used to avoid repetitive heap allocations. */
-        glm::vec4* dummy_genome;
 
         /** The number of individuals that should be in this population */
         int _pop_size;
@@ -286,9 +342,83 @@ class Population {
          */
         const ElevationData& _data;
 
-        /** The Mersenne Twister that is used for random generation of points */
-        std::mt19937 _twister;
+/************************************************************************************************************************************************/
 
+        /** The number of individuals that are selected from each generation that are the best solutions */
+        int _mu;
+
+        /** This is the sum of 1/_weights^2 */
+        float _mu_weight;
+    
+        /** The square root of _mu_weight */
+        float _mu_weight_sqrt;
+    
+        /** The expectedc value of the standard normal distribution. We use this to determine if we should shrink or grow sigma */
+        float _expected_value;
+
+        /**
+         * This represents the current mean vector of the population. In other words, this is the favorite solution the the population.
+         * The vector is legnth _genome_size * 3, 3 components for each point in the bezier curve (X, Y, Z).
+         */
+        Eigen::VectorXf _mean;
+
+        /** The difference between the new mean and the last mean divided by the step size */
+        Eigen::VectorXf _mean_displacement;
+
+        /**
+         * The covariance matrix of the population. This contains the information about how the multivariate normal distribution is shaped.
+         * This is a _genome_size * 3 X _genome_size * 3 matrix, 3 components for each point in the bezier curve (X, Y, Z).
+         */
+        Eigen::MatrixXf _covar_matrix;
+
+        /**
+         * The current step size. This is how far the next generation will move.
+         * The vector is length _genome_size * 3, 3 components for each point in the bezier curve (X, Y, Z).
+         */
+        Eigen::VectorXf _sigma;
+
+        /**
+         * When we recalculate the mean vector from the best solutions, we do a weighting. This vector stores these weights where
+         * _weights[0] is the highest weight, meant for the best solution.
+         */
+        std::vector<float> _weights;
+
+        /**
+         * The evolution path for the covariance matrix. This is used to adapt the covariance matrix each step
+         * so that successful search steps vary closer to the favorable solution.
+         */
+        Eigen::VectorXf _p_covar;
+
+        /**
+         * The evolution path for the step size (sigma). This is used to adapt the step size each step
+         * so that successful do not prematurely converge.
+         */
+        Eigen::VectorXf _p_sigma;
+
+        /** The inverse of _c_sigma is the the backward time horizon for the evolution path for the step size. */
+        float _c_sigma;
+
+        /** The inverse of _c_covar is the the backward time horizon for the evolution path for the covariance matrix. */
+        float _c_covar;
+
+        /** The learning rate for the rank 1 update of the the covariance matrix */
+        float _c1;
+
+        /** The learning rate for the rank mu update of the covariance matrix */
+        float _c_mu;
+
+        /**
+         * The samples from the distribution minus the mean. We separate this from the completed, evalulatable population to decrease
+         * the chance of numerical error because we are dealing with large numbers.
+         */
+        std::vector<Eigen::VectorXf> _samples;
+
+        /** Several multithreaded standard normal sample generator to speed up population sampling */
+        std::vector<SampleGenerator*> _sample_gens;
+    
+        /** The _mu best multinormal samples from the population */
+        std::vector<Eigen::VectorXf> _best_samples;
+    
 };
 
 #endif //ROUTES_POPULATION_H

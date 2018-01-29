@@ -75,6 +75,7 @@ $(function() {
 <code>#include &lt;time.h&gt;</code><br />
 <code>#include &quot;<a class="el" href="bezier_8h_source.html">../bezier/bezier.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="elevation_8h_source.html">../elevation/elevation.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="multinormal_8h_source.html">../normal/multinormal.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="pod_8h_source.html">../pod/pod.h</a>&quot;</code><br />
 </div>
 <p><a href="population_8h_source.html">Go to the source code of this file.</a></p>
@@ -88,16 +89,71 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
-<tr class="memitem:ada0398b27c35ebe568d6a615bf7538a7"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="population_8h.html#ada0398b27c35ebe568d6a615bf7538a7">TRACK_ABOVE_BELOW_EXTREMA</a>&#160;&#160;&#160;10.0f</td></tr>
-<tr class="separator:ada0398b27c35ebe568d6a615bf7538a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a995dc8039bc2f74e15aafc595d0e5808"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="population_8h.html#a995dc8039bc2f74e15aafc595d0e5808">MAX_STRAIGHT_DEVIATION</a>&#160;&#160;&#160;10000.0f</td></tr>
-<tr class="separator:a995dc8039bc2f74e15aafc595d0e5808"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9bf5d952c5c93c70f9e66c9794d406c9"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="population_8h.html#a9bf5d952c5c93c70f9e66c9794d406c9">M_E</a>&#160;&#160;&#160;2.71828182845904523536f</td></tr>
+<tr class="separator:a9bf5d952c5c93c70f9e66c9794d406c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acfcee9c17743fdcd5c1a217c1b94961f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="population_8h.html#acfcee9c17743fdcd5c1a217c1b94961f">METERS_TO_POINT_CONVERSION</a>&#160;&#160;&#160;30.1867567568f</td></tr>
 <tr class="separator:acfcee9c17743fdcd5c1a217c1b94961f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a17816c3d2f274b8b02deb9738da01035"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="population_8h.html#a17816c3d2f274b8b02deb9738da01035">LENGTH_TO_GENOME</a>&#160;&#160;&#160;0.0274360619f</td></tr>
 <tr class="separator:a17816c3d2f274b8b02deb9738da01035"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c17a11cd32591232924b8b51817b940"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="population_8h.html#a5c17a11cd32591232924b8b51817b940">INITIAL_SIGMA_DIVISOR</a>&#160;&#160;&#160;20.0f</td></tr>
+<tr class="separator:a5c17a11cd32591232924b8b51817b940"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1eaf19a79169a7a7b216521cd2c1fae4"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="population_8h.html#a1eaf19a79169a7a7b216521cd2c1fae4">INITIAL_SIGMA_XY</a>&#160;&#160;&#160;2500.0f</td></tr>
+<tr class="separator:a1eaf19a79169a7a7b216521cd2c1fae4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c9252d678dbd8ac90d4df613d04209f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="population_8h.html#a5c9252d678dbd8ac90d4df613d04209f">STEP_DAMPENING</a>&#160;&#160;&#160;1.5f</td></tr>
+<tr class="separator:a5c9252d678dbd8ac90d4df613d04209f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af5abd28c44c29b7397c84f1fec4b1d84"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="population_8h.html#af5abd28c44c29b7397c84f1fec4b1d84">ALPHA</a>&#160;&#160;&#160;1.5f</td></tr>
+<tr class="separator:af5abd28c44c29b7397c84f1fec4b1d84"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f3e4dc0c38efd4098b8a62b7a3be079"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="population_8h.html#a6f3e4dc0c38efd4098b8a62b7a3be079">NUM_SAMPLE_THREADS</a>&#160;&#160;&#160;10</td></tr>
+<tr class="separator:a6f3e4dc0c38efd4098b8a62b7a3be079"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a668eaf473104c8b7957f96b2a0b688fb"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="population_8h.html#a668eaf473104c8b7957f96b2a0b688fb">NUM_ROUTE_WORKERS</a>&#160;&#160;&#160;100</td></tr>
+<tr class="separator:a668eaf473104c8b7957f96b2a0b688fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
+<a id="af5abd28c44c29b7397c84f1fec4b1d84"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5abd28c44c29b7397c84f1fec4b1d84">&#9670;&nbsp;</a></span>ALPHA</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define ALPHA&#160;&#160;&#160;1.5f</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The interval multiplier for the square root of _genome_size * 3 for the indicator function. </p>
+
+</div>
+</div>
+<a id="a5c17a11cd32591232924b8b51817b940"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c17a11cd32591232924b8b51817b940">&#9670;&nbsp;</a></span>INITIAL_SIGMA_DIVISOR</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define INITIAL_SIGMA_DIVISOR&#160;&#160;&#160;20.0f</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>This value is used to help calculate the initial step size of the population. and the Z sigma is the max elevation delta / INITIAL_SIGMA_DIVISOR. </p>
+
+</div>
+</div>
+<a id="a1eaf19a79169a7a7b216521cd2c1fae4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1eaf19a79169a7a7b216521cd2c1fae4">&#9670;&nbsp;</a></span>INITIAL_SIGMA_XY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define INITIAL_SIGMA_XY&#160;&#160;&#160;2500.0f</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>This serves as the initial value for the X and Y of all the points for sigma. We use 5km as a pretty tight bounding around the straight line (initial mean) </p>
+
+</div>
+</div>
 <a id="a17816c3d2f274b8b02deb9738da01035"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a17816c3d2f274b8b02deb9738da01035">&#9670;&nbsp;</a></span>LENGTH_TO_GENOME</h2>
 
@@ -113,18 +169,17 @@ Macros</h2></td></tr>
 
 </div>
 </div>
-<a id="a995dc8039bc2f74e15aafc595d0e5808"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a995dc8039bc2f74e15aafc595d0e5808">&#9670;&nbsp;</a></span>MAX_STRAIGHT_DEVIATION</h2>
+<a id="a9bf5d952c5c93c70f9e66c9794d406c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9bf5d952c5c93c70f9e66c9794d406c9">&#9670;&nbsp;</a></span>M_E</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define MAX_STRAIGHT_DEVIATION&#160;&#160;&#160;10000.0f</td>
+          <td class="memname">#define M_E&#160;&#160;&#160;2.71828182845904523536f</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Since we assume that paths are relatively close to straight lines, we decide on a maximum deviation from a straight line that a path can initially generate from. This number represents the max deviation in meters. </p>
 
 </div>
 </div>
@@ -143,18 +198,48 @@ Macros</h2></td></tr>
 
 </div>
 </div>
-<a id="ada0398b27c35ebe568d6a615bf7538a7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ada0398b27c35ebe568d6a615bf7538a7">&#9670;&nbsp;</a></span>TRACK_ABOVE_BELOW_EXTREMA</h2>
+<a id="a668eaf473104c8b7957f96b2a0b688fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a668eaf473104c8b7957f96b2a0b688fb">&#9670;&nbsp;</a></span>NUM_ROUTE_WORKERS</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define TRACK_ABOVE_BELOW_EXTREMA&#160;&#160;&#160;10.0f</td>
+          <td class="memname">#define NUM_ROUTE_WORKERS&#160;&#160;&#160;100</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>The max distance above or below the max and min of elevation data a population is allowed to generate a track at. </p>
+<p>The number of divisions that the route is split up into for evaluation on the GPU </p>
+
+</div>
+</div>
+<a id="a6f3e4dc0c38efd4098b8a62b7a3be079"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f3e4dc0c38efd4098b8a62b7a3be079">&#9670;&nbsp;</a></span>NUM_SAMPLE_THREADS</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define NUM_SAMPLE_THREADS&#160;&#160;&#160;10</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The number of threads that are used to sample from the multivariate normal distribution </p>
+
+</div>
+</div>
+<a id="a5c9252d678dbd8ac90d4df613d04209f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c9252d678dbd8ac90d4df613d04209f">&#9670;&nbsp;</a></span>STEP_DAMPENING</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define STEP_DAMPENING&#160;&#160;&#160;1.5f</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Represents the dampening parameter for the step size. This value should be close to 1 </p>
 
 </div>
 </div>

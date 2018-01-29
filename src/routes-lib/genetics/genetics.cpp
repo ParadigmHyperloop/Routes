@@ -8,37 +8,23 @@ std::vector<glm::vec3> Genetics::solve(Population& pop, Pod& pod, int generation
 
     // Run the simulation for then given amount of generations
     for (int i = 0; i < generations; i++) {
+        
+        if (i % 20 == 0 && i) {
 
-        // Sort the individuals to determine who is most fit
-        pop.evaluateCost(pod);
-
-        // Sort the individuals by cost
-        pop.sortIndividuals();
-
-        if (i % 20 == 0) {
-
-            Individual ind = pop.getIndividual(4);
-            std::cout << "Finished generation " << i << " Fittest: " << ind.header->x << std::endl;
+            Individual ind = pop.getIndividual(0);
+            std::cout << "Finished gen " << i << " cost: " << ind.header->x << ", track: " << ind.header->y << std::endl;
 
         }
-
-        // Generate a new population with the most fit being the mothers and father
-        if (i != generations - 1)
-            pop.breedIndividuals();
-
+        
+        pop.step(pod);
+        
+        Individual ind = pop.getIndividual(0);
+        if (!ind.header->x)
+            break;
+        
     }
 
-    // Sort one last time
-    pop.sortIndividuals();
-
-    // Format a path so we can print it in python
-    Individual ind = pop.getIndividual(0);
-
     // Transfer the bath over
-    std::vector<glm::vec3> out_path = std::vector<glm::vec3>(ind.num_genes + 2);
-    for (int i = 0; i < ind.num_genes + 2; i++)
-        out_path[i] = glm::vec3(ind.path[i].x, ind.path[i].y, ind.path[i].z);
-
-    return out_path;
+    return pop.getSolution();
 
 }

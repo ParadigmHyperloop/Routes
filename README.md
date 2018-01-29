@@ -5,10 +5,10 @@
 Full C++ documentation can be found at https://paradigmhyperloop.github.io/Routes/index.html
 
 ## Purpose
-This project is intended to calculate realistic possible hyperloop routes. We build a representation of the terrain that a hyperloop will be crossing with GIS elevation data. 
+This project is intended to calculate realistic possible hyperloop routes. We build a representation of the terrain that a hyperloop will be crossing with GIS elevation data.
 
 ## The Algorithm
-The algorithm itself is a genetic algorithm. This essentially simulates natural selection like organic life would undergo in nature. First it generates an initial population of routes from the desired start to the destination. It then ranks these paths based on a number of factors including how high the track is above the land, how much tunneling would be required, how curved the track is, etc.. The best individuals are then "bred" together to create a new generation of (hopefully) better solutions. This process is repeated for a desired number of iterations. Upon completion the most "fit" path will be given.
+We utilize the CMA-ES algorithm (Covariance Matrix Adaptation Evolution Strategy). Routes are sampled from a multivariate normal distribution. The solutions are then ranked. We build a new distribution based on the best solutions that we sampled from the previous generation and then repeat this process.
 
 ## Dependencies
 
@@ -16,6 +16,7 @@ The algorithm itself is a genetic algorithm. This essentially simulates natural 
 - Boost  http://www.boost.org
 - OpenGL Mathematics (GLM) https://glm.g-truc.net/0.9.8/index.html
 - OpenCL https://www.khronos.org/opencl/
+- Eigen http://eigen.tuxfamily.org/
 
 ## Setup Instructions
 
@@ -47,10 +48,10 @@ make check
 ```
 
 ### Windows
-Note: We had some issues getting the project to compile under Windows with the newest version of CMake. CMake 3.8.2 has been confirmed to work. 
+Note: We had some issues getting the project to compile under Windows with the newest version of CMake. CMake 3.8.2 has been confirmed to work.
 
-Make sure Visual Studio 2017 is installed. The Community edition is free and will suffice. 
-1. Open up the Visual Studio 2017 Developer Command Prompt. If you search "Developer" in Cortana it should be one of the results. 
+Make sure Visual Studio 2017 is installed. The Community edition is free and will suffice.
+1. Open up the Visual Studio 2017 Developer Command Prompt. If you search "Developer" in Cortana it should be one of the results.
 2. Download and install curl from http://www.confusedbycode.com/curl/. Ensure that you select the option to add it to your PATH.
 3. Make sure that the Intel OpenCL SDK is installed from https://software.intel.com/en-us/intel-opencl
 4. Run these commands from the developer command prompt:
@@ -101,14 +102,12 @@ GET http://localhost:8080/max-route-length
 ````
 Since we use OpenCL textures to represent the elevation data on the GPU, we are limited by the max texture size allowed by the GPU hardware. This will return the longest possible route in meters based on that limit.
 
+By editing the url field htdocs/scripts/config.js to `http://localhost` you can ensure that when using the website (index.html) it will point to your own machine.
+
 ## Data
 Data is pulled from the USGS, and is 1 arc second 3D elevation products. You can find all USGS data at https://viewer.nationalmap.gov/basic/
 
-Currently the algorithm is being tested on these pieces of data:
-- https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/13/IMG/USGS_NED_13_n42w071_IMG.zip
-- https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1/IMG/n35w119.zip
-
-Once you download data, create a "data" folder in the repo. Unzip the downloads and copy in the .img file. After you have all of the data in the data folder, you'll need to build the database. To do this run:
+Once you download data, create a "data" folder in the repo. Unzip any downloads and copy in the .img file to the data folder. After you have all of the data in the data folder, you'll need to build the database. To do this run:
 ```
 cd build
 ./Routes-Exec --rebuild
@@ -118,4 +117,5 @@ cd build
 OpenCL is used in this project because the genetic algorithm benefits from parallel processing on the GPU. If your system does not have a dedicated GPU (or at least a decent integrated one), running the algorithm on a CPU will most likely be very slow, and is not recommended.
 
 ## Reference
-This algorithm is originally based off of an algorithm demonstrated by Casey J. Handmer. This paper can be found at https://arxiv.org/pdf/1503.01524.pdf
+- https://en.wikipedia.org/wiki/CMA-ES
+- https://www.lri.fr/~hansen/gecco2011-CMA-ES-tutorial.pdf

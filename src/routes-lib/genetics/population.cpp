@@ -4,13 +4,8 @@
 
 #include "population.h"
 
-Population::Population(int pop_size, glm::vec4 start, glm::vec4 dest, const ElevationData& data) : _data(data) {
-
-    // Save constants
-    _pop_size = pop_size;
-    _start = start;
-    _dest = dest;
-    _direction = _dest -_start;
+Population::Population(int pop_size, glm::vec4 start, glm::vec4 dest, const ElevationData& data) : _pop_size(pop_size), _start(start),
+    _dest(dest), _direction(_dest - _start), _data(data) {
 
     // Figure out how many points we need for this route
     calcGenomeSize();
@@ -20,35 +15,48 @@ Population::Population(int pop_size, glm::vec4 start, glm::vec4 dest, const Elev
     _individual_size = _genome_size + 2 + 1;
 
     // Create the appropriate vectors
-    _individuals = std::vector<glm::vec4>(pop_size * _individual_size);
+    _individuals = std::vector<glm::vec4>((size_t)pop_size * _individual_size);
+
+    for (int i = 0; i < _individuals.size(); i++)
+        _individuals[i] = glm::vec4(0.0);
+
     _opencl_individuals =  boost::compute::vector<glm::vec4>(_individuals.size(), Kernel::getContext());
 
     // Calculate the binomial coefficients for evaluating the bezier paths
     calcBinomialCoefficients();
 
-    // Make a dummy genome
-    dummy_genome = new glm::vec4[_genome_size];
-
     // Figure out how many points this route should be evaluated on.
     // We also make sure it is a multiple of workers
     glm::dvec2 cropped_size = data.getCroppedSizeMeters();
-    _num_evaluation_points = ceil(glm::max(cropped_size.x / METERS_TO_POINT_CONVERSION,
-                                           cropped_size.y / METERS_TO_POINT_CONVERSION) / 50.0) * 50;
-    
+    _num_evaluation_points = (int)ceil(glm::max(cropped_size.x / METERS_TO_POINT_CONVERSION,
+                                                cropped_size.y / METERS_TO_POINT_CONVERSION) / (float)NUM_ROUTE_WORKERS) * NUM_ROUTE_WORKERS;
+
     std::cout << "Using " << _num_evaluation_points << " points of evaluation" << std::endl;
     _num_evaluation_points_1 = (float)_num_evaluation_points - 1.0f;
 
-    // Generate the population
-    generatePopulation();
+    // First we init the params, then generate a starter population
+    initParams();
+    initSamplers();
+    initSamples();
+    samplePopulation();
+        
+    // Create the best sample vector
+    _best_samples = std::vector<Eigen::VectorXf>((size_t)_mu);
 
 }
 
-Population::~Population() { delete dummy_genome; }
+Population::~Population() {
+
+    // Delete the sample generators
+    for (int i = 0; i < NUM_SAMPLE_THREADS; i++)
+        delete _sample_gens[i];
+
+}
 
 Individual Population::getIndividual(int index) {
 
-    Individual ind;
-    ind.num_genes = _genome_size;
+    Individual ind = Individual();
+    ind.num_genes = (size_t)_genome_size;
 
     // Calculate the location of the parts of the individual
     glm::vec4* header_loc = _individuals.data() + index * _individual_size;
@@ -57,15 +65,50 @@ Individual Population::getIndividual(int index) {
     // Account for the header
     ind.path = header_loc + 1;
     ind.genome = header_loc + 2;
+    
+    ind.index = index;
 
     return ind;
+
+}
+
+void Population::step(const Pod& pod) {
+
+    // Evaluate the cost and sort so the most fit solutions are in the front
+//    long long int start = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+
+    evaluateCost(pod);
+
+//    long long int end = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+//    std::cout << "Cost took " << end - start << std::endl;
+//    start = end;
+
+    sortIndividuals();
+
+//    end = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+//    std::cout << "Sort took " << end - start << std::endl;
+//    start = end;
+
+    // Update the params
+    updateParams();
+
+//    end = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+//    std::cout << "Params took " << end - start << std::endl;
+//    start = end;
+
+    // Sample a new generation
+    samplePopulation();
+
+//    end = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+//    std::cout << "Sample took " << end - start << std::endl;
+//    start = end;
 
 }
 
 void Population::sortIndividuals() {
 
     // Get all of the individuals as Individuals for easier sorting
-    std::vector<Individual> individuals_s = std::vector<Individual>(_pop_size);
+    std::vector<Individual> individuals_s = std::vector<Individual>((size_t)_pop_size);
     for (int i = 0; i < _pop_size; i++)
         individuals_s[i] = getIndividual(i);
 
@@ -77,70 +120,9 @@ void Population::sortIndividuals() {
 
     });
 
-    // Create a new vector so we don't destroy any data
-    std::vector<glm::vec4> sorted_individuals = std::vector<glm::vec4>(_individuals.size());
-    for (int i = 0; i < _pop_size; i++) {
-
-        // Copy the sorted individual into the new array
-        memcpy(sorted_individuals.data() + i * _individual_size, individuals_s[i].header, sizeof(glm::vec4) * _individual_size);
-
-    }
-
-    // Save the sorted array
-    _individuals = sorted_individuals;
-
-}
-
-void Population::breedIndividuals() {
-
-    // Get a random number of mother and fathers from the top 20%
-    // Ensure there is 1 mother and 1 father every time though
-    int mothers = (int)(_pop_size * 0.2);
-    int fathers = (int)(_pop_size * 0.2);
-
-    std::vector<glm::vec4> new_population = std::vector<glm::vec4>(_individuals.size());
-
-    // Breed 80% of the population from the mother and father
-    int i;
-    for (i = 0; i < (_pop_size * 0.8); i++) {
-
-
-        int mom = generateRandomFloat(0, mothers);
-        int dad = generateRandomFloat(0, fathers);
-
-        glm::vec4* bred = crossoverIndividual(mom, dad);
-        memcpy(new_population.data() + (i * _individual_size + 2), bred, sizeof(glm::vec4) * _genome_size);
-
-        // Set the start and the destination
-        new_population[i * _individual_size + 1] = _start;
-
-        // Set the start and the destination
-        new_population[i * _individual_size + 2 + _genome_size] = _dest;
-
-    }
-
-    // Generate new individuals (20%)
-    for (; i < _pop_size; i++) {
-
-        // Adds + 1 to ignore the header
-        int individual_start = i * _individual_size + 2;
-
-        for (int j = 0; j < _genome_size; j++)
-            generateRandomPoint(new_population[individual_start + j]);
-
-        // Set the start and the destination
-        new_population[individual_start - 1] = _start;
-
-        // Set the start and the destination
-        new_population[individual_start + _genome_size] = _dest;
-
-    }
-
-    // Save the new population
-    _individuals = new_population;
-
-    // Copy to GPU
-    boost::compute::copy(new_population.begin(), new_population.end(), _opencl_individuals.begin(), Kernel::getQueue());
+    // Copy the best samples into a sorted array
+    for (int i = 0; i < _mu; i++)
+        _best_samples[i] = _samples[individuals_s[i].index];
 
 }
 
@@ -149,279 +131,364 @@ void Population::evaluateCost(const Pod& pod) {
     // Get stuff we need to execute a kernel on
     boost::compute::command_queue& queue = Kernel::getQueue();
 
-    // Generate the program sounds
-    static const std::string source = BOOST_COMPUTE_STRINGIZE_SOURCE(
-
-        // Evaluates the bezier curve made by the given control points and start and dest at parametric value s
-        float4 evaluateBezierCurve(__global float4* controls, int offset, int points, float s, __global int* binomial_coeffs) {
-
-            float one_minus_s = 1.0 - s;
-
-            // Degree is num points - 1
-            int degree = points - 1;
-
-            float4 out_point = (float4)(0.0, 0.0, 0.0, 0.0);
-
-            // Middle terms, iterate for num points
-            for (int i = 0; i < points; i++) {
-
-                // Evaluate for x y and z
-                float multiplier = pown(one_minus_s, degree - i) * pown(s, i);
-
-                // We subtract one here so that we use the correct control point since i starts at 1
-                out_point += controls[i + offset] * multiplier * (float)binomial_coeffs[i];
-
-            }
-
-            return out_point;
-
-        }
-
-        // This calculates the approximates curvature at a given point (p1)
-        float curvature(float4 p0, float4 p1, float4 p2) {
-
-            // Calculate the approximate first derivatives
-            float4 der_first0 = p1 - p0;
-            float4 der_first1 = p2 - p1;
-
-            // Get the second derivative
-            float4 der_second = der_first1 - der_first0;
-
-            // Calculate the denominator and numerator
-            float denom = length(cross(der_first0, der_second));
-            float num = pown(length(der_first0), 3);
-
-            return fabs(num / denom);
-
-        }
-
-        // Computes the cost of a path
-        __kernel void cost(__read_only image2d_t image, __global float4* individuals, int path_length,
-                           float max_grade_allowed, float min_curve_allowed, float excavation_depth, float width,
-                           float height, __global int* binomial_coeffs,
-                           float num_points_1, int points_per_worker, float origin_x, float origin_y) {
-
-            const sampler_t sampler = CLK_NORMALIZED_COORDS_TRUE | CLK_ADDRESS_CLAMP_TO_EDGE | CLK_FILTER_NEAREST;
-            const float pylon_cost = 0.000116;
-            const float tunnel_cost = 0.310;
-            const float curve_weight = 300000.0;
-            const float grade_weight = 100.0;
-
-            __local float curve_sums [50];
-//            __local float min_curves [50];
-            __local float max_grades [50];
-            __local float track_costs[50];
-
-            // Get an offset to the gnome
-            size_t i = get_global_id(0);
-            size_t w = get_local_id(1);
-
-            int path = i * (path_length + 1) + 1;
-
-//            float min_curve = 10000000000000.0;
-            float curve_sum = 0.0;
-
-            float track_cost = 0.0;
-            float steepest_grade = 0.0;
-
-            // Figure out where to start and end
-            int start = w * points_per_worker;
-            int end = start + points_per_worker;
-
-            float4 last_last = individuals[path];
-            float4 last_point = individuals[path];
-
-            // If we start at an offset, we need to make sure we "remember" the information that the last worker
-            // calculated. The fastest way to do this is to just re-calculate it
-            if (w) {
-
-                last_last   = evaluateBezierCurve(individuals, path, path_length, (float)(start - 2) / num_points_1, binomial_coeffs);
-                last_point  = evaluateBezierCurve(individuals, path, path_length, (float)(start - 1) / num_points_1, binomial_coeffs);
-
-            }
-
-            for (int p = start; p <= end; p++) {
-
-                // Evaluate the bezier curve
-                float4 bezier_point = evaluateBezierCurve(individuals, path, path_length, (float)p / num_points_1, binomial_coeffs);
-
-                // Get the elevation of the terrain at this point. We do this with a texture sample
-                float2 nrm_device = (float2)((bezier_point.x - origin_x) / width, (bezier_point.y - origin_y) / height);
-                float height = read_imagef(image, sampler, nrm_device).x;
-
-                // Compute spacing, only x and y distance, z delta is handled by the grade
-                float spacing = sqrt(pown(bezier_point.x - last_point.x, 2) + pown(bezier_point.y - last_point.y, 2));
-
-                // Get curvature
-                if (p > 1) {
-
-                    float curve = curvature(last_last, last_point, bezier_point);
-                    curve_sum += 1.0 / curve * curve_weight;
-//                    min_curve = min(min_curve, curve);
-
-                }
-
-                // Compute grade and track cost if there was spacing
-                if (spacing) {
-
-                    steepest_grade = max(steepest_grade, fabs(bezier_point.z - last_point.z) / spacing);
-
-                    // Compute track cost
-                    // First we get the pylon height which is the distance from the point on the track to the actual terrain
-                    float pylon_height = bezier_point.z - height;
-
-                    // Cost for the track being above the terrain. This is significantly less than if it was
-                    // underground because no tunneling is needed
-                    float above_cost = 0.5 * (fabs(pylon_height) + pylon_height);
-                    above_cost = pown(above_cost, 2) * pylon_cost;
-
-                    // Cost for the track being below the ground.
-                    // For a delta of <= excavation_depth we don't count as tunneling because excavation will suffice
-                    float below_cost = (-fabs(pylon_height + excavation_depth) + pylon_height + excavation_depth);
-                    float below_cost_den = 2.0 * pylon_height + 2.0 * (excavation_depth);
-
-                    below_cost = below_cost / below_cost_den * tunnel_cost;
-                    track_cost += (above_cost + below_cost) * spacing;
-
-            }
-
-                // Keep track of the stuff that was computed so that we can calculate the delta at the next point
-                last_last = last_point;
-                last_point = bezier_point;
-
-            }
-
-            // Write to the buffer
-            curve_sums [w] = curve_sum;
-//            min_curves [w] = min_curve;
-            max_grades [w] = steepest_grade;
-            track_costs[w] = track_cost;
-
-            barrier(CLK_LOCAL_MEM_FENCE);
-
-            // This is only done on thread 0 so we don't do a million memory writes/reads
-            if (!w) {
-
-                // Figure out the final cost for everything. This would be equivalent to using one thread
-                for (int m = 1; m < 50; m++) {
-
-                     curve_sum += curve_sums[m];
-//                     min_curve = min(min_curve, min_curves[m]);
-                     steepest_grade = max(steepest_grade, max_grades[m]);
-                     track_cost += track_costs[m];
-
-                }
-
-                // Now that we have all of the information about the route, we can calculate the cost.
-                // Calculate grade cost, only apply a penalty if it is above 6%
-                float grade_cost = grade_weight * (steepest_grade - max_grade_allowed + fabs(max_grade_allowed - steepest_grade)) + 1.0;
-
-                // Calculate the curvature cost
-                // Right now we are simply using the sum of curvature (not radius of curvature)
-                float curve_cost = curve_sum;
-
-                // Get total cost
-                float total_cost = grade_cost + track_cost + curve_cost;
-
-                // Set the individual's header to contain its cost
-                individuals[path - 1].x = total_cost;
-
-            }
-    });
-
     // Get the data to allow for proper texture sampling
     glm::vec2 size_crop = _data.getCroppedSizeMeters();
     glm::vec2 origin = _data.getCroppedOriginMeters();
 
     // Create a temporary kernel and execute it
-    static Kernel kernel = Kernel(source, "cost");
+    static Kernel kernel = Kernel(std::ifstream("../opencl/kernel_cost.opencl"), "cost");
     kernel.setArgs(_data.getOpenCLImage(), _opencl_individuals.get_buffer(), _genome_size + 2,
                    MAX_SLOPE_GRADE, pod.minCurveRadius(), EXCAVATION_DEPTH, size_crop.x,
                    size_crop.y, _opencl_binomials.get_buffer(),
-                   _num_evaluation_points_1, _num_evaluation_points / 50, origin.y, origin.y);
+                   _num_evaluation_points_1, _num_evaluation_points / NUM_ROUTE_WORKERS, origin.y, origin.y, glm::length(_direction));
+
+    // Upload the data
+    boost::compute::copy(_individuals.begin(), _individuals.end(), _opencl_individuals.begin(), queue);
 
     // Execute the 2D kernel with a work size of 5. 5 threads working on a single individual
     kernel.execute2D(glm::vec<2, size_t>(0, 0),
-                     glm::vec<2, size_t>(_pop_size, 50),
-                     glm::vec<2, size_t>(1, 50));
+                     glm::vec<2, size_t>(_pop_size, NUM_ROUTE_WORKERS),
+                     glm::vec<2, size_t>(1, NUM_ROUTE_WORKERS));
 
     // Download the data
     boost::compute::copy(_opencl_individuals.begin(), _opencl_individuals.end(), _individuals.begin(), queue);
 
 }
 
+std::vector<glm::vec3> Population::getSolution() const {
+    
+    std::vector<glm::vec3> solution = std::vector<glm::vec3>((size_t)_genome_size + 2);
+    solution[0]                     = glm::vec3(_start.x, _start.y, _start.z);
+    solution[_genome_size + 1]      = glm::vec3(_dest.x, _dest.y, _dest.z);
+    
+    for (int i = 0; i < _genome_size; i++)
+        solution[i + 1] = glm::vec3(_mean(i * 3    ),
+                                    _mean(i * 3 + 1),
+                                    _mean(i * 3 + 2));
+    
+    return solution;
+    
+}
+
 void Population::calcGenomeSize() {
 
     // The genome size has a square root relationship with the length of the route
-    float sqrt_lenth = sqrt(glm::length(_direction));
-    _genome_size = std::round(sqrt_lenth * LENGTH_TO_GENOME);
-    std::cout << "Genome size: " << _genome_size << std::endl;
+    float sqrt_length = sqrtf(glm::length(_direction));
+    _genome_size = (int)std::round(sqrt_length * LENGTH_TO_GENOME);
+
+    std::cout << "Genome: " << _genome_size << std::endl;
 
 }
 
-void Population::generatePopulation() {
+void Population::initParams() {
 
-    // Random seed
-    std::hash<int> hasher;
-    _twister = std::mt19937(hasher(std::chrono::high_resolution_clock::now().time_since_epoch().count()));
+    // Choose mu to be a fixed number of individuals
+    _mu = (int)(_pop_size * 0.15);
 
-    // Go through each individual
+    // Init the mean to the best guess (a straight line)
+    bestGuess();
+
+    // Calculate the weights for the selected population (mu)
+    calcWeights();
+
+    // Covariance matrix starts as the identity matrix
+    // Multiply by three to make sure that we have room for X, Y and Z
+    _covar_matrix = Eigen::MatrixXf::Identity(_genome_size * 3, _genome_size * 3);
+
+    // Calculate the initial step size
+    calcInitialSigma();
+
+    // Calculate strat params
+    calculateStratParameters();
+
+    // Set the two evolution paths to the zero vector
+    _p_covar = Eigen::VectorXf::Zero(_genome_size * 3);
+    _p_sigma = Eigen::VectorXf::Zero(_genome_size * 3);
+    
+    // Calculate the expected value of the standard normal distribution.
+    // This is purely based of the number of dimensions.
+    float N = _mean.size();
+    _expected_value = sqrtf(N) * (1.0f - 1.0f / (N * 4.0f) + 1.0f / (21.0f * glm::pow(N, 2.0f)));
+
+}
+
+void Population::initSamplers() {
+
+    // Create the standard normal samplers
+    _sample_gens = std::vector<SampleGenerator*>(NUM_SAMPLE_THREADS);
+    for (int i = 0; i < NUM_SAMPLE_THREADS; i++)
+        _sample_gens[i] = new SampleGenerator(_genome_size * 3, _pop_size / NUM_SAMPLE_THREADS);
+
+}
+
+void Population::initSamples() {
+
+    // Samples should be the same size as the population
+    _samples = std::vector<Eigen::VectorXf>((size_t)_pop_size);
+
+    for (int i = 0; i < _pop_size; i++)
+        _samples[i] = Eigen::VectorXf::Zero(_genome_size * 3);
+
+    // Make sure that individuals have the start and destination all set up. This will never change so we can do it
+    // once.
     for (int i = 0; i < _pop_size; i++) {
 
-        // Adds + 2 to ignore the header and start
-        int individual_start = i * _individual_size + 2;
-
-        // Set the start and the destination
-        _individuals[individual_start - 1] = _start;
-
-        // Set the start and the destination
-        _individuals[individual_start + _genome_size] = _dest;
-
-        for (int j = 0; j < _genome_size; j++)
-            generateRandomPoint(_individuals[individual_start + j]);
+        _individuals[i * _individual_size + 1] = _start;
+        _individuals[i * _individual_size + 2 + _genome_size] = _dest;
 
     }
 
-    // Upload the population onto the GPU
-    boost::compute::copy(_individuals.begin(), _individuals.end(), _opencl_individuals.begin(), Kernel::getQueue());
+}
+
+void Population::bestGuess() {
+
+    // We choose a linear spacing of points along a straight line from the start to destination
+    _mean = Eigen::VectorXf(_genome_size * 3);
+
+    for (int i = 1; i <= _genome_size; i++) {
+
+        // Figure out how far along the direction line we are
+        float percent = (float)i / (float)(_genome_size + 1);
+
+        // Set the mean
+        int i_adjusted = (i - 1) * 3;
+        _mean(i_adjusted    ) = _start.x + _direction.x * percent;
+        _mean(i_adjusted + 1) = _start.y + _direction.y * percent;
+        _mean(i_adjusted + 2) = _start.z + _direction.z * percent;
+
+    }
 
 }
 
-glm::vec4* Population::crossoverIndividual(int a, int b) {
+void Population::calcWeights() {
 
-    // Get memory location of a's genom, add 2 to ignore the header and start
-    glm::vec4* a_genome = _individuals.data() + (a * _individual_size + 2);
-    glm::vec4* b_genome = _individuals.data() + (b * _individual_size + 2);
+    // When we update the mean and covariance matrix, we weight each solution unevenly.
+    // Sum of all values in _weights should equal 1
+    // Sum of 1/pow(_weights, 2) should be about _pop_size / 4
+    _weights = std::vector<float>((size_t)_mu);
+    float sum = 0.0f;
 
-    // Crossover each gene
+    for (int i = 0; i < _mu; i++) {
+
+        _weights[i] = log(_mu + 0.5f) - log(i + 1.0f);
+        sum += _weights[i];
+
+    }
+
+    // Normalize to make sure that it adds up to 1
+    for (int i = 0; i < _mu; i++)
+        _weights[i] /= sum;
+
+    // Calculate _mu_weight to be the sum of 1/pow(_weights, 2)
+    sum = 0.0f;
+
+    for (int i = 0; i < _mu; i++)
+        sum += glm::pow(_weights[i], 2.0f);
+
+    // Save some constant params we need to keep
+    _mu_weight = 1.0f / sum;
+    _mu_weight_sqrt = sqrtf(_mu_weight);
+
+}
+
+void Population::calcInitialSigma() {
+
+    // Initialize sigma
+    _sigma = Eigen::VectorXf(_genome_size * 3);
+
+    // First we figure out what the actual values should be
+    glm::vec3 sigma_parts = glm::vec3(INITIAL_SIGMA_XY,
+                                      INITIAL_SIGMA_XY,
+                                      (_data.getMaxElevation() - _data.getMinElevation()) / INITIAL_SIGMA_DIVISOR);
+
+    // Apply it to the X Y and Z for each point
     for (int i = 0; i < _genome_size; i++) {
 
-        // Get a random amount to cross the two by
-        dummy_genome[i] = glm::mix(a_genome[i], b_genome[i], generateRandomFloat(0.0, 1.0));
+        _sigma(i * 3    ) = sigma_parts.x;
+        _sigma(i * 3 + 1) = sigma_parts.y;
+        _sigma(i * 3 + 2) = sigma_parts.z;
 
     }
-
-    // Do some mutation
-    mutateGenome(dummy_genome);
-
-    return dummy_genome;
 
 }
 
-void Population::mutateGenome(glm::vec4* genome) {
+void Population::calculateStratParameters() {
 
-    // 81% chance that this genome will be mutated
-    if (generateRandomFloat(0.0, 1.0) > 0.23) {
+    float N = _mean.size();
+
+    // Calc c_sigma
+    _c_sigma = 3.0 / N;
+
+    // Calc c_covar
+    _c_covar = 4.0 / N;
+
+    // Calculate a few other params for the covariance matrix updating
+    _c1 = 2.0f / ((N + 1.3f) * (N + 1.3f) + _mu_weight);
+    _c_mu = glm::clamp(2.0f * (_mu_weight - 2.0f + 1.0f / _mu_weight) / ((N + 2.0f) * (N + 2.0f) + _mu_weight), 0.0f, 1.0f - _c1);
+
+}
+
+void Population::samplePopulation() {
+
+    // Create a MND
+    MultiNormal dist = MultiNormal(_covar_matrix, _sigma);
+    dist.generateRandomSamples(_samples, _sample_gens);
+    
+    // Convert the _samples over to a set of glm vectors and update the population
+    // Do so with multiple threads
+    std::vector<std::thread> threads = std::vector<std::thread>(NUM_SAMPLE_THREADS);
+    int worker_size = _pop_size / NUM_SAMPLE_THREADS;
+    
+    for (int i = 0; i < NUM_SAMPLE_THREADS; i++) {
         
-        // Choose a single random point to mutate and then choose a random component
-        int point = generateRandomFloat(0, _genome_size - 1);
-        
-        glm::vec4* point_ptr = genome + point;
-        
-        // Do the mutation
-        generateRandomPoint((*point_ptr));
+        threads[i] = std::thread([this, i, worker_size] {
+
+            int start = worker_size * i;
+            int end = glm::min(start + worker_size, _pop_size);
+
+            for (int u = start; u < end; u++) {
+
+                // Add the mean because the samples don't have it
+                Eigen::VectorXf actual = _samples[u] + _mean;
+
+                // Use memory copies to put the right data in the the _individuals vector because its slightly faster
+                // We need to do it in a for loop because the _individuals is vec4 and there are only 3 components for each control point
+                // In the Eigen vectors that we build
+                for (int p = 0; p < _genome_size; p++)
+                    memcpy(&_individuals[u * _individual_size + 2 + p][0], actual.data() + p * 3, sizeof(float) * 3);
+
+            }
+
+        });
         
     }
+    
+    // Make sure all of the threads finish
+    for (int i = 0; i < NUM_SAMPLE_THREADS; i++)
+        threads[i].join();
+
+}
+
+void Population::updateParams() {
+    
+    // Update the mean
+    updateMean();
+    
+    // Update the step size path
+    updatePSigma();
+
+    // Update the covariance matrix path
+    updatePCovar();
+
+    // Update the covariance matrix
+    updateCovar();
+    
+    // Update the step size
+    updateSigma();
+    
+}
+
+void Population::updateMean() {
+
+    // Save the mean from the last gen so we can use it to update the paths
+    Eigen::VectorXf _mean_prime = _mean;
+
+    _mean = Eigen::VectorXf::Zero(_mean.size());
+
+    for (int i = 0; i < _mu; i++)
+        _mean += _best_samples[i] * _weights[i];
+    
+    _mean += _mean_prime;
+
+    // Calculate mean displacement
+    _mean_displacement = (_mean - _mean_prime);
+    
+    // Divide by sigma
+    for (int i = 0; i < _mean_displacement.size(); i++)
+        _mean_displacement(i) = _mean_displacement(i) / _sigma(i);
+    
+}
+
+void Population::updatePSigma() {
+
+    // Calculate the discount factor and its complement
+    float discount = 1.0f - _c_sigma;
+    float discount_comp = sqrtf(1.0f - (discount * discount));
+
+    // Get the inverse square root of the covariance matrix
+    Eigen::SelfAdjointEigenSolver<Eigen::MatrixXf> solver(_covar_matrix);
+    Eigen::MatrixXf inv_sqrt_C(solver.operatorInverseSqrt());
+
+    // Ensure that nan is not in the square root
+    if (isnan(inv_sqrt_C(0, 0))) {
+        std::cout << "Nan in inv_sqrt covariance detected\n";
+        return;
+    }
+
+    _p_sigma = discount * _p_sigma + discount_comp * _mu_weight_sqrt * inv_sqrt_C * _mean_displacement;
+
+}
+
+void Population::updatePCovar() {
+
+    // Calculate the discount factor and its complement
+    float discount = 1.0f - _c_covar;
+    float discount_comp = sqrtf(1.0f - (discount * discount));
+
+    // Figure out the indicator function
+    float indicator = 0.0f;
+    if (_p_sigma.norm() <= sqrtf((float)_mean.size()) * ALPHA)
+        indicator = 1.0;
+
+    _p_covar = discount * _p_covar + indicator * discount_comp * _mu_weight_sqrt * _mean_displacement;
+
+}
+
+void Population::updateCovar() {
+
+    // Calculate the actual new covariance matrix
+    Eigen::MatrixXf covariance_prime = Eigen::MatrixXf::Zero(_mean.size(), _mean.size());
+
+    for (int i = 0; i < _mu; i++) {
+
+        Eigen::VectorXf adjusted = _best_samples[i];
+        
+        // Divide by sigma
+        for (int k = 0; k < adjusted.size(); k++)
+            adjusted(k) = adjusted(k) / _sigma(k);
+        
+        covariance_prime += adjusted * adjusted.transpose() * _weights[i];
+
+    }
+
+    // Calculate the rank one matrix
+    Eigen::MatrixXf rank_one = _c1 * _p_covar * _p_covar.transpose();
+
+    // Calculate cs
+    float indicator = 0.0f;
+    if (_p_sigma.norm() * _p_sigma.norm() <= sqrtf((float)_mean.size()) * ALPHA)
+        indicator = 1.0;
+
+    float cs = (1.0f - indicator) * _c1 * _c_covar * (2.0f - _c_covar);
+
+    // Calculate the discount factor
+    float discount = 1.0f - _c1 - _c_mu + cs;
+
+    // Update the MatrixXf
+    _covar_matrix = discount * _covar_matrix + rank_one + _c_mu * covariance_prime;
+
+}
+
+void Population::updateSigma() {
+
+    // Calculate ratio between the decay and the dampening
+    float ratio = _c_sigma / STEP_DAMPENING;
+
+    // Get the magnitude of the sigma path
+    float mag = _p_sigma.norm();
+
+    // Update sigma
+    _sigma = _sigma * glm::pow(M_E, ratio * (mag / _expected_value - 1.0f));
 
 }
 
@@ -429,43 +496,9 @@ void Population::calcBinomialCoefficients() {
 
     // For degree we have _genome_size + 2 points, so we use that minus 1 for the degree
     const std::vector<int>& binomials = Bezier::getBinomialCoefficients(_genome_size + 1);
-    _opencl_binomials = boost::compute::vector<int>(_genome_size + 2, Kernel::getContext());
+    _opencl_binomials = boost::compute::vector<int>((size_t)_genome_size + 2, Kernel::getContext());
 
     // Upload to the GPU
     boost::compute::copy(binomials.begin(), binomials.end(), _opencl_binomials.begin(), Kernel::getQueue());
 
 }
-
-void Population::generateRandomPoint(glm::vec4& to_gen) {
-
-    // First we move along the direction vector by a random amount
-    float percent = generateRandomFloat(0.0, 1.0);
-    glm::vec4 progressed = _direction * percent + _start;
-
-    // Generate a random deviation
-    glm::vec4 deviation = progressed + glm::vec4(generateRandomFloat(-MAX_STRAIGHT_DEVIATION, MAX_STRAIGHT_DEVIATION),
-                                                 generateRandomFloat(-MAX_STRAIGHT_DEVIATION, MAX_STRAIGHT_DEVIATION),
-                                                 0.0f, 0.0f);
-
-    // Get cropped info
-    glm::vec2 cropped_origin = _data.getCroppedOriginMeters();
-    glm::vec2 cropped_size   = _data.getCroppedSizeMeters();
-
-    // Final vector, clamp to width and height
-    to_gen = glm::vec4(glm::clamp(deviation.x, cropped_origin.x, cropped_origin.x + cropped_size.x),
-                       glm::clamp(deviation.y, cropped_origin.y, cropped_origin.y + cropped_size.y),
-                       generateRandomFloat(_data.getMinElevation() - TRACK_ABOVE_BELOW_EXTREMA,
-                                           _data.getMaxElevation() + TRACK_ABOVE_BELOW_EXTREMA), 0.0);
-
-}
-
-float Population::generateRandomFloat(float low, float high) {
-    
-    // Get the twister value from [0,1]
-    float random = (float)_twister() / (float)4294967296;
-    
-    // Convert and return
-    return (random * (high - low)) + low;
-    
-}
-          

@@ -29,10 +29,30 @@ bool Kernel::initOpenCL() {
 
 }
 
-Kernel::Kernel(const std::string& program, const std::string name) {
+Kernel::Kernel(const std::string& program, const std::string& name) {
+
+    compileProgram(program, name);
+
+}
+
+Kernel::Kernel(std::ifstream stream, const std::string& name) {
+
+    // Extract the program from the stream
+    std::string program;
+    std::string line;
+
+    // Ensure to add a new line so we can read if there is a compile erorr
+    while (std::getline(stream, line))
+        program += line + "\n";
+
+    compileProgram(program, name);
+
+}
+
+void Kernel::compileProgram(const std::string& program, const std::string& name) {
 
     // Compile the program
-    // Check if there was an exeption
+    // Check if there was an exception
     try {
 
         _opencl_program =  _global_cache->get_or_build("__routes" + name, "", program, _opencl_context);
@@ -54,7 +74,7 @@ Kernel::Kernel(const std::string& program, const std::string name) {
 
 }
 
-Kernel::Kernel(const boost::compute::program& program, const std::string name) {
+Kernel::Kernel(const boost::compute::program& program, const std::string& name) {
 
     // We already have the program so just tell it to create a new kernel
     _opencl_program = program;
@@ -70,7 +90,7 @@ void Kernel::execute1D(size_t start_index, size_t num_iterations, size_t work_si
 
 }
 
-void Kernel:: execute2D(const glm::vec<2, size_t>& start_index,
+void Kernel::execute2D(const glm::vec<2, size_t>& start_index,
                         const glm::vec<2, size_t>& num_iterations,
                         const glm::vec<2, size_t>& work_size) {
 
