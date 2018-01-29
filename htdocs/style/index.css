@@ -52,7 +52,7 @@ input {
 .button-container {
     
     margin-top: 25pt;
-    padding: 5pt;
+    padding: 4pt;
     border-radius: 10pt;
     
     background: linear-gradient(to bottom right, #FF5A43, #C00040);
@@ -65,7 +65,7 @@ input {
     padding-left: 45pt;
     padding-right: 45pt;
     
-    border-radius: 6.5pt;
+    border-radius: 6pt;
     
     -webkit-user-select: none;
     user-select: none;

@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="style/places.css">
 
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyARXZWbgKN2HjFHrEHr-tI_3tlfeo_B2Lw&libraries=places"></script>
+<script src="script/jquery.particleground.min.js"></script>
 <script src="script/index.js"></script>
 
 <html>
@@ -20,6 +21,8 @@
     </head>
 
     <body>
+        
+        <div id="background"></div>
                 
         <div id="navbar">
             Routes
@@ -36,12 +39,12 @@
             I'm a parallelized <div class="grad-text">evolutionary</div> algorithm built for computing <div class="grad-text">hyperloop</div> routes
         </div>    
         
-        <div id="input-container" onclick="compute()">
+        <div id="input-container">
         
             <input id="origin"      class="loc-input" placeholder = "Origin" type="test">
             <input id="destination" class="loc-input" placeholder = "Destination" type="test">
             
-            <div class="button-container">
+            <div class="button-container" onclick="compute()">
                 <div class="button">
                     <div class="button-text">
                         Calculate

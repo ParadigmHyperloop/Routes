@@ -7,7 +7,11 @@
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="script/config.js" type="text/javascript"></script>
+<script src="script/jquery.particleground.min.js"></script>
 <script src="script/routes.js"></script>
+
+<script src="script/map-init.js"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyARXZWbgKN2HjFHrEHr-tI_3tlfeo_B2Lw&libraries=places&callback=initMap"></script>
 
 <html>
     
@@ -23,6 +27,8 @@
                 
         <div id="overlay">
         
+            <div id="background"></div>
+            
             <div id="navbar">
                 Routes
                 <a href="https://paradigmhyperloop.com/">
@@ -30,9 +36,15 @@
                 </a>
             </div>
             
-            <div id="saying"></div>
+            <div id="sayings-container">
+            
+                <div id="sayings"></div>
+                
+            </div>
             
         </div> 
+        
+        <div id="map-container"> </div>
         
     </body>
 

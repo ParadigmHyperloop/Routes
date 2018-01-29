@@ -1,19 +1,38 @@
 window.onload = function() {
 
-    origin      = new google.maps.places.Autocomplete((document.getElementById('origin')),      {types: ['geocode']});
-    destination = new google.maps.places.Autocomplete((document.getElementById('destination')), {types: ['geocode']});
+    origin      = new google.maps.places.Autocomplete((document.getElementById('origin')),      {types: ['geocode']})
+    destination = new google.maps.places.Autocomplete((document.getElementById('destination')), {types: ['geocode']})
+
+    particleground(document.getElementById('background'), {
+        
+      minSpeedX: 0.2,
+      maxSpeedX: 0.3,
+      minSpeedY: 0.2,
+      maxSpeedY: 0.3,
+      density: 63000, 
+      curvedLines: false,
+      parallax: false,
+      proximity: 250, 
+      particleRadius: 4,
+        
+    })
     
 }
 
 function compute() {
-    
-    let start_lat = origin.getPlace().geometry.location.lat()
-    let start_lng = origin.getPlace().geometry.location.lng()
-    let dest_lat = destination.getPlace().geometry.location.lat()
-    let dest_lng = destination.getPlace().geometry.location.lng()
-    let start = start_lng+ "," + start_lat
-    let end = dest_lng + "," + dest_lat
+        
+    localStorage.setItem("origin",      JSON.stringify(origin.getPlace().geometry.location));
+    localStorage.setItem("destination", JSON.stringify(destination.getPlace().geometry.location));
 
-    window.location.href = "route.html?start=" + start + "&dest=" + end;
+//     window.location.href = "route.html";
+        
     
+}
+
+function supports_html5_storage() {
+  try {
+    return 'localStorage' in window && window['localStorage'] !== null;
+  } catch (e) {
+    return false;
+  }
 }
