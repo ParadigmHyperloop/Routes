@@ -119,7 +119,7 @@ void Population::sortIndividuals() {
         return (*a.header).x < (*b.header).x;
 
     });
-    
+
     // Copy the best samples into a sorted array
     for (int i = 0; i < _mu; i++)
         _best_samples[i] = _samples[individuals_s[i].index];
@@ -173,8 +173,10 @@ std::vector<glm::vec3> Population::getSolution() const {
 void Population::calcGenomeSize() {
 
     // The genome size has a square root relationship with the length of the route
-    float sqrt_length = sqrt(glm::length(_direction));
+    float sqrt_length = sqrtf(glm::length(_direction));
     _genome_size = (int)std::round(sqrt_length * LENGTH_TO_GENOME);
+
+    std::cout << "Genome: " << _genome_size << std::endl;
 
 }
 
@@ -206,7 +208,7 @@ void Population::initParams() {
     // Calculate the expected value of the standard normal distribution.
     // This is purely based of the number of dimensions.
     float N = _mean.size();
-    _expected_value = sqrt(N) * (1.0f - 1.0f / (N * 4.0f) + 1.0f / (21.0f * glm::pow(N, 2.0f)));
+    _expected_value = sqrtf(N) * (1.0f - 1.0f / (N * 4.0f) + 1.0f / (21.0f * glm::pow(N, 2.0f)));
 
 }
 
@@ -285,7 +287,7 @@ void Population::calcWeights() {
 
     // Save some constant params we need to keep
     _mu_weight = 1.0f / sum;
-    _mu_weight_sqrt = sqrt(_mu_weight);
+    _mu_weight_sqrt = sqrtf(_mu_weight);
 
 }
 
@@ -315,10 +317,10 @@ void Population::calculateStratParameters() {
     float N = _mean.size();
 
     // Calc c_sigma
-    _c_sigma = (_mu_weight + 2.0f) / (N + _mu_weight + 5.0f);
+    _c_sigma = 3.0 / N;
 
     // Calc c_covar
-    _c_covar = (4.0f + _mu_weight / N) / (N + 4.0f + 2.0f * _mu_weight / N );
+    _c_covar = 4.0 / N;
 
     // Calculate a few other params for the covariance matrix updating
     _c1 = 2.0f / ((N + 1.3f) * (N + 1.3f) + _mu_weight);
@@ -340,15 +342,15 @@ void Population::samplePopulation() {
     for (int i = 0; i < NUM_SAMPLE_THREADS; i++) {
         
         threads[i] = std::thread([this, i, worker_size] {
-            
+
             int start = worker_size * i;
             int end = glm::min(start + worker_size, _pop_size);
-            
+
             for (int u = start; u < end; u++) {
-                
+
                 // Add the mean because the samples don't have it
                 Eigen::VectorXf actual = _samples[u] + _mean;
-                
+
                 // Use memory copies to put the right data in the the _individuals vector because its slightly faster
                 // We need to do it in a for loop because the _individuals is vec4 and there are only 3 components for each control point
                 // In the Eigen vectors that we build
@@ -356,7 +358,7 @@ void Population::samplePopulation() {
                     memcpy(&_individuals[u * _individual_size + 2 + p][0], actual.data() + p * 3, sizeof(float) * 3);
 
             }
-            
+
         });
         
     }
@@ -405,14 +407,13 @@ void Population::updateMean() {
     for (int i = 0; i < _mean_displacement.size(); i++)
         _mean_displacement(i) = _mean_displacement(i) / _sigma(i);
     
-    
 }
 
 void Population::updatePSigma() {
 
     // Calculate the discount factor and its complement
     float discount = 1.0f - _c_sigma;
-    float discount_comp = sqrt(1.0f - (discount * discount));
+    float discount_comp = sqrtf(1.0f - (discount * discount));
 
     // Get the inverse square root of the covariance matrix
     Eigen::SelfAdjointEigenSolver<Eigen::MatrixXf> solver(_covar_matrix);
@@ -423,7 +424,7 @@ void Population::updatePSigma() {
         std::cout << "Nan in inv_sqrt covariance detected\n";
         return;
     }
-    
+
     _p_sigma = discount * _p_sigma + discount_comp * _mu_weight_sqrt * inv_sqrt_C * _mean_displacement;
 
 }
@@ -432,11 +433,11 @@ void Population::updatePCovar() {
 
     // Calculate the discount factor and its complement
     float discount = 1.0f - _c_covar;
-    float discount_comp = sqrt(1.0f - (discount * discount));
+    float discount_comp = sqrtf(1.0f - (discount * discount));
 
     // Figure out the indicator function
     float indicator = 0.0f;
-    if (_p_sigma.norm() <= sqrt((float)_mean.size()) * ALPHA)
+    if (_p_sigma.norm() <= sqrtf((float)_mean.size()) * ALPHA)
         indicator = 1.0;
 
     _p_covar = discount * _p_covar + indicator * discount_comp * _mu_weight_sqrt * _mean_displacement;
@@ -447,7 +448,6 @@ void Population::updateCovar() {
 
     // Calculate the actual new covariance matrix
     Eigen::MatrixXf covariance_prime = Eigen::MatrixXf::Zero(_mean.size(), _mean.size());
-    covariance_prime.setZero();
 
     for (int i = 0; i < _mu; i++) {
 
@@ -466,7 +466,7 @@ void Population::updateCovar() {
 
     // Calculate cs
     float indicator = 0.0f;
-    if (_p_sigma.norm() * _p_sigma.norm() <= sqrt((float)_mean.size()) * ALPHA)
+    if (_p_sigma.norm() * _p_sigma.norm() <= sqrtf((float)_mean.size()) * ALPHA)
         indicator = 1.0;
 
     float cs = (1.0f - indicator) * _c1 * _c_covar * (2.0f - _c_covar);
