@@ -47,7 +47,7 @@ void MultiNormal::generateRandomSamples(std::vector<Eigen::VectorXf>& out, std::
     int num_workers = samplers.size();
     int work_size = out.size() / num_workers;
 
-    std::vector<std::thread> threads (num_workers);
+    std::vector<std::thread> threads ((size_t)num_workers);
 
     for (int i = 0; i < num_workers; i++) {
 

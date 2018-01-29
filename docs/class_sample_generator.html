@@ -94,10 +94,10 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a5b5f31572a2141ecdb66d9596e382d20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3836bbedc9fc4505c705ebc18ce720ae"><td class="memItemLeft" align="right" valign="top">std::thread&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sample_generator.html#a3836bbedc9fc4505c705ebc18ce720ae">_sample_thread</a></td></tr>
 <tr class="separator:a3836bbedc9fc4505c705ebc18ce720ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa3aad649549054114b8ebcec949de2ae"><td class="memItemLeft" align="right" valign="top">std::mt19937&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sample_generator.html#aa3aad649549054114b8ebcec949de2ae">_twister</a></td></tr>
-<tr class="separator:aa3aad649549054114b8ebcec949de2ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a15f21650d5aa0c7feff549d9f66bf53a"><td class="memItemLeft" align="right" valign="top">std::normal_distribution&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sample_generator.html#a15f21650d5aa0c7feff549d9f66bf53a">_standard_distro</a></td></tr>
-<tr class="separator:a15f21650d5aa0c7feff549d9f66bf53a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b23fc6a36afc3d69c92ee60f13f7a81"><td class="memItemLeft" align="right" valign="top">boost::mt19937&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sample_generator.html#a7b23fc6a36afc3d69c92ee60f13f7a81">_twister</a></td></tr>
+<tr class="separator:a7b23fc6a36afc3d69c92ee60f13f7a81"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af07375b65d61d740560f9cd89cae8df2"><td class="memItemLeft" align="right" valign="top">boost::normal_distribution&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_sample_generator.html#af07375b65d61d740560f9cd89cae8df2">_standard_distro</a></td></tr>
+<tr class="separator:af07375b65d61d740560f9cd89cae8df2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Because sampling from a multivariate normal distribution is so slow and all require samples from the standard normal distribution, we can pull the standard random samples from another thread so they are always ready. This class will store N random samples of the desired length from the standard normal distribution.</p>
@@ -301,8 +301,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a15f21650d5aa0c7feff549d9f66bf53a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a15f21650d5aa0c7feff549d9f66bf53a">&#9670;&nbsp;</a></span>_standard_distro</h2>
+<a id="af07375b65d61d740560f9cd89cae8df2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af07375b65d61d740560f9cd89cae8df2">&#9670;&nbsp;</a></span>_standard_distro</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -311,7 +311,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::normal_distribution&lt;float&gt; SampleGenerator::_standard_distro</td>
+          <td class="memname">boost::normal_distribution&lt;float&gt; SampleGenerator::_standard_distro</td>
         </tr>
       </table>
   </td>
@@ -324,8 +324,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="aa3aad649549054114b8ebcec949de2ae"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa3aad649549054114b8ebcec949de2ae">&#9670;&nbsp;</a></span>_twister</h2>
+<a id="a7b23fc6a36afc3d69c92ee60f13f7a81"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b23fc6a36afc3d69c92ee60f13f7a81">&#9670;&nbsp;</a></span>_twister</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -334,7 +334,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::mt19937 SampleGenerator::_twister</td>
+          <td class="memname">boost::mt19937 SampleGenerator::_twister</td>
         </tr>
       </table>
   </td>

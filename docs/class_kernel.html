@@ -62,6 +62,7 @@ $(function() {
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-static-methods">Static Private Member Functions</a> &#124;
 <a href="#pri-static-attribs">Static Private Attributes</a> &#124;
 <a href="class_kernel-members.html">List of all members</a>  </div>
@@ -74,10 +75,12 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a0e137f5646f930df1a646306cc119170"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kernel.html#a0e137f5646f930df1a646306cc119170">Kernel</a> (const std::string &amp;program, const std::string name)</td></tr>
-<tr class="separator:a0e137f5646f930df1a646306cc119170"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8dbc456fce5b42316efcfcfe71136431"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kernel.html#a8dbc456fce5b42316efcfcfe71136431">Kernel</a> (const boost::compute::program &amp;program, const std::string name)</td></tr>
-<tr class="separator:a8dbc456fce5b42316efcfcfe71136431"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a8389cf516f9b892938a4db7a738122"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kernel.html#a8a8389cf516f9b892938a4db7a738122">Kernel</a> (const std::string &amp;program, const std::string &amp;name)</td></tr>
+<tr class="separator:a8a8389cf516f9b892938a4db7a738122"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b09f9f3cd3fcc33b62c00bef209f28e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kernel.html#a2b09f9f3cd3fcc33b62c00bef209f28e">Kernel</a> (std::ifstream stream, const std::string &amp;name)</td></tr>
+<tr class="separator:a2b09f9f3cd3fcc33b62c00bef209f28e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a039d6bdab5cb8ff5e246405023f32c03"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kernel.html#a039d6bdab5cb8ff5e246405023f32c03">Kernel</a> (const boost::compute::program &amp;program, const std::string &amp;name)</td></tr>
+<tr class="separator:a039d6bdab5cb8ff5e246405023f32c03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af4e0fd31fe498b840a638ce5dc726c82"><td class="memTemplParams" colspan="2">template&lt;class... T&gt; </td></tr>
 <tr class="memitem:af4e0fd31fe498b840a638ce5dc726c82"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="class_kernel.html#af4e0fd31fe498b840a638ce5dc726c82">setArgs</a> (T &amp;&amp;... args)</td></tr>
 <tr class="separator:af4e0fd31fe498b840a638ce5dc726c82"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -106,6 +109,11 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:ab7c0ecef9ff7940c38cbc0c3915c836c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kernel.html#ab7c0ecef9ff7940c38cbc0c3915c836c">_opencl_program_valid</a> = false</td></tr>
 <tr class="separator:ab7c0ecef9ff7940c38cbc0c3915c836c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:ac07c1f999f5bd522fe2e36e0da579149"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kernel.html#ac07c1f999f5bd522fe2e36e0da579149">compileProgram</a> (const std::string &amp;program, const std::string &amp;name)</td></tr>
+<tr class="separator:ac07c1f999f5bd522fe2e36e0da579149"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-static-methods"></a>
 Static Private Member Functions</h2></td></tr>
 <tr class="memitem:aaf85aedc18138e6b5857e83658cf7582"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_kernel.html#aaf85aedc18138e6b5857e83658cf7582">initOpenCL</a> ()</td></tr>
@@ -127,8 +135,8 @@ Static Private Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="class_kernel.html">Kernel</a> is a class that will create and retain an OpenCL kernel. Given a std::string, it will automatically compile the program. <a class="el" href="class_kernel.html">Kernel</a> statically manages the OpenCL context. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a0e137f5646f930df1a646306cc119170"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0e137f5646f930df1a646306cc119170">&#9670;&nbsp;</a></span>Kernel() <span class="overload">[1/2]</span></h2>
+<a id="a8a8389cf516f9b892938a4db7a738122"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8a8389cf516f9b892938a4db7a738122">&#9670;&nbsp;</a></span>Kernel() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -142,7 +150,7 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string&#160;</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>name</em>&#160;</td>
         </tr>
         <tr>
@@ -162,8 +170,44 @@ Static Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a8dbc456fce5b42316efcfcfe71136431"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8dbc456fce5b42316efcfcfe71136431">&#9670;&nbsp;</a></span>Kernel() <span class="overload">[2/2]</span></h2>
+<a id="a2b09f9f3cd3fcc33b62c00bef209f28e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b09f9f3cd3fcc33b62c00bef209f28e">&#9670;&nbsp;</a></span>Kernel() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Kernel::Kernel </td>
+          <td>(</td>
+          <td class="paramtype">std::ifstream&#160;</td>
+          <td class="paramname"><em>stream</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>name</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Compiles a kernel from an external file</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">stream</td><td>The stream that points to the location on disk that the kernel program should be compiled from</td></tr>
+    <tr><td class="paramname">name</td><td>The name of the kernel function inside the program </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a039d6bdab5cb8ff5e246405023f32c03"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a039d6bdab5cb8ff5e246405023f32c03">&#9670;&nbsp;</a></span>Kernel() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -177,7 +221,7 @@ Static Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const std::string&#160;</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
           <td class="paramname"><em>name</em>&#160;</td>
         </tr>
         <tr>
@@ -199,6 +243,50 @@ Static Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="ac07c1f999f5bd522fe2e36e0da579149"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac07c1f999f5bd522fe2e36e0da579149">&#9670;&nbsp;</a></span>compileProgram()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Kernel::compileProgram </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>program</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>name</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Compiles the program for this kernel from the given string.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">program</td><td>The source of the kernel program</td></tr>
+    <tr><td class="paramname">name</td><td>The name of the kernel inside of the source </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="aa858ce0ccbe1e71a1d6bf0114a094f72"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aa858ce0ccbe1e71a1d6bf0114a094f72">&#9670;&nbsp;</a></span>execute1D()</h2>
 

@@ -57,11 +57,11 @@ var searchData=
   ['_5fsamples',['_samples',['../class_population.html#ae32c16e86ca6f39eecfff2e8edaff66e',1,'Population']]],
   ['_5fshould_5fgen_5fsamples',['_should_gen_samples',['../class_sample_generator.html#a5b5f31572a2141ecdb66d9596e382d20',1,'SampleGenerator']]],
   ['_5fsigma',['_sigma',['../class_population.html#abe008a0b33a70380d25ab453581c4924',1,'Population::_sigma()'],['../class_multi_normal.html#af6f423cbb72b0b71175f1c2eba717edf',1,'MultiNormal::_sigma()']]],
-  ['_5fstandard_5fdistro',['_standard_distro',['../class_sample_generator.html#a15f21650d5aa0c7feff549d9f66bf53a',1,'SampleGenerator']]],
+  ['_5fstandard_5fdistro',['_standard_distro',['../class_sample_generator.html#af07375b65d61d740560f9cd89cae8df2',1,'SampleGenerator']]],
   ['_5fstart',['_start',['../class_population.html#a4e0aeaa0a40d1c84026b31ac7eb0c794',1,'Population']]],
   ['_5fstate',['_state',['../class_c_m_d.html#a6514aa4a90837f1b1d54bf8b3dc7165e',1,'CMD']]],
   ['_5fstaticgdal',['_StaticGDAL',['../class_elevation_data_1_1___static_g_d_a_l.html',1,'ElevationData::_StaticGDAL'],['../class_elevation_data_1_1___static_g_d_a_l.html#a79b026bc4dc17acf2dad22be6ddb912b',1,'ElevationData::_StaticGDAL::_StaticGDAL()']]],
-  ['_5ftwister',['_twister',['../class_sample_generator.html#aa3aad649549054114b8ebcec949de2ae',1,'SampleGenerator']]],
+  ['_5ftwister',['_twister',['../class_sample_generator.html#a7b23fc6a36afc3d69c92ee60f13f7a81',1,'SampleGenerator']]],
   ['_5fweights',['_weights',['../class_population.html#a8f77c5ffb1f52964c960c7e271b4c366',1,'Population']]],
   ['_5fwidth',['_width',['../class_elevation_data_1_1___static_g_d_a_l.html#a291571816205df02889e20a87f91ef2c',1,'ElevationData::_StaticGDAL']]],
   ['_5fwidth_5fmeters',['_width_meters',['../class_elevation_data_1_1___static_g_d_a_l.html#a977d536604a196d7f5fdb17a05df72a2',1,'ElevationData::_StaticGDAL']]]

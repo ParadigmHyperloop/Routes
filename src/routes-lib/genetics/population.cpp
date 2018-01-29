@@ -15,9 +15,12 @@ Population::Population(int pop_size, glm::vec4 start, glm::vec4 dest, const Elev
     _individual_size = _genome_size + 2 + 1;
 
     // Create the appropriate vectors
-    _individuals = std::vector<glm::vec4>(pop_size * _individual_size);
+    _individuals = std::vector<glm::vec4>((size_t)pop_size * _individual_size);
+
+    for (int i = 0; i < _individuals.size(); i++)
+        _individuals[i] = glm::vec4(0.0);
+
     _opencl_individuals =  boost::compute::vector<glm::vec4>(_individuals.size(), Kernel::getContext());
-        
 
     // Calculate the binomial coefficients for evaluating the bezier paths
     calcBinomialCoefficients();
@@ -25,8 +28,8 @@ Population::Population(int pop_size, glm::vec4 start, glm::vec4 dest, const Elev
     // Figure out how many points this route should be evaluated on.
     // We also make sure it is a multiple of workers
     glm::dvec2 cropped_size = data.getCroppedSizeMeters();
-    _num_evaluation_points = ceil(glm::max(cropped_size.x / METERS_TO_POINT_CONVERSION,
-                                           cropped_size.y / METERS_TO_POINT_CONVERSION) / (float)NUM_ROUTE_WORKERS) * NUM_ROUTE_WORKERS;
+    _num_evaluation_points = (int)ceil(glm::max(cropped_size.x / METERS_TO_POINT_CONVERSION,
+                                                cropped_size.y / METERS_TO_POINT_CONVERSION) / (float)NUM_ROUTE_WORKERS) * NUM_ROUTE_WORKERS;
 
     std::cout << "Using " << _num_evaluation_points << " points of evaluation" << std::endl;
     _num_evaluation_points_1 = (float)_num_evaluation_points - 1.0f;
@@ -38,7 +41,7 @@ Population::Population(int pop_size, glm::vec4 start, glm::vec4 dest, const Elev
     samplePopulation();
         
     // Create the best sample vector
-    _best_samples = std::vector<Eigen::VectorXf>(_mu);
+    _best_samples = std::vector<Eigen::VectorXf>((size_t)_mu);
 
 }
 
@@ -52,8 +55,8 @@ Population::~Population() {
 
 Individual Population::getIndividual(int index) {
 
-    Individual ind;
-    ind.num_genes = _genome_size;
+    Individual ind = Individual();
+    ind.num_genes = (size_t)_genome_size;
 
     // Calculate the location of the parts of the individual
     glm::vec4* header_loc = _individuals.data() + index * _individual_size;
@@ -105,7 +108,7 @@ void Population::step(const Pod& pod) {
 void Population::sortIndividuals() {
 
     // Get all of the individuals as Individuals for easier sorting
-    std::vector<Individual> individuals_s = std::vector<Individual>(_pop_size);
+    std::vector<Individual> individuals_s = std::vector<Individual>((size_t)_pop_size);
     for (int i = 0; i < _pop_size; i++)
         individuals_s[i] = getIndividual(i);
 
@@ -116,7 +119,7 @@ void Population::sortIndividuals() {
         return (*a.header).x < (*b.header).x;
 
     });
-    
+
     // Copy the best samples into a sorted array
     for (int i = 0; i < _mu; i++)
         _best_samples[i] = _samples[individuals_s[i].index];
@@ -154,7 +157,7 @@ void Population::evaluateCost(const Pod& pod) {
 
 std::vector<glm::vec3> Population::getSolution() const {
     
-    std::vector<glm::vec3> solution = std::vector<glm::vec3>(_genome_size + 2);
+    std::vector<glm::vec3> solution = std::vector<glm::vec3>((size_t)_genome_size + 2);
     solution[0]                     = glm::vec3(_start.x, _start.y, _start.z);
     solution[_genome_size + 1]      = glm::vec3(_dest.x, _dest.y, _dest.z);
     
@@ -170,16 +173,17 @@ std::vector<glm::vec3> Population::getSolution() const {
 void Population::calcGenomeSize() {
 
     // The genome size has a square root relationship with the length of the route
-    float sqrt_length = sqrt(glm::length(_direction));
-    _genome_size = std::round(sqrt_length * LENGTH_TO_GENOME);
-    std::cout << "Genome size: " << _genome_size << std::endl;
+    float sqrt_length = sqrtf(glm::length(_direction));
+    _genome_size = (int)std::round(sqrt_length * LENGTH_TO_GENOME);
+
+    std::cout << "Genome: " << _genome_size << std::endl;
 
 }
 
 void Population::initParams() {
 
     // Choose mu to be a fixed number of individuals
-    _mu = _pop_size * 0.15;
+    _mu = (int)(_pop_size * 0.15);
 
     // Init the mean to the best guess (a straight line)
     bestGuess();
@@ -203,8 +207,8 @@ void Population::initParams() {
     
     // Calculate the expected value of the standard normal distribution.
     // This is purely based of the number of dimensions.
-    float N = (float)_mean.size();
-    _expected_value = sqrt(N) * (1.0 - 1.0 / (N * 4.0) + 1.0 / (21.0 * glm::pow(N, 2.0)));
+    float N = _mean.size();
+    _expected_value = sqrtf(N) * (1.0f - 1.0f / (N * 4.0f) + 1.0f / (21.0f * glm::pow(N, 2.0f)));
 
 }
 
@@ -220,7 +224,7 @@ void Population::initSamplers() {
 void Population::initSamples() {
 
     // Samples should be the same size as the population
-    _samples = std::vector<Eigen::VectorXf>(_pop_size);
+    _samples = std::vector<Eigen::VectorXf>((size_t)_pop_size);
 
     for (int i = 0; i < _pop_size; i++)
         _samples[i] = Eigen::VectorXf::Zero(_genome_size * 3);
@@ -261,12 +265,12 @@ void Population::calcWeights() {
     // When we update the mean and covariance matrix, we weight each solution unevenly.
     // Sum of all values in _weights should equal 1
     // Sum of 1/pow(_weights, 2) should be about _pop_size / 4
-    _weights = std::vector<float>(_mu);
-    float sum = 0.0;
+    _weights = std::vector<float>((size_t)_mu);
+    float sum = 0.0f;
 
     for (int i = 0; i < _mu; i++) {
 
-        _weights[i] = log(_mu + 0.5) - log(i + 1);
+        _weights[i] = log(_mu + 0.5f) - log(i + 1.0f);
         sum += _weights[i];
 
     }
@@ -276,14 +280,14 @@ void Population::calcWeights() {
         _weights[i] /= sum;
 
     // Calculate _mu_weight to be the sum of 1/pow(_weights, 2)
-    sum = 0.0;
+    sum = 0.0f;
 
     for (int i = 0; i < _mu; i++)
         sum += glm::pow(_weights[i], 2.0f);
 
     // Save some constant params we need to keep
-    _mu_weight = 1.0 / sum;
-    _mu_weight_sqrt = sqrt(_mu_weight);
+    _mu_weight = 1.0f / sum;
+    _mu_weight_sqrt = sqrtf(_mu_weight);
 
 }
 
@@ -313,13 +317,13 @@ void Population::calculateStratParameters() {
     float N = _mean.size();
 
     // Calc c_sigma
-    _c_sigma = (_mu_weight + 2.0) / (N + _mu_weight + 5.0);
+    _c_sigma = 3.0 / N;
 
     // Calc c_covar
-    _c_covar = (4.0+ _mu_weight / N) / (N + 4.0 + 2.0 * _mu_weight / N );
+    _c_covar = 4.0 / N;
 
     // Calculate a few other params for the covariance matrix updating
-    _c1 = 2.0 / ((N + 1.3) * (N + 1.3) + _mu_weight);
+    _c1 = 2.0f / ((N + 1.3f) * (N + 1.3f) + _mu_weight);
     _c_mu = glm::clamp(2.0f * (_mu_weight - 2.0f + 1.0f / _mu_weight) / ((N + 2.0f) * (N + 2.0f) + _mu_weight), 0.0f, 1.0f - _c1);
 
 }
@@ -338,23 +342,23 @@ void Population::samplePopulation() {
     for (int i = 0; i < NUM_SAMPLE_THREADS; i++) {
         
         threads[i] = std::thread([this, i, worker_size] {
-            
+
             int start = worker_size * i;
             int end = glm::min(start + worker_size, _pop_size);
-            
+
             for (int u = start; u < end; u++) {
-                
+
                 // Add the mean because the samples don't have it
                 Eigen::VectorXf actual = _samples[u] + _mean;
-                
+
                 // Use memory copies to put the right data in the the _individuals vector because its slightly faster
                 // We need to do it in a for loop because the _individuals is vec4 and there are only 3 components for each control point
                 // In the Eigen vectors that we build
                 for (int p = 0; p < _genome_size; p++)
                     memcpy(&_individuals[u * _individual_size + 2 + p][0], actual.data() + p * 3, sizeof(float) * 3);
-                
+
             }
-            
+
         });
         
     }
@@ -403,14 +407,13 @@ void Population::updateMean() {
     for (int i = 0; i < _mean_displacement.size(); i++)
         _mean_displacement(i) = _mean_displacement(i) / _sigma(i);
     
-    
 }
 
 void Population::updatePSigma() {
 
     // Calculate the discount factor and its complement
-    float discount = 1.0 - _c_sigma;
-    float discount_comp = sqrt(1.0 - (discount * discount));
+    float discount = 1.0f - _c_sigma;
+    float discount_comp = sqrtf(1.0f - (discount * discount));
 
     // Get the inverse square root of the covariance matrix
     Eigen::SelfAdjointEigenSolver<Eigen::MatrixXf> solver(_covar_matrix);
@@ -421,7 +424,7 @@ void Population::updatePSigma() {
         std::cout << "Nan in inv_sqrt covariance detected\n";
         return;
     }
-    
+
     _p_sigma = discount * _p_sigma + discount_comp * _mu_weight_sqrt * inv_sqrt_C * _mean_displacement;
 
 }
@@ -429,12 +432,12 @@ void Population::updatePSigma() {
 void Population::updatePCovar() {
 
     // Calculate the discount factor and its complement
-    float discount = 1.0 - _c_covar;
-    float discount_comp = sqrt(1.0 - (discount * discount));
+    float discount = 1.0f - _c_covar;
+    float discount_comp = sqrtf(1.0f - (discount * discount));
 
     // Figure out the indicator function
-    float indicator = 0.0;
-    if (_p_sigma.norm() <= sqrt((float)_mean.size()) * ALPHA)
+    float indicator = 0.0f;
+    if (_p_sigma.norm() <= sqrtf((float)_mean.size()) * ALPHA)
         indicator = 1.0;
 
     _p_covar = discount * _p_covar + indicator * discount_comp * _mu_weight_sqrt * _mean_displacement;
@@ -444,8 +447,7 @@ void Population::updatePCovar() {
 void Population::updateCovar() {
 
     // Calculate the actual new covariance matrix
-    Eigen::MatrixXf covariance_prime(_mean.size(), _mean.size());
-    covariance_prime.setZero();
+    Eigen::MatrixXf covariance_prime = Eigen::MatrixXf::Zero(_mean.size(), _mean.size());
 
     for (int i = 0; i < _mu; i++) {
 
@@ -463,14 +465,14 @@ void Population::updateCovar() {
     Eigen::MatrixXf rank_one = _c1 * _p_covar * _p_covar.transpose();
 
     // Calculate cs
-    float indicator = 0.0;
-    if (_p_sigma.norm() * _p_sigma.norm() <= sqrt((float)_mean.size()) * ALPHA)
+    float indicator = 0.0f;
+    if (_p_sigma.norm() * _p_sigma.norm() <= sqrtf((float)_mean.size()) * ALPHA)
         indicator = 1.0;
 
-    float cs = (1.0 - indicator) * _c1 * _c_covar * (2.0 - _c_covar);
+    float cs = (1.0f - indicator) * _c1 * _c_covar * (2.0f - _c_covar);
 
     // Calculate the discount factor
-    float discount = 1.0 - _c1 - _c_mu + cs;
+    float discount = 1.0f - _c1 - _c_mu + cs;
 
     // Update the MatrixXf
     _covar_matrix = discount * _covar_matrix + rank_one + _c_mu * covariance_prime;
@@ -486,7 +488,7 @@ void Population::updateSigma() {
     float mag = _p_sigma.norm();
 
     // Update sigma
-    _sigma = _sigma * glm::pow(M_E, ratio * (mag / _expected_value - 1.0));
+    _sigma = _sigma * glm::pow(M_E, ratio * (mag / _expected_value - 1.0f));
 
 }
 
@@ -494,7 +496,7 @@ void Population::calcBinomialCoefficients() {
 
     // For degree we have _genome_size + 2 points, so we use that minus 1 for the degree
     const std::vector<int>& binomials = Bezier::getBinomialCoefficients(_genome_size + 1);
-    _opencl_binomials = boost::compute::vector<int>(_genome_size + 2, Kernel::getContext());
+    _opencl_binomials = boost::compute::vector<int>((size_t)_genome_size + 2, Kernel::getContext());
 
     // Upload to the GPU
     boost::compute::copy(binomials.begin(), binomials.end(), _opencl_binomials.begin(), Kernel::getQueue());
