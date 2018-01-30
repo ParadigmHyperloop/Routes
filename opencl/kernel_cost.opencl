@@ -49,7 +49,7 @@ __kernel void cost(__read_only image2d_t image, __global float4* individuals, in
 
     const sampler_t sampler = CLK_NORMALIZED_COORDS_TRUE | CLK_ADDRESS_CLAMP_TO_EDGE | CLK_FILTER_NEAREST;
     const float pylon_cost = 1.16;
-    const float tunnel_cost = 3100.0;
+    const float tunnel_cost = 31000.0;
 
     __local int curve_penalties[100];
     __local int grade_penalties[100];
@@ -78,8 +78,8 @@ __kernel void cost(__read_only image2d_t image, __global float4* individuals, in
     // calculated. The fastest way to do this is to just re-calculate it
     if (w) {
 
-        last_last   = evaluateBezierCurve(individuals, path, path_length, (float)(start - 2) / num_points_1, binomial_coeffs);
-        last_point  = evaluateBezierCurve(individuals, path, path_length, (float)(start - 1) / num_points_1, binomial_coeffs);
+        last_last  = evaluateBezierCurve(individuals, path, path_length, (float)(start - 2) / num_points_1, binomial_coeffs);
+        last_point = evaluateBezierCurve(individuals, path, path_length, (float)(start - 1) / num_points_1, binomial_coeffs);
 
     }
 
@@ -171,7 +171,7 @@ __kernel void cost(__read_only image2d_t image, __global float4* individuals, in
         float grade_cost = (float)grade_penalty / (num_points_1 + 1.0);
 
         // Get total cost
-        float total_cost = track_cost_n * 1.2 + curve_cost + grade_cost * 0.4 + route_length_n * 1.2;
+        float total_cost = track_cost_n * 1.2 + curve_cost + grade_cost + route_length_n * 1.6;
 
         // Set the individual's header to contain its cost
         individuals[path - 1].x = total_cost;
