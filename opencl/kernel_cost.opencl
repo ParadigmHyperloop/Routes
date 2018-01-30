@@ -62,7 +62,7 @@ __kernel void cost(__read_only image2d_t image, __global float4* individuals, in
 
     int path = i * (path_length + 1) + 1;
 
-    float route_length;
+    float route_length = 0.0;
     int curve_penalty = 0;
     int grade_penalty = 0;
     float track_cost = 0.0;
