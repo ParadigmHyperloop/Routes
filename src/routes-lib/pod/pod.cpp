@@ -54,7 +54,7 @@ float Pod::timeForCurve(const std::vector<glm::vec3>& points) const {
     for(int i = 0; i < points.size() - 1; i++) {
 
         // Calculate the acceleration at each point and add it to a vector
-        if(i = 0) {
+        if(i == 0) {
             accel_at_point[0] = 0.0;
             vel_at_point[0] = 0.0;
         }

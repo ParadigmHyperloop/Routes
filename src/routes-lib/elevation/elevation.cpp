@@ -271,6 +271,8 @@ void ElevationData::createOpenCLImage() {
     // Go line by line and read GDAL data to get the data in the format we need
     std::vector<float> image_data = std::vector<float>(size.x * size.y);
 
+    long long int start = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+    
     for (int i = 0; i < size.y; i++) {
 
         CPLErr err = _StaticGDAL::_gdal_raster_band->RasterIO(GF_Read, crop_origin_c.x, i + crop_origin_c.y, size.x,
@@ -279,6 +281,10 @@ void ElevationData::createOpenCLImage() {
             throw std::runtime_error("There was an error reading from the dataset");
 
     }
+    
+    long long int end = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+    std::cout << "Copying took " << end - start << std::endl;
+    start = end;
 
     // Create the OpenCL image
     boost::compute::image_format format = boost::compute::image_format(CL_INTENSITY, CL_FLOAT);
@@ -289,45 +295,22 @@ void ElevationData::createOpenCLImage() {
     const boost::compute::context& ctx =   Kernel::getContext();
     boost::compute::command_queue& queue = Kernel::getQueue();
 
-    std::vector<float>            min_max_host(2);
+    std::vector<float>            min_max_host = {1000000.0, -1000000.0};
     boost::compute::vector<float> min_max_device(2, ctx);
-
-    // Generate the program sounds
-    const std::string source = BOOST_COMPUTE_STRINGIZE_SOURCE(
-
-            __kernel void computeMinMax(__read_only image2d_t image, __global float* min_max, int width, int height) {
-
-                const sampler_t sampler = CLK_NORMALIZED_COORDS_FALSE | CLK_ADDRESS_CLAMP_TO_EDGE | CLK_FILTER_NEAREST;
-
-                // Use this to exclude no data
-                const float extreme = 1000000.0;
-
-                size_t x = get_global_id(0);
-                size_t y = get_global_id(1);
-
-                float sample = read_imagef(image, sampler, (float2)(x, y)).x;
-
-                // Do a sanity check
-                if (fabs(sample) < extreme) {
-
-                    min_max[0] = min(sample, min_max[0]);
-                    min_max[1] = max(sample, min_max[1]);
-
-                }
-
-            }
-
-    );
-
+    
     // Create a temporary kernel and execute it
-    Kernel extrema_kernel = Kernel(source, "computeMinMax");
+    static Kernel extrema_kernel = Kernel(std::ifstream("../opencl/kernel_minmax.opencl"), "computeMinMax");
+    
+    start = std::chrono::high_resolution_clock::now().time_since_epoch().count();
     extrema_kernel.setArgs(_opencl_image, min_max_device.get_buffer(), size.x, size.y);
-    extrema_kernel.execute2D(glm::vec<2, size_t>(0, 0),
-                             glm::vec<2, size_t>(size.x, size.y),
-                             glm::vec<2, size_t>(1, 1));
+    extrema_kernel.execute1D(0, size.x);
 
     boost::compute::copy(min_max_device.begin(), min_max_device.end(), min_max_host.begin(), queue);
-
+    
+    end = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+    std::cout << "Min max took  " << end - start << std::endl;
+    start = end;
+    
     _elevation_min = min_max_host[0];
     _elevation_max = min_max_host[1];
 

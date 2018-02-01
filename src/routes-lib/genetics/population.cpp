@@ -14,14 +14,6 @@ Population::Population(int pop_size, glm::vec4 start, glm::vec4 dest, const Elev
     // and the destination
     _individual_size = _genome_size + 2 + 1;
 
-    // Create the appropriate vectors
-    _individuals = std::vector<glm::vec4>((size_t)pop_size * _individual_size);
-
-    for (int i = 0; i < _individuals.size(); i++)
-        _individuals[i] = glm::vec4(0.0);
-
-    _opencl_individuals =  boost::compute::vector<glm::vec4>(_individuals.size(), Kernel::getContext());
-
     // Calculate the binomial coefficients for evaluating the bezier paths
     calcBinomialCoefficients();
 
@@ -33,6 +25,10 @@ Population::Population(int pop_size, glm::vec4 start, glm::vec4 dest, const Elev
 
     std::cout << "Using " << _num_evaluation_points << " points of evaluation" << std::endl;
     _num_evaluation_points_1 = (float)_num_evaluation_points - 1.0f;
+        
+    // Get the data to allow for proper texture sampling
+    _data_size   = _data.getCroppedSizeMeters();
+    _data_origin = _data.getCroppedOriginMeters();
 
     // First we init the params, then generate a starter population
     initParams();
@@ -107,13 +103,12 @@ void Population::step(const Pod& pod) {
 
 void Population::sortIndividuals() {
 
-    // Get all of the individuals as Individuals for easier sorting
-    std::vector<Individual> individuals_s = std::vector<Individual>((size_t)_pop_size);
+    // Get all of the individuals as Individuals (struct) for easier sorting
     for (int i = 0; i < _pop_size; i++)
-        individuals_s[i] = getIndividual(i);
+        _sorted_individuals[i] = getIndividual(i);
 
     // Sort the array of individual structs
-    std::sort(individuals_s.begin(), individuals_s.end(), [](Individual a, Individual b){
+    std::sort(_sorted_individuals.begin(), _sorted_individuals.end(), [](Individual a, Individual b){
 
         // Compare costs in the header
         return (*a.header).x < (*b.header).x;
@@ -122,7 +117,7 @@ void Population::sortIndividuals() {
 
     // Copy the best samples into a sorted array
     for (int i = 0; i < _mu; i++)
-        _best_samples[i] = _samples[individuals_s[i].index];
+        _best_samples[i] = _samples[_sorted_individuals[i].index];
 
 }
 
@@ -131,21 +126,17 @@ void Population::evaluateCost(const Pod& pod) {
     // Get stuff we need to execute a kernel on
     boost::compute::command_queue& queue = Kernel::getQueue();
 
-    // Get the data to allow for proper texture sampling
-    glm::vec2 size_crop = _data.getCroppedSizeMeters();
-    glm::vec2 origin = _data.getCroppedOriginMeters();
-
     // Create a temporary kernel and execute it
     static Kernel kernel = Kernel(std::ifstream("../opencl/kernel_cost.opencl"), "cost");
     kernel.setArgs(_data.getOpenCLImage(), _opencl_individuals.get_buffer(), _genome_size + 2,
-                   MAX_SLOPE_GRADE, pod.minCurveRadius(), EXCAVATION_DEPTH, size_crop.x,
-                   size_crop.y, _opencl_binomials.get_buffer(),
-                   _num_evaluation_points_1, _num_evaluation_points / NUM_ROUTE_WORKERS, origin.x, origin.y, glm::length(_direction));
+                   MAX_SLOPE_GRADE, pod.minCurveRadius(), EXCAVATION_DEPTH, _data_size.x,
+                   _data_size.y, _opencl_binomials.get_buffer(),
+                   _num_evaluation_points_1, _num_evaluation_points / NUM_ROUTE_WORKERS, _data_origin.x, _data_origin.y, glm::length(_direction));
 
     // Upload the data
     boost::compute::copy(_individuals.begin(), _individuals.end(), _opencl_individuals.begin(), queue);
 
-    // Execute the 2D kernel with a work size of 5. 5 threads working on a single individual
+    // Execute the 2D kernel with a work size of NUM_ROUTE_WORKERS. NUM_ROUTE_WORKERS threads  will work on a single individual
     kernel.execute2D(glm::vec<2, size_t>(0, 0),
                      glm::vec<2, size_t>(_pop_size, NUM_ROUTE_WORKERS),
                      glm::vec<2, size_t>(1, NUM_ROUTE_WORKERS));
@@ -223,6 +214,16 @@ void Population::initSamplers() {
 
 void Population::initSamples() {
 
+    // Create the appropriate vectors
+    _individuals = std::vector<glm::vec4>((size_t)_pop_size * _individual_size);
+    std::vector<Individual> _sorted_individuals = std::vector<Individual>((size_t)_pop_size);
+    
+    for (int i = 0; i < _individuals.size(); i++)
+        _individuals[i] = glm::vec4(0.0);
+    
+    _opencl_individuals =  boost::compute::vector<glm::vec4>(_individuals.size(), Kernel::getContext());
+
+    
     // Samples should be the same size as the population
     _samples = std::vector<Eigen::VectorXf>((size_t)_pop_size);
 

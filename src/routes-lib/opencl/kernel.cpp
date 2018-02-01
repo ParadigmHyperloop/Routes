@@ -91,8 +91,8 @@ void Kernel::execute1D(size_t start_index, size_t num_iterations, size_t work_si
 }
 
 void Kernel::execute2D(const glm::vec<2, size_t>& start_index,
-                        const glm::vec<2, size_t>& num_iterations,
-                        const glm::vec<2, size_t>& work_size) {
+                       const glm::vec<2, size_t>& num_iterations,
+                       const glm::vec<2, size_t>& work_size) {
 
     // Add a work order onto the kernel with the parameters that were given
     if (_opencl_program_valid)
