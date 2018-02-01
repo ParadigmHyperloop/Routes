@@ -216,14 +216,13 @@ void Population::initSamples() {
 
     // Create the appropriate vectors
     _individuals = std::vector<glm::vec4>((size_t)_pop_size * _individual_size);
-    std::vector<Individual> _sorted_individuals = std::vector<Individual>((size_t)_pop_size);
-    
+    _sorted_individuals = std::vector<Individual>((size_t)_pop_size);
+
     for (int i = 0; i < _individuals.size(); i++)
         _individuals[i] = glm::vec4(0.0);
-    
+
     _opencl_individuals =  boost::compute::vector<glm::vec4>(_individuals.size(), Kernel::getContext());
 
-    
     // Samples should be the same size as the population
     _samples = std::vector<Eigen::VectorXf>((size_t)_pop_size);
 

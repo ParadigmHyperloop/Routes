@@ -171,7 +171,7 @@ __kernel void cost(__read_only image2d_t image, __global float4* individuals, in
         float grade_cost = (float)grade_penalty / (num_points_1 + 1.0);
 
         // Get total cost
-        float total_cost = track_cost_n * 1.2 + curve_cost + grade_cost + route_length_n * 1.6;
+        float total_cost = track_cost_n * 1.2 + curve_cost + grade_cost + route_length_n * 2.0;
 
         // Set the individual's header to contain its cost
         individuals[path - 1].x = total_cost;
