@@ -312,6 +312,12 @@ class Population {
          */
         glm::vec4 _direction;
 
+        /** The origin of the data in meters relative to the database absolute origin */
+        glm::vec2 _data_size;
+    
+        /** The size of the data in meters */
+        glm::vec2 _data_origin;
+    
         /**
          * Since the cost algorithm uses sampling we need to know how many samples to take. For one dataset this is a
          * trivial task. However some routes may span multiple datasets and therefore a calculation needs to be
@@ -418,6 +424,9 @@ class Population {
     
         /** The _mu best multinormal samples from the population */
         std::vector<Eigen::VectorXf> _best_samples;
+    
+        /** The vector that is used to sort the individuals. We keep this around to avoid allocating every time we sort */
+        std::vector<Individual> _sorted_individuals;
     
 };
 
