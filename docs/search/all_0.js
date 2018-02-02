@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['_5fa',['_A',['../class_multi_normal.html#a9ff2bde3c9bf0262ed042cde75fcca59',1,'MultiNormal']]],
   ['_5fbest_5fsamples',['_best_samples',['../class_population.html#a9c777f0801dc3e53f74fd535bbe141be',1,'Population']]],
   ['_5fc1',['_c1',['../class_population.html#a0d53c91ce41885642a6f55cfe750cc1b',1,'Population']]],
   ['_5fc_5fcovar',['_c_covar',['../class_population.html#a5de21aa44d44a2c2a151136c71adbfb0',1,'Population']]],
@@ -11,6 +10,8 @@ var searchData=
   ['_5fcrop_5fextent',['_crop_extent',['../class_elevation_data.html#afa6c3aadbed8d4003b2d57df7d3d00c1',1,'ElevationData']]],
   ['_5fcrop_5forigin',['_crop_origin',['../class_elevation_data.html#ad42dfc2217591d33fd89ac7f5aa35daf',1,'ElevationData']]],
   ['_5fdata',['_data',['../class_population.html#a38141fe6b682fc55d396cc4d781d1228',1,'Population']]],
+  ['_5fdata_5forigin',['_data_origin',['../class_population.html#a4d4caa1b49c87e693c28f9bbbf5b057c',1,'Population']]],
+  ['_5fdata_5fsize',['_data_size',['../class_population.html#aaa1f28a399453a515a73ac4f5d9cd31e',1,'Population']]],
   ['_5fdest',['_dest',['../class_population.html#a7aa0ea5b8e48e19a77d28d0c268bb51d',1,'Population']]],
   ['_5fdirection',['_direction',['../class_population.html#a12a9a8defaf210633a3575fbea984d39',1,'Population']]],
   ['_5felevation_5fmax',['_elevation_max',['../class_elevation_data.html#ad0a44d39e94c31b4ddd0a7986c15d6f4',1,'ElevationData']]],
@@ -27,6 +28,7 @@ var searchData=
   ['_5findividuals',['_individuals',['../class_population.html#aeac36ea8d0adf5d86de7b450854020c5',1,'Population']]],
   ['_5finit',['_init',['../class_elevation_data.html#a3b18b270f0f0a6e181bd4add2d571a0b',1,'ElevationData']]],
   ['_5fis_5finitialized',['_is_initialized',['../class_kernel.html#ad3ec114105efa539756f02af36ad8749',1,'Kernel']]],
+  ['_5fl',['_L',['../class_multi_normal.html#a3295220f91be819307655a62faf8d9ec',1,'MultiNormal']]],
   ['_5flength',['_length',['../class_sample_generator.html#a164d688f7c648db090db61e96e8aac31',1,'SampleGenerator']]],
   ['_5fmax_5fspeed',['_max_speed',['../class_pod.html#acca59281981c944e3159eba166106083',1,'Pod']]],
   ['_5fmean',['_mean',['../class_population.html#a00614fb4a39e2be35f7cead3adcff6d0',1,'Population']]],
@@ -57,6 +59,7 @@ var searchData=
   ['_5fsamples',['_samples',['../class_population.html#ae32c16e86ca6f39eecfff2e8edaff66e',1,'Population']]],
   ['_5fshould_5fgen_5fsamples',['_should_gen_samples',['../class_sample_generator.html#a5b5f31572a2141ecdb66d9596e382d20',1,'SampleGenerator']]],
   ['_5fsigma',['_sigma',['../class_population.html#abe008a0b33a70380d25ab453581c4924',1,'Population::_sigma()'],['../class_multi_normal.html#af6f423cbb72b0b71175f1c2eba717edf',1,'MultiNormal::_sigma()']]],
+  ['_5fsorted_5findividuals',['_sorted_individuals',['../class_population.html#a975d0a72c1ffd6441759bec963ad228a',1,'Population']]],
   ['_5fstandard_5fdistro',['_standard_distro',['../class_sample_generator.html#af07375b65d61d740560f9cd89cae8df2',1,'SampleGenerator']]],
   ['_5fstart',['_start',['../class_population.html#a4e0aeaa0a40d1c84026b31ac7eb0c794',1,'Population']]],
   ['_5fstate',['_state',['../class_c_m_d.html#a6514aa4a90837f1b1d54bf8b3dc7165e',1,'CMD']]],

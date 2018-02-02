@@ -13,11 +13,11 @@ MultiNormal::MultiNormal(const Eigen::MatrixXf& covariance_matrix, const Eigen::
     Eigen::LLT<Eigen::MatrixXf> decomp(covariance_matrix);
     
     if (decomp.info() == Eigen::Success)
-        _A = decomp.matrixL();
+        _L = decomp.matrixL();
     else {
       
         Eigen::SelfAdjointEigenSolver<Eigen::MatrixXf> eigen_decomp(covariance_matrix);
-        _A = eigen_decomp.eigenvectors() * eigen_decomp.eigenvalues().cwiseSqrt().asDiagonal();
+        _L = eigen_decomp.eigenvectors() * eigen_decomp.eigenvalues().cwiseSqrt().asDiagonal();
         
     }
     
@@ -37,7 +37,7 @@ void MultiNormal::doSample(Eigen::VectorXf& out_sample, SampleGenerator& sampler
     sampler.getSample(out_sample);
     
     // Transform the sample by the decomposed covariance and then add the mean vector
-    out_sample = (_A * out_sample).cwiseProduct(_sigma);
+    out_sample = (_L * out_sample).cwiseProduct(_sigma);
     
 }
 

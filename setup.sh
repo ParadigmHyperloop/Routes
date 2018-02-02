@@ -30,7 +30,7 @@ fi
 
 # Download boost
 curl -L https://dl.bintray.com/boostorg/release/1.65.1/source/boost_1_65_1.tar.gz --output boost.tar.gz
-tar -xvzf boost.tar.gz
+tar -xzf boost.tar.gz
 
 # Copy libraries
 cp -r boost_1_65_1/boost/ include/boost/
@@ -69,7 +69,7 @@ rm -rf restbed
 
 # Download Eigen
 curl -L http://bitbucket.org/eigen/eigen/get/3.3.4.tar.gz --output ei.tar.gz
-tar -xvzf ei.tar.gz
+tar -xzf ei.tar.gz
 rm ei.tar.gz
 cd ei*
 mkdir build

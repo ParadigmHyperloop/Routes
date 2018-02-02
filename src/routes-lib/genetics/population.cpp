@@ -71,33 +71,33 @@ Individual Population::getIndividual(int index) {
 void Population::step(const Pod& pod) {
 
     // Evaluate the cost and sort so the most fit solutions are in the front
-//    long long int start = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+    long long int start = std::chrono::high_resolution_clock::now().time_since_epoch().count();
 
     evaluateCost(pod);
 
-//    long long int end = std::chrono::high_resolution_clock::now().time_since_epoch().count();
-//    std::cout << "Cost took " << end - start << std::endl;
-//    start = end;
+    long long int end = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+    std::cout << "Cost took " << end - start << std::endl;
+    start = end;
 
     sortIndividuals();
 
-//    end = std::chrono::high_resolution_clock::now().time_since_epoch().count();
-//    std::cout << "Sort took " << end - start << std::endl;
-//    start = end;
+    end = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+    std::cout << "Sort took " << end - start << std::endl;
+    start = end;
 
     // Update the params
     updateParams();
 
-//    end = std::chrono::high_resolution_clock::now().time_since_epoch().count();
-//    std::cout << "Params took " << end - start << std::endl;
-//    start = end;
+    end = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+    std::cout << "Params took " << end - start << std::endl;
+    start = end;
 
     // Sample a new generation
     samplePopulation();
 
-//    end = std::chrono::high_resolution_clock::now().time_since_epoch().count();
-//    std::cout << "Sample took " << end - start << std::endl;
-//    start = end;
+    end = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+    std::cout << "Sample took " << end - start << std::endl;
+    start = end;
 
 }
 
