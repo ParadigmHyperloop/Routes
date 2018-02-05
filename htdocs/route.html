@@ -25,7 +25,8 @@
 
     <body>
                 
-        <!-- <div id="overlay">
+<!--
+        <div id="overlay">
         
             <div id="background"></div>
             
@@ -43,37 +44,52 @@
             </div>
             
         </div> 
+
+-->
         
-        <div id="map-container"> </div> -->
+        <div id="info-bar">
+        
+            <div class="graph-container">
+                <canvas id="graph"></canvas>
+            </div>
+        
+        </div>
+        
+        <div id="map-container">
+            
+        </div> 
         
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
-        <div id="a" style="width: 500pt; height: 375pt"><canvas id="myChart"></canvas></div>
+        <script src="script/graph.js"></script>
+        
         
         <script>
-    var ctx = document.getElementById('myChart').getContext('2d');
             
-            var gradient = ctx.createLinearGradient(0, 0, 0, $('#a').get(0).offsetWidth / 1.3);
-gradient.addColorStop(0, '#FF5A43');   
-gradient.addColorStop(1, '#C00040');
+           
+            var chart = makeLineGraph("graph")
             
-var chart = new Chart(ctx, {
-    // The type of chart we want to create
-    type: 'line',
-
-    // The data for our dataset
-    data: {
-        labels: ["January", "February", "March", "April", "May", "June", "July"],
-        datasets: [{
-            label: "Number of Isaac Clones Recycled",
-            data: [0, 10, 5, 7, 3, 6, 9],
-            borderColor: gradient
-        }]
-    },
-
-    // Configuration options go here
-    options: {}
-});
-
+            
+            chart.data.datasets[0] = {
+                        label: "Number of Isaac Clones Recycled",
+                        data: [{
+                                x: 10,
+                                y: 20
+                            },
+                                                      {
+                                x: 20,
+                                y: 22
+                            },{
+                                x: 56,
+                                y: 58
+                            }],
+                
+                        backgroundColor: "transparent",
+                        borderColor: gradient("graph"),
+                        pointRadius: 0,
+                        pointHitRadius: 0
+                };
+            
+            chart.update()
         
         </script>
         
