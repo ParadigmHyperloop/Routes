@@ -1,4 +1,4 @@
-function makeLineGraph(canvas) {
+function makeLineGraph(canvas, xAxis, yAxis) {
     
     var ctx = document.getElementById(canvas).getContext('2d');
             
@@ -12,15 +12,17 @@ function makeLineGraph(canvas) {
 
                     ticks: {
                         fontFamily: "Rubik",
-                        fontSize: 13
+                        fontSize: 13,
+                        fontColor: "#fff"
                     },
 
                     scaleLabel: {
 
                         display: true,
-                        labelString: "Distance (m)",
+                        labelString: xAxis,
                         fontFamily: "Rubik",
-                        fontSize: 15
+                        fontSize: 15,
+                        fontColor: "#fff"
                     }
 
                 }],
@@ -29,15 +31,17 @@ function makeLineGraph(canvas) {
 
                     ticks: {
                         fontFamily: "Rubik",
-                        fontSize: 13
+                        fontSize: 13,
+                        fontColor: "#fff"
                     },
 
                     scaleLabel: {
 
                         display: true,
-                        labelString: "Elevation (m)",
+                        labelString: yAxis,
                         fontFamily: "Rubik",
-                        fontSize: 15
+                        fontSize: 15,
+                        fontColor: "#fff"
                     }
 
                 }]
@@ -54,14 +58,89 @@ function makeLineGraph(canvas) {
     
 }
 
-function gradient(canvas) {
+function makeBarGraph(canvas, labels, yAxis) {
+    
+    var ctx = document.getElementById("graph-2").getContext('2d');
+    return new Chart(ctx, {
+
+        type: 'bar',
+
+        data: {
+
+            labels: labels
+            
+        },
+
+        options: {
+
+            scales: {
+
+                xAxes: [{
+
+                    ticks: {
+                        fontFamily: "Rubik",
+                        fontSize: 13,
+                        fontColor: "#fff"
+                    },
+
+                    scaleLabel: {
+
+                        display: true,
+                        labelString: yAxis,
+                        fontFamily: "Rubik",
+                        fontSize: 15,
+                        fontColor: "#fff"
+                    }
+
+                }],
+
+                yAxes: [{
+
+                    ticks: {
+
+                        fontFamily: "Rubik",
+                        fontSize: 13,
+                        fontColor: "#fff",
+                        beginAtZero:true
+                    },
+
+                    scaleLabel: {
+
+                        display: true,
+                        labelString: "Time (m)",
+                        fontFamily: "Rubik",
+                        fontSize: 15,
+                        fontColor: "#fff"
+
+                    }
+
+                }]
+
+            },
+
+            legend: {
+
+                display: false,
+
+            }
+
+        }
+    });
+    
+}
+
+function gradientW(canvas, width, height) {
     
     var ctx = document.getElementById(canvas).getContext('2d');
     
-    var gradient = ctx.createLinearGradient(0, 0, $("#" + canvas).width(), $("#" + canvas).height());
+    var gradient = ctx.createLinearGradient(0, height, width, 0);
     gradient.addColorStop(0, '#FF5A43');   
     gradient.addColorStop(1, '#C00040');
            
     return gradient;
     
+}
+
+function gradient(canvas) {
+    return gradientW(canvas, $("#" + canvas).width(), $("#" + canvas).height());
 }

@@ -14,6 +14,8 @@ html {
     background-color: #191919;
     transition: opacity 1s;
     
+    overflow: hidden;
+    
 }
 
 #map-container {
@@ -46,7 +48,7 @@ html {
     height: 125pt;
     
     transform: translate3d(0, 0, 0);
-    transition: transform 1.5s ease;
+    transition: transform 1.5s ease, opacity 1s;
     
     pointer-events: none;
     -webkit-user-select: none;
@@ -60,19 +62,50 @@ html {
     
 }
 
-#info-bar {
+#info-container {
     
-    position: absolute; 
-    z-index: 1; 
+    opacity: 0;
     
-    background-color: #191919;
-    height: 100%;
-    width: 400pt;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    
+    transition: opacity 1s;
     
 }
 
-.graph-container {
+#results-title {
     
-    padding: 7pt; 
-    margin: 5pt;
+    margin-top: 20pt;
+    margin-bottom: 20pt;
+    
+    text-align: center;
+    font-size: 36pt;
+    
+    width: 100%;
+    
+}
+
+#result-subtitle {
+    
+    font-size: 18pt;
+    margin-bottom: 20pt;
+    
+}
+
+#graphs-container {
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    
+}
+
+.graph-title {
+    
+    font-size: 15pt;
+    margin: 10pt;
+    
 }

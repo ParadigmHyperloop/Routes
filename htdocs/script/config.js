@@ -1,3 +1,3 @@
 var config = {
-    url: "http://localhost"
+    url: "http://routes.paradigmhyperloop.com"
 };

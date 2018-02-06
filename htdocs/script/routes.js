@@ -130,14 +130,22 @@ function gotFinishedRoute(result) {
     });
 
     pathLine.setMap(map)
-    $('#overlay').css({"opacity" : "0"})
-    setTimeout(hideOverlay, 1000)
+    $('#sayings-container').hide()
+    $('#info-container').css({"display": "flex", "opacity" : "100"})
+    $('#overlay').css({"overflow-y": "scroll"})
 
+}
+
+function fadeOverlay() {
+    
+    $('#overlay').css({"opacity": 0})
+    setTimeout(hideOverlay, 1000)
+    
 }
 
 function hideOverlay() {
     
-    $('#overlay').hide()
+     $('#overlay').css({"display": "none"})
 
 }
 

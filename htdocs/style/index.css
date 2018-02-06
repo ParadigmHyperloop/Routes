@@ -49,59 +49,6 @@ input {
     
 }
 
-.button-container {
-    
-    margin-top: 25pt;
-    padding: 4pt;
-    border-radius: 10pt;
-    
-    background: linear-gradient(to bottom right, #FF5A43, #C00040);
-    
-}
-
-.button {
-    
-    padding: 15pt;
-    padding-left: 45pt;
-    padding-right: 45pt;
-    
-    border-radius: 6pt;
-    
-    -webkit-user-select: none;
-    user-select: none;
-    cursor: pointer;
-    
-    background-color: #191919;
-    
-    transition: background-color 0.3s;
-    
-}
-
-.button-text {
-    
-    color: transparent;
-    font-size: 23pt;
-    
-    background-image: linear-gradient(to bottom right, #FF5A43, #C00040);
-    -webkit-background-clip: text;
-    background-clip: text;
-    
-    transition: color 0.3s;
-    
-}
-
-.button:hover {
-    
-    background-color: transparent;
-    
-}
-
-.button:hover .button-text {
-    
-    color: #191919;
-    
-}
-
 #learn-more-container {
     
     margin-bottom: 20pt;
@@ -110,6 +57,6 @@ input {
 
 #learn-more-text {
     
-     font-size: 19pt;
+     font-size: 16.5pt;
     
 }
