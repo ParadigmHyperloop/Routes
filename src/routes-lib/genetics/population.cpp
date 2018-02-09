@@ -114,7 +114,10 @@ void Population::sortIndividuals() {
         return (*a.header).x < (*b.header).x;
 
     });
-
+    
+    // Save the fitness value of the best individual
+    _fitness_over_generations.push_back(_sorted_individuals[0].header->x);
+    
     // Copy the best samples into a sorted array
     for (int i = 0; i < _mu; i++)
         _best_samples[i] = _samples[_sorted_individuals[i].index];
@@ -418,12 +421,6 @@ void Population::updatePSigma() {
     // Get the inverse square root of the covariance matrix
     Eigen::SelfAdjointEigenSolver<Eigen::MatrixXf> solver(_covar_matrix);
     Eigen::MatrixXf inv_sqrt_C(solver.operatorInverseSqrt());
-
-    // Ensure that nan is not in the square root
-    if (isnan(inv_sqrt_C(0, 0))) {
-        std::cout << "Nan in inv_sqrt covariance detected\n";
-        return;
-    }
 
     _p_sigma = discount * _p_sigma + discount_comp * _mu_weight_sqrt * inv_sqrt_C * _mean_displacement;
 
