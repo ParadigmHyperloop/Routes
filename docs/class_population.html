@@ -91,6 +91,8 @@ Public Member Functions</h2></td></tr>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:a52a41d7911ed22285e95244f3f780fbb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a52a41d7911ed22285e95244f3f780fbb">calcGenomeSize</a> ()</td></tr>
 <tr class="separator:a52a41d7911ed22285e95244f3f780fbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4123726d3b7e81b3dac8fd123ec5e125"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a4123726d3b7e81b3dac8fd123ec5e125">determineEvalPoints</a> ()</td></tr>
+<tr class="separator:a4123726d3b7e81b3dac8fd123ec5e125"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af6fd879ac429afc818bcab64b4aef633"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#af6fd879ac429afc818bcab64b4aef633">initParams</a> ()</td></tr>
 <tr class="separator:af6fd879ac429afc818bcab64b4aef633"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0f8f46964400234c9c8a6d503178ef2e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a0f8f46964400234c9c8a6d503178ef2e">initSamplers</a> ()</td></tr>
@@ -136,6 +138,10 @@ Private Attributes</h2></td></tr>
 <tr class="separator:a7aa0ea5b8e48e19a77d28d0c268bb51d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a12a9a8defaf210633a3575fbea984d39"><td class="memItemLeft" align="right" valign="top">glm::vec4&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a12a9a8defaf210633a3575fbea984d39">_direction</a></td></tr>
 <tr class="separator:a12a9a8defaf210633a3575fbea984d39"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa1f28a399453a515a73ac4f5d9cd31e"><td class="memItemLeft" align="right" valign="top">glm::vec2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#aaa1f28a399453a515a73ac4f5d9cd31e">_data_size</a></td></tr>
+<tr class="separator:aaa1f28a399453a515a73ac4f5d9cd31e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d4caa1b49c87e693c28f9bbbf5b057c"><td class="memItemLeft" align="right" valign="top">glm::vec2&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a4d4caa1b49c87e693c28f9bbbf5b057c">_data_origin</a></td></tr>
+<tr class="separator:a4d4caa1b49c87e693c28f9bbbf5b057c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab24376531403464de7b208146cd3244a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#ab24376531403464de7b208146cd3244a">_num_evaluation_points</a></td></tr>
 <tr class="separator:ab24376531403464de7b208146cd3244a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abcdd0b795c6d89d3a0e34dcd3632bf81"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#abcdd0b795c6d89d3a0e34dcd3632bf81">_num_evaluation_points_1</a></td></tr>
@@ -184,6 +190,10 @@ Private Attributes</h2></td></tr>
 <tr class="separator:aedb0594cae875b623f916d6150781284"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9c777f0801dc3e53f74fd535bbe141be"><td class="memItemLeft" align="right" valign="top">std::vector&lt; Eigen::VectorXf &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a9c777f0801dc3e53f74fd535bbe141be">_best_samples</a></td></tr>
 <tr class="separator:a9c777f0801dc3e53f74fd535bbe141be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a975d0a72c1ffd6441759bec963ad228a"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="struct_individual.html">Individual</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a975d0a72c1ffd6441759bec963ad228a">_sorted_individuals</a></td></tr>
+<tr class="separator:a975d0a72c1ffd6441759bec963ad228a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a39b2e8896cfa6a1c5e40a8db307c445f"><td class="memItemLeft" align="right" valign="top">std::vector&lt; float &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a39b2e8896cfa6a1c5e40a8db307c445f">_fitness_over_generations</a></td></tr>
+<tr class="separator:a39b2e8896cfa6a1c5e40a8db307c445f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This class is responsible for holding individuals and breeding them. The current representation of an individual is as follows:</p>
@@ -415,6 +425,32 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>When we recalculate the mean vector from the best solutions, we do a weighting. This function calculates the weights for mew (the selected population) once, as it remains constant. </p>
+
+</div>
+</div>
+<a id="a4123726d3b7e81b3dac8fd123ec5e125"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4123726d3b7e81b3dac8fd123ec5e125">&#9670;&nbsp;</a></span>determineEvalPoints()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Population::determineEvalPoints </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>When the GPU kernel to evaluate the cost is run, the bezier curve is sampled at discrete intervals. For longer routes this needs to be higher so we have a rougly consistant meter-bezier sample. This function determines the number of points to use. </p>
 
 </div>
 </div>
@@ -957,6 +993,52 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a4d4caa1b49c87e693c28f9bbbf5b057c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d4caa1b49c87e693c28f9bbbf5b057c">&#9670;&nbsp;</a></span>_data_origin</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">glm::vec2 Population::_data_origin</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The size of the data in meters </p>
+
+</div>
+</div>
+<a id="aaa1f28a399453a515a73ac4f5d9cd31e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaa1f28a399453a515a73ac4f5d9cd31e">&#9670;&nbsp;</a></span>_data_size</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">glm::vec2 Population::_data_size</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The origin of the data in meters relative to the database absolute origin </p>
+
+</div>
+</div>
 <a id="a7aa0ea5b8e48e19a77d28d0c268bb51d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7aa0ea5b8e48e19a77d28d0c268bb51d">&#9670;&nbsp;</a></span>_dest</h2>
 
@@ -1023,6 +1105,29 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>The expectedc value of the standard normal distribution. We use this to determine if we should shrink or grow sigma </p>
+
+</div>
+</div>
+<a id="a39b2e8896cfa6a1c5e40a8db307c445f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39b2e8896cfa6a1c5e40a8db307c445f">&#9670;&nbsp;</a></span>_fitness_over_generations</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;float&gt; Population::_fitness_over_generations</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This vector contains the best fitness values of each generation. Every time <a class="el" href="class_population.html#a6aa7bc5b1eaa2a67041185a2ca92cc4f">step()</a> is called, the value of the cost function for the fittest individual is saved </p>
 
 </div>
 </div>
@@ -1437,6 +1542,29 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>The current step size. This is how far the next generation will move. The vector is length _genome_size * 3, 3 components for each point in the bezier curve (X, Y, Z). </p>
+
+</div>
+</div>
+<a id="a975d0a72c1ffd6441759bec963ad228a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a975d0a72c1ffd6441759bec963ad228a">&#9670;&nbsp;</a></span>_sorted_individuals</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;<a class="el" href="struct_individual.html">Individual</a>&gt; Population::_sorted_individuals</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>The vector that is used to sort the individuals. We keep this around to avoid allocating every time we sort </p>
 
 </div>
 </div>

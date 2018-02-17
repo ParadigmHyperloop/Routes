@@ -72,8 +72,8 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a683bb2b132a43c07e1bd1f94aa2f3d4a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_multi_normal.html#a683bb2b132a43c07e1bd1f94aa2f3d4a">MultiNormal</a> (const Eigen::MatrixXf &amp;covariance_matrix, const Eigen::VectorXf &amp;sigma)</td></tr>
-<tr class="separator:a683bb2b132a43c07e1bd1f94aa2f3d4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d9904884be0830b638f6f2ca00b9b74"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_multi_normal.html#a6d9904884be0830b638f6f2ca00b9b74">MultiNormal</a> (const Eigen::MatrixXf &amp;covariance_matrix, Eigen::VectorXf sigma)</td></tr>
+<tr class="separator:a6d9904884be0830b638f6f2ca00b9b74"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6f2a5156edccfc8abc46699366a59e7b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_multi_normal.html#a6f2a5156edccfc8abc46699366a59e7b">generateRandomSamples</a> (std::vector&lt; Eigen::VectorXf &gt; &amp;out, <a class="el" href="class_sample_generator.html">SampleGenerator</a> &amp;sampler)</td></tr>
 <tr class="separator:a6f2a5156edccfc8abc46699366a59e7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ade52a2dd78876c7b0d5dca46e2473567"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_multi_normal.html#ade52a2dd78876c7b0d5dca46e2473567">generateRandomSamples</a> (std::vector&lt; Eigen::VectorXf &gt; &amp;out, std::vector&lt; <a class="el" href="class_sample_generator.html">SampleGenerator</a> *&gt; samplers)</td></tr>
@@ -94,8 +94,8 @@ Private Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>This class is responsible for sampling from a multivariate normal distribution. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a683bb2b132a43c07e1bd1f94aa2f3d4a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a683bb2b132a43c07e1bd1f94aa2f3d4a">&#9670;&nbsp;</a></span>MultiNormal()</h2>
+<a id="a6d9904884be0830b638f6f2ca00b9b74"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d9904884be0830b638f6f2ca00b9b74">&#9670;&nbsp;</a></span>MultiNormal()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -109,7 +109,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const Eigen::VectorXf &amp;&#160;</td>
+          <td class="paramtype">Eigen::VectorXf&#160;</td>
           <td class="paramname"><em>sigma</em>&#160;</td>
         </tr>
         <tr>
