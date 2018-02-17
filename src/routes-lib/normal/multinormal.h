@@ -35,7 +35,7 @@ class MultiNormal {
          * The step size of the distribution
          *
          */
-        MultiNormal(const Eigen::MatrixXf& covariance_matrix, const Eigen::VectorXf& sigma);
+        MultiNormal(const Eigen::MatrixXf& covariance_matrix, Eigen::VectorXf& sigma);
 
         /**
          * Fills the out vector with samples from this distribution.
@@ -82,7 +82,7 @@ class MultiNormal {
         Eigen::MatrixXf _A;
     
         /** The step size of the distribution */
-        Eigen::VectorXf _sigma;
+        Eigen::VectorXf& _sigma;
     
 };
 

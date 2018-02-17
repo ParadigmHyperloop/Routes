@@ -63,8 +63,8 @@ cd build
 cmake -DBUILD_SSL=NO .. 
 make install 
 cd ../../
-cp -r restbed/distribution/library/ lib/
-cp -r restbed/distribution/include/ include/
+cp -r restbed/distribution/library/* lib/
+cp -r restbed/distribution/include/* include/
 rm -rf restbed
 
 # Download Eigen
