@@ -331,23 +331,23 @@ void Population::samplePopulation() {
     std::vector<std::thread> threads = std::vector<std::thread>(NUM_SAMPLE_THREADS);
     int worker_size = _pop_size / NUM_SAMPLE_THREADS;
     
-    for (int i = 0; i < NUM_SAMPLE_THREADS; i++) {
+    for (int thread = 0; thread < NUM_SAMPLE_THREADS; thread++) {
         
-        threads[i] = std::thread([this, i, worker_size] {
+        threads[thread] = std::thread([this, thread, worker_size] {
 
-            int start = worker_size * i;
+            int start = worker_size * thread;
             int end = glm::min(start + worker_size, _pop_size);
 
-            for (int u = start; u < end; u++) {
+            for (int individual = start; individual < end; individual++) {
 
                 // Add the mean because the samples don't have it
-                Eigen::VectorXf actual = _samples[u] + _mean;
+                Eigen::VectorXf actual = _samples[individual] + _mean;
 
                 // Use memory copies to put the right data in the the _individuals vector because its slightly faster
                 // We need to do it in a for loop because the _individuals is vec4 and there are only 3 components for each control point
                 // In the Eigen vectors that we build
-                for (int p = 0; p < _genome_size; p++)
-                    memcpy(&_individuals[u * _individual_size + 2 + p][0], actual.data() + p * 3, sizeof(float) * 3);
+                for (int point = 0; point < _genome_size; point++)
+                    memcpy(&_individuals[individual * _individual_size + 2 + point][0], actual.data() + point * 3, sizeof(float) * 3);
 
             }
 
