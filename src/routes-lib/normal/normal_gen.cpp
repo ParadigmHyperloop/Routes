@@ -5,7 +5,8 @@
 #include "normal_gen.h"
 
 std::hash<long long int> hasher;
-SampleGenerator::SampleGenerator(int length, int retainer) : _queue(new boost::lockfree::spsc_queue<Eigen::VectorXf>(retainer)), 
+
+SampleGenerator::SampleGenerator(int length, int retainer) : _queue(new boost::lockfree::spsc_queue<Eigen::VectorXf>(retainer)),
                                                              _length(length),
                                                              _should_gen_samples(true),
                                                              _twister(hasher(std::chrono::high_resolution_clock::now().time_since_epoch().count())),

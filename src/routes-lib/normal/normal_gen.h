@@ -8,7 +8,7 @@
 #include <ctime>
 #include <eigen3/Eigen/Eigen>
 #include <iostream>
-#include <boost/random.hpp>
+#include <boost/random/mersenne_twister.hpp>
 #include <boost/random/normal_distribution.hpp>
 #include <boost/lockfree/spsc_queue.hpp>
 #include <thread>
