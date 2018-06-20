@@ -2,12 +2,13 @@
 // Created by isaac on 10/13/17.
 //
 
+
 #include "pod.h"
 
 Pod::Pod(float max_speed) {
 
-    // Save the max speed of the pod
-    _max_speed = max_speed;
+   // Save the max speed of the pod
+   _max_speed = max_speed;
 
 }
 
@@ -15,77 +16,129 @@ float Pod::minCurveRadius() const { return pow (_max_speed, 2.0) / g; }
 
 float Pod::calcCentripetalAccel(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2) const {
 
-    float accel = 0.0;
+   float accel = 0.0;
 
-    accel = pow(_max_speed, 2) / Bezier::radiusOfCurvature(p0,p1,p2);
+   accel = pow(_max_speed, 2) / Bezier::radiusOfCurvature(p0,p1,p2);
 
-    return accel;
+   return accel;
 }
 
 float Pod::timeForCurve(const std::vector<glm::vec3>& points) const {
 
-    float time = 0.0;
+   // The length of the track. This is calculated by adding the straight line distance between each point.
+   float length = 0.0;
 
-    std::vector<glm::vec3> interestPoints;
+   /*
+    * This will also initialize the accelerations along the track. At the beginning and end of the track, the acceleration is
+    * determined by the accel needed to get the pod up to speed. Between these points, the acceleration is the
+    * centripetal acceleration at the point. In the future, centripetal accel should be accounted for in the beginning
+    * and end of the route.
+    */
 
-    // Add points whose centripetal acceleration is greater than g to a vec3
-    for(int i = 1; i < points.size() - 2; i++) {
-        if(calcCentripetalAccel(points[i-1], points[i], points[i+1]) > g)
-            interestPoints[i] = points[i];
-    }
+   std::vector<float> accels;
 
-    std::vector<float> accel_at_point;
-    std::vector<float> vel_at_point;
+   float vfSquared = std::pow(DEFAULT_POD_MAX_SPEED, 2);
+   float v0Squared = 0;
 
-    // The distance between the first interest point and the beginning of the route.
-    int backtrack_init = 0;
+   float posAccel = (vfSquared - v0Squared) / (2 * ACCEL_DISTANCE);
+   float negAccel = -1 * posAccel;
 
-    for(int round = 0; round < interestPoints.size(); round++){
-        if(interestPoints[round] != glm::vec3(0.0)) {
-            backtrack_init = round;
-            break;
-        }
-    }
+   int firstIndex;
+   int secondIndex;
 
-    // The amount to backtrack from an interest point to start slowing down
-    int backtrack = backtrack_init / 2;
+   int toggle = 0;
 
-    // Calculate the acceleration at each point
-    for(int i = 0; i < points.size() - 1; i++) {
+   for (int i = 0; i < points.size() - 1; i++) {
 
-        // Calculate the acceleration at each point and add it to a vector
-        if(i == 0) {
-            accel_at_point[0] = 0.0;
-            vel_at_point[0] = 0.0;
-        }
-        else if(calcCentripetalAccel(points[i-1], points[i], points[i+1]) < g) {
-            // Sets the acceleration at a point to the centripetal acceleration at a point if it does not have a
-            // centripetal acceleration greater than or equal to g.
-            accel_at_point[i] = calcCentripetalAccel(points[i - 1], points[i], points[i + 1]);
+       if (length < ACCEL_DISTANCE) {
+           accels.push_back(posAccel);
+       } else if (length > ACCEL_DISTANCE) {
+           // We don't deal with the end of the track yet because the full length of the track isnt yet known,
+           // this will be corrected after this loop.
+           accels.push_back(calcCentripetalAccel(points[i - 1], points[i], points[i + 1]));
+       }
 
-            // Sets the velocity at all points where the centripetal accleration is less than g to the max speed
-            vel_at_point[i] = _max_speed;
+       if (length > ACCEL_DISTANCE && toggle == 0) {
+           firstIndex = i;
+           toggle = 1;
+       }
 
-        }
-        else if(calcCentripetalAccel(points[i-1], points[i], points[i+1]) >= g){
-            accel_at_point[i] = .9 * g;
+       length = Bezier::bezierLength(points);
+   }
 
-            // Calculate the new velocity at point i if point i caused an acceleration that was greater than g.
-            vel_at_point[i] = sqrt(pow(_max_speed, 2) + 2 * (-.2 * g) * (Bezier::avgDistanceBetweenPoints(points) * backtrack));
+   float tempLength = 0.0;
 
-            // Calculates the velocities before an interest point
-            for(int j = floor((i/2) + 1); j < i; j++)
-                vel_at_point[j] = vel_at_point[i/2] - j * (.2 * g);
+   // Correct accels at end of route
+   for (int i = 0; i < points.size(); i++) {
 
-            // Calculates the velocities after an interest point
-            for(int k = i + 1; k < 2 * i || k < (points.size() - 1); k++)
-                vel_at_point[k] = vel_at_point[i] + k * (.2 * g);
-        }
-    }
+       while (tempLength > length - ACCEL_DISTANCE) {
+           accels[i] = negAccel;
+       }
 
-    // Accumulates the time by multiplying the velocity at a point by the average distance between the points
-    for(int t = 0; t < points.size() - 1; t++)
-        time += vel_at_point[t] * Bezier::avgDistanceBetweenPoints(points);
+       if (tempLength > length - ACCEL_DISTANCE && toggle == 1) {
+           secondIndex = i;
+           toggle = 0;
+       }
 
-    return time;
+       tempLength = Bezier::bezierLength(points);
+   }
+
+   // Now we need to find all the points where the acceleration is larger than "g". For now we will ignore the
+   // beginning and the end of the route.
+
+   // this is a vector of the indices in the points and accels array where the acceleration is larger than g.
+   std::vector<int> accel_too_high;
+
+   // ignore first and last points
+   for (int i = firstIndex + 1; i < secondIndex - 1; i++) {
+       if (calcCentripetalAccel(points[i - 1], points[i], points[i + 1]) > g) {
+           accel_too_high.push_back(i);
+       }
+   }
+
+   // Now we must go to all these points, using the velocity, and bringing it down to the velocity that it must be
+   // in order to make the centripetal acceleration at a good level.
+
+   for (int i = 0; i < accel_too_high.size(); i++) {
+       float radiusAtPoint = Bezier::radiusOfCurvature(points[accel_too_high[i] - 1],
+                                                       points[accel_too_high[i]],
+                                                       points[accel_too_high[i] + 1]);
+
+       float targetVel = glm::sqrt(g * radiusAtPoint);
+
+       float distanceToAccel = (targetVel - _max_speed) / (2 * DE_ACCEL);
+
+       std::vector<glm::vec3> tempPoints;
+
+       for (int i = 0; i < accel_too_high[i]; i++) {
+           tempPoints[i] = points[i];
+       }
+
+       float distanceFromStart = Bezier::bezierLength(tempPoints);
+
+       float lengthSoFar = 0.0;
+
+       // Correct the Accelerations. After this the accelerations are done.
+       for (int i = 0; i < tempPoints.size(); i++) {
+
+           if (lengthSoFar > (distanceFromStart - distanceToAccel)) {
+               accels[i] = DE_ACCEL * -1;
+           }
+
+           lengthSoFar += glm::length(points[i + 1] - points[i]);
+       }
+
+
+   }
+
+   // We now calculate the time for the pod to traverse the route
+
+   float time = 0.0;
+
+   for (int i = 0; i < accels.size(); i++) {
+       time += glm::sqrt((2 * length) / accels[i]);
+   }
+
+   return time;
+
 }
