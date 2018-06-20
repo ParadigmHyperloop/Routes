@@ -22,9 +22,9 @@
 /** The default max speed of a hyperloop pod in meters / second. */
 #define DEFAULT_POD_MAX_SPEED 339.75f
 
-#define ACCEL_DISTANCE 400f;
+#define ACCEL_DISTANCE 400.0f
 
-#define DE_ACCEL 0.2f;
+#define DE_ACCEL 0.2f
 
 class Pod {
 
