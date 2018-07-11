@@ -9,6 +9,7 @@
 #include <iostream>
 #include <map>
 #include <vector>
+#include <unordered_map>
 
 /** This class provides utils to evaluate a bezier curve, rather than rewrite the code in more than one class. */
 class Bezier {
@@ -82,6 +83,18 @@ class Bezier {
          *
          */
         static float bezierLength(const std::vector<glm::vec3>& points);
+
+        /**
+        * Calculates the approximate length of a bezier curve. Calculates using the sum of the straight line distances of the given points.
+        *
+        * @param points
+        * Points from evaluateBezierCurve or evaluateEntireBezierCurve that are on the curve.
+        *
+        * @return
+        * The aproximate length of the bezier curve in whatever unit the given points were in.
+        *
+        */
+        static std::unordered_map<int, float> bezierLengthMap(const std::vector<glm::vec3>& points);
 
         /**
          * Calculates the curvature around a point p1

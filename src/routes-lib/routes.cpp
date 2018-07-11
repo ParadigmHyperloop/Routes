@@ -29,6 +29,10 @@ std::vector<glm::vec3> Routes::calculateRoute(glm::vec2 start, glm::vec2 dest) {
     // These points will be in meters so we need to convert them
     std::vector<glm::vec3> computed = Genetics::solve(pop, pod, NUM_GENERATIONS);
 
+    std::vector<glm::vec3> points = Bezier::evaluateEntireBezierCurve(computed, 1000);
+
+    std::cout << "Time: " << pod.timeForCurve(points) << "s" << std::endl;
+
     // Convert to longitude, latitude and elevation
     for (int i = 0; i < computed.size(); i++) {
 
