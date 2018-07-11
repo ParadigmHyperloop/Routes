@@ -141,8 +141,8 @@ enable_testing()
 FILE(GLOB_RECURSE HS ${CMAKE_SOURCE_DIR}/src/routes-tests/*.h*)
 FILE(GLOB_RECURSE SOURCES ${CMAKE_SOURCE_DIR}/src/routes-tests/*.cpp)
 
-add_executable(Routes-Tests ${HS}
-                             ${SOURCES} src/routes-tests/test_pod.cpp)
+add_executable(Routes-Tests ${HS}	
+                            ${SOURCES})
 
 add_dependencies(Routes-Tests Routes)
 
