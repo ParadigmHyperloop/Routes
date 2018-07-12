@@ -9,10 +9,10 @@ os: linux
 addons:
     apt:
         sources:
-            - llvm-toolchain-precise-6.0
+            - llvm-toolchain-precise-5.0
             - ubuntu-toolchain-r-test
         packages:
-            - clang-6.0
+            - clang-5.0
             - ocl-icd-opencl-dev
             - libgdal-dev
 
