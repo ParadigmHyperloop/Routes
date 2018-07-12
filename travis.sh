@@ -83,4 +83,4 @@ sudo chmod -R 777 include
 sudo chmod -R 777 lib
 
 cd build
-/opt/cmake-3.8.2-Linux-x86_64/bin/cmake -DCMAKE_CXX_COMPILER=/usr/bin/clang-5.0 ..
+/opt/cmake-3.8.2-Linux-x86_64/bin/cmake -DCMAKE_CXX_COMPILER=/usr/bin/clang-3.8 ..
