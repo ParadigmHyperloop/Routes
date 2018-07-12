@@ -3,7 +3,7 @@ language: cpp
 sudo: required
 
 compiler:
-- gcc
+- clang
 
 addons:
     apt:
@@ -11,8 +11,7 @@ addons:
             - llvm-toolchain-precise
             - ubuntu-toolchain-r-test
         packages:
-            - g++-7
-            - gcc-7
+            - clang-3.6
             - ocl-icd-opencl-dev
             - libgdal-dev
 
