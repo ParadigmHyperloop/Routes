@@ -83,10 +83,13 @@ void RoutesServer::handleRetrieval(const std::shared_ptr<restbed::Session>& sess
     if (RoutesQueue::isRouteCompleted(id)) {
 
         // Get the control points
-        std::vector<glm::vec3> points = RoutesQueue::getCompletedRoute(id);
+        RoutesQueue::forJSON ans = RoutesQueue::getCompletedRoute(id);
+
+        std::vector<glm::vec3> controls = ans.controls;
+        float time = ans.time;
 
         // Check if there was an exception
-        if (points[0].x == std::numeric_limits<float>::max()) {
+        if (controls[0].x == std::numeric_limits<float>::max()) {
 
             // Send some error text
             sendResponse(session, "An error was encountered calculating the route");
@@ -94,10 +97,21 @@ void RoutesServer::handleRetrieval(const std::shared_ptr<restbed::Session>& sess
         } else {
 
             // Evaluate it
-            std::vector<glm::vec3> evaluated = Bezier::evaluateEntireBezierCurve(points, 100);
+            std::vector<glm::vec3> evaluated = ans.evaluated;
+
+            std::string timeJSON = std::to_string(time);
+
+            std::string distanceJSON = std::to_string(ans.length);
 
             // Convert to a  JSON string
-            std::string JSON = "{\"controls\":\n" + vectorToJSON(points) + ", \n\"evaluated\":\n" + vectorToJSON(evaluated) + "}";
+            std::string JSON = "{\"controls\":\n" + vector3ToJSON(controls) +
+                    + ", \n\"evaluated\":\n" + vector3ToJSON(evaluated) +
+                    + ", \n\"timeForCurve\":\n    " + timeJSON +
+                    + ", \n\"distance\":\n    " + distanceJSON +
+                    + ", \n\"elevations\":\n" + vector2ToJSON(ans.elevations) +
+                    + ", \n\"speeds\":\n" + vector2ToJSON(ans.speeds) + "}";
+
+            std::cout << JSON << std::endl;
 
             sendResponse(session, JSON);
 
@@ -149,7 +163,7 @@ void RoutesServer::sendResponse(const std::shared_ptr<restbed::Session>& session
     
 }
 
-std::string RoutesServer::vectorToJSON(const std::vector<glm::vec3> points) {
+std::string RoutesServer::vector3ToJSON(const std::vector<glm::vec3> points) {
     
     std::string JSON = "   [";
     
@@ -171,4 +185,27 @@ std::string RoutesServer::vectorToJSON(const std::vector<glm::vec3> points) {
     
     return JSON + "]";
     
+}
+
+std::string RoutesServer::vector2ToJSON(const std::vector<glm::vec2> points) {
+
+    std::string JSON = "   [";
+
+    for (int i = 0; i < points.size(); i++) {
+
+        // Add an indent to make it a little easier for humans to read
+        if (i)
+            JSON += "    ";
+
+        JSON += "[" + std::to_string(points[i].x) + ", " +
+                std::to_string(points[i].y) + "]";
+
+        // Make sure there aren't trailing commas
+        if (i != points.size() - 1)
+            JSON += ", \n";
+
+    }
+
+    return JSON + "]";
+
 }

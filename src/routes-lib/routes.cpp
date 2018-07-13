@@ -4,6 +4,11 @@
 
 #include "routes.h"
 
+float Routes::_time;
+float Routes::_length;
+std::vector<glm::vec2> Routes::_elevations;
+std::vector<glm::vec2> Routes::_speeds;
+
 std::vector<glm::vec3> Routes::calculateRoute(glm::vec2 start, glm::vec2 dest) {
 
     std::cout << "Calculating a route\n";
@@ -31,7 +36,22 @@ std::vector<glm::vec3> Routes::calculateRoute(glm::vec2 start, glm::vec2 dest) {
 
     std::vector<glm::vec3> points = Bezier::evaluateEntireBezierCurve(computed, 1000);
 
-    std::cout << "Time: " << pod.timeForCurve(points) << "s" << std::endl;
+    _time = pod.timeForCurve(points);
+    _length = Bezier::bezierLength(points);
+
+    std::vector<glm::vec2> elev;
+    std::vector<float> velocities = pod.getVelocities(points);
+    std::vector<glm::vec2> speeds;
+
+    std::unordered_map<int, float> lengthMap = Bezier::bezierLengthMap(points);
+
+    for (int i = 0; i < points.size(); i++) {
+        elev.push_back({lengthMap[i], points[i].z});
+        speeds.push_back({lengthMap[i], velocities[i]});
+    }
+
+    _elevations = elev;
+    _speeds = speeds;
 
     // Convert to longitude, latitude and elevation
     for (int i = 0; i < computed.size(); i++) {
@@ -47,6 +67,23 @@ std::vector<glm::vec3> Routes::calculateRoute(glm::vec2 start, glm::vec2 dest) {
     return computed;
 
 }
+
+float Routes::getTime() {
+    return _time;
+}
+
+float Routes::getLength() {
+    return _length;
+}
+
+std::vector<glm::vec2> Routes::getElevations() {
+    return _elevations;
+}
+
+std::vector<glm::vec2> Routes::getSpeeds() {
+    return _speeds;
+}
+
 
 bool Routes::validatePoint(const glm::vec3& point) {
 

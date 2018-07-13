@@ -13,6 +13,7 @@
 <script src="script/map-init.js"></script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyARXZWbgKN2HjFHrEHr-tI_3tlfeo_B2Lw&libraries=places&callback=initMap"></script>
 
+
 <html>
     
     <head>
@@ -45,9 +46,9 @@
              <div id="info-container">
             
                 <div id="results-title">Here are the <div class="grad-text">results</div></div>
-                <div id="result-subtitle">Track length: <div class="grad-text">540.2km</div> 
+                <div id="result-subtitle">Track length: <div id="distance" class="grad-text"></div> 
                                          <br>
-                                          Travel time: <div class="grad-text">35.4 minutes</div></div>
+                                          Travel time: <div id="time" class="grad-text"></div></div>
             
                 <div class="button-container" id="learn-more-container" onclick="fadeOverlay()">
                     <div class="button">
@@ -68,7 +69,7 @@
                     <div class="graph-title">Speed of <div class="grad-text">Pod</div> Along Track</div>
                     <canvas id="graph-1" width="450" height="210"></canvas>
                     
-                    <div class="graph-title"><div class="grad-text">Travel time</div> of Modes of Transpotation</div>
+                    <div class="graph-title"><div class="grad-text">Travel time</div> of Modes of Transportation</div>
                     <canvas id="graph-2" width="450" height="210"></canvas>
 
                 </div>
@@ -86,73 +87,7 @@
         
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
         <script src="script/graph.js"></script>
-        
-        
-        <script>
-            
-            var chart = makeLineGraph("graph", "Distance (m)", "Elevation (m)")
-            var chart1 = makeLineGraph("graph-1", "Distance (m)", "Speed (m/s)")
-            
-            chart.data.datasets[0] = {
-                        data: [{
-                                x: 10,
-                                y: 20
-                            },
-                                                      {
-                                x: 20,
-                                y: 22
-                            },{
-                                x: 56,
-                                y: 58
-                            }],
-                
-                        backgroundColor: "transparent",
-                        borderColor: gradient("graph"),
-                        pointRadius: 0,
-                        pointHitRadius: 0
-                };
-            
-            chart.update()
-            
-            chart1.data.datasets[0] = {
-                        data: [{
-                                x: 10,
-                                y: 20
-                            },
-                                                      {
-                                x: 20,
-                                y: 22
-                            },{
-                                x: 56,
-                                y: 58
-                            }],
-                
-                        backgroundColor: "transparent",
-                        borderColor: gradient("graph"),
-                        pointRadius: 0,
-                        pointHitRadius: 0
-                };
-            
-            chart1.update()
-            
-            var chart2 = makeBarGraph("graph-2",  ["Hyperloop", "Plane", "Car", "Transit"], "Time of Travel")
-            
-            chart2.data.datasets[0] = {
-
-                label: 'Travel Time',
-                data: [35.4, 65, 103, 156],
-                backgroundColor: [
-                    gradientW("graph-2", 75, 50),
-                    "#3c3c3c",
-                    "#3c3c3c",
-                    "#3c3c3c"
-                ],
-            }
-            
-            chart2.update()
-            
-        </script>
-        
+        <script src="script/routes.js"></script>
     </body>
 
 </html>

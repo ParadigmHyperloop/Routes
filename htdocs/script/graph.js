@@ -107,7 +107,7 @@ function makeBarGraph(canvas, labels, yAxis) {
                     scaleLabel: {
 
                         display: true,
-                        labelString: "Time (m)",
+                        labelString: "Time (s)",
                         fontFamily: "Rubik",
                         fontSize: 15,
                         fontColor: "#fff"

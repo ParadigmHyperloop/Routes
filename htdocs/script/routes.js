@@ -106,6 +106,8 @@ function gotInProgress() {
 
 }
 
+
+
 function gotFinishedRoute(result) {
 
     // Invalidate the timer and dismiss loading
@@ -117,10 +119,50 @@ function gotFinishedRoute(result) {
     var points = [];
     for (var i = 0; i < JSON_result.evaluated.length; i++) {
         points.push({lat: JSON_result.evaluated[i][1], lng:
-                     JSON_result.evaluated[i][0]})
+                     JSON_result.evaluated[i][0]});
 
     }
-
+    
+    var time1 = fancyTimeFormat(JSON_result.timeForCurve);
+    var length = fancyLengthFormat(JSON_result.distance);
+    
+    var elevations = [];
+    var speeds = [];
+    
+    for (var i = 0; i < JSON_result.elevations.length; i++) {
+        elevations.push({x: JSON_result.elevations[i][0],
+                         y: JSON_result.elevations[i][1]});
+    }
+    for (var i = 0; i < JSON_result.speeds.length; i++) {
+        speeds.push({x: JSON_result.speeds[i][0],
+                     y: JSON_result.speeds[i][1]});
+    }
+    
+    var chart = makeLineGraph("graph", "Distance (m)", "Elevation (m)")
+            var chart1 = makeLineGraph("graph-1", "Distance (m)", "Speed (m/s)")
+            
+            chart.data.datasets[0] = {
+                data: elevations,
+                backgroundColor: "transparent",
+                borderColor: gradient("graph"),
+                pointRadius: 0,
+                pointHitRadius: 0
+            };
+            
+            chart.update()
+            
+            chart1.data.datasets[0] = {
+                data: speeds,
+                
+                backgroundColor: "transparent",
+                borderColor: gradient("graph"),
+                pointRadius: 0,
+                pointHitRadius: 0
+                };
+    
+    chart1.update()
+    
+    
     var pathLine = new google.maps.Polyline({
         path: points,
         geodesic: true,
@@ -128,12 +170,30 @@ function gotFinishedRoute(result) {
         strokeOpacity: 1.0,
         strokeWeight: 4
     });
+    
+    var chart2 = makeBarGraph("graph-2",  ["Hyperloop", "Car", "Transit"], "Time of Travel")
+            
+    chart2.data.datasets[0] = {
+
+        label: 'Travel Time',
+        data: [190, 2940, 8460],
+        backgroundColor: [
+            gradientW("graph-2", 250, 50),
+            "#3c3c3c",
+            "#3c3c3c",
+            "#3c3c3c"
+        ],
+    }
+            
+  chart2.update()
 
     pathLine.setMap(map)
     $('#sayings-container').hide()
     $('#info-container').css({"display": "flex", "opacity" : "100"})
     $('#overlay').css({"overflow-y": "scroll"})
-
+    
+    document.getElementById("time").innerHTML = time1;
+    document.getElementById("distance").innerHTML = length;    
 }
 
 function fadeOverlay() {
@@ -199,4 +259,38 @@ function zoomToRoute() {
     map.fitBounds(bounds);
     map.setCenter(bounds.getCenter());    
     
+}
+
+function fancyTimeFormat(time) {   
+    // Hours, minutes and seconds
+    var hrs = ~~(time / 3600);
+    var mins = ~~((time % 3600) / 60);
+    var secs = time % 60;
+
+    // Output like "1:01" or "4:03:59" or "123:03:59"
+    var ret = "";
+
+    if (hrs > 0) {
+        ret += "" + hrs  + " hrs";
+    }
+
+    ret += "" + mins + " mins " + "" + secs.toFixed(0) + " secs";
+    return ret;
+}
+
+function fancyLengthFormat(length) {   
+    // Hours, minutes and seconds
+    var km = ~~(length / 1000);
+    var m = ~~(length % 1000)
+
+
+    // Output like "1:01" or "4:03:59" or "123:03:59"
+    var ret = "";
+
+    if (km > 0) {
+        ret += "" + km  + "km ";
+    }
+
+    ret += "" + m + "m";
+    return ret;
 }

@@ -10,6 +10,12 @@ This project is intended to calculate realistic potential hyperloop routes. Real
 ## The Algorithm
 Routes are internally represented by n-degree bezier curves, where n is determined at runtime based on the length of the route being calculated. A GPU based cost function is used to determine how "good" a particular bezier curve is at being a hyperloop route, given the current terrain. The CMA-ES algorithm (Covariance Matrix Adaptation Evolution Strategy) is then applied to find the minima of this cost function. This involves randomly sampling bezier curves, ranking them based on their cost, adjusting the distribution based on the best solutions and sampling again. This process constitutes a single generation and is then repeated over and over until the minima is located.
 
+## Screenshots
+
+![Input](https://imgur.com/N6k5ifE)
+![Stats](https://imgur.com/qdtndiu)
+![Route](https://imgur.com/AfYYfJU)
+
 ## Dependencies
 
 - Geospatial Data Abstraction Library (GDAL) [ http://www.gdal.org]

@@ -23,11 +23,7 @@ float Pod::calcCentripetalAccel(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2) const 
     return accel;
 }
 
-//TODO: Account for going vertical movement
-float Pod::timeForCurve(const std::vector<glm::vec3>& points) const {
-
-    // The length of the track. This is calculated by adding the straight line distance between each point.
-    float length = Bezier::bezierLength(points);
+std::vector<float> Pod::getVelocities(const std::vector<glm::vec3>& points) {
 
     //map from index to length of track at that index
     std::unordered_map<int, float> lengthMap = Bezier::bezierLengthMap(points);
@@ -39,9 +35,6 @@ float Pod::timeForCurve(const std::vector<glm::vec3>& points) const {
      */
 
     std::vector<float> accels;
-
-    float vfSquared = std::pow(DEFAULT_POD_MAX_SPEED, 2);
-    float v0Squared = 0.0;
 
     //initialize velocity vector, the first value should be 0
     std::vector<float> vels;
@@ -164,6 +157,15 @@ float Pod::timeForCurve(const std::vector<glm::vec3>& points) const {
         }
     }
 
+    return vels;
+}
+
+//TODO: Account for going vertical movement
+float Pod::timeForCurve(const std::vector<glm::vec3>& points) {
+
+    std::vector<float> vels = getVelocities(points);
+    std::unordered_map<int, float> lengthMap = Bezier::bezierLengthMap(points);
+
     //We now calculate the time for the pod to traverse the route
     float time = 0.0;
     float dist = 0.0;
@@ -177,3 +179,4 @@ float Pod::timeForCurve(const std::vector<glm::vec3>& points) const {
     return time;
 
 }
+

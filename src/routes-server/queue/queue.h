@@ -23,6 +23,33 @@ class RoutesQueue {
 
 public:
 
+    struct forJSON {
+
+        /** The control points of the curve*/
+        std::vector<glm::vec3> controls;
+
+        /** The evaluated points of the curve*/
+        std::vector<glm::vec3> evaluated;
+
+        /** The time needed to traverse the route in seconds*/
+        float time;
+
+        /** The length of the track in meters*/
+        float length;
+
+        /** The elevations of the track. The x values are the current distance(m) on
+         * the track and the y values are the elevations(m)
+         */
+        std::vector<glm::vec2> elevations;
+
+        /**
+         * The speed of the pod along the track. The x values are the current distnace(m) on the
+         * track and the y values are the speeds(m/s)
+         */
+        std::vector<glm::vec2> speeds;
+
+    };
+
     /**
      * Queues a route to be calculated.
      *
@@ -66,7 +93,9 @@ public:
      * and Z is the elevation.
      *
      */
-    static std::vector<glm::vec3> getCompletedRoute(size_t id);
+    static forJSON getCompletedRoute(size_t id);
+
+
 
 
 private:
@@ -104,7 +133,7 @@ private:
      * The value is the control points of the bezier curve of the route.
      * Unordered map is used because it fits the thread safety requirements.
      */
-    static std::unordered_map<size_t, std::vector<glm::vec3>> _completed;
+    static std::unordered_map<size_t, forJSON> _completed;
 
 
 };
