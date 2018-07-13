@@ -1,0 +1,31 @@
+.pac-container {
+    
+    font-family: 'Rubik';
+    
+}
+
+.pac-item-query {
+    
+    font-size: 13pt;
+    
+}
+
+.pac-matched {
+    
+    font-weight: 400;
+    
+}
+
+.pac-icon {
+    
+    width: 0pt;
+    height: 0pt;
+    
+}
+
+.pac-container:after {
+    
+    /* Disclaimer: not needed to show 'powered by Google' if also a Google Map is shown */
+    background-image: none !important;
+    height: 0px;
+}

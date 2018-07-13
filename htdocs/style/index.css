@@ -1,0 +1,62 @@
+#hero-title {
+    
+    margin-top: -10pt;
+    
+    text-align: center;
+    font-size: 56pt;
+    
+    width: 100%;
+    
+}
+
+#hero-subtitle {
+    
+    margin: 15pt;
+    margin-top: 50pt;
+    margin-bottom: 15pt;
+    
+    text-align: center;
+    font-size: 22pt;
+    
+}
+
+#input-container {
+    
+    padding-top: 30pt;
+    width: 100%;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    
+}
+
+input {
+    
+    font-size: 18pt;
+    color: white;
+    
+    padding: 12pt;
+    
+    margin-bottom: 15pt;
+    width: 75%;
+    
+    outline: none;
+    border-radius: 10pt;
+    border-color: transparent;
+    background-color: #393939;
+    
+}
+
+#learn-more-container {
+    
+    margin-bottom: 20pt;
+    
+}
+
+#learn-more-text {
+    
+     font-size: 16.5pt;
+    
+}

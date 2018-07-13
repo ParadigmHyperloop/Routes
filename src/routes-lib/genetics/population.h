@@ -434,13 +434,7 @@ class Population {
     
         /** The vector that is used to sort the individuals. We keep this around to avoid allocating every time we sort */
         std::vector<Individual> _sorted_individuals;
-    
-        /**
-         * This vector contains the best fitness values of each generation. Every time step() is called, the value of the cost function
-         * for the fittest individual is saved
-         */
-        std::vector<float> _fitness_over_generations;
-    
+   
 };
 
 #endif //ROUTES_POPULATION_H
