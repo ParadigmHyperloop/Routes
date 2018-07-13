@@ -6,9 +6,11 @@
 #define ROUTES_POD_H
 
 #include <glm/vec3.hpp>
+#include <glm/glm.hpp>
 #include <math.h>
 #include <vector>
 #include "../bezier/bezier.h"
+#include <unordered_map>
 
 /** Lowercase g in physics (the gravitational acceleration constant) in meters / second^2. */
 #define g 9.81
@@ -21,6 +23,16 @@
 
 /** The default max speed of a hyperloop pod in meters / second. */
 #define DEFAULT_POD_MAX_SPEED 339.75f
+
+/** The acceleration of the pod when it needs to slow down */
+#define DE_ACCEL 0.5 * g
+
+/** THe acceleration of the pod when it is starting out*/
+#define BEGIN_ACCEL g
+
+/** THe acceleration of the pod when it is nearing the end of its route*/
+#define END_ACCEL g
+
 
 class Pod {
 
@@ -69,7 +81,7 @@ class Pod {
          * The points of the bezier curve
          *
          * @return
-         * The time required to travel on a given hyperloop route
+         * The time required to travel on a given hyperloop route in seconds
          */
         float timeForCurve(const std::vector<glm::vec3>& points) const;
 

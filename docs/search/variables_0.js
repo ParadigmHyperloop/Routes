@@ -17,6 +17,7 @@ var searchData=
   ['_5felevation_5fmax',['_elevation_max',['../class_elevation_data.html#ad0a44d39e94c31b4ddd0a7986c15d6f4',1,'ElevationData']]],
   ['_5felevation_5fmin',['_elevation_min',['../class_elevation_data.html#a5b46dc79d04d3da2cddb7904641fd28d',1,'ElevationData']]],
   ['_5fexpected_5fvalue',['_expected_value',['../class_population.html#a3086bee14a54af16b7a814081249cd7a',1,'Population']]],
+  ['_5ffitness_5fover_5fgenerations',['_fitness_over_generations',['../class_population.html#a39b2e8896cfa6a1c5e40a8db307c445f',1,'Population']]],
   ['_5fgdal_5fdataset',['_gdal_dataset',['../class_elevation_data_1_1___static_g_d_a_l.html#a467237f8076ce0e78c58b7a33d36fcd0',1,'ElevationData::_StaticGDAL']]],
   ['_5fgdal_5fraster_5fband',['_gdal_raster_band',['../class_elevation_data_1_1___static_g_d_a_l.html#afb4c6ca01e23c027dc22d666147fcbe7',1,'ElevationData::_StaticGDAL']]],
   ['_5fgdal_5ftransform',['_gdal_transform',['../class_elevation_data_1_1___static_g_d_a_l.html#a5a5318c7ba646c5444192b192caa48aa',1,'ElevationData::_StaticGDAL']]],

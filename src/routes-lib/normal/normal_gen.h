@@ -8,7 +8,7 @@
 #include <ctime>
 #include <eigen3/Eigen/Eigen>
 #include <iostream>
-#include <boost/random.hpp>
+#include <boost/random/mersenne_twister.hpp>
 #include <boost/random/normal_distribution.hpp>
 #include <boost/lockfree/spsc_queue.hpp>
 #include <thread>
@@ -66,7 +66,7 @@ class SampleGenerator {
         int _length;
 
         /** Whether or not samples should still be generated on the thread */
-        std::atomic<bool> _should_gen_samples = true;
+        std::atomic<bool> _should_gen_samples;
 
         /** The thread that sampling is performed on */
         std::thread _sample_thread;

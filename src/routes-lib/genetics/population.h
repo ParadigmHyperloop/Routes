@@ -197,6 +197,13 @@ class Population {
         void calcGenomeSize();
 
         /**
+         * When the GPU kernel to evaluate the cost is run, the bezier curve is sampled at discrete intervals.
+         * For longer routes this needs to be higher so we have a rougly consistant meter-bezier sample. This function
+         * determines the number of points to use.
+         */
+        void determineEvalPoints();
+    
+        /**
          * This function initializes the parameters for CMA-ES.
          * Parameters include the covariance matrix, the mean, the evolution path and the step size.
          */
@@ -427,7 +434,7 @@ class Population {
     
         /** The vector that is used to sort the individuals. We keep this around to avoid allocating every time we sort */
         std::vector<Individual> _sorted_individuals;
-    
+   
 };
 
 #endif //ROUTES_POPULATION_H

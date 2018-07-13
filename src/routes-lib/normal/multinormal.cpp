@@ -7,7 +7,7 @@
 
 #include "multinormal.h"
 
-MultiNormal::MultiNormal(const Eigen::MatrixXf& covariance_matrix, const Eigen::VectorXf& sigma) : _sigma(sigma) {
+MultiNormal::MultiNormal(const Eigen::MatrixXf& covariance_matrix, Eigen::VectorXf sigma) : _sigma(sigma) {
 
     // Decompose the covariance matrix
     Eigen::LLT<Eigen::MatrixXf> decomp(covariance_matrix);

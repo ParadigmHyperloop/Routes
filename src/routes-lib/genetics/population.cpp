@@ -16,6 +16,10 @@ Population::Population(int pop_size, glm::vec4 start, glm::vec4 dest, const Elev
 
     // Calculate the binomial coefficients for evaluating the bezier paths
     calcBinomialCoefficients();
+        
+    // Get the data to allow for proper texture sampling
+    _data_size   = _data.getCroppedSizeMeters();
+    _data_origin = _data.getCroppedOriginMeters();
 
     // Figure out how many points this route should be evaluated on.
     // We also make sure it is a multiple of workers
@@ -98,7 +102,6 @@ void Population::step(const Pod& pod) {
     end = std::chrono::high_resolution_clock::now().time_since_epoch().count();
     std::cout << "Sample took " << end - start << std::endl;
     start = end;
-
 }
 
 void Population::sortIndividuals() {
@@ -114,7 +117,10 @@ void Population::sortIndividuals() {
         return (*a.header).x < (*b.header).x;
 
     });
-
+    
+    // Save the fitness value of the best individual
+    _fitness_over_generations.push_back(_sorted_individuals[0].header->x);
+    
     // Copy the best samples into a sorted array
     for (int i = 0; i < _mu; i++)
         _best_samples[i] = _samples[_sorted_individuals[i].index];
@@ -171,6 +177,19 @@ void Population::calcGenomeSize() {
 
 }
 
+void Population::determineEvalPoints() {
+    
+    // Figure out how many points this route should be evaluated on.
+    // We also make sure it is a multiple of workers
+    _num_evaluation_points = glm::max((int)ceil(glm::max(_data_size.x / METERS_TO_POINT_CONVERSION,
+                                                         _data_size.y / METERS_TO_POINT_CONVERSION)
+                                                                      / (float)NUM_ROUTE_WORKERS) * NUM_ROUTE_WORKERS,
+                                                         2400);
+    
+    _num_evaluation_points_1 = (float)_num_evaluation_points - 1.0f;
+    
+}
+
 void Population::initParams() {
 
     // Choose mu to be a fixed number of individuals
@@ -207,6 +226,7 @@ void Population::initSamplers() {
 
     // Create the standard normal samplers
     _sample_gens = std::vector<SampleGenerator*>(NUM_SAMPLE_THREADS);
+    
     for (int i = 0; i < NUM_SAMPLE_THREADS; i++)
         _sample_gens[i] = new SampleGenerator(_genome_size * 3, _pop_size / NUM_SAMPLE_THREADS);
 
@@ -279,7 +299,7 @@ void Population::calcWeights() {
     for (int i = 0; i < _mu; i++)
         _weights[i] /= sum;
 
-    // Calculate _mu_weight to be the sum of 1/pow(_weights, 2)
+    // Calculate _mu_weight to be the sum of 1 / pow(_weights, 2)
     sum = 0.0f;
 
     for (int i = 0; i < _mu; i++)
@@ -339,23 +359,23 @@ void Population::samplePopulation() {
     std::vector<std::thread> threads = std::vector<std::thread>(NUM_SAMPLE_THREADS);
     int worker_size = _pop_size / NUM_SAMPLE_THREADS;
     
-    for (int i = 0; i < NUM_SAMPLE_THREADS; i++) {
+    for (int thread = 0; thread < NUM_SAMPLE_THREADS; thread++) {
         
-        threads[i] = std::thread([this, i, worker_size] {
+        threads[thread] = std::thread([this, thread, worker_size] {
 
-            int start = worker_size * i;
+            int start = worker_size * thread;
             int end = glm::min(start + worker_size, _pop_size);
 
-            for (int u = start; u < end; u++) {
+            for (int individual = start; individual < end; individual++) {
 
                 // Add the mean because the samples don't have it
-                Eigen::VectorXf actual = _samples[u] + _mean;
+                Eigen::VectorXf actual = _samples[individual] + _mean;
 
                 // Use memory copies to put the right data in the the _individuals vector because its slightly faster
                 // We need to do it in a for loop because the _individuals is vec4 and there are only 3 components for each control point
                 // In the Eigen vectors that we build
-                for (int p = 0; p < _genome_size; p++)
-                    memcpy(&_individuals[u * _individual_size + 2 + p][0], actual.data() + p * 3, sizeof(float) * 3);
+                for (int point = 0; point < _genome_size; point++)
+                    memcpy(&_individuals[individual * _individual_size + 2 + point][0], actual.data() + point * 3, sizeof(float) * 3);
 
             }
 
@@ -418,12 +438,6 @@ void Population::updatePSigma() {
     // Get the inverse square root of the covariance matrix
     Eigen::SelfAdjointEigenSolver<Eigen::MatrixXf> solver(_covar_matrix);
     Eigen::MatrixXf inv_sqrt_C(solver.operatorInverseSqrt());
-
-    // Ensure that nan is not in the square root
-    if (isnan(inv_sqrt_C(0, 0))) {
-        std::cout << "Nan in inv_sqrt covariance detected\n";
-        return;
-    }
 
     _p_sigma = discount * _p_sigma + discount_comp * _mu_weight_sqrt * inv_sqrt_C * _mean_displacement;
 

@@ -91,6 +91,8 @@ Public Member Functions</h2></td></tr>
 Private Member Functions</h2></td></tr>
 <tr class="memitem:a52a41d7911ed22285e95244f3f780fbb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a52a41d7911ed22285e95244f3f780fbb">calcGenomeSize</a> ()</td></tr>
 <tr class="separator:a52a41d7911ed22285e95244f3f780fbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4123726d3b7e81b3dac8fd123ec5e125"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a4123726d3b7e81b3dac8fd123ec5e125">determineEvalPoints</a> ()</td></tr>
+<tr class="separator:a4123726d3b7e81b3dac8fd123ec5e125"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af6fd879ac429afc818bcab64b4aef633"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#af6fd879ac429afc818bcab64b4aef633">initParams</a> ()</td></tr>
 <tr class="separator:af6fd879ac429afc818bcab64b4aef633"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0f8f46964400234c9c8a6d503178ef2e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_population.html#a0f8f46964400234c9c8a6d503178ef2e">initSamplers</a> ()</td></tr>
@@ -421,6 +423,32 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>When we recalculate the mean vector from the best solutions, we do a weighting. This function calculates the weights for mew (the selected population) once, as it remains constant. </p>
+
+</div>
+</div>
+<a id="a4123726d3b7e81b3dac8fd123ec5e125"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4123726d3b7e81b3dac8fd123ec5e125">&#9670;&nbsp;</a></span>determineEvalPoints()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Population::determineEvalPoints </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>When the GPU kernel to evaluate the cost is run, the bezier curve is sampled at discrete intervals. For longer routes this needs to be higher so we have a rougly consistant meter-bezier sample. This function determines the number of points to use. </p>
 
 </div>
 </div>
@@ -1075,6 +1103,29 @@ Private Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 <p>The expectedc value of the standard normal distribution. We use this to determine if we should shrink or grow sigma </p>
+
+</div>
+</div>
+<a id="a39b2e8896cfa6a1c5e40a8db307c445f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39b2e8896cfa6a1c5e40a8db307c445f">&#9670;&nbsp;</a></span>_fitness_over_generations</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt;float&gt; Population::_fitness_over_generations</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This vector contains the best fitness values of each generation. Every time <a class="el" href="class_population.html#a6aa7bc5b1eaa2a67041185a2ca92cc4f">step()</a> is called, the value of the cost function for the fittest individual is saved </p>
 
 </div>
 </div>
