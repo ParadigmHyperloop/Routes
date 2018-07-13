@@ -16,8 +16,10 @@ size_t RoutesQueue::queueRoute(const glm::vec2& start, const glm::vec2& dest) {
     _RouteItem item;
 
     item.id = identifier;
-    item.start = start;
-    item.dest = dest;
+    item.start_lat = start.x;
+    item.start_lon = start.y;
+    item.dest_lat = dest.x;
+    item.dest_lon = dest.y;
 
     _routes.push(item);
 
@@ -34,7 +36,9 @@ void RoutesQueue::calculateRoutes() {
 
             // Calculate the route and insert it into the map
             // This can be done because the [] operator behaves like it is const for the purposes of thread safety
-            _completed[item.id] = Routes::calculateRoute(item.start, item.dest);
+            glm::vec2 start = glm::vec2(item.start_lat, item.start_lon);
+            glm::vec2 dest = glm::vec2(item.dest_lat, item.dest_lon);
+            _completed[item.id] = Routes::calculateRoute(start, dest);
 
         } catch (std::runtime_error e) {
 
