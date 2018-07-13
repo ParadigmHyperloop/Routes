@@ -12,9 +12,9 @@ Routes are internally represented by n-degree bezier curves, where n is determin
 
 ## Screenshots
 
-![Input](https://imgur.com/N6k5ifE)
-![Stats](https://imgur.com/qdtndiu)
-![Route](https://imgur.com/AfYYfJU)
+![Input](https://i.imgur.com/N6k5ifE.png "Input")
+![Stats](https://i.imgur.com/qdtndiu.png "Stats")
+![Route](https://i.imgur.com/AfYYfJU.jpg "Route")
 
 ## Dependencies
 
