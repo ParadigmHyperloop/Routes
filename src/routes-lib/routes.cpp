@@ -7,6 +7,7 @@
 float Routes::_time;
 float Routes::_length;
 std::vector<glm::vec2> Routes::_elevations;
+std::vector<glm::vec2> Routes::_ground_elevations;
 std::vector<glm::vec2> Routes::_speeds;
 
 std::vector<glm::vec3> Routes::calculateRoute(glm::vec2 start, glm::vec2 dest) {
@@ -42,15 +43,20 @@ std::vector<glm::vec3> Routes::calculateRoute(glm::vec2 start, glm::vec2 dest) {
     std::vector<glm::vec2> elev;
     std::vector<float> velocities = pod.getVelocities(points);
     std::vector<glm::vec2> speeds;
+    std::vector<glm::vec2> g_elev;
 
     std::unordered_map<int, float> lengthMap = Bezier::bezierLengthMap(points);
 
     for (int i = 0; i < points.size(); i++) {
         elev.push_back({lengthMap[i], points[i].z});
         speeds.push_back({lengthMap[i], velocities[i]});
+        glm::vec2 newPoint = {points[i].x, points[i].y};
+        float newElev = data.metersToElevation(newPoint);
+        g_elev.push_back({lengthMap[i], newElev});
     }
 
     _elevations = elev;
+    _ground_elevations = g_elev;
     _speeds = speeds;
 
     // Convert to longitude, latitude and elevation
@@ -82,6 +88,10 @@ std::vector<glm::vec2> Routes::getElevations() {
 
 std::vector<glm::vec2> Routes::getSpeeds() {
     return _speeds;
+}
+
+std::vector<glm::vec2> Routes::getGElevations() {
+    return _ground_elevations;
 }
 
 

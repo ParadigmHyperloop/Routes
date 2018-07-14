@@ -184,6 +184,20 @@ glm::dvec3 ElevationData::metersToMetersAndElevation(const glm::dvec2& pos_meter
 
 }
 
+float ElevationData::metersToElevation(const glm::dvec2& pos_meters) const {
+    glm::dvec3 pos_meters_sample = glm::dvec3(pos_meters.x, pos_meters.y, 0.0);
+    float z = 0.0;
+
+    // Get the pixel position
+    glm::ivec2 pos_pixels = metersToPixels(pos_meters);
+
+    // Do the sample
+    CPLErr err = _StaticGDAL::_gdal_raster_band->RasterIO(GF_Read, pos_pixels.x, pos_pixels.y, 1, 1, &z, 1, 1, GDT_Float32, 0, 0);
+    if (err)
+        throw std::runtime_error("There was an error reading from the dataset");
+
+    return z;
+}
 
 glm::dvec3 ElevationData::pixelsToMetersAndElevation(const glm::ivec2& pos_pixels) const {
 

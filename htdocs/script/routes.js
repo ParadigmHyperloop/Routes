@@ -127,40 +127,57 @@ function gotFinishedRoute(result) {
     var length = fancyLengthFormat(JSON_result.distance);
     
     var elevations = [];
+    var groundElevations = [];
     var speeds = [];
     
     for (var i = 0; i < JSON_result.elevations.length; i++) {
         elevations.push({x: JSON_result.elevations[i][0],
                          y: JSON_result.elevations[i][1]});
     }
+    for (var i = 0; i < JSON_result.groundElevations.length; i++) {
+        groundElevations.push({x: JSON_result.groundElevations[i][0],
+                               y: JSON_result.groundElevations[i][1]});
+    }
     for (var i = 0; i < JSON_result.speeds.length; i++) {
         speeds.push({x: JSON_result.speeds[i][0],
                      y: JSON_result.speeds[i][1]});
     }
     
+    
     var chart = makeLineGraph("graph", "Distance (m)", "Elevation (m)")
-            var chart1 = makeLineGraph("graph-1", "Distance (m)", "Speed (m/s)")
+    var chart1 = makeLineGraph("graph-1", "Distance (m)", "Speed (m/s)")
             
             chart.data.datasets[0] = {
                 data: elevations,
+                label: "Track",
                 backgroundColor: "transparent",
-                borderColor: gradient("graph"),
+                borderColor: gradient("graph", 1),
                 pointRadius: 0,
                 pointHitRadius: 0
             };
-            
+    
+    
+            chart.data.datasets[1] = {
+                data:groundElevations,
+                label: "Terrain",
+                backgroundColor: "transparent",
+                borderColor: gradient("graph", 2),
+                pointRadius: 0,
+                pointHitRadius: 0
+            };
+                
             chart.update()
             
             chart1.data.datasets[0] = {
                 data: speeds,
-                
                 backgroundColor: "transparent",
-                borderColor: gradient("graph"),
+                borderColor: gradient("graph", 1),
                 pointRadius: 0,
                 pointHitRadius: 0
                 };
     
-    chart1.update()
+            chart1.options.legend.display = false;
+            chart1.update()
     
     
     var pathLine = new google.maps.Polyline({
@@ -293,10 +310,8 @@ function fancyLengthFormat(length) {
     // Output like "1:01" or "4:03:59" or "123:03:59"
     var ret = "";
 
-    if (km > 0) {
-        ret += "" + km  + "km ";
-    }
 
-    ret += "" + m + "m";
+    ret += "" + km.toFixed(2)  + "km ";
+
     return ret;
 }

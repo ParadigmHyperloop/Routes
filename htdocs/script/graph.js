@@ -48,7 +48,7 @@ function makeLineGraph(canvas, xAxis, yAxis) {
             },
 
             legend: {
-                display: false,
+                display: true,
             }
 
         }
@@ -129,6 +129,7 @@ function makeBarGraph(canvas, labels, yAxis) {
     
 }
 
+
 function gradientW(canvas, width, height) {
     
     var ctx = document.getElementById(canvas).getContext('2d');
@@ -141,6 +142,20 @@ function gradientW(canvas, width, height) {
     
 }
 
-function gradient(canvas) {
-    return gradientW(canvas, $("#" + canvas).width(), $("#" + canvas).height());
+function blueGradientW(canvas, width, height) {
+    var ctx = document.getElementById(canvas).getContext('2d');
+    
+    var gradient = ctx.createLinearGradient(0, height, width, 0);
+    gradient.addColorStop(0, '#66a3ff');   
+    gradient.addColorStop(1, '#005ce6');
+           
+    return gradient;
+}
+
+function gradient(canvas, color) {
+    if (color == 1) {
+        return gradientW(canvas, $("#" + canvas).width(), $("#" + canvas).height());
+    } else if (color == 2) {
+        return blueGradientW(canvas, $("#" + canvas).width(), $("#" + canvas).height());
+    }
 }

@@ -64,6 +64,15 @@ class Routes {
         static std::vector<glm::vec2> getElevations();
 
         /**
+         * Gets the elevations of the ground along the route.
+         * Should always be called after calculateRoute.
+         *
+         * @return
+         * Pairs of distance along track and the elevation at that point in meters
+         */
+        static std::vector<glm::vec2> getGElevations();
+
+        /**
          * Gets the speeds along the route.
          * Should always be called after calculateRoute.
          *
@@ -100,6 +109,11 @@ class Routes {
          * pairs of distance along track and the elevation at that point in meters
          */
         static std::vector<glm::vec2> _elevations;
+
+        /**
+         * pairs of distance along track and the elevation of the ground at that point in meters
+         */
+        static std::vector<glm::vec2> _ground_elevations;
 
         /**
          * pairs of distance along track and the speed at that point in meters / second

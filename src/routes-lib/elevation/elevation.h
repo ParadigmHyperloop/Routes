@@ -161,6 +161,18 @@ class ElevationData {
         glm::dvec3 metersToMetersAndElevation(const glm::dvec2& pos_meters) const;
 
         /**
+        * Takes in a location on the image in meters and samples from the raster data, essentially
+         * turning a 2D position into a the z coordinate a that position.
+         *
+        * @param pos_meters
+        * The position on the raster image in meters where the elevation should be sampled from.
+        *
+        * @return
+        * The z coordinate on the terrain in meters
+        */
+        float metersToElevation(const glm::dvec2& pos_meters) const;
+
+        /**
          * Takes in a location on the image in pixels and samples from the raster data, essentially
          * turning a 2D position into a 3D position that corresponds to the point on the terrain.
          * This function takes an input in pixels and converts it to meters.
