@@ -111,7 +111,6 @@ void RoutesServer::handleRetrieval(const std::shared_ptr<restbed::Session>& sess
                     + ", \n\"elevations\":\n" + vector2ToJSON(ans.elevations) +
                     + ", \n\"speeds\":\n" + vector2ToJSON(ans.speeds) + "}";
 
-            std::cout << JSON << std::endl;
 
             sendResponse(session, JSON);
 

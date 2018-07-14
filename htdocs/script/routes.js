@@ -209,6 +209,12 @@ function hideOverlay() {
 
 }
 
+function showStats() {
+    $('#overlay').show()
+    $('#overlay').css({"opacity": 100})
+    $('#info-container').css({"display": "flex", "opacity" : "100"})
+}
+
 function getComputeRequest(start, dest, succ) {
 
     // Return the dictonary with the parameters filled in

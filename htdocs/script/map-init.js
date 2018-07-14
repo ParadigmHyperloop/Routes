@@ -322,5 +322,5 @@ function initMap() {
               }
             ]             
     });
-    
+        
 }
