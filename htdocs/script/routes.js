@@ -106,6 +106,35 @@ function gotInProgress() {
 
 }
 
+var driveTime = 0;
+var transitTime = 0;
+
+
+
+function getCommuteTime(departLocation, arriveLocation, modeOfTransport) {    
+    var queryURL = 
+    "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=" + departLocation + "&destinations=" + arriveLocation + "&mode=" + modeOfTransport + "&key=" + keys.timeRoute;
+    console.log(queryURL);
+    
+    
+    $.ajax({
+        url: queryURL,
+        dataType: 'json',
+        async: false,
+        success: function(data) {
+            callback(data, modeOfTransport);
+        }
+    });
+    
+}
+
+function callback(data, modeOfTransport) {
+    if (modeOfTransport == "driving") {
+        driveTime = data.rows[0].elements[0].duration.value;
+    } else if (modeOfTransport == "transit") {
+        transitTime = data.rows[0].elements[0].duration.value;
+    }    
+}   
 
 
 function gotFinishedRoute(result) {
@@ -189,11 +218,22 @@ function gotFinishedRoute(result) {
     });
     
     var chart2 = makeBarGraph("graph-2",  ["Hyperloop", "Car", "Transit"], "Time of Travel")
-            
+    
+    let start_lat = origin["lat"]
+    let start_lng = origin["lng"]
+    let dest_lat = destination["lat"]
+    let dest_lng = destination["lng"]
+    let start = start_lat + "," + start_lng
+    let end = dest_lat + "," + dest_lng
+    
+    getCommuteTime(start, end, "driving");
+    getCommuteTime(start, end, "transit");
+
+        
     chart2.data.datasets[0] = {
 
         label: 'Travel Time',
-        data: [190, 2940, 8460],
+        data: [190, driveTime, transitTime],
         backgroundColor: [
             gradientW("graph-2", 250, 50),
             "#3c3c3c",
@@ -271,13 +311,12 @@ function getCheckRequest(_ident, succ, fail) {
 
     }
 
-}
+} 
 
 function doc_keyUp(e) {
 
-    // this would test for whichever key is 40 and the ctrl key at the same time
+    //determine if the button is 'z'
     if (e.keyCode == 90) {
-        // call your function to do the thing
         zoomToRoute();
     }
 }
@@ -301,7 +340,6 @@ function fancyTimeFormat(time) {
     var mins = ~~((time % 3600) / 60);
     var secs = time % 60;
 
-    // Output like "1:01" or "4:03:59" or "123:03:59"
     var ret = "";
 
     if (hrs > 0) {
@@ -313,12 +351,10 @@ function fancyTimeFormat(time) {
 }
 
 function fancyLengthFormat(length) {   
-    // Hours, minutes and seconds
     var km = ~~(length / 1000);
     var m = ~~(length % 1000)
 
 
-    // Output like "1:01" or "4:03:59" or "123:03:59"
     var ret = "";
 
 

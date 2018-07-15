@@ -88,6 +88,14 @@ This will calculate a route from -119.001666666700030°W 35.001666666664143°N t
 ```
 where lon is the desired longitude, lat is the desired latitude.
 
+In order to run the front end, a Google maps Distance-Matrix API key is needed. Once acquired, make a file called "keys.js" in htdocs/script with the contents:
+```
+var keys = {
+	timeRoute:"YOUR_KEY_HERE"
+};
+```
+
+
 ## Server
 For web-based computation of routes, Routes-Server provides a simple REST API. The server must be run out of the build directory
 First make sure that the database has been build by running:
