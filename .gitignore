@@ -7,3 +7,4 @@ include/*
 data/*
 python/plot.png
 lib/*
+htdocs/script/keys.js

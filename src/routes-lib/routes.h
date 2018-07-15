@@ -36,6 +36,51 @@ class Routes {
          */
         static std::vector<glm::vec3> calculateRoute(glm::vec2 start, glm::vec2 dest);
 
+        /**
+         * Gets the time to traverse the calculated route.
+         * Should always be called after calculateRoute.
+         *
+         * @return
+         * Time to traverse route in seconds
+         */
+        static float getTime();
+
+        /**
+         * Gets the length of the calculated route.
+         * Should always be called after calculateRoute.
+         *
+         * @return
+         * Length of the track in meters
+         */
+        static float getLength();
+
+        /**
+         * Gets the elevations of the route.
+         * Should always be called after calculateRoute.
+         *
+         * @return
+         * Pairs of distance along track and the elevation at that point in meters
+         */
+        static std::vector<glm::vec2> getElevations();
+
+        /**
+         * Gets the elevations of the ground along the route.
+         * Should always be called after calculateRoute.
+         *
+         * @return
+         * Pairs of distance along track and the elevation at that point in meters
+         */
+        static std::vector<glm::vec2> getGElevations();
+
+        /**
+         * Gets the speeds along the route.
+         * Should always be called after calculateRoute.
+         *
+         * @return
+         * Pairs of distance along track and the speed at that point in meters / second
+         */
+        static std::vector<glm::vec2> getSpeeds();
+
     private:
 
         /**
@@ -49,6 +94,31 @@ class Routes {
          * True if the point was valid, false if otherwise.
          */
         static bool validatePoint(const glm::vec3& point);
+
+        /**
+         * Time to traverse route in seconds
+         */
+        static float _time;
+
+        /**
+         * Length of the track in meters
+         */
+        static float _length;
+
+        /**
+         * pairs of distance along track and the elevation at that point in meters
+         */
+        static std::vector<glm::vec2> _elevations;
+
+        /**
+         * pairs of distance along track and the elevation of the ground at that point in meters
+         */
+        static std::vector<glm::vec2> _ground_elevations;
+
+        /**
+         * pairs of distance along track and the speed at that point in meters / second
+         */
+        static std::vector<glm::vec2> _speeds;
 
 };
 

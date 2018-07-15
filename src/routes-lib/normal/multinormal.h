@@ -79,7 +79,7 @@ class MultiNormal {
          * Represents the decomposition of the covariance matrix. Multiplying a vector with independent random samples from the
          * standard normal distribution will yeild a sample from the multivariate normal distribution.
          */
-        Eigen::MatrixXf _A;
+        Eigen::MatrixXf _L;
     
         /** The step size of the distribution */
         Eigen::VectorXf _sigma;

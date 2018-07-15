@@ -28,6 +28,8 @@
  * GET server_addr/max-route-length
  * Returns the theretical max length of a route that can be computed with this compute device. Response is in meters.
  *
+ * GET server_addr/route-time
+ * Returns the time needed to traverse the computed route in seconds;
  */
 class RoutesServer {
 
@@ -64,8 +66,8 @@ class RoutesServer {
         static void handleCompute(const std::shared_ptr<restbed::Session>& session);
 
         /**
-         * This function handles the GET request for retrieval of the route. This function shouldn't be called from
-         * anywhere, restbed calls it.
+         * This function handles the GET request for retrieval of the route and time needed to travel the route.
+         * This function shouldn't be called from anywhere, restbed calls it.
          *
          * @param session
          * The session input from restbed.
@@ -99,7 +101,18 @@ class RoutesServer {
          * The vector of points to be converted to JSON
          *
          */
-        static std::string vectorToJSON(const std::vector<glm::vec3> points);
+        static std::string vector3ToJSON(const std::vector<glm::vec3> points);
+
+        /**
+         * Converts a vector of glm::vec2's to a JSON string.
+         *
+         * @param points
+         * The vector of points to be converted to JSON
+         *
+         */
+        static std::string vector2ToJSON(const std::vector<glm::vec2> points);
+
+
 
         /**
          * This is a simple method to make sure that every outgoing response is CORS complient by addind in the required headers.

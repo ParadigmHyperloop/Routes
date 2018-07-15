@@ -68,6 +68,21 @@ float Bezier::bezierLength(const std::vector<glm::vec3>& points) {
     
 }
 
+std::unordered_map<int, float> Bezier::bezierLengthMap(const std::vector<glm::vec3> &points) {
+
+    std::unordered_map<int, float> map;
+
+    float length = 0.0;
+
+    for (int i = 0; i < points.size(); i++) {
+        map.insert({i, length});
+        length += glm::length(points[i+1] - points[i]);
+    }
+
+    return map;
+
+}
+
 float Bezier::calcCurvature(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2) {
 
     glm::vec3 der_first0 = p1 - p0;

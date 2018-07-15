@@ -28,21 +28,21 @@ else
 fi
 
 # Download boost
-curl -L https://dl.bintray.com/boostorg/release/1.65.1/source/boost_1_65_1.tar.gz --output boost.tar.gz
+curl -L https://dl.bintray.com/boostorg/beta/1.68.0.beta1/source/boost_1_68_0_b1.tar.bz2 --output boost.tar.gz
 tar -xzf boost.tar.gz
+rm -rf boost.tar.gz
 
 # Copy libraries
-cp -r boost_1_65_1/boost/ include/boost/
+cp -r boost*/boost/ include/boost/
 
 # Compile boost filesystem and program options
-cd boost_1_65_1
+cd boost*
 ./bootstrap.sh --with-libraries=program_options,filesystem,test
 ./b2 link=static
 cp -r stage/lib ../
 cd ..
 
-rm -rf boost_1_65_1
-rm -rf boost.tar.gz
+rm -rf boost*
 
 # Remove libraries that get built and we dont need
 rm lib/*boost_prg_exec_monitor*
@@ -60,7 +60,9 @@ cd restbed
 mkdir build
 cd build
 cmake -DBUILD_SSL=NO ..
-make install
+make restbed-static
+make restbed-shared
+make install/fast
 cd ../../
 cp -r restbed/distribution/library/* lib/
 cp -r restbed/distribution/include/* include/

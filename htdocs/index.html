@@ -1,71 +1,69 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+
+<link rel="stylesheet" href="style/shared.css">
+<link rel="stylesheet" href="style/navbar.css">
+<link rel="stylesheet" href="style/index.css">
+<link rel="stylesheet" href="style/places.css">
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyARXZWbgKN2HjFHrEHr-tI_3tlfeo_B2Lw&libraries=places"></script>
+<script src="script/jquery.particleground.min.js"></script>
+<script src="script/index.js"></script>
+
 <html>
+    
     <head>
-        <title>Hyperloop Routes</title>
-        <meta charset="utf-8">
+        
+        <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-        <!-- Jquery -->
-        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-
-        <!--Bootstrap css js-->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
-
-        <link rel="stylesheet" href="css/shared.css">
-        <link rel="stylesheet" href="css/calculate.css">
-        <!--        <link rel="stylesheet" href="css/header.css">-->
-        <!--        <link rel="stylesheet" href="css/ui.css">-->
+        <title>Paradigm Hyperloop: Routes</title>
+        
     </head>
 
     <body>
-        <div id = "overlay">
-            <div class = "overlay-content">
-
-                <h1 id="big-title" style="color: white; opacity: 0.0;">Hi, my name is <b id="genie-name" style="opacity: 0.0; color: rgb(0,107,255)">Evie</b></h1>
-                <br>
-                <h5 id="little-title" style="opacity: 0.0;">I'm a parallelized <b id="genetic" style="opacity: 0.0; color: rgb(0,107,255); font-weight: 900;">evolutionary</b> <div id="sub-rest" style="opacity: 0.0; display: inline;">algorithm built for computing hyperloop routes</div></h5>
-                <br>
-                <h5 id="where-to" style="opacity: 0.0;">Where would you like to go?</h5>
-
-                <div id ="locationField">
-                    <input id="autocomplete" class="form-control" placeholder = "Start location" type="test">
-                    <input id="autocomplete2" class="form-control" placeholder = "End location" type="test">
+        
+        <div id="background"></div>
+                
+        <div id="navbar">
+            Routes
+            <a href="https://paradigmhyperloop.com/">
+                <img src="assets/image/paradigm-logo.svg" id="paradigm-logo">
+            </a>
+        </div>
+       
+        <div id="hero-title">
+            Hi, I'm <div class="grad-text">Evie</div>
+        </div>    
+        
+        <div id="hero-subtitle">
+            I'm a parallelized <div class="grad-text">evolutionary</div> algorithm built for computing <div class="grad-text">hyperloop</div> routes
+        </div>    
+        
+        <div id="input-container">
+        
+            <input id="origin"      class="loc-input" placeholder = "Origin" type="test">
+            <input id="destination" class="loc-input" placeholder = "Destination" type="test">
+            
+            <div class="button-container" onclick="compute()">
+                <div class="button">
+                    <div class="button-text">
+                        Calculate
+                    </div>
                 </div>
-
-                <button id = "calculate" type="button" class="btn btn-lg" onclick="push()">Calculate</button>
-                <button id = "cancel" type="button" class="btn btn-lg" onclick="hideOverlay()">Cancel</button>
             </div>
+            
+            <div class="button-container" id="learn-more-container">
+                <div class="button">
+                    <div class="button-text" id="learn-more-text">
+                        Learn more
+                    </div>
+                </div>
+            </div>
+            
+            
         </div>
-
-        <div id = "map-holder">
-        </div>
-
-        <!--
-<div id="loading_blob">
-<div>
-<h1>Loading...</h1>
-<img src="res/image/puff.svg" style="width: 40pt; height:40pt"><br><br>
-<h3 id="saying">Insert pun here</h3>
-</div>
-</div>
--->
-
-        <button id = "new-route" type="button" class="btn btn-primary" onclick="openNav()">Test new route</button>
-
-        <div id = "stats">
-            <p>stats comparing hyperloop to conventional transport go here but styled super cool</p>
-        </div>
-
-
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
-
-        <script src="scripts/config.js" type="text/javascript"></script>
-        <script src="scripts/calculate-visual.js" type="text/javascript"></script>
-        <script src="scripts/calculate.js" type="text/javascript"></script>
-
-        <script async defer
-                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyARXZWbgKN2HjFHrEHr-tI_3tlfeo_B2Lw&libraries=places&callback=initMap">
-        </script>
-
+        
+        
     </body>
+
 </html>

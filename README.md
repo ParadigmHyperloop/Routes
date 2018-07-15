@@ -10,6 +10,12 @@ This project is intended to calculate realistic potential hyperloop routes. Real
 ## The Algorithm
 Routes are internally represented by n-degree bezier curves, where n is determined at runtime based on the length of the route being calculated. A GPU based cost function is used to determine how "good" a particular bezier curve is at being a hyperloop route, given the current terrain. The CMA-ES algorithm (Covariance Matrix Adaptation Evolution Strategy) is then applied to find the minima of this cost function. This involves randomly sampling bezier curves, ranking them based on their cost, adjusting the distribution based on the best solutions and sampling again. This process constitutes a single generation and is then repeated over and over until the minima is located.
 
+## Screenshots
+
+![Input](https://i.imgur.com/N6k5ifE.png "Input")
+![Stats](https://i.imgur.com/qdtndiu.png "Stats")
+![Route](https://i.imgur.com/AfYYfJU.jpg "Route")
+
 ## Dependencies
 
 - Geospatial Data Abstraction Library (GDAL) [ http://www.gdal.org]
@@ -81,6 +87,14 @@ This will calculate a route from -119.001666666700030°W 35.001666666664143°N t
 --[start or dest]=lon,lat
 ```
 where lon is the desired longitude, lat is the desired latitude.
+
+In order to run the front end, a Google maps Distance-Matrix API key is needed. Once acquired, make a file called "keys.js" in htdocs/script with the contents:
+```
+var keys = {
+	timeRoute:"YOUR_KEY_HERE"
+};
+```
+
 
 ## Server
 For web-based computation of routes, Routes-Server provides a simple REST API. The server must be run out of the build directory

@@ -1,0 +1,135 @@
+html {
+    
+    overflow: hidden;
+    
+}
+
+#overlay {
+    
+    position: absolute;
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+    
+    background-color: #191919;
+    transition: opacity 1s;
+    
+    overflow: hidden;
+    
+}
+
+#map-container {
+    width: 100%;
+    height: 100%;    
+}
+
+#not-overlay {
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    background-color: transparent;
+}
+
+#see-stats-container {
+    position: absolute;
+    display: table;
+    width: 7%;
+    height: 4%;
+    margin-top: auto;
+    margin-bottom: auto;
+    top: 0;
+    left: 0;
+    white-space: nowrap;
+    background-color: transparent;
+   
+}
+
+#sayings-container {
+    
+    margin-top: -83pt;
+    width: 100%;
+    
+    overflow: hidden;
+    text-align: center;
+    
+    position: relative;
+    top: 50%;
+    transform: translate3d(0, -50%, 0);
+    
+}
+
+#sayings {
+    
+    font-size: 36pt;
+    text-align: center;
+    
+    width: 100%;
+    height: 125pt;
+    
+    transform: translate3d(0, 0, 0);
+    transition: transform 1.5s ease, opacity 1s;
+    
+    pointer-events: none;
+    -webkit-user-select: none;
+    user-select: none;
+    
+}
+
+.saying-row {
+    
+    padding-bottom: 100pt;
+    
+}
+
+#info-container {
+    
+    opacity: 0;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: auto;
+    
+    transition: opacity 1s;    
+}
+
+#results-title {
+    
+    margin-top: 20pt;
+    margin-bottom: 20pt;
+    
+    text-align: center;
+    font-size: 36pt;
+    
+    width: 100%;
+    
+}
+
+#result-subtitle {
+    
+    font-size: 18pt;
+    margin-bottom: 20pt;
+    
+}
+
+#graphs-container {
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    
+    
+}
+
+.graph-title {
+    
+    font-size: 15pt;
+    margin: 10pt;
+    
+}
+
+
+

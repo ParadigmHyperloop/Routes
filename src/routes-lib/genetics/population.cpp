@@ -21,8 +21,19 @@ Population::Population(int pop_size, glm::vec4 start, glm::vec4 dest, const Elev
     _data_size   = _data.getCroppedSizeMeters();
     _data_origin = _data.getCroppedOriginMeters();
 
-    determineEvalPoints();
+    // Figure out how many points this route should be evaluated on.
+    // We also make sure it is a multiple of workers
+    glm::dvec2 cropped_size = data.getCroppedSizeMeters();
+    _num_evaluation_points = glm::max((int)ceil(glm::max(cropped_size.x / METERS_TO_POINT_CONVERSION,
+                                                         cropped_size.y / METERS_TO_POINT_CONVERSION) / (float)NUM_ROUTE_WORKERS) * NUM_ROUTE_WORKERS, 2400);
+
+    std::cout << "Using " << _num_evaluation_points << " points of evaluation" << std::endl;
+    _num_evaluation_points_1 = (float)_num_evaluation_points - 1.0f;
         
+    // Get the data to allow for proper texture sampling
+    _data_size   = _data.getCroppedSizeMeters();
+    _data_origin = _data.getCroppedOriginMeters();
+
     // First we init the params, then generate a starter population
     initParams();
     initSamplers();
@@ -64,16 +75,33 @@ Individual Population::getIndividual(int index) {
 void Population::step(const Pod& pod) {
 
     // Evaluate the cost and sort so the most fit solutions are in the front
+    long long int start = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+
     evaluateCost(pod);
 
+    long long int end = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+    //std::cout << "Cost took " << end - start << std::endl;
+    start = end;
+
     sortIndividuals();
+
+    end = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+    //std::cout << "Sort took " << end - start << std::endl;
+    start = end;
 
     // Update the params
     updateParams();
 
+    end = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+    //std::cout << "Params took " << end - start << std::endl;
+    start = end;
+
     // Sample a new generation
     samplePopulation();
 
+    end = std::chrono::high_resolution_clock::now().time_since_epoch().count();
+    //std::cout << "Sample took " << end - start << std::endl;
+    start = end;
 }
 
 void Population::sortIndividuals() {

@@ -5,7 +5,7 @@
 #include "queue.h"
 
 boost::lockfree::queue<RoutesQueue::_RouteItem> RoutesQueue::_routes(0);
-std::unordered_map<size_t, std::vector<glm::vec3>> RoutesQueue::_completed;
+std::unordered_map<size_t, RoutesQueue::forJSON> RoutesQueue::_completed;
 
 size_t RoutesQueue::queueRoute(const glm::vec2& start, const glm::vec2& dest) {
 
@@ -16,8 +16,10 @@ size_t RoutesQueue::queueRoute(const glm::vec2& start, const glm::vec2& dest) {
     _RouteItem item;
 
     item.id = identifier;
-    item.start = start;
-    item.dest = dest;
+    item.start_lat = start.x;
+    item.start_lon = start.y;
+    item.dest_lat = dest.x;
+    item.dest_lon = dest.y;
 
     _routes.push(item);
 
@@ -34,14 +36,24 @@ void RoutesQueue::calculateRoutes() {
 
             // Calculate the route and insert it into the map
             // This can be done because the [] operator behaves like it is const for the purposes of thread safety
-            _completed[item.id] = Routes::calculateRoute(item.start, item.dest);
+            glm::vec2 start = glm::vec2(item.start_lat, item.start_lon);
+            glm::vec2 dest = glm::vec2(item.dest_lat, item.dest_lon);
+            std::vector<glm::vec3> controls = Routes::calculateRoute(start, dest);
+            std::vector<glm::vec3> evaluated = Bezier::evaluateEntireBezierCurve(controls, 2400);
+            float time = Routes::getTime();
+            float length = Routes::getLength();
+            std::vector<glm::vec2> elevations = Routes::getElevations();
+            std::vector<glm::vec2> ground_elevations = Routes::getGElevations();
+            std::vector<glm::vec2> speeds = Routes::getSpeeds();
+            _completed[item.id] = {controls, evaluated, time, length, elevations, ground_elevations, speeds};
 
         } catch (std::runtime_error e) {
 
             // Print out that the server had an exception
             std::cout << "Exception: " << e.what() << std::endl;
-            _completed[item.id] = {glm::vec3(std::numeric_limits<float>::max())};
-
+            std::vector<glm::vec3> maxVec3 = {glm::vec3(std::numeric_limits<float>::max())};
+            std::vector<glm::vec2> maxVec2 = {glm::vec2(std::numeric_limits<float>::max())};
+            _completed[item.id] = {maxVec3, maxVec3, 0.0f, 0.0f, maxVec2, maxVec2};
         }
 
     }
@@ -55,14 +67,8 @@ bool RoutesQueue::isRouteCompleted(size_t id) {
 
 }
 
-std::vector<glm::vec3> RoutesQueue::getCompletedRoute(size_t id) {
+RoutesQueue::forJSON RoutesQueue::getCompletedRoute(size_t id) {
 
-    // We assume that the route is finished because isRouteCompleted should have been called.
-    std::vector<glm::vec3> controls = _completed[id];
-
-    // Erase it from the completed
-    _completed.erase(id);
-
-    return controls;
+    return _completed[id];
 
 }
