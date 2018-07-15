@@ -273,6 +273,17 @@ function getCheckRequest(_ident, succ, fail) {
 
 }
 
+function doc_keyUp(e) {
+
+    // this would test for whichever key is 40 and the ctrl key at the same time
+    if (e.keyCode == 90) {
+        // call your function to do the thing
+        zoomToRoute();
+    }
+}
+// register the handler 
+document.addEventListener('keyup', doc_keyUp, false);
+
 function zoomToRoute() {
     
     let bounds = new google.maps.LatLngBounds();
