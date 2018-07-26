@@ -1,5 +1,4 @@
-# Routes
-![Build status](https://travis-ci.org/ParadigmHyperloop/Routes.svg?branch=master "Build status (passing I hope)")
+# Routes [![Build status](https://travis-ci.org/ParadigmHyperloop/Routes.svg?branch=master "Build status (passing I hope)")](https://travis-ci.org/ParadigmHyperloop/Routes)
 
 ## Documentation
 Full C++ documentation can be found at https://paradigmhyperloop.github.io/Routes/index.html
