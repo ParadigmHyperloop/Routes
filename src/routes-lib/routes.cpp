@@ -35,7 +35,7 @@ std::vector<glm::vec3> Routes::calculateRoute(glm::vec2 start, glm::vec2 dest) {
     // These points will be in meters so we need to convert them
     std::vector<glm::vec3> computed = Genetics::solve(pop, pod, NUM_GENERATIONS);
 
-    std::vector<glm::vec3> points = Bezier::evaluateEntireBezierCurve(computed, 1000);
+    std::vector<glm::vec3> points = Bezier::evaluateEntireBezierCurve(computed, 100);
 
     _time = pod.timeForCurve(points);
     _length = Bezier::bezierLength(points);

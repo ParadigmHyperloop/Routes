@@ -30,6 +30,11 @@ BOOST_AUTO_TEST_CASE(test_bezier_CPU) {
     
     // Check multi evaluation with a quadratic curve
     std::vector<glm::vec3> evaluated_multi = Bezier::evaluateEntireBezierCurve({start, mid, end}, 3);
+
+    std::cout << evaluated_multi[0].x << ", " << evaluated_multi[0].y << ", " << evaluated_multi[0].z << std::endl;
+    std::cout << evaluated_multi[1].x << ", " << evaluated_multi[1].y << ", " << evaluated_multi[1].z << std::endl;
+    std::cout << evaluated_multi[2].x << ", " << evaluated_multi[2].y << ", " << evaluated_multi[2].z << std::endl;
+
     BOOST_CHECK(evaluated_multi[0] == start);
     BOOST_CHECK(evaluated_multi[1] == glm::vec3(0.45, 1.3, 0.35));
     BOOST_CHECK(evaluated_multi[2] == end);
