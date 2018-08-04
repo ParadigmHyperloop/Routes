@@ -9,6 +9,8 @@ float Routes::_length;
 std::vector<glm::vec2> Routes::_elevations;
 std::vector<glm::vec2> Routes::_ground_elevations;
 std::vector<glm::vec2> Routes::_speeds;
+std::vector<glm::vec2> Routes::_grades;
+
 
 std::vector<glm::vec3> Routes::calculateRoute(glm::vec2 start, glm::vec2 dest) {
 
@@ -44,6 +46,7 @@ std::vector<glm::vec3> Routes::calculateRoute(glm::vec2 start, glm::vec2 dest) {
     std::vector<float> velocities = pod.getVelocities(points);
     std::vector<glm::vec2> speeds;
     std::vector<glm::vec2> g_elev;
+    std::vector<glm::vec2> grades;
 
     std::unordered_map<int, float> lengthMap = Bezier::bezierLengthMap(points);
 
@@ -55,9 +58,18 @@ std::vector<glm::vec3> Routes::calculateRoute(glm::vec2 start, glm::vec2 dest) {
         g_elev.push_back({lengthMap[i], newElev});
     }
 
+    float spacing = 0.0f;
+
+    for (int i = 1; i < points.size(); i++) {
+        spacing = sqrt(glm::pow(points[i].x - points[i-1].x, 2) + glm::pow(points[i].y - points[i-1].y, 2));
+
+        grades.push_back({lengthMap[i], fabs(((points[i].z - points[i-1].z) * 100) / spacing)});
+    }
+
     _elevations = elev;
     _ground_elevations = g_elev;
     _speeds = speeds;
+    _grades = grades;
 
     // Convert to longitude, latitude and elevation
     for (int i = 0; i < computed.size(); i++) {
@@ -92,6 +104,10 @@ std::vector<glm::vec2> Routes::getSpeeds() {
 
 std::vector<glm::vec2> Routes::getGElevations() {
     return _ground_elevations;
+}
+
+std::vector<glm::vec2> Routes::getGrades() {
+    return _grades;
 }
 
 

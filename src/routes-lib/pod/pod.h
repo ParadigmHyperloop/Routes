@@ -13,7 +13,7 @@
 #include <unordered_map>
 
 /** Lowercase g in physics (the gravitational acceleration constant) in meters / second^2. */
-#define g 9.81
+#define g_CONST 9.81
 
 /** The maximum slope grade that should be allowed for the track. */
 #define MAX_SLOPE_GRADE 0.06f
@@ -25,13 +25,13 @@
 #define DEFAULT_POD_MAX_SPEED 339.75f
 
 /** The acceleration of the pod when it needs to slow down */
-#define DE_ACCEL 0.5 * g
+#define DE_ACCEL 0.5 * g_CONST
 
 /** THe acceleration of the pod when it is starting out*/
-#define BEGIN_ACCEL g
+#define BEGIN_ACCEL g_CONST
 
 /** THe acceleration of the pod when it is nearing the end of its route*/
-#define END_ACCEL g
+#define END_ACCEL g_CONST
 
 
 class Pod {

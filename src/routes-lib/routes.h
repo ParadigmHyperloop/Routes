@@ -81,6 +81,15 @@ class Routes {
          */
         static std::vector<glm::vec2> getSpeeds();
 
+        /**
+         * Gets the grade of the track along the route.
+         * Shoudl always be called after calculateRoute.
+         *
+         * @return
+         * Pairs of distance along the track and the grade at that point
+         */
+        static std::vector<glm::vec2> getGrades();
+
     private:
 
         /**
@@ -119,6 +128,11 @@ class Routes {
          * pairs of distance along track and the speed at that point in meters / second
          */
         static std::vector<glm::vec2> _speeds;
+
+        /**
+         * pairs of distance along track and the grade at that point
+         */
+         static std::vector<glm::vec2> _grades;
 
 };
 

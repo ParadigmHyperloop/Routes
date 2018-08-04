@@ -45,7 +45,8 @@ void RoutesQueue::calculateRoutes() {
             std::vector<glm::vec2> elevations = Routes::getElevations();
             std::vector<glm::vec2> ground_elevations = Routes::getGElevations();
             std::vector<glm::vec2> speeds = Routes::getSpeeds();
-            _completed[item.id] = {controls, evaluated, time, length, elevations, ground_elevations, speeds};
+            std::vector<glm::vec2> grades = Routes::getGrades();
+            _completed[item.id] = {controls, evaluated, time, length, elevations, ground_elevations, speeds, grades};
 
         } catch (std::runtime_error e) {
 

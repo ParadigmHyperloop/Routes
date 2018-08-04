@@ -48,10 +48,16 @@ public:
         std::vector<glm::vec2> ground_elevations;
 
         /**
-         * The speed of the pod along the track. The x values are the current distnace(m) on the
+         * The speed of the pod along the track. The x values are the current distance(m) on the
          * track and the y values are the speeds(m/s)
          */
         std::vector<glm::vec2> speeds;
+
+        /**
+         * The grade of the pod as it moves along the track. The x values are the current distance(m)
+         * on the track and the y value are the grade.
+         */
+        std::vector<glm::vec2> grades;
 
     };
 

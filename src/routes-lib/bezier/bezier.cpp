@@ -44,7 +44,7 @@ std::vector<glm::vec3> Bezier::evaluateEntireBezierCurve(const std::vector<glm::
     const std::vector<int>& binoms = getBinomialCoefficients(degree);
 
     // Figure out how far along the curve each point is. We use num_desired - 1 as the divisor so that we make sure we evaluate at 1
-    std::vector<glm::vec3> points_calc = std::vector<glm::vec3>(num_desired);
+    std::vector<glm::vec3> points_calc = std::vector<glm::vec3>(num_desired, {0,0,0});
 
     for (int p = 0; p < num_desired; p++) {
 

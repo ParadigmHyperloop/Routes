@@ -9,6 +9,7 @@
 #include <boost/compute/container/vector.hpp>
 #include <random>
 #include <time.h>
+#include <pagmo2/include/pagmo/utils/multi_objective.hpp>
 
 #include "../bezier/bezier.h"
 #include "../elevation/elevation.h"
@@ -68,9 +69,15 @@ struct Individual {
     /**
      * A reference to this individual's header.
      * The header contains the computed cost of the individual, so long as it has been downloaded from the GPU.
-     * Cost is stored in the X component and Y, Z and W are currently unused.
+     * Cost is stored in the X component, Z, Y and W are currently unused.
      */
     glm::vec4* header;
+
+    /**
+     * The reference to this individuals moHeader.
+     * The header contains doubles corresponding to the fitness functions' objective values
+     */
+    glm::vec4* moHeader;
 
     /**
      * The pointer to the genome of the individual. This is an array of glm::vec4 with length equal
@@ -168,6 +175,12 @@ public:
      * the most fit individual. Currently this is done on the CPU, which is not optimal, but it is simpler.
      */
     void sortIndividuals();
+
+    /**
+     * This function sorts the individuals based off their objective function values. _individuals[0]
+     * becomes the most fit individual.
+     */
+    void sortIndividualsMo();
 
     /**
      * This function is what makes the genetic algorithm work.
@@ -440,6 +453,12 @@ private:
      * for the fittest individual is saved
      */
     std::vector<float> _fitness_over_generations;
+
+    /**
+     * This vector contains the best fitness vectors of each generation. Every time step() is called, the vector of the cost function
+     * for the fittest individual is saved
+     */
+    std::vector<std::vector<double>> _mo_fitness_over_generations;
 
 };
 

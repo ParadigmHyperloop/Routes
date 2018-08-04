@@ -50,7 +50,7 @@ rm lib/*boost_test_exec_monitor*
 rm lib/*boost_timer*
 
 # Download GLM
-git clone https://github.com/g-truc/glm.git
+git clone https://github.com/g_CONST-truc/glm.git
 cp -r glm/glm/ include/glm/
 rm -rf glm
 
