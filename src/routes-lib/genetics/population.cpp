@@ -84,7 +84,7 @@ void Population::step(const Pod& pod) {
     //std::cout << "Cost took " << end - start << std::endl;
     start = end;
 
-    sortIndividualsMo();
+    sortIndividuals();
 
     end = std::chrono::high_resolution_clock::now().time_since_epoch().count();
     //std::cout << "Sort took " << end - start << std::endl;

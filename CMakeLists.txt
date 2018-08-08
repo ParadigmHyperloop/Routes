@@ -12,7 +12,7 @@ message(WARNING ${LIBRARIES})
 
 # Add the sources to the executables
 add_library(Routes STATIC ${HS}
-                          ${SOURCES})
+        ${SOURCES})
 
 IF (WIN32)
 
@@ -35,7 +35,7 @@ ENDIF()
 
 # Include stuff
 include_directories(SYSTEM ${CMAKE_CURRENT_SOURCE_DIR}/include
-                           ${GDAL_INCLUDE_DIR})
+        ${GDAL_INCLUDE_DIR})
 
 add_custom_target(copy)
 
@@ -43,20 +43,20 @@ IF (WIN32)
 
   message(STATUS ${GDAL_LIBRARY})
   target_link_libraries(Routes ${OpenCL_LIBRARIES}
-                               ${GDAL_LIBRARY}
-                               ${LIBRARIES})
+          ${GDAL_LIBRARY}
+          ${LIBRARIES})
 
   add_custom_command(TARGET copy PRE_BUILD
-                     COMMAND ${CMAKE_COMMAND} -E
-                     copy C:/warmerda/bld/bin/gdal202.dll
-                     ${CMAKE_BINARY_DIR}/gdal202.dll)
+          COMMAND ${CMAKE_COMMAND} -E
+          copy C:/warmerda/bld/bin/gdal202.dll
+          ${CMAKE_BINARY_DIR}/gdal202.dll)
 
 ELSE()
 
   target_link_libraries(Routes ${OPENCL_LIBRARIES}
-                               ${GDAL_LIBRARY}
-                               ${LIBRARIES}
-                               -lpthread)
+          ${GDAL_LIBRARY}
+          ${LIBRARIES}
+          -lpthread)
 
 ENDIF()
 
@@ -68,8 +68,8 @@ foreach(Header ${HS})
   message(STATUS ${TO_WRITE})
 
   add_custom_command(TARGET copy PRE_BUILD
-                     COMMAND ${CMAKE_COMMAND} -E
-                     copy ${Header} ${TO_WRITE})
+          COMMAND ${CMAKE_COMMAND} -E
+          copy ${Header} ${TO_WRITE})
 
 endforeach()
 
@@ -80,12 +80,12 @@ FILE(GLOB_RECURSE HS ${CMAKE_SOURCE_DIR}/src/routes-exec/*.h*)
 FILE(GLOB_RECURSE SOURCES ${CMAKE_SOURCE_DIR}/src/routes-exec/*.cpp)
 
 add_executable(Routes-Exec ${HS}
-                           ${SOURCES})
+        ${SOURCES})
 
 add_dependencies(Routes-Exec Routes)
 
 # Build it with the library
-include_directories(Routes-Exec ${CMAKE_BINARY_DIR}/include)
+include_directories(Routes-Exec ${CMAKE_BINARY_DIR}/include /usr/local/include/mysql-connector-cpp/include)
 target_link_libraries(Routes-Exec ${CMAKE_BINARY_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}Routes${CMAKE_STATIC_LIBRARY_SUFFIX})
 
 # Link in the other libraries
@@ -93,15 +93,18 @@ IF (WIN32)
 
   message(WARNING ${GDAL_LIBRARY})
   target_link_libraries(Routes-Exec ${OpenCL_LIBRARIES}
-                                    ${GDAL_LIBRARY}
-                                    ${LIBRARIES})
+          ${GDAL_LIBRARY}
+          ${LIBRARIES})
 
 ELSE()
 
   target_link_libraries(Routes-Exec ${OPENCL_LIBRARIES}
-                                    ${GDAL_LIBRARY}
-                                    ${LIBRARIES}
-                                    -lpthread)
+          ${GDAL_LIBRARY}
+          ${LIBRARIES}
+          ${CMAKE_DL_LIBS}
+          -lpthread
+          -lssl
+          -lcrypto)
 
 ENDIF()
 
@@ -110,12 +113,12 @@ FILE(GLOB_RECURSE HS ${CMAKE_SOURCE_DIR}/src/routes-server/*.h*)
 FILE(GLOB_RECURSE SOURCES ${CMAKE_SOURCE_DIR}/src/routes-server/*.cpp)
 
 add_executable(Routes-Server ${HS}
-                             ${SOURCES})
+        ${SOURCES})
 
 add_dependencies(Routes-Server Routes)
 
 # Build it with the library
-include_directories(Routes-Server ${CMAKE_BINARY_DIR}/include)
+include_directories(Routes-Server ${CMAKE_BINARY_DIR}/include /usr/local/include/mysql-connector-cpp/include)
 target_link_libraries(Routes-Server ${CMAKE_BINARY_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}Routes${CMAKE_STATIC_LIBRARY_SUFFIX})
 
 # Link in the other libraries
@@ -123,15 +126,18 @@ IF (WIN32)
 
   message(STATUS ${GDAL_LIBRARY})
   target_link_libraries(Routes-Server ${OpenCL_LIBRARIES}
-                                      ${GDAL_LIBRARY}
-                                      ${LIBRARIES})
+          ${GDAL_LIBRARY}
+          ${LIBRARIES})
 
 ELSE()
 
   target_link_libraries(Routes-Server ${OPENCL_LIBRARIES}
-                                      ${GDAL_LIBRARY}
-                                      ${LIBRARIES}
-                                      -lpthread)
+          ${GDAL_LIBRARY}
+          ${LIBRARIES}
+          ${CMAKE_DL_LIBS}
+          -lpthread
+          -lssl
+          -lcrypto)
 
 ENDIF()
 
@@ -141,13 +147,13 @@ enable_testing()
 FILE(GLOB_RECURSE HS ${CMAKE_SOURCE_DIR}/src/routes-tests/*.h*)
 FILE(GLOB_RECURSE SOURCES ${CMAKE_SOURCE_DIR}/src/routes-tests/*.cpp)
 
-add_executable(Routes-Tests ${HS}	
-                            ${SOURCES})
+add_executable(Routes-Tests ${HS}
+        ${SOURCES})
 
 add_dependencies(Routes-Tests Routes)
 
 # Build it with the library
-include_directories(Routes-Tests ${CMAKE_BINARY_DIR}/include)
+include_directories(Routes-Tests ${CMAKE_BINARY_DIR}/include /usr/local/include/mysql-connector-cpp/include)
 target_link_libraries(Routes-Tests ${CMAKE_BINARY_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}Routes${CMAKE_STATIC_LIBRARY_SUFFIX})
 
 # Link in the other libraries
@@ -155,15 +161,18 @@ IF (WIN32)
 
   message(STATUS ${GDAL_LIBRARY})
   target_link_libraries(Routes-Tests ${OpenCL_LIBRARIES}
-                                      ${GDAL_LIBRARY}
-                                      ${LIBRARIES})
+          ${GDAL_LIBRARY}
+          ${LIBRARIES})
 
 ELSE()
 
   target_link_libraries(Routes-Tests ${OPENCL_LIBRARIES}
-                                      ${GDAL_LIBRARY}
-                                      ${LIBRARIES}
-                                      -lpthread)
+          ${GDAL_LIBRARY}
+          ${LIBRARIES}
+          ${CMAKE_DL_LIBS}
+          -lpthread
+          -lssl
+          -lcrypto)
 
 ENDIF()
 
@@ -171,11 +180,11 @@ add_test(Routes-TestSuite Routes-Tests)
 
 # Add the check target because the built in test one is a pain
 # Taken from https://stackoverflow.com/questions/5709914/using-cmake-how-do-i-get-verbose-output-from-ctest/31124523#31124523
-add_custom_target(check 
+add_custom_target(check
         COMMAND ${CMAKE_COMMAND} -E env CTEST_OUTPUT_ON_FAILURE=1
-            ${CMAKE_CTEST_COMMAND} -C $<CONFIG>
-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-    DEPENDS Routes-Tests)
+        ${CMAKE_CTEST_COMMAND} -C $<CONFIG>
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+        DEPENDS Routes-Tests)
 
 # Fix the Xcode build so that everything is put into the binary directory
 set_target_properties(Routes PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
@@ -193,4 +202,3 @@ set_target_properties(Routes-Exec PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE ${
 set_target_properties(Routes-Tests PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set_target_properties(Routes-Tests PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_BINARY_DIR})
 set_target_properties(Routes-Tests PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMAKE_BINARY_DIR})
-

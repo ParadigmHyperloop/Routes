@@ -384,7 +384,7 @@ private:
 
     /**
      * This represents the current mean vector of the population. In other words, this is the favorite solution the the population.
-     * The vector is legnth _genome_size * 3, 3 components for each point in the bezier curve (X, Y, Z).
+     * The vector is length _genome_size * 3, 3 components for each point in the bezier curve (X, Y, Z).
      */
     Eigen::VectorXf _mean;
 
