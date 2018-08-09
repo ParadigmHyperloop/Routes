@@ -7,17 +7,7 @@
 
 #include "population.h"
 
-#include <stdlib.h>
-#include <iostream>
-
-#include "mysql_connection.h"
-
-#include <cppconn/driver.h>
-#include <cppconn/exception.h>
-#include <cppconn/resultset.h>
-#include <cppconn/statement.h>
-
-/** */
+#include <pqxx/pqxx>
 
 /** A simple class to manage the genetic cycle of a population */
 class Genetics {
@@ -38,7 +28,34 @@ class Genetics {
          * The points of the calculated path in meters. This will need to be converted to latitude and longitude
          * to be properly displayed.
          */
-        static std::vector<glm::vec3> solve(Population& pop, Pod& pod, int generations);
+        static std::vector<glm::vec3> solve(Population& pop, Pod& pod, int generations, const glm::dvec2& start, const glm::dvec2& dest, std::string objectiveType);
+
+    private:
+
+        /**
+         * The control points of the optimal solution at the current generation
+         */
+        static double _opt_control_points;
+
+        /**
+         * The starting latitude
+         */
+        static double _lat_start;
+
+        /**
+         * The ending latitude
+         */
+        static double _lat_end;
+
+        /**
+         * The starting longitude
+         */
+        static double _long_start;
+
+        /**
+         * The ending longitude
+         */
+        static double _long_end;
 
 };
 

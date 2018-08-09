@@ -85,7 +85,7 @@ add_executable(Routes-Exec ${HS}
 add_dependencies(Routes-Exec Routes)
 
 # Build it with the library
-include_directories(Routes-Exec ${CMAKE_BINARY_DIR}/include /usr/local/include/mysql-connector-cpp/include)
+include_directories(Routes-Exec ${CMAKE_BINARY_DIR}/include)
 target_link_libraries(Routes-Exec ${CMAKE_BINARY_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}Routes${CMAKE_STATIC_LIBRARY_SUFFIX})
 
 # Link in the other libraries
@@ -101,10 +101,9 @@ ELSE()
   target_link_libraries(Routes-Exec ${OPENCL_LIBRARIES}
           ${GDAL_LIBRARY}
           ${LIBRARIES}
-          ${CMAKE_DL_LIBS}
           -lpthread
-          -lssl
-          -lcrypto)
+          -lpqxx
+          -lpq)
 
 ENDIF()
 
@@ -118,7 +117,7 @@ add_executable(Routes-Server ${HS}
 add_dependencies(Routes-Server Routes)
 
 # Build it with the library
-include_directories(Routes-Server ${CMAKE_BINARY_DIR}/include /usr/local/include/mysql-connector-cpp/include)
+include_directories(Routes-Server ${CMAKE_BINARY_DIR}/include)
 target_link_libraries(Routes-Server ${CMAKE_BINARY_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}Routes${CMAKE_STATIC_LIBRARY_SUFFIX})
 
 # Link in the other libraries
@@ -134,10 +133,9 @@ ELSE()
   target_link_libraries(Routes-Server ${OPENCL_LIBRARIES}
           ${GDAL_LIBRARY}
           ${LIBRARIES}
-          ${CMAKE_DL_LIBS}
           -lpthread
-          -lssl
-          -lcrypto)
+          -lpqxx
+          -lpq)
 
 ENDIF()
 
@@ -153,7 +151,7 @@ add_executable(Routes-Tests ${HS}
 add_dependencies(Routes-Tests Routes)
 
 # Build it with the library
-include_directories(Routes-Tests ${CMAKE_BINARY_DIR}/include /usr/local/include/mysql-connector-cpp/include)
+include_directories(Routes-Tests ${CMAKE_BINARY_DIR}/include)
 target_link_libraries(Routes-Tests ${CMAKE_BINARY_DIR}/${CMAKE_STATIC_LIBRARY_PREFIX}Routes${CMAKE_STATIC_LIBRARY_SUFFIX})
 
 # Link in the other libraries
@@ -169,10 +167,9 @@ ELSE()
   target_link_libraries(Routes-Tests ${OPENCL_LIBRARIES}
           ${GDAL_LIBRARY}
           ${LIBRARIES}
-          ${CMAKE_DL_LIBS}
           -lpthread
-          -lssl
-          -lcrypto)
+          -lpqxx
+          -lpq)
 
 ENDIF()
 

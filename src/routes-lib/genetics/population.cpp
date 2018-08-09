@@ -73,18 +73,22 @@ Individual Population::getIndividual(int index) {
 
 }
 
-void Population::step(const Pod& pod) {
+void Population::step(const Pod& pod, std::string objectiveType) {
 
     // Evaluate the cost and sort so the most fit solutions are in the front
     long long int start = std::chrono::high_resolution_clock::now().time_since_epoch().count();
 
-    evaluateCost(pod);
+    evaluateCost(pod, objectiveType);
 
     long long int end = std::chrono::high_resolution_clock::now().time_since_epoch().count();
     //std::cout << "Cost took " << end - start << std::endl;
     start = end;
 
-    sortIndividuals();
+    if (objectiveType == "single") {
+        sortIndividuals();
+    } else if (objectiveType == "multi") {
+        sortIndividualsMo();
+    }
 
     end = std::chrono::high_resolution_clock::now().time_since_epoch().count();
     //std::cout << "Sort took " << end - start << std::endl;
@@ -167,13 +171,21 @@ void Population::sortIndividualsMo() {
 
 }
 
-void Population::evaluateCost(const Pod& pod) {
+void Population::evaluateCost(const Pod& pod, std::string objectiveType) {
 
     // Get stuff we need to execute a kernel on
     boost::compute::command_queue& queue = Kernel::getQueue();
 
+    std::string kernelFunction;
+
+    if (objectiveType == "single") {
+        kernelFunction = "cost";
+    } else if (objectiveType == "multi") {
+        kernelFunction = "mo";
+    }
+
     // Create a temporary kernel and execute it
-    static Kernel kernel = Kernel(std::ifstream("../opencl/kernel_cost.opencl"), "mo");
+    static Kernel kernel = Kernel(std::ifstream("../opencl/kernel_cost.opencl"), "cost");
 
     kernel.setArgs(_data.getOpenCLImage(), _opencl_individuals.get_buffer(), _genome_size + 2,
                    MAX_SLOPE_GRADE, pod.minCurveRadius(), EXCAVATION_DEPTH, _data_size.x,

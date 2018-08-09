@@ -168,7 +168,7 @@ public:
      * @param pod
      * The pod object containing the specs of the pod. Right now just uses max speed.
      */
-    void step(const Pod& pod);
+    void step(const Pod& pod, std::string objectiveType);
 
     /**
      * This function sorts the individuals in ascending order based on the cost. _individuals[0] becomes
@@ -191,7 +191,7 @@ public:
      * The pod object containing the specs of the pod. Right now just uses max speed.
      *
      */
-    void evaluateCost(const Pod& pod);
+    void evaluateCost(const Pod& pod, std::string objectiveType);
 
     /**
      * This returns the computed solution to the route (the mean).
@@ -200,6 +200,12 @@ public:
      * The control points of the completed route containing the start and destination.
      */
     std::vector<glm::vec3> getSolution() const;
+
+    /** The starting position of the path that this population is trying to "solve" */
+    glm::vec4 _start;
+
+    /** The ending position of the path that this population is trying to "solve" */
+    glm::vec4 _dest;
 
 private:
 
@@ -319,12 +325,6 @@ private:
      * This includes the genome size, the header and the start and destination
      */
     int _individual_size;
-
-    /** The starting position of the path that this population is trying to "solve" */
-    glm::vec4 _start;
-
-    /** The ending position of the path that this population is trying to "solve" */
-    glm::vec4 _dest;
 
     /**
      * The direction vector of the path that this population is built for.
