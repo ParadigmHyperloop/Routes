@@ -44,6 +44,20 @@ html {
    
 }
 
+#visualize-container {
+    position: absolute;
+    display: table;
+    width: 7%;
+    height: 4%;
+    margin-top: auto;
+    margin-bottom: auto;
+    top: 0;
+    left: 0;
+    white-space: nowrap;
+    background-color: transparent;
+   
+}
+
 #sayings-container {
     
     margin-top: -83pt;

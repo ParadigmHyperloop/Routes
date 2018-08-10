@@ -59,6 +59,16 @@ public:
          */
         std::vector<glm::vec2> grades;
 
+        /**
+         * The route_id for database querying
+         */
+        int route_id;
+
+        /**
+         * A vector of the best solutions at each generation of the route.
+         */
+        std::string solutions;
+
     };
 
     /**
@@ -75,7 +85,7 @@ public:
      */
     static size_t queueRoute(const glm::vec2& start, const glm::vec2& dest);
 
-    /**
+        /**
      * A function that will calculate any routes that are in the queue. All routes that are calculated are then
      * moved to the completed map.
      */
@@ -105,9 +115,6 @@ public:
      *
      */
     static forJSON getCompletedRoute(size_t id);
-
-
-
 
 private:
 
@@ -145,7 +152,6 @@ private:
      * Unordered map is used because it fits the thread safety requirements.
      */
     static std::unordered_map<size_t, forJSON> _completed;
-
 
 };
 

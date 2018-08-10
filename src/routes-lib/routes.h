@@ -13,9 +13,9 @@
 #define POP_SIZE 1000
 
 /** The default number of generations that the population should be bred for */
-#define NUM_GENERATIONS 300
+#define NUM_GENERATIONS 600
 
-/** This is a simple class to handle the complete calculation of a route. */
+/** This is a simplelass to handle the complete calculation of a route. */
 class Routes {
 
     public:
@@ -83,12 +83,29 @@ class Routes {
 
         /**
          * Gets the grade of the track along the route.
-         * Shoudl always be called after calculateRoute.
+         * Should always be called after calculateRoute.
          *
          * @return
          * Pairs of distance along the track and the grade at that point
          */
         static std::vector<glm::vec2> getGrades();
+
+        /**
+         * Gets the route_id for querying the database.
+         * Should always be called after calculateRoute.
+         *
+         * @return
+         * The primary key for accessing the database for this route
+         */
+        static int getId();
+
+        /**
+         * Gets the solutions at each generation
+         *
+         * @return
+         * A String representing the JSON array of solutions at each generation
+         */
+        static std::string getSolutions();
 
     private:
 
@@ -133,6 +150,16 @@ class Routes {
          * pairs of distance along track and the grade at that point
          */
          static std::vector<glm::vec2> _grades;
+
+         /**
+          * The id of this route for querying the database
+          */
+         static int _route_id;
+
+         /**
+          * The solutions at each generation
+          */
+         static std::string _solutions;
 
 };
 

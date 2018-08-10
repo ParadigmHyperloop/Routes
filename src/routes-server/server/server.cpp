@@ -20,7 +20,7 @@ void RoutesServer::startServer(int port) {
     retrieve_resource->set_method_handler("GET", handleRetrieval);
     retrieve_resource->set_method_handler("OPTIONS", handleCORS);
     
-    // Make the resource for the querrying the max route length
+    // Make the resource for the querying the max route length
     auto length_resource = std::make_shared<restbed::Resource>();
     length_resource->set_path("/max-route-length");
     length_resource->set_method_handler("GET", handleMaxRoute);
@@ -111,7 +111,9 @@ void RoutesServer::handleRetrieval(const std::shared_ptr<restbed::Session>& sess
                     + ", \n\"elevations\":\n" + vector2ToJSON(ans.elevations) +
                     + ", \n\"groundElevations\":\n" + vector2ToJSON(ans.ground_elevations) +
                     + ", \n\"speeds\":\n" + vector2ToJSON(ans.speeds) +
-                    + ", \n\"grades\":\n" + vector2ToJSON(ans.grades) + "}";
+                    + ", \n\"grades\":\n" + vector2ToJSON(ans.grades) +
+                    + ", \n\"route_id\":\n" + std::to_string(ans.route_id) +
+                    + ", \n\"solutions\":\n" + ans.solutions +"}";
 
 
             sendResponse(session, JSON);
@@ -148,7 +150,6 @@ void RoutesServer::onServerReady(restbed::Service &service) {
             // Sleep for a single second and then try to calculate some new routes
             std::this_thread::sleep_for(std::chrono::milliseconds(1000));
             RoutesQueue::calculateRoutes();
-
         }
 
     });
@@ -156,7 +157,7 @@ void RoutesServer::onServerReady(restbed::Service &service) {
 }
 
 void RoutesServer::sendResponse(const std::shared_ptr<restbed::Session>& session, const std::string& message) {
-    
+
     session->close(restbed::OK, message.c_str(),
                    {{"Access-Control-Allow-Origin",  "*"},
                     {"Content-Length", std::to_string(message.length())},

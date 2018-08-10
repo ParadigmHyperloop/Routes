@@ -20,6 +20,7 @@ var sayings = ["Adding that [Musk-y] smell",
 var saying_timer
 var current_saying
 
+var route_id;
 
 window.onload = function() {
     
@@ -136,16 +137,24 @@ function callback(data, modeOfTransport) {
     }    
 }   
 
+var sols = [];
+var generation = 0;
+
+var JSON_result;
+
+var pathLine;
+var points = [];
 
 function gotFinishedRoute(result) {
 
     // Invalidate the timer and dismiss loading
     clearTimeout(saying_timer);
-
+    
     // Parse the JSON 
-    var JSON_result = JSON.parse(result);
+    JSON_result = JSON.parse(result);
+    
 
-    var points = [];
+    points = [];
     for (var i = 0; i < JSON_result.evaluated.length; i++) {
         points.push({lat: JSON_result.evaluated[i][1], lng:
                      JSON_result.evaluated[i][0]});
@@ -209,7 +218,7 @@ function gotFinishedRoute(result) {
             chart1.update()
     
     
-    var pathLine = new google.maps.Polyline({
+    pathLine = new google.maps.Polyline({
         path: points,
         geodesic: true,
         strokeColor: '#FF0000',
@@ -242,15 +251,28 @@ function gotFinishedRoute(result) {
         ],
     }
             
-  chart2.update()
+    chart2.update()
 
     pathLine.setMap(map)
     $('#sayings-container').hide()
     $('#info-container').css({"display": "flex", "opacity" : "100"})
     $('#overlay').css({"overflow-y": "scroll"})
-    
+
     document.getElementById("time").innerHTML = time1;
     document.getElementById("distance").innerHTML = length;    
+    
+    numGenerations = JSON_result.solutions.length;
+        
+    for (var i = 0; i < numGenerations; i++) {
+        sols[i] = [];
+    }
+    
+    for (var i = 0; i < JSON_result.solutions.length; i++) {
+        for (var j = 0; j < JSON_result.solutions[i].length; j++) {
+            sols[i].push({lat: JSON_result.solutions[i][j][1],
+                               lng: JSON_result.solutions[i][j][0]});
+        }
+    }
 }
 
 function fadeOverlay() {
@@ -270,10 +292,23 @@ function showStats() {
     $('#overlay').show()
     $('#overlay').css({"opacity": 100})
     $('#info-container').css({"display": "flex", "opacity" : "100"})
+    
+    pathLine.setMap(null);
+    
+    pathLine = new google.maps.Polyline({
+        path: points,
+        geodesic: true,
+        strokeColor: '#FF0000',
+        strokeOpacity: 1.0,
+        strokeWeight: 4
+    });
+    
+    pathLine.setMap(map);
+
 }
 
 function getComputeRequest(start, dest, succ) {
-
+    
     // Return the dictonary with the parameters filled in
     return {
 
@@ -283,9 +318,10 @@ function getComputeRequest(start, dest, succ) {
         contentType: "text/plain",
 
         headers: { "Access-Control-Allow-Origin" : "*", },
+       
         success: function(result) { succ(result) }
     }
-
+    
 }
 
 function getCheckRequest(_ident, succ, fail) {
@@ -304,8 +340,9 @@ function getCheckRequest(_ident, succ, fail) {
             if (result == "false"){
                 console.log("failed to retrieve data from server" + ident)
                 fail();
-            }
-            else succ(result);
+            } else {
+                succ(result);
+            } 
 
         }
 
@@ -318,10 +355,21 @@ function doc_keyUp(e) {
     //determine if the button is 'z'
     if (e.keyCode == 90) {
         zoomToRoute();
+        console.log("z");
+    } else if (e.keyCode == 39 && generation < numGenerations - 2) { //right arrow
+        generation += 1;
+        updateMap();
+        console.log("right");
+    } else if (e.keyCode == 37 && generation > 0) { // left arrow
+        generation += -1;
+        updateMap();
+        console.log("left");   
+    } else {
+        updateMap();
     }
 }
 // register the handler 
-document.addEventListener('keyup', doc_keyUp, false);
+document.addEventListener('keydown', doc_keyUp, false);
 
 function zoomToRoute() {
     
@@ -362,3 +410,59 @@ function fancyLengthFormat(length) {
 
     return ret;
 }
+
+function startVisualization() {
+    generation = 0;
+    updateMap();
+    fadeOverlay();
+}
+
+function updateMap() {
+    
+    pathLine.setMap(null);
+    
+    pathLine = new google.maps.Polyline({
+        path: sols[generation],
+        geodesic: true,
+        strokeColor: '#FF0000',
+        strokeOpacity: 1.0,
+        strokeWeight: 4
+    });
+        
+    origin = JSON.parse(localStorage.getItem("origin"))
+    destination = JSON.parse(localStorage.getItem("destination"))
+    
+    let start_lat = origin["lat"]
+    let start_lng = origin["lng"]
+    let dest_lat = destination["lat"]
+    let dest_lng = destination["lng"]
+    let start = start_lat + "," + start_lng
+    let end = dest_lat + "," + dest_lng
+    
+    pathLine.setMap(map);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

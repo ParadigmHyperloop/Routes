@@ -30,12 +30,20 @@ class Genetics {
          */
         static std::vector<glm::vec3> solve(Population& pop, Pod& pod, int generations, const glm::dvec2& start, const glm::dvec2& dest, std::string objectiveType);
 
+        /**
+         * This function returns the route id of this route for querying the database
+         *
+         * @return
+         * The primary key of the route table
+         */
+        static int getRouteId();
+
     private:
 
         /**
          * The control points of the optimal solution at the current generation
          */
-        static double _opt_control_points;
+        static int _id;
 
         /**
          * The starting latitude

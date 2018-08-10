@@ -48,7 +48,7 @@
 #define INITIAL_SIGMA_XY 2500.0f
 
 /** Represents the dampening parameter for the step size. This value should be close to 1 */
-#define STEP_DAMPENING 1.5f
+#define STEP_DAMPENING 1.0f
 
 /** The interval multiplier for the square root of _genome_size * 3 for the indicator function. */
 #define ALPHA 1.5f

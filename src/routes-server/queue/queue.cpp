@@ -27,6 +27,7 @@ size_t RoutesQueue::queueRoute(const glm::vec2& start, const glm::vec2& dest) {
 
 }
 
+
 void RoutesQueue::calculateRoutes() {
 
     _RouteItem item;
@@ -46,7 +47,9 @@ void RoutesQueue::calculateRoutes() {
             std::vector<glm::vec2> ground_elevations = Routes::getGElevations();
             std::vector<glm::vec2> speeds = Routes::getSpeeds();
             std::vector<glm::vec2> grades = Routes::getGrades();
-            _completed[item.id] = {controls, evaluated, time, length, elevations, ground_elevations, speeds, grades};
+            int route_id = Routes::getId();
+            std::string solutions = Routes::getSolutions();
+            _completed[item.id] = {controls, evaluated, time, length, elevations, ground_elevations, speeds, grades, route_id, solutions};
 
         } catch (std::runtime_error e) {
 
@@ -60,6 +63,7 @@ void RoutesQueue::calculateRoutes() {
     }
 
 }
+
 
 bool RoutesQueue::isRouteCompleted(size_t id) {
 

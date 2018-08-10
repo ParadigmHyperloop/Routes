@@ -10,7 +10,8 @@ std::vector<glm::vec2> Routes::_elevations;
 std::vector<glm::vec2> Routes::_ground_elevations;
 std::vector<glm::vec2> Routes::_speeds;
 std::vector<glm::vec2> Routes::_grades;
-
+int Routes::_route_id;
+std::string Routes::_solutions;
 
 std::vector<glm::vec3> Routes::calculateRoute(glm::vec2 start, glm::vec2 dest) {
 
@@ -37,10 +38,12 @@ std::vector<glm::vec3> Routes::calculateRoute(glm::vec2 start, glm::vec2 dest) {
     // These points will be in meters so we need to convert them
     std::vector<glm::vec3> computed = Genetics::solve(pop, pod, NUM_GENERATIONS, start, dest, "single");
 
-    std::vector<glm::vec3> points = Bezier::evaluateEntireBezierCurve(computed, 1000);
+    std::vector<glm::vec3> points = Bezier::evaluateEntireBezierCurve(computed, 100);
 
     _time = pod.timeForCurve(points);
     _length = Bezier::bezierLength(points);
+
+    _route_id = Genetics::getRouteId();
 
     std::vector<glm::vec2> elev;
     std::vector<float> velocities = pod.getVelocities(points);
@@ -108,6 +111,58 @@ std::vector<glm::vec2> Routes::getGElevations() {
 
 std::vector<glm::vec2> Routes::getGrades() {
     return _grades;
+}
+
+int Routes::getId() {
+    return _route_id;
+}
+
+std::string Routes::getSolutions() {
+
+    pqxx::result r;
+
+    try {
+        pqxx::connection c("dbname=routes user=isaac password=evolution");
+
+        pqxx::work w(c);
+
+
+        r = w.exec("select evaluated from \"Controls\" where route_id = " + std::to_string(_route_id));
+
+        w.commit();
+
+    } catch (const std::exception &e) {
+        std::cerr << e.what() << std::endl;
+    }
+
+    std::vector<std::string> evaluatedStrings;
+
+
+    for (auto row : r) {
+        evaluatedStrings.push_back(row[0].c_str());
+    }
+
+    std::string evaluatedResult = "[";
+
+    for (std::string s : evaluatedStrings) {
+
+        evaluatedResult.append(s);
+
+        //newline for readability when debugging
+        evaluatedResult.append(",\n");
+    }
+
+    evaluatedResult.append("]");
+
+    evaluatedResult.erase(evaluatedResult.size() - 3, 2);
+    //evaluatedResult.append("]");
+
+
+
+    std::replace(evaluatedResult.begin(), evaluatedResult.end(), '{', '[');
+    std::replace(evaluatedResult.begin(), evaluatedResult.end(), '}', ']');
+
+    return evaluatedResult;
 }
 
 

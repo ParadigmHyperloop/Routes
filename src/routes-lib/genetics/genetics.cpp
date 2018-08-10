@@ -8,6 +8,8 @@ double Genetics::_lat_start;
 double Genetics::_long_start;
 double Genetics::_lat_end;
 double Genetics::_long_end;
+int Genetics::_id;
+
 std::vector<glm::vec3> Genetics::solve(Population& pop, Pod& pod, int generations, const glm::dvec2& start, const glm::dvec2& dest, std::string objectiveType) {
 
     ElevationData elev = ElevationData(start, dest);
@@ -31,10 +33,13 @@ std::vector<glm::vec3> Genetics::solve(Population& pop, Pod& pod, int generation
         pqxx::result r = w.exec("SELECT route_id FROM \"Route\" ");
 
         int route_id;
+
         for (auto row: r) {
             route_id = std::stoi(row[0].c_str());
         }
-        
+
+        _id = route_id;
+
         // Run the simulation for then given amount of generations
         for (int i = 0; i < generations; i++) {
             pop.step(pod, objectiveType);
@@ -45,7 +50,10 @@ std::vector<glm::vec3> Genetics::solve(Population& pop, Pod& pod, int generation
 
             std::vector<glm::vec3> sol = pop.getSolution();
 
-            std::vector<std::string> toInsert;
+            std::vector<glm::vec3> eval = Bezier::evaluateEntireBezierCurve(sol, 100);
+
+            std::vector<std::string> toInsertControls;
+            std::vector<std::string> toInsertEvaluated;
 
             for (glm::vec3 point : sol) {
 
@@ -53,12 +61,21 @@ std::vector<glm::vec3> Genetics::solve(Population& pop, Pod& pod, int generation
                 double latitude = elev.metersToLongitudeLatitude({point.x, point.y})[1];
 
 
-                toInsert.push_back("{" + std::to_string(longitude) + ", " + std::to_string(latitude) + "}");
+                toInsertControls.push_back("{" + std::to_string(longitude) + ", " + std::to_string(latitude) + "}");
+            }
+
+            for (glm::vec3 point : eval) {
+
+                double longitude = elev.metersToLongitudeLatitude({point.x, point.y})[0];
+                double latitude = elev.metersToLongitudeLatitude({point.x, point.y})[1];
+
+
+                toInsertEvaluated.push_back("{" + std::to_string(longitude) + ", " + std::to_string(latitude) + "}");
             }
 
             std::string controlsToInsert = "{";
 
-            for (std::string s: toInsert) {
+            for (std::string s : toInsertControls) {
                 controlsToInsert.append(s);
                 controlsToInsert.append(", ");
             }
@@ -66,8 +83,20 @@ std::vector<glm::vec3> Genetics::solve(Population& pop, Pod& pod, int generation
 
             controlsToInsert.erase(controlsToInsert.size() - 3, 2);
 
-            w.exec("INSERT INTO \"Controls\" (route_id, controls) "
-                   "values (" + std::to_string(route_id) + ", \'" + controlsToInsert + "\')");
+            std::string evalToInsert = "{";
+
+            for (std::string s : toInsertEvaluated) {
+                evalToInsert.append(s);
+                evalToInsert.append(", ");
+            }
+
+            evalToInsert.append("}");
+
+            evalToInsert.erase(evalToInsert.size() - 3, 2);
+
+            w.exec("INSERT INTO \"Controls\" (route_id, controls, evaluated) "
+                   "values (" + std::to_string(route_id) + ", \'" + controlsToInsert + "\'"
+                   + ", \'" + evalToInsert + "\')");
 
             pqxx::result c = w.exec("SELECT controls_id FROM \"Controls\"");
 
@@ -91,5 +120,11 @@ std::vector<glm::vec3> Genetics::solve(Population& pop, Pod& pod, int generation
 
     // Transfer the bath over
     return pop.getSolution();
+
+}
+
+int Genetics::getRouteId() {
+
+    return _id;
 
 }
