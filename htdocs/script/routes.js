@@ -242,7 +242,7 @@ function gotFinishedRoute(result) {
     chart2.data.datasets[0] = {
 
         label: 'Travel Time',
-        data: [190, driveTime, transitTime],
+        data: [JSON_result.timeForCurve, driveTime, transitTime],
         backgroundColor: [
             gradientW("graph-2", 250, 50),
             "#3c3c3c",
@@ -278,7 +278,9 @@ function gotFinishedRoute(result) {
 function fadeOverlay() {
     
     $('#overlay').css({"opacity": 0})
-    setTimeout(hideOverlay, 1000)
+    setTimeout(hideOverlay, 800)
+    
+    zoomToRoute();
     
 }
 
@@ -303,9 +305,12 @@ function showStats() {
         strokeWeight: 4
     });
     
-    pathLine.setMap(map);
-
+    setTimeout(function(){
+        pathLine.setMap(map);
+    }, 1500);
+    
 }
+
 
 function getComputeRequest(start, dest, succ) {
     

@@ -24,6 +24,9 @@ class Genetics {
          * @param pod
          * The information about the hyperloop pod. Determines how curved the track can be.
          *
+         * @param objectiveType
+         * The type of optimization, either "single" or "multi"
+         *
          * @return
          * The points of the calculated path in meters. This will need to be converted to latitude and longitude
          * to be properly displayed.

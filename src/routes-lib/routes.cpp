@@ -122,12 +122,16 @@ std::string Routes::getSolutions() {
     pqxx::result r;
 
     try {
+        // Connect to the database
         pqxx::connection c("dbname=routes user=isaac password=evolution");
 
         pqxx::work w(c);
 
-
-        r = w.exec("select evaluated from \"Controls\" where route_id = " + std::to_string(_route_id));
+        // Get all the evaluated points with this iterations route_id
+        r = w.exec("SELECT \"Controls\".evaluated FROM \"Controls\" "
+                   "JOIN \"Generation\" ON (\"Controls\".controls_id = \"Generation\".controls_id) "
+                   "JOIN \"Route\" ON (\"Route\".route_id = \"Generation\".route_id) "
+                   "WHERE \"Route\".route_id = " + std::to_string(_route_id));
 
         w.commit();
 
@@ -138,10 +142,12 @@ std::string Routes::getSolutions() {
     std::vector<std::string> evaluatedStrings;
 
 
+    //add all the rows into a vector and turn them into strings
     for (auto row : r) {
         evaluatedStrings.push_back(row[0].c_str());
     }
 
+    //wrap the vector in brackets and make it one string
     std::string evaluatedResult = "[";
 
     for (std::string s : evaluatedStrings) {
@@ -154,11 +160,11 @@ std::string Routes::getSolutions() {
 
     evaluatedResult.append("]");
 
+    //get rid of the trailing comma
     evaluatedResult.erase(evaluatedResult.size() - 3, 2);
-    //evaluatedResult.append("]");
 
-
-
+    //Since this is being passed to the front end through JSON, and curly braces
+    //indicate an object in JSON, change curly braces to brackets.
     std::replace(evaluatedResult.begin(), evaluatedResult.end(), '{', '[');
     std::replace(evaluatedResult.begin(), evaluatedResult.end(), '}', ']');
 

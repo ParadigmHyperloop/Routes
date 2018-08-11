@@ -19,47 +19,69 @@ std::vector<glm::vec3> Genetics::solve(Population& pop, Pod& pod, int generation
     _lat_end = pop._dest.y;
     _long_end = pop._dest.x;
 
+    std::vector<std::string> controlValsToInsert;
+    std::vector<std::string> genValsToInsert;
+
     try {
+        //Start a connection to the database
         pqxx::connection c("dbname=routes user=isaac password=evolution");
 
         pqxx::work w(c);
 
-        w.exec("INSERT INTO \"Route\" (lat_start, lat_end, long_start, long_end, objectives) "
+        //Insert the starting positions and the type of optimization
+        w.exec("INSERT INTO \"Route\" (lat_start, lat_end, long_start, long_end, objective_type) "
                "values (" + std::to_string(_lat_start) + ", " + std::to_string(_lat_end) + ", "
                + std::to_string(_long_start) + ", " + std::to_string(_long_end)
                + ", " + "\'" + objectiveType + "\'" + ")");
 
 
+        //get all the route_ids
         pqxx::result r = w.exec("SELECT route_id FROM \"Route\" ");
 
         int route_id;
 
+        //find the last route_id (since it is auto_increment)
         for (auto row: r) {
             route_id = std::stoi(row[0].c_str());
         }
 
         _id = route_id;
 
+        //same as above but for controls. Start this at 0 in case the tables were just truncated.
+        pqxx::result con = w.exec("SELECT controls_id FROM \"Controls\"");
+
+        int controls_id = 0;
+        for (auto row: con) {
+            controls_id = std::stoi(row[0].c_str());
+        }
+
         // Run the simulation for then given amount of generations
         for (int i = 0; i < generations; i++) {
+
+            //increment this at the beginning, since if the table is empty we want the first record to have id 1
+            controls_id++;
+
+            //Step through one generation
             pop.step(pod, objectiveType);
 
             Individual ind = pop.getIndividual(0);
             if (!ind.header->x)
                 break;
 
+            // Get the best solution at this generation (this is a vector of control points)
             std::vector<glm::vec3> sol = pop.getSolution();
 
+            //evaluate the control points
             std::vector<glm::vec3> eval = Bezier::evaluateEntireBezierCurve(sol, 100);
 
             std::vector<std::string> toInsertControls;
             std::vector<std::string> toInsertEvaluated;
 
+            //convert points in meters to points in longitude and latitude
             for (glm::vec3 point : sol) {
 
                 double longitude = elev.metersToLongitudeLatitude({point.x, point.y})[0];
                 double latitude = elev.metersToLongitudeLatitude({point.x, point.y})[1];
-
 
                 toInsertControls.push_back("{" + std::to_string(longitude) + ", " + std::to_string(latitude) + "}");
             }
@@ -73,6 +95,7 @@ std::vector<glm::vec3> Genetics::solve(Population& pop, Pod& pod, int generation
                 toInsertEvaluated.push_back("{" + std::to_string(longitude) + ", " + std::to_string(latitude) + "}");
             }
 
+            //aggregate the points into one string
             std::string controlsToInsert = "{";
 
             for (std::string s : toInsertControls) {
@@ -81,8 +104,10 @@ std::vector<glm::vec3> Genetics::solve(Population& pop, Pod& pod, int generation
             }
             controlsToInsert.append("}");
 
+            //get rid of the trailing comma
             controlsToInsert.erase(controlsToInsert.size() - 3, 2);
 
+            //same as above
             std::string evalToInsert = "{";
 
             for (std::string s : toInsertEvaluated) {
@@ -94,22 +119,44 @@ std::vector<glm::vec3> Genetics::solve(Population& pop, Pod& pod, int generation
 
             evalToInsert.erase(evalToInsert.size() - 3, 2);
 
-            w.exec("INSERT INTO \"Controls\" (route_id, controls, evaluated) "
-                   "values (" + std::to_string(route_id) + ", \'" + controlsToInsert + "\'"
-                   + ", \'" + evalToInsert + "\')");
+            //add a row to be inserted
+            controlValsToInsert.push_back("(\'" + controlsToInsert + "\'"
+                                            + ", \'" + evalToInsert + "\')");
 
-            pqxx::result c = w.exec("SELECT controls_id FROM \"Controls\"");
 
-            int controls_id;
-            for (auto row: c) {
-                controls_id = std::stoi(row[0].c_str());
-            }
+            genValsToInsert.push_back("(" + std::to_string(i) + ", "
+                                          + std::to_string(controls_id) + ", "
+                                          + std::to_string(route_id) + ")");
 
-            w.exec("INSERT INTO \"Generation\" (generation, controls_id, route_id) "
-                   "values (" + std::to_string(i) + ", "
-                   + std::to_string(controls_id) + ", "
-                   + std::to_string(route_id) + ")");
+
         }
+
+        std::string controlString = "";
+
+        //turn the vector into a comma delimited string
+        for (std::string s : controlValsToInsert) {
+            controlString.append(s);
+            controlString.append(",");
+        }
+        //erase the last comma (it is the last character here so we can just use pop_back()
+        controlString.pop_back();
+
+        std::string genString = "";
+
+        for (std::string s : genValsToInsert) {
+            genString.append(s);
+            genString.append(",");
+        }
+
+        genString.pop_back();
+
+        //Insert into the Controls table
+        w.exec("INSERT INTO \"Controls\" (controls, evaluated) "
+               "values " + controlString);
+
+        //Insert into the Generation table
+        w.exec("INSERT INTO \"Generation\" (generation, controls_id, route_id) "
+               "values " + genString);
 
         w.commit();
         std::cout << "Writing to database succeeded" << std::endl;
