@@ -13,10 +13,10 @@ window.onload = function() {
         
     })
 }
-
-document.getElementById('button').addEventListener('click', changeVisibility(), null);
-function changeVisibility()
-{
-    document.getElementById('divToHide').style.display = "none";
-    document.getElementById('divToShow').style.display = "block";
-}
+//
+//document.getElementById('button').addEventListener('click', changeVisibility(), null);
+//function changeVisibility()
+//{
+//    document.getElementById('divToHide').style.display = "none";
+//    document.getElementById('divToShow').style.display = "block";
+//}

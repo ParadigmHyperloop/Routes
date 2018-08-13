@@ -21,6 +21,7 @@ std::vector<glm::vec3> Genetics::solve(Population& pop, Pod& pod, int generation
 
     std::vector<std::string> controlValsToInsert;
     std::vector<std::string> genValsToInsert;
+    std::vector<std::string> fitValsToInsert;
 
     try {
         //Start a connection to the database
@@ -55,11 +56,19 @@ std::vector<glm::vec3> Genetics::solve(Population& pop, Pod& pod, int generation
             controls_id = std::stoi(row[0].c_str());
         }
 
+        pqxx::result conFit = w.exec("SELECT controls_id FROM \"Controls\"");
+
+        int generation_id = 0;
+        for (auto row: conFit) {
+            generation_id = std::stoi(row[0].c_str());
+        }
+
         // Run the simulation for then given amount of generations
         for (int i = 0; i < generations; i++) {
 
             //increment this at the beginning, since if the table is empty we want the first record to have id 1
             controls_id++;
+            generation_id++;
 
             //Step through one generation
             pop.step(pod, objectiveType);
@@ -121,13 +130,24 @@ std::vector<glm::vec3> Genetics::solve(Population& pop, Pod& pod, int generation
 
             //add a row to be inserted
             controlValsToInsert.push_back("(\'" + controlsToInsert + "\'"
-                                            + ", \'" + evalToInsert + "\')");
+                                          + ", \'" + evalToInsert + "\')");
 
 
             genValsToInsert.push_back("(" + std::to_string(i) + ", "
-                                          + std::to_string(controls_id) + ", "
-                                          + std::to_string(route_id) + ")");
+                                      + std::to_string(controls_id) + ", "
+                                      + std::to_string(route_id) + ")");
 
+
+            glm::vec4 fitness = pop.getFitness();
+
+            double total = Population::totalFitness(fitness);
+
+            fitValsToInsert.push_back("(" + std::to_string(total) + ", "
+                                          + std::to_string(fitness.x) + ","
+                                          + std::to_string(fitness.y) + ","
+                                          + std::to_string(fitness.z) + ","
+                                          + std::to_string(fitness.w) + ","
+                                          + std::to_string(generation_id) + ")");
 
         }
 
@@ -150,6 +170,15 @@ std::vector<glm::vec3> Genetics::solve(Population& pop, Pod& pod, int generation
 
         genString.pop_back();
 
+        std::string fitString = "";
+
+        for (std::string s : fitValsToInsert) {
+            fitString.append(s);
+            fitString.append(",");
+        }
+
+        fitString.pop_back();
+
         //Insert into the Controls table
         w.exec("INSERT INTO \"Controls\" (controls, evaluated) "
                "values " + controlString);
@@ -157,6 +186,9 @@ std::vector<glm::vec3> Genetics::solve(Population& pop, Pod& pod, int generation
         //Insert into the Generation table
         w.exec("INSERT INTO \"Generation\" (generation, controls_id, route_id) "
                "values " + genString);
+
+        w.exec("INSERT INTO \"Fitness\" (total_fitness, track_fitness, curve_fitness, grade_fitness, length_fitness, generation_id) "
+               "values " + fitString);
 
         w.commit();
         std::cout << "Writing to database succeeded" << std::endl;

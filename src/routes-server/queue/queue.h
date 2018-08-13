@@ -69,6 +69,31 @@ public:
          */
         std::string solutions;
 
+        /**
+         * A vector of the total fitness at each generation of the route.
+         */
+        std::string total_fitness;
+
+        /**
+         * A vector of the track fitness at each generation of the route.
+         */
+        std::string track_fitness;
+
+        /**
+         * A vector of the curve fitness at each generation of the route.
+         */
+        std::string curve_fitness;
+
+        /**
+         * A vector of the grade fitness at each generation of the route.
+         */
+        std::string grade_fitness;
+
+        /**
+         * A vector of the length fitness at each generation of the route.
+         */
+        std::string length_fitness;
+
     };
 
     /**

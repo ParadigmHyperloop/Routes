@@ -71,6 +71,7 @@
                     <div class="graph-title"><div class="grad-text">Travel time</div> of Modes of Transportation</div>
                     <canvas id="graph-2" width="450" height="210"></canvas>
 
+                    
                 </div>
                 
                 <br>
@@ -90,6 +91,11 @@
                     
         </div> 
         <div id="not-overlay">
+            <div id="fit-graphs">
+                <div class="graph-title"><div class="grad-text">Cost</div> over Time</div>
+                <canvas id="tot-fit-graph" width="450" height="210"></canvas> 
+            </div>
+            
             <div id="map-container"></div> 
             <div class="button-container-transparent" id="see-stats-container" onclick="showStats()">
                 <div class="button">
@@ -97,7 +103,11 @@
                         Show stats
                     </div>                         
                 </div>
-            </div>           
+            </div>
+            
+        
+            
+            
         </div>
         
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>

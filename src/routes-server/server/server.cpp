@@ -113,7 +113,12 @@ void RoutesServer::handleRetrieval(const std::shared_ptr<restbed::Session>& sess
                     + ", \n\"speeds\":\n" + vector2ToJSON(ans.speeds) +
                     + ", \n\"grades\":\n" + vector2ToJSON(ans.grades) +
                     + ", \n\"route_id\":\n" + std::to_string(ans.route_id) +
-                    + ", \n\"solutions\":\n" + ans.solutions +"}";
+                    + ", \n\"solutions\":\n" + ans.solutions +
+                    + ", \n\"totalFitness\":\n" + ans.total_fitness +
+                    + ", \n\"trackFitness\":\n" + ans.track_fitness +
+                    + ", \n\"curveFitness\":\n" + ans.curve_fitness +
+                    + ", \n\"gradeFitness\":\n" + ans.grade_fitness +
+                    + ", \n\"lengthFitness\":\n" + ans.length_fitness +"}";
 
 
             sendResponse(session, JSON);

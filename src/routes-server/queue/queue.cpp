@@ -49,7 +49,14 @@ void RoutesQueue::calculateRoutes() {
             std::vector<glm::vec2> grades = Routes::getGrades();
             int route_id = Routes::getId();
             std::string solutions = Routes::getSolutions();
-            _completed[item.id] = {controls, evaluated, time, length, elevations, ground_elevations, speeds, grades, route_id, solutions};
+            std::string totalFitness = Routes::getTotalFitness();
+            std::string trackFitness = Routes::getTrackFitness();
+            std::string curveFitness = Routes::getCurveFitness();
+            std::string gradeFitness = Routes::getGradeFitness();
+            std::string lengthFitness = Routes::getLengthFitness();
+            _completed[item.id] = {controls, evaluated, time, length, elevations,
+                                   ground_elevations, speeds, grades, route_id, solutions,
+                                   totalFitness, trackFitness, curveFitness, gradeFitness, lengthFitness};
 
         } catch (std::runtime_error e) {
 

@@ -153,6 +153,8 @@ function gotFinishedRoute(result) {
     // Parse the JSON 
     JSON_result = JSON.parse(result);
     
+    console.log(JSON_result);
+    
 
     points = [];
     for (var i = 0; i < JSON_result.evaluated.length; i++) {
@@ -273,6 +275,8 @@ function gotFinishedRoute(result) {
                                lng: JSON_result.solutions[i][j][0]});
         }
     }
+    
+    updateMap();
 }
 
 function fadeOverlay() {
@@ -363,10 +367,12 @@ function doc_keyUp(e) {
         console.log("z");
     } else if (e.keyCode == 39 && generation < numGenerations - 2) { //right arrow
         generation += 1;
+        updateGraphs();
         updateMap();
         console.log("right");
     } else if (e.keyCode == 37 && generation > 0) { // left arrow
         generation += -1;
+        updateGraphs();
         updateMap();
         console.log("left");   
     } else {
@@ -419,7 +425,33 @@ function fancyLengthFormat(length) {
 function startVisualization() {
     generation = 0;
     updateMap();
+    updateGraphs();
     fadeOverlay();
+}
+
+function updateGraphs() {    
+    
+    var totalFitChart = makeLineGraph("tot-fit-graph", "Generation", "Fitness");
+    
+    var totals = [];
+    
+    for (var i = 0; i < JSON_result.totalFitness.length; i++) {
+        totals.push({x: i,
+                     y: JSON_result.totalFitness[i]});
+    }
+    
+    
+        totalFitChart.data.datasets[0] = {
+            data: totals,
+            label: "Fitness",
+            backgroundColor: "transparent",
+            borderColor: gradient("graph", 1),
+            pointRadius: 0,
+            pointHitRadius: 0
+        }
+    
+    totalFitChart.update();
+    
 }
 
 function updateMap() {

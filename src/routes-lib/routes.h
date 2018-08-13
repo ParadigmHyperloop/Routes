@@ -107,6 +107,46 @@ class Routes {
          */
         static std::string getSolutions();
 
+        /**
+         * Gets the total fitness at each generation
+         *
+         * @return
+         * A String representing the JSON array of total fitness at each generation
+         */
+        static std::string getTotalFitness();
+
+        /**
+         * Gets the track fitness at each generation
+         *
+         * @return
+         * A String representing the JSON array of track fitness at each generation
+         */
+        static std::string getTrackFitness();
+
+        /**
+         * Gets the curve fitness at each generation
+         *
+         * @return
+         * A String representing the JSON array of curve fitness at each generation
+         */
+        static std::string getCurveFitness();
+
+        /**
+         * Gets the grade fitness at each generation
+         *
+         * @return
+         * A String representing the JSON array of grade fitness at each generation
+         */
+        static std::string getGradeFitness();
+
+        /**
+         * Gets the length fitness at each generation
+         *
+         * @return
+         * A String representing the JSON array of length fitness at each generation
+         */
+        static std::string getLengthFitness();
+
     private:
 
         /**
@@ -160,6 +200,31 @@ class Routes {
           * The solutions at each generation
           */
          static std::string _solutions;
+
+         /**
+          * The total fitness at each generation
+          */
+         static std::string total_fitness;
+
+         /**
+          * The track fitness at each generation
+          */
+         static std::string track_fitness;
+
+         /**
+          * The curve fitness at each generation
+          */
+         static std::string curve_fitness;
+
+         /**
+          * The grade fitness at each generation
+          */
+         static std::string grade_fitness;
+
+         /**
+          * The length fitness at each generation
+          */
+         static std::string length_fitness;
 
 };
 

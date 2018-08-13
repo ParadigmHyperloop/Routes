@@ -118,14 +118,23 @@ void Population::sortIndividuals() {
     // Sort the array of individual structs
     std::sort(_sorted_individuals.begin(), _sorted_individuals.end(), [](Individual a, Individual b){
 
-        // Compare costs in the header
-        return (*a.header).x < (*b.header).x;
+        glm::vec4 vecA = (*a.header);
+        glm::vec4 vecB = (*b.header);
 
+        double a_total_cost = totalFitness(vecA);
+        double b_total_cost = totalFitness(vecB);
+
+        // Compare costs in the header
+        return a_total_cost < b_total_cost;
 
     });
-    
+
+    glm::vec4* vecOfFit = _sorted_individuals[0].header;
+
+    double best_fitness = vecOfFit->x * 1.2 + vecOfFit->y + vecOfFit->z + vecOfFit->w * 2.0;
+
     // Save the fitness value of the best individual
-    _fitness_over_generations.push_back(_sorted_individuals[0].header->x);
+    _fitness_over_generations.push_back(best_fitness);
     
     // Copy the best samples into a sorted array
     for (int i = 0; i < _mu; i++)
@@ -218,6 +227,18 @@ std::vector<glm::vec3> Population::getSolution() const {
     
     return solution;
     
+}
+
+glm::vec4 Population::getFitness() const {
+
+    return (*_sorted_individuals[0].header);
+
+}
+
+double Population::totalFitness(glm::vec4 costs) {
+
+    return costs.x * 1.2 + costs.y + costs.z + costs.w * 2.0;
+
 }
 
 void Population::calcGenomeSize() {

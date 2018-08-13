@@ -201,6 +201,28 @@ public:
      */
     std::vector<glm::vec3> getSolution() const;
 
+    /**
+     * Returns a vector of the fitness of each part of the fitness function.
+     * x: track_fitness
+     * y: curve_fitness
+     * z: grade_fitness
+     * w: length_fitness
+     *
+     * @return
+     * A vector of each component of the fitness of the best individual of this generation.
+     */
+    glm::vec4 getFitness() const;
+
+    /**
+     * Computes the total fitness of from the header of an individual
+     *
+     * @return
+     * The fitness of an individual
+     */
+    static double totalFitness(glm::vec4 costs);
+
+
+
     /** The starting position of the path that this population is trying to "solve" */
     glm::vec4 _start;
 

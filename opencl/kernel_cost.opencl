@@ -174,8 +174,11 @@ __kernel void cost(__read_only image2d_t image, __global float4* individuals, in
         float total_cost = track_cost_n * 1.2 + curve_cost + grade_cost + route_length_n * 2.0;
 
         // Set the individual's header to contain its cost
-        individuals[path - 1].x = total_cost;
-        individuals[path - 1].y = route_length_n;
+        individuals[path - 1].x = track_cost_n;
+        individuals[path - 1].y = curve_cost;
+        individuals[path - 1].z = grade_cost;
+        individuals[path - 1].w = route_length_n;
+
 
     }
 

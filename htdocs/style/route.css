@@ -138,6 +138,12 @@ html {
     
 }
 
+#fit-graphs {
+    display: flex;
+    margin-left: 20px;
+    margin-top: 200px;
+}
+
 .graph-title {
     
     font-size: 15pt;
