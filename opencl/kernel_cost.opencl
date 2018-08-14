@@ -285,6 +285,12 @@ __kernel void mo(__read_only image2d_t image, __global float4* individuals, int 
               }
              track_cost += (above_cost + below_cost) * spacing;
 
+             if (isnan(track_cost)) {
+                printf("above_cost: %f\n", above_cost);
+                printf("below_cost: %f\n", below_cost);
+                printf("spacing: %f\n", spacing );
+             }
+
      }
 
          // Keep track of the stuff that was computed so that we can calculate the delta at the next point

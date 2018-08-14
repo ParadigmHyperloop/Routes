@@ -81,7 +81,7 @@
                 <div class="button-container-transparent" id="visualize-container" onclick="startVisualization()">
                     <div class="button">
                         <div class="button-text" id="stats-for-nerds">
-                            Stats for nerds
+                            Dashboard
                         </div>
                     </div>
                 </div>
@@ -92,13 +92,19 @@
         </div> 
         <div id="not-overlay">         
             
-            <div id="map-graphs">
+           
+            
+            <div id="map-container">
                 
+                <div id="left-map-graphs">
+
                     <div id="tot" class="fit-graphs">
                         <div class="graph-title"><div class="grad-text">Total</div> Cost over Time</div>
                         <canvas id="tot-fit-graph" width="450" height="210"></canvas> 
                     </div>
+                </div>
 
+                <div id="right-map-graphs">
                     <div id="track" class="small-fit-graphs">
                         <div class="graph-title"><div class="grad-text">Track</div> Cost over Time</div>
                         <canvas id="track-fit-graph" width="450" height="210"></canvas> 
@@ -118,9 +124,9 @@
                         <div class="graph-title"><div class="grad-text">Length</div> Cost over Time</div>
                         <canvas id="length-fit-graph" width="450" height="210"></canvas> 
                     </div>
-            </div> 
-            
-            <div id="map-container"></div>
+                </div> 
+                
+            </div>
             
             
             
@@ -128,6 +134,14 @@
                 <div class="button">
                     <div class="button-text" id="see-stats-text">
                         Show stats
+                    </div>                         
+                </div>
+            </div>
+            
+            <div class="button-container-transparent" id="see-stats-container" onclick="showGraphs()">
+                <div class="button">
+                    <div class="button-text" id="see-graphs-text">
+                        Show Graphs
                     </div>                         
                 </div>
             </div>

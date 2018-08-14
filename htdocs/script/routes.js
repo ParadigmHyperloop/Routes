@@ -22,6 +22,9 @@ var current_saying
 
 var route_id;
 
+//0 if not showing graphs, 1 if showing
+var toggle = 0;
+
 window.onload = function() {
     
     particleground(document.getElementById('background'), {
@@ -53,6 +56,10 @@ window.onload = function() {
     
     initSayings()
     saying_timer = window.setTimeout(changeSaying, 500)
+    
+
+
+        
     
 }
 
@@ -258,7 +265,7 @@ function gotFinishedRoute(result) {
     pathLine.setMap(map)
     $('#sayings-container').hide()
     $('#info-container').css({"display": "flex", "opacity" : "100"})
-    $('#map-graphs').css({"display": "flex", "opacity" : "0"})
+    $('#map-container').css({"display": "flex", "opacity" : "0"})
     $('#overlay').css({"overflow-y": "scroll"})
 
     document.getElementById("time").innerHTML = time1;
@@ -283,6 +290,14 @@ function gotFinishedRoute(result) {
 function fadeOverlay() {
     
     $('#overlay').css({"opacity": 0})
+    $('#map-container').css({"display": "flex", "opacity" : "100"})
+    $('#left-map-graphs').css({"display": "flex", "opacity" : "0"})
+    $('#right-map-graphs').css({"display": "flex", "opacity" : "0"})
+    $('#dashboard-container').css({"opacity" : "0"});
+    $('#dashboard-container').prop('disabled', true);
+
+    
+
     setTimeout(hideOverlay, 800)
     
     zoomToRoute();
@@ -298,7 +313,7 @@ function hideOverlay() {
 function showStats() {
     $('#overlay').show()
     $('#overlay').css({"opacity": 100})
-    $('#map-graphs').css({"display": "flex", "opacity" : "0"})
+    $('#map-container').css({"display": "flex", "opacity" : "0"})
     $('#info-container').css({"display": "flex", "opacity" : "100"})
     
     pathLine.setMap(null);
@@ -428,20 +443,33 @@ function startVisualization() {
     generation = 0;
     updateMap();
     initGraphs();
-    $('#map-graphs').css({"display": "flex", "opacity" : "100"});
+    $('#map-container').css({"display": "flex", "opacity" : "100"});
     fadeOverlay();
+    $('#dashboard-container').css({ "opacity" : "100"});
+    $('#dashboard-container').prop('disabled', false);
+
+
+//    $('#left-map-graphs').css({"display": "flex", "opacity" : "100"})
+//    $('#right-map-graphs').css({"display": "flex", "opacity" : "100"})
 }
 
 
 
-var totalFitChart = makeLineGraph("tot-fit-graph", "Generation", "Cost");
-var trackFitChart = makeLineGraph("track-fit-graph", "Generation", "Cost");
-var curveFitChart = makeLineGraph("curve-fit-graph", "Generation", "Cost");
-var gradeFitChart = makeLineGraph("grade-fit-graph", "Generation", "Cost");
-var lengthFitChart = makeLineGraph("length-fit-graph", "Generation", "Cost");
+var totalFitChart;
+var trackFitChart;
+var curveFitChart;
+var gradeFitChart;
+var lengthFitChart;
 
 
 function initGraphs() {    
+    
+    totalFitChart = makeLineGraph("tot-fit-graph", "Generation", "Cost");
+    trackFitChart = makeLineGraph("track-fit-graph", "Generation", "Cost");
+    curveFitChart = makeLineGraph("curve-fit-graph", "Generation", "Cost");
+    gradeFitChart = makeLineGraph("grade-fit-graph", "Generation", "Cost");
+    lengthFitChart = makeLineGraph("length-fit-graph", "Generation", "Cost");
+
     
     var totals = [];
 
@@ -450,10 +478,12 @@ function initGraphs() {
                      y: JSON_result.totalFitness[i]});
     }    
     
+
+    
     totalFitChart.data.datasets[0] = {
         data: totals,
-        label: "Fitness",
-        backgroundColor: "transparent",
+        label: "Cost",
+        backgroundColor: "#191919",
         borderColor: gradient("graph", 1),
         pointRadius: 0,
         pointHitRadius: 0
@@ -470,8 +500,8 @@ function initGraphs() {
     
     trackFitChart.data.datasets[0] = {
         data: tracks,
-        label: "Fitness",
-        backgroundColor: "transparent",
+        label: "Cost",
+        backgroundColor: "#191919",
         borderColor: gradient("graph", 2),
         pointRadius: 0,
         pointHitRadius: 0
@@ -488,8 +518,8 @@ function initGraphs() {
     
     curveFitChart.data.datasets[0] = {
         data: curves,
-        label: "Fitness",
-        backgroundColor: "transparent",
+        label: "Cost",
+        backgroundColor: "#191919",
         borderColor: gradient("graph", 2),
         pointRadius: 0,
         pointHitRadius: 0
@@ -506,8 +536,8 @@ function initGraphs() {
     
     gradeFitChart.data.datasets[0] = {
         data: grades,
-        label: "Fitness",
-        backgroundColor: "transparent",
+        label: "Cost",
+        backgroundColor: "#191919",
         borderColor: gradient("graph", 2),
         pointRadius: 0,
         pointHitRadius: 0
@@ -524,8 +554,8 @@ function initGraphs() {
     
     lengthFitChart.data.datasets[0] = {
         data: lengths,
-        label: "Fitness",
-        backgroundColor: "transparent",
+        label: "Cost",
+        backgroundColor: "#191919",
         borderColor: gradient("graph", 2),
         pointRadius: 0,
         pointHitRadius: 0
@@ -621,6 +651,20 @@ function updateMap() {
 }
 
 
+function showGraphs() {
+    if (toggle == 0) {
+        $('#left-map-graphs').css({"display": "flex", "opacity" : "100"})
+        $('#right-map-graphs').css({"display": "flex", "opacity" : "100"})
+        toggle = 1;
+        $("see-graphs-text").update("Hide Graphs");
+    } else {
+        $('#left-map-graphs').css({"display": "flex", "opacity" : "0"})
+        $('#right-map-graphs').css({"display": "flex", "opacity" : "0"})
+        toggle = 0;
+        $("see-graphs-text").update("Show Graphs");
+
+    }
+}
 
 
 
