@@ -19,6 +19,7 @@ html {
 }
 
 #map-container {
+    position: absolute;
     width: 100%;
     height: 100%;    
 }
@@ -138,10 +139,62 @@ html {
     
 }
 
-#fit-graphs {
-    display: flex;
-    margin-left: 20px;
-    margin-top: 200px;
+#map-graphs {
+    position: fixed;
+    display: table;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 3;
+}
+
+#tot {
+    left: 4%;
+    top: 35%;
+    float: left;
+}
+
+#track {
+    right: 10%;
+    top: 1%;
+    float: right;
+}
+
+#curve {
+    right: 10%;
+    top: 25%;
+    float: right;
+}
+
+#grade {
+    right: 10%;
+    top: 50%;
+    float: right;
+}
+
+#length {
+    right: 10%;
+    top: 75%;
+    float: right;
+}
+
+.fit-graphs {
+    position: absolute;
+    display: table;
+    width: 15%;
+    height: 10%;
+    white-space: nowrap;
+    background-color: transparent;
+}
+
+.small-fit-graphs {
+    position: absolute;
+    display: table;
+    width: 15%;
+    height: 5%;
+    white-space: nowrap;
+    background-color: transparent;
 }
 
 .graph-title {

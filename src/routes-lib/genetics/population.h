@@ -39,7 +39,7 @@
  * This value is used to help calculate the initial step size of the population.
  * and the Z sigma is the max elevation delta / INITIAL_SIGMA_DIVISOR.
  */
-#define INITIAL_SIGMA_DIVISOR 20.0f
+#define INITIAL_SIGMA_DIVISOR 10.0f
 
 /**
  * This serves as the initial value for the X and Y of all the points for sigma.
@@ -48,7 +48,7 @@
 #define INITIAL_SIGMA_XY 2500.0f
 
 /** Represents the dampening parameter for the step size. This value should be close to 1 */
-#define STEP_DAMPENING 1.5f
+#define STEP_DAMPENING .75f
 
 /** The interval multiplier for the square root of _genome_size * 3 for the indicator function. */
 #define ALPHA 1.5f

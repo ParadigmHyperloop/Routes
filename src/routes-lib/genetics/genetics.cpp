@@ -49,16 +49,16 @@ std::vector<glm::vec3> Genetics::solve(Population& pop, Pod& pod, int generation
         _id = route_id;
 
         //same as above but for controls. Start this at 0 in case the tables were just truncated.
-        pqxx::result con = w.exec("SELECT controls_id FROM \"Controls\"");
+        pqxx::result con = w.exec("SELECT nextval('\"Controls_controls_id_seq\"')");
 
-        int controls_id = 0;
+        int controls_id;
         for (auto row: con) {
             controls_id = std::stoi(row[0].c_str());
         }
 
-        pqxx::result conFit = w.exec("SELECT controls_id FROM \"Controls\"");
+        pqxx::result conFit = w.exec("SELECT nextval('\"Generation_generation_id_seq\"')");
 
-        int generation_id = 0;
+        int generation_id;
         for (auto row: conFit) {
             generation_id = std::stoi(row[0].c_str());
         }
@@ -186,6 +186,7 @@ std::vector<glm::vec3> Genetics::solve(Population& pop, Pod& pod, int generation
         //Insert into the Generation table
         w.exec("INSERT INTO \"Generation\" (generation, controls_id, route_id) "
                "values " + genString);
+
 
         w.exec("INSERT INTO \"Fitness\" (total_fitness, track_fitness, curve_fitness, grade_fitness, length_fitness, generation_id) "
                "values " + fitString);

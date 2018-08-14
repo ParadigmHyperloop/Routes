@@ -126,8 +126,15 @@ __kernel void cost(__read_only image2d_t image, __global float4* individuals, in
             float below_cost = (-fabs(pylon_height + excavation_depth) + pylon_height + excavation_depth);
             float below_cost_den = 2.0 * pylon_height + 2.0 * (excavation_depth);
 
-            below_cost = below_cost / below_cost_den * tunnel_cost;
-            track_cost += (above_cost + below_cost) * spacing;
+            if (below_cost_den == 0) {
+                below_cost = (below_cost) * tunnel_cost;
+            } else {
+                below_cost = (below_cost / below_cost_den) * tunnel_cost;
+            }
+
+
+            track_cost += ((above_cost + below_cost) * spacing);
+
 
     }
 
@@ -156,7 +163,10 @@ __kernel void cost(__read_only image2d_t image, __global float4* individuals, in
              route_length += segment_lengths[m];
              track_cost += track_costs[m];
 
+
         }
+
+
 
         // To normalize the track cost, divide by the distance of the entire route.
         // Then we divide by the max cost per segment of track, which we assume is the tunneling cost
@@ -268,7 +278,11 @@ __kernel void mo(__read_only image2d_t image, __global float4* individuals, int 
              float below_cost = (-fabs(pylon_height + excavation_depth) + pylon_height + excavation_depth);
              float below_cost_den = 2.0 * pylon_height + 2.0 * (excavation_depth);
 
-             below_cost = below_cost / below_cost_den * tunnel_cost;
+              if (below_cost_den == 0) {
+                below_cost = (below_cost) * tunnel_cost;
+              } else {
+                below_cost = (below_cost / below_cost_den) * tunnel_cost;
+              }
              track_cost += (above_cost + below_cost) * spacing;
 
      }

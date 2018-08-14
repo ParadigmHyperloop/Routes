@@ -90,13 +90,40 @@
             </div>
                     
         </div> 
-        <div id="not-overlay">
-            <div id="fit-graphs">
-                <div class="graph-title"><div class="grad-text">Cost</div> over Time</div>
-                <canvas id="tot-fit-graph" width="450" height="210"></canvas> 
-            </div>
+        <div id="not-overlay">         
             
-            <div id="map-container"></div> 
+            <div id="map-graphs">
+                
+                    <div id="tot" class="fit-graphs">
+                        <div class="graph-title"><div class="grad-text">Total</div> Cost over Time</div>
+                        <canvas id="tot-fit-graph" width="450" height="210"></canvas> 
+                    </div>
+
+                    <div id="track" class="small-fit-graphs">
+                        <div class="graph-title"><div class="grad-text">Track</div> Cost over Time</div>
+                        <canvas id="track-fit-graph" width="450" height="210"></canvas> 
+                    </div>
+
+                    <div id="curve" class="small-fit-graphs">
+                        <div class="graph-title"><div class="grad-text">Curve</div> Cost over Time</div>
+                        <canvas id="curve-fit-graph" width="450" height="210"></canvas> 
+                    </div>
+
+                    <div id="grade" class="small-fit-graphs">
+                        <div class="graph-title"><div class="grad-text">Grade</div> Cost over Time</div>
+                        <canvas id="grade-fit-graph" width="450" height="210"></canvas> 
+                    </div>
+
+                    <div id="length" class="small-fit-graphs">
+                        <div class="graph-title"><div class="grad-text">Length</div> Cost over Time</div>
+                        <canvas id="length-fit-graph" width="450" height="210"></canvas> 
+                    </div>
+            </div> 
+            
+            <div id="map-container"></div>
+            
+            
+            
             <div class="button-container-transparent" id="see-stats-container" onclick="showStats()">
                 <div class="button">
                     <div class="button-text" id="see-stats-text">
@@ -104,7 +131,10 @@
                     </div>                         
                 </div>
             </div>
+
             
+            
+           
         
             
             

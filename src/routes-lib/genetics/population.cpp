@@ -124,6 +124,8 @@ void Population::sortIndividuals() {
         double a_total_cost = totalFitness(vecA);
         double b_total_cost = totalFitness(vecB);
 
+        //std::cout << "cost: " << a_total_cost << std::endl;
+
         // Compare costs in the header
         return a_total_cost < b_total_cost;
 
@@ -194,7 +196,7 @@ void Population::evaluateCost(const Pod& pod, std::string objectiveType) {
     }
 
     // Create a temporary kernel and execute it
-    static Kernel kernel = Kernel(std::ifstream("../opencl/kernel_cost.opencl"), "cost");
+    static Kernel kernel = Kernel(std::ifstream("../opencl/kernel_cost.opencl"), kernelFunction);
 
     kernel.setArgs(_data.getOpenCLImage(), _opencl_individuals.get_buffer(), _genome_size + 2,
                    MAX_SLOPE_GRADE, pod.minCurveRadius(), EXCAVATION_DEPTH, _data_size.x,
@@ -211,6 +213,7 @@ void Population::evaluateCost(const Pod& pod, std::string objectiveType) {
 
     // Download the data
     boost::compute::copy(_opencl_individuals.begin(), _opencl_individuals.end(), _individuals.begin(), queue);
+
 
 }
 

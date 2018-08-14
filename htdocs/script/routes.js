@@ -258,6 +258,7 @@ function gotFinishedRoute(result) {
     pathLine.setMap(map)
     $('#sayings-container').hide()
     $('#info-container').css({"display": "flex", "opacity" : "100"})
+    $('#map-graphs').css({"display": "flex", "opacity" : "0"})
     $('#overlay').css({"overflow-y": "scroll"})
 
     document.getElementById("time").innerHTML = time1;
@@ -297,6 +298,7 @@ function hideOverlay() {
 function showStats() {
     $('#overlay').show()
     $('#overlay').css({"opacity": 100})
+    $('#map-graphs').css({"display": "flex", "opacity" : "0"})
     $('#info-container').css({"display": "flex", "opacity" : "100"})
     
     pathLine.setMap(null);
@@ -367,13 +369,13 @@ function doc_keyUp(e) {
         console.log("z");
     } else if (e.keyCode == 39 && generation < numGenerations - 2) { //right arrow
         generation += 1;
-        updateGraphs();
         updateMap();
+        addToGraphs();
         console.log("right");
     } else if (e.keyCode == 37 && generation > 0) { // left arrow
         generation += -1;
-        updateGraphs();
         updateMap();
+        removeFromGraphs();
         console.log("left");   
     } else {
         updateMap();
@@ -425,33 +427,172 @@ function fancyLengthFormat(length) {
 function startVisualization() {
     generation = 0;
     updateMap();
-    updateGraphs();
+    initGraphs();
+    $('#map-graphs').css({"display": "flex", "opacity" : "100"});
     fadeOverlay();
 }
 
-function updateGraphs() {    
-    
-    var totalFitChart = makeLineGraph("tot-fit-graph", "Generation", "Fitness");
+
+
+var totalFitChart = makeLineGraph("tot-fit-graph", "Generation", "Cost");
+var trackFitChart = makeLineGraph("track-fit-graph", "Generation", "Cost");
+var curveFitChart = makeLineGraph("curve-fit-graph", "Generation", "Cost");
+var gradeFitChart = makeLineGraph("grade-fit-graph", "Generation", "Cost");
+var lengthFitChart = makeLineGraph("length-fit-graph", "Generation", "Cost");
+
+
+function initGraphs() {    
     
     var totals = [];
-    
-    for (var i = 0; i < JSON_result.totalFitness.length; i++) {
+
+    for (var i = 0; i < generation; i++) {
         totals.push({x: i,
                      y: JSON_result.totalFitness[i]});
+    }    
+    
+    totalFitChart.data.datasets[0] = {
+        data: totals,
+        label: "Fitness",
+        backgroundColor: "transparent",
+        borderColor: gradient("graph", 1),
+        pointRadius: 0,
+        pointHitRadius: 0
     }
-    
-    
-        totalFitChart.data.datasets[0] = {
-            data: totals,
-            label: "Fitness",
-            backgroundColor: "transparent",
-            borderColor: gradient("graph", 1),
-            pointRadius: 0,
-            pointHitRadius: 0
-        }
     
     totalFitChart.update();
     
+    var tracks = [];
+
+    for (var i = 0; i < generation; i++) {
+        tracks.push({x: i,
+                     y: JSON_result.trackFitness[i]});
+    }    
+    
+    trackFitChart.data.datasets[0] = {
+        data: tracks,
+        label: "Fitness",
+        backgroundColor: "transparent",
+        borderColor: gradient("graph", 2),
+        pointRadius: 0,
+        pointHitRadius: 0
+    }
+    
+    trackFitChart.update();
+    
+    var curves = [];
+
+    for (var i = 0; i < generation; i++) {
+        curves.push({x: i,
+                     y: JSON_result.curveFitness[i]});
+    }    
+    
+    curveFitChart.data.datasets[0] = {
+        data: curves,
+        label: "Fitness",
+        backgroundColor: "transparent",
+        borderColor: gradient("graph", 2),
+        pointRadius: 0,
+        pointHitRadius: 0
+    }
+    
+    curveFitChart.update();
+    
+    var grades = [];
+
+    for (var i = 0; i < generation; i++) {
+        grades.push({x: i,
+                     y: JSON_result.gradeFitness[i]});
+    }    
+    
+    gradeFitChart.data.datasets[0] = {
+        data: grades,
+        label: "Fitness",
+        backgroundColor: "transparent",
+        borderColor: gradient("graph", 2),
+        pointRadius: 0,
+        pointHitRadius: 0
+    }
+    
+    gradeFitChart.update();
+    
+    var lengths = [];
+
+    for (var i = 0; i < generation; i++) {
+        lengths.push({x: i,
+                     y: JSON_result.lengthFitness[i]});
+    }    
+    
+    lengthFitChart.data.datasets[0] = {
+        data: lengths,
+        label: "Fitness",
+        backgroundColor: "transparent",
+        borderColor: gradient("graph", 2),
+        pointRadius: 0,
+        pointHitRadius: 0
+    }
+    
+    
+    lengthFitChart.update();
+    
+}
+
+function addToGraphs() {
+    totalFitChart.data.datasets.forEach((dataset) => {
+        dataset.data.push({x: generation,
+                           y: JSON_result.totalFitness[generation]});
+    });
+    totalFitChart.update();
+    
+    trackFitChart.data.datasets.forEach((dataset) => {
+        dataset.data.push({x: generation,
+                           y: JSON_result.trackFitness[generation]});
+    });
+    trackFitChart.update();
+    
+    curveFitChart.data.datasets.forEach((dataset) => {
+        dataset.data.push({x: generation,
+                           y: JSON_result.curveFitness[generation]});
+    });
+    curveFitChart.update();
+    
+    gradeFitChart.data.datasets.forEach((dataset) => {
+        dataset.data.push({x: generation,
+                           y: JSON_result.gradeFitness[generation]});
+    });
+    gradeFitChart.update();
+    
+    lengthFitChart.data.datasets.forEach((dataset) => {
+        dataset.data.push({x: generation,
+                           y: JSON_result.lengthFitness[generation]});
+    });
+    lengthFitChart.update();
+}
+
+function removeFromGraphs() {
+    totalFitChart.data.datasets.forEach((dataset) => {
+        dataset.data.pop();
+    });
+    totalFitChart.update();
+    
+    trackFitChart.data.datasets.forEach((dataset) => {
+        dataset.data.pop();
+    });
+    trackFitChart.update();
+    
+    curveFitChart.data.datasets.forEach((dataset) => {
+        dataset.data.pop();
+    });
+    curveFitChart.update();
+    
+    gradeFitChart.data.datasets.forEach((dataset) => {
+        dataset.data.pop();
+    });
+    gradeFitChart.update();
+    
+    lengthFitChart.data.datasets.forEach((dataset) => {
+        dataset.data.pop();
+    });
+    lengthFitChart.update();
 }
 
 function updateMap() {
