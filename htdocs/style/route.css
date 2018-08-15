@@ -31,7 +31,21 @@ html {
     background-color: transparent;
 }
 
+#map-buttons {
+    position: absolute;
+    display: table;
+    margin-top: auto;
+    margin-bottom: auto;
+    width: 25%;
+    height: 10%;
+    top: 0;
+    left: 0;
+    white-space: nowrap;
+    background-color: transparent;
+}
+
 #see-stats-container {
+     -webkit-appearance: none;
     position: absolute;
     display: table;
     width: 7%;
@@ -42,17 +56,17 @@ html {
     left: 0;
     white-space: nowrap;
     background-color: transparent;
-   
 }
 
 #dashboard-container {
+     -webkit-appearance: none;
     position: absolute;
     display: table;
     width: 2%;
     height: 3.2%;
     margin-top: auto;
     margin-bottom: auto;
-    top: 10%;
+    top: 100%;
     left: 0;
     white-space: nowrap;
     background-color: transparent;
@@ -179,25 +193,25 @@ html {
 }
 
 #track {
-    right: 100%;
+    right: 95%;
     top: 0;
     float: right;
 }
 
 #curve {
-    right: 100%;
+    right: 95%;
     top: 25%;
     float: right;
 }
 
 #grade {
-    right: 100%;
+    right: 95%;
     top: 50%;
     float: right;
 }
 
 #length {
-    right: 100%;
+    right: 95%;
     top: 75%;
     float: right;
 }
@@ -225,6 +239,10 @@ html {
     font-size: 15pt;
     margin: 10pt;
     
+}
+
+#see-graphs-text {
+    font-size: 23.2px;
 }
 
 

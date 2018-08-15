@@ -291,16 +291,23 @@ function fadeOverlay() {
     
     $('#overlay').css({"opacity": 0})
     $('#map-container').css({"display": "flex", "opacity" : "100"})
+    
+    setTimeout(hideOverlay, 800)
+    
+    zoomToRoute();
+    
+}
+
+function showRoute() {
+    
+    generation = numGenerations - 1;
     $('#left-map-graphs').css({"display": "flex", "opacity" : "0"})
     $('#right-map-graphs').css({"display": "flex", "opacity" : "0"})
     $('#dashboard-container').css({"opacity" : "0"});
     $('#dashboard-container').prop('disabled', true);
-
-    
-
-    setTimeout(hideOverlay, 800)
-    
-    zoomToRoute();
+    $('#see-stats-container').css({"opacity" : "100"});
+    fadeOverlay();
+    updateMap();
     
 }
 
@@ -440,13 +447,14 @@ function fancyLengthFormat(length) {
 }
 
 function startVisualization() {
+    fadeOverlay();
     generation = 0;
     updateMap();
     initGraphs();
-    $('#map-container').css({"display": "flex", "opacity" : "100"});
-    fadeOverlay();
     $('#dashboard-container').css({ "opacity" : "100"});
     $('#dashboard-container').prop('disabled', false);
+    $('#see-stats-container').css({ "opacity" : "100"});
+
 
 
 //    $('#left-map-graphs').css({"display": "flex", "opacity" : "100"})

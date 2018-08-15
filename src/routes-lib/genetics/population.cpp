@@ -240,7 +240,7 @@ glm::vec4 Population::getFitness() const {
 
 double Population::totalFitness(glm::vec4 costs) {
 
-    return costs.x * 1.2 + costs.y * 1.3 + costs.z + costs.w * 2.0;
+    return costs.x * 1.2 + costs.y * 0.8 + costs.z + costs.w * 1.5;
 
 }
 

@@ -13,7 +13,7 @@
 #define POP_SIZE 1000
 
 /** The default number of generations that the population should be bred for */
-#define NUM_GENERATIONS 300
+#define NUM_GENERATIONS 600
 
 /** This is a simplelass to handle the complete calculation of a route. */
 class Routes {

@@ -278,11 +278,8 @@ __kernel void mo(__read_only image2d_t image, __global float4* individuals, int 
              float below_cost = (-fabs(pylon_height + excavation_depth) + pylon_height + excavation_depth);
              float below_cost_den = 2.0 * pylon_height + 2.0 * (excavation_depth);
 
-              if (below_cost_den == 0) {
-                below_cost = (below_cost) * tunnel_cost;
-              } else {
-                below_cost = (below_cost / below_cost_den) * tunnel_cost;
-              }
+             below_cost = below_cost_den == 0 ? 1.0 : (below_cost / below_cost_den) * tunnel_cost;
+
              track_cost += (above_cost + below_cost) * spacing;
 
              if (isnan(track_cost)) {

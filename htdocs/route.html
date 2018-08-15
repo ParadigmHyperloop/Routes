@@ -49,7 +49,7 @@
                                          <br>
                                           Travel time: <div id="time" class="grad-text"></div></div>
             
-                <div class="button-container" id="learn-more-container" onclick="fadeOverlay()">
+                <div class="button-container" id="learn-more-container" onclick="showRoute()">
                     <div class="button">
                         <div class="button-text" id="learn-more-text">
                             See my route
@@ -130,21 +130,26 @@
             
             
             
-            <div class="button-container-transparent" id="see-stats-container" onclick="showStats()">
-                <div class="button">
-                    <div class="button-text" id="see-stats-text">
-                        Show stats
-                    </div>                         
+            <div id="map-buttons">
+            
+                <div class="button-container-transparent" id="see-stats-container" onclick="showStats()">
+                    <div class="button">
+                        <div class="button-text" id="see-stats-text">
+                            Show Stats
+                        </div>                         
+                    </div>
                 </div>
+
+                <div class="button-container-transparent" id="dashboard-container" onclick="showGraphs()">
+                    <div class="button">
+                        <div class="button-text" id="see-graphs-text">
+                            Show Graphs
+                        </div>                         
+                    </div>
+                </div>
+
             </div>
             
-            <div class="button-container-transparent" id="see-stats-container" onclick="showGraphs()">
-                <div class="button">
-                    <div class="button-text" id="see-graphs-text">
-                        Show Graphs
-                    </div>                         
-                </div>
-            </div>
 
             
             
