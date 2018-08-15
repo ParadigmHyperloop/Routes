@@ -12,8 +12,13 @@ std::vector<glm::vec2> Routes::_speeds;
 std::vector<glm::vec2> Routes::_grades;
 int Routes::_route_id;
 std::string Routes::_solutions;
+int Routes::_pop_size;
+int Routes::_num_generations;
+Configure Routes::_config;
 
 std::vector<glm::vec3> Routes::calculateRoute(glm::vec2 start, glm::vec2 dest) {
+
+    configureParams();
 
     time_t now = time(0);
 
@@ -33,12 +38,14 @@ std::vector<glm::vec3> Routes::calculateRoute(glm::vec2 start, glm::vec2 dest) {
     
     // Create a pod and a population
     Pod pod = Pod(DEFAULT_POD_MAX_SPEED);
-    Population pop = Population(POP_SIZE, glm::vec4(start_meter.x, start_meter.y, start_meter.z + 10.0, 0.0),
-                                          glm::vec4(dest_meter.x, dest_meter.y, dest_meter.z + 10.0, 0.0), data);
+
+    _config = Configure();
+    Population pop = Population(_pop_size, glm::vec4(start_meter.x, start_meter.y, start_meter.z + 10.0, 0.0),
+                                          glm::vec4(dest_meter.x, dest_meter.y, dest_meter.z + 10.0, 0.0), data, _config);
 
     // Solve!
     // These points will be in meters so we need to convert them
-    std::vector<glm::vec3> computed = Genetics::solve(pop, pod, NUM_GENERATIONS, start, dest, "single");
+    std::vector<glm::vec3> computed = Genetics::solve(pop, pod, _num_generations, start, dest, "single");
 
     std::vector<glm::vec3> points = Bezier::evaluateEntireBezierCurve(computed, 100);
 
@@ -91,6 +98,13 @@ std::vector<glm::vec3> Routes::calculateRoute(glm::vec2 start, glm::vec2 dest) {
     std::cout << "time to compute: " + std::to_string(after-now) << std::endl;
 
     return computed;
+
+}
+
+void Routes::configureParams() {
+
+    _pop_size = _config.getPopulationSize();
+    _num_generations = _config.getNumGenerations();
 
 }
 

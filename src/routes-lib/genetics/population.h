@@ -15,6 +15,7 @@
 #include "../elevation/elevation.h"
 #include "../normal/multinormal.h"
 #include "../pod/pod.h"
+#include "../configure/configure.h"
 
 // Ensure that E is defined on Windows
 #ifndef M_E
@@ -34,30 +35,6 @@
  * by a constant. This constant is small so we get few points for a lot of meters.
  */
 #define LENGTH_TO_GENOME 0.0274360619f
-
-/**
- * This value is used to help calculate the initial step size of the population.
- * and the Z sigma is the max elevation delta / INITIAL_SIGMA_DIVISOR.
- */
-#define INITIAL_SIGMA_DIVISOR 10.0f
-
-/**
- * This serves as the initial value for the X and Y of all the points for sigma.
- * We use 5km as a pretty tight bounding around the straight line (initial mean)
- */
-#define INITIAL_SIGMA_XY 2500.0f
-
-/** Represents the dampening parameter for the step size. This value should be close to 1 */
-#define STEP_DAMPENING .75f
-
-/** The interval multiplier for the square root of _genome_size * 3 for the indicator function. */
-#define ALPHA 1.5f
-
-/** The number of threads that are used to sample from the multivariate normal distribution */
-#define NUM_SAMPLE_THREADS 10
-
-/** The number of divisions that the route is split up into for evaluation on the GPU */
-#define NUM_ROUTE_WORKERS 100
 
 /**
  * Individual is a convenience so that individuals can be treated as units rather than
@@ -142,7 +119,7 @@ public:
      * @param data
      * The elevation data that this population is path-finding on
      */
-    Population(int pop_size, glm::vec4 start, glm::vec4 dest, const ElevationData& data);
+    Population(int pop_size, glm::vec4 start, glm::vec4 dest, const ElevationData& data, Configure conf);
 
     /** Simple destructor to delete heap allocated things */
     ~Population();
@@ -230,6 +207,11 @@ public:
     glm::vec4 _dest;
 
 private:
+
+    /**
+     * Reloads the paramaters if needed
+     */
+    void configureParams();
 
     /**
      * This function calculates the size of the genome.
@@ -481,6 +463,36 @@ private:
      * for the fittest individual is saved
      */
     std::vector<std::vector<double>> _mo_fitness_over_generations;
+
+    /**
+     * 0: reload params
+     * 1: don't reload params
+     */
+    const int _reload;
+
+    /**
+     * This value is used to help calculate the initial step size of the population.
+     * and the Z sigma is the max elevation delta / INITIAL_SIGMA_DIVISOR.
+     */
+    const float _initial_sigma_divisor;
+
+    /**
+    * This serves as the initial value for the X and Y of all the points for sigma.
+    * We use 5km as a pretty tight bounding around the straight line (initial mean)
+    */
+    const float _initial_sigma_xy;
+
+    /** Represents the dampening parameter for the step size. This value should be close to 1 */
+    const float _step_dampening;
+
+    /** The interval multiplier for the square root of _genome_size * 3 for the indicator function. */
+    const float _alpha;
+
+    /** The number of threads that are used to sample from the multivariate normal distribution */
+    const int _num_sample_threads;
+
+    /** The number of divisions that the route is split up into for evaluation on the GPU */
+    const int _num_route_workers;
 
 };
 
