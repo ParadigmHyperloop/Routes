@@ -88,11 +88,13 @@ void Population::step(const Pod& pod, std::string objectiveType) {
     //std::cout << "Cost took " << end - start << std::endl;
     start = end;
 
-    if (objectiveType == "single") {
-        sortIndividuals();
-    } else if (objectiveType == "multi") {
-        sortIndividualsMo();
-    }
+    sortIndividuals();
+
+//    if (objectiveType == "single") {
+//        sortIndividuals();
+//    } else if (objectiveType == "multi") {
+//        sortIndividualsMo();
+//    }
 
     end = std::chrono::high_resolution_clock::now().time_since_epoch().count();
     //std::cout << "Sort took " << end - start << std::endl;
@@ -148,43 +150,43 @@ void Population::sortIndividuals() {
 
 }
 
-void Population::sortIndividualsMo() {
-
-    for (int i = 0; i < _pop_size; i++) {
-        _sorted_individuals[i] = getIndividual(i);
-    }
-
-    std::vector<std::vector<double>> input_f;
-
-    //convert moHeader to a vector of doubles
-    for (int i = 0; i < _pop_size; i++) {
-        double xComp = (double)(*(getIndividual(i).moHeader)).x;
-        double yComp = (double)(*(getIndividual(i).moHeader)).y;
-        double zComp = (double)(*(getIndividual(i).moHeader)).z;
-        double wComp = (double)(*(getIndividual(i).moHeader)).w;
-
-        input_f.push_back({xComp, yComp, zComp, wComp});
-    }
-
-    std::vector<pagmo::vector_double::size_type> result = pagmo::sort_population_mo(input_f);
-
-    for (int i = 0; i < _pop_size; i++) {
-        _sorted_individuals[i] = getIndividual(result[i]);
-    }
-
-    double xSorted = (double)(*(_sorted_individuals[0].moHeader)).x;
-    double ySorted = (double)(*(_sorted_individuals[0].moHeader)).y;
-    double zSorted = (double)(*(_sorted_individuals[0].moHeader)).z;
-    double wSorted = (double)(*(_sorted_individuals[0].moHeader)).w;
-
-    // Save the fitness value of the best individual
-    _mo_fitness_over_generations.push_back({xSorted, ySorted, zSorted, wSorted});
-
-    // Copy the best samples into a sorted array
-    for (int i = 0; i < _mu; i++)
-        _best_samples[i] = _samples[_sorted_individuals[i].index];
-
-}
+//void Population::sortIndividualsMo() {
+//
+//    for (int i = 0; i < _pop_size; i++) {
+//        _sorted_individuals[i] = getIndividual(i);
+//    }
+//
+//    std::vector<std::vector<double>> input_f;
+//
+//    //convert moHeader to a vector of doubles
+//    for (int i = 0; i < _pop_size; i++) {
+//        double xComp = (double)(*(getIndividual(i).moHeader)).x;
+//        double yComp = (double)(*(getIndividual(i).moHeader)).y;
+//        double zComp = (double)(*(getIndividual(i).moHeader)).z;
+//        double wComp = (double)(*(getIndividual(i).moHeader)).w;
+//
+//        input_f.push_back({xComp, yComp, zComp, wComp});
+//    }
+//
+//    std::vector<pagmo::vector_double::size_type> result = pagmo::sort_population_mo(input_f);
+//
+//    for (int i = 0; i < _pop_size; i++) {
+//        _sorted_individuals[i] = getIndividual(result[i]);
+//    }
+//
+//    double xSorted = (double)(*(_sorted_individuals[0].moHeader)).x;
+//    double ySorted = (double)(*(_sorted_individuals[0].moHeader)).y;
+//    double zSorted = (double)(*(_sorted_individuals[0].moHeader)).z;
+//    double wSorted = (double)(*(_sorted_individuals[0].moHeader)).w;
+//
+//    // Save the fitness value of the best individual
+//    _mo_fitness_over_generations.push_back({xSorted, ySorted, zSorted, wSorted});
+//
+//    // Copy the best samples into a sorted array
+//    for (int i = 0; i < _mu; i++)
+//        _best_samples[i] = _samples[_sorted_individuals[i].index];
+//
+//}
 
 void Population::evaluateCost(const Pod& pod, std::string objectiveType) {
 

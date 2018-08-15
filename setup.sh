@@ -83,5 +83,12 @@ cd ../../
 cp -r ei*/build/Ei/include/eigen3 include/eigen3
 rm -rf ei*
 
+# Download libpqxx
+git clone https://github.com/jtv/libpqxx.git
+cd include/libqxx
+sudo ./configure --disable-documentation
+sudo make
+sudo make install
+
 sudo chmod -R 777 include
 sudo chmod -R 777 lib

@@ -79,6 +79,13 @@ curl -sSL https://cmake.org/files/v3.8/cmake-3.8.2-Linux-x86_64.tar.gz | sudo ta
 
 mkdir build
 
+# Download libpqxx
+git clone https://github.com/jtv/libpqxx.git include/libqxx
+cd include/libqxx
+sudo ./configure --disable-documentation
+sudo make
+sudo make install
+
 sudo chmod -R 777 include
 sudo chmod -R 777 lib
 
