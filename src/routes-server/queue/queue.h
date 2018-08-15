@@ -48,10 +48,51 @@ public:
         std::vector<glm::vec2> ground_elevations;
 
         /**
-         * The speed of the pod along the track. The x values are the current distnace(m) on the
+         * The speed of the pod along the track. The x values are the current distance(m) on the
          * track and the y values are the speeds(m/s)
          */
         std::vector<glm::vec2> speeds;
+
+        /**
+         * The grade of the pod as it moves along the track. The x values are the current distance(m)
+         * on the track and the y value are the grade.
+         */
+        std::vector<glm::vec2> grades;
+
+        /**
+         * The route_id for database querying
+         */
+        int route_id;
+
+        /**
+         * A vector of the best solutions at each generation of the route.
+         */
+        std::string solutions;
+
+        /**
+         * A vector of the total fitness at each generation of the route.
+         */
+        std::string total_fitness;
+
+        /**
+         * A vector of the track fitness at each generation of the route.
+         */
+        std::string track_fitness;
+
+        /**
+         * A vector of the curve fitness at each generation of the route.
+         */
+        std::string curve_fitness;
+
+        /**
+         * A vector of the grade fitness at each generation of the route.
+         */
+        std::string grade_fitness;
+
+        /**
+         * A vector of the length fitness at each generation of the route.
+         */
+        std::string length_fitness;
 
     };
 
@@ -69,7 +110,7 @@ public:
      */
     static size_t queueRoute(const glm::vec2& start, const glm::vec2& dest);
 
-    /**
+        /**
      * A function that will calculate any routes that are in the queue. All routes that are calculated are then
      * moved to the completed map.
      */
@@ -99,9 +140,6 @@ public:
      *
      */
     static forJSON getCompletedRoute(size_t id);
-
-
-
 
 private:
 
@@ -139,7 +177,6 @@ private:
      * Unordered map is used because it fits the thread safety requirements.
      */
     static std::unordered_map<size_t, forJSON> _completed;
-
 
 };
 

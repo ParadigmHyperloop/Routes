@@ -4,8 +4,11 @@
 
 #include "population.h"
 
-Population::Population(int pop_size, glm::vec4 start, glm::vec4 dest, const ElevationData& data) : _pop_size(pop_size), _start(start),
-    _dest(dest), _direction(_dest - _start), _data(data) {
+Population::Population(int pop_size, glm::vec4 start, glm::vec4 dest, const ElevationData& data, Configure conf) : _pop_size(pop_size), _start(start),
+    _dest(dest), _direction(_dest - _start), _data(data), _reload(conf.getReload()), _initial_sigma_divisor(conf.getInitialSigmaDivisor()),
+    _initial_sigma_xy(conf.getInitialSigmaXY()), _step_dampening(conf.getStepDampening()), _alpha(conf.getAlpha()), _num_sample_threads(conf.getNumSampleThreads()),
+    _num_route_workers(conf.getNumRouteWorkers()) {
+
 
     // Figure out how many points we need for this route
     calcGenomeSize();
@@ -25,7 +28,7 @@ Population::Population(int pop_size, glm::vec4 start, glm::vec4 dest, const Elev
     // We also make sure it is a multiple of workers
     glm::dvec2 cropped_size = data.getCroppedSizeMeters();
     _num_evaluation_points = glm::max((int)ceil(glm::max(cropped_size.x / METERS_TO_POINT_CONVERSION,
-                                                         cropped_size.y / METERS_TO_POINT_CONVERSION) / (float)NUM_ROUTE_WORKERS) * NUM_ROUTE_WORKERS, 2400);
+                                                         cropped_size.y / METERS_TO_POINT_CONVERSION) / (float)_num_route_workers) * _num_route_workers, 2400);
 
     std::cout << "Using " << _num_evaluation_points << " points of evaluation" << std::endl;
     _num_evaluation_points_1 = (float)_num_evaluation_points - 1.0f;
@@ -43,12 +46,13 @@ Population::Population(int pop_size, glm::vec4 start, glm::vec4 dest, const Elev
     // Create the best sample vector
     _best_samples = std::vector<Eigen::VectorXf>((size_t)_mu);
 
+
 }
 
 Population::~Population() {
 
     // Delete the sample generators
-    for (int i = 0; i < NUM_SAMPLE_THREADS; i++)
+    for (int i = 0; i < _num_sample_threads; i++)
         delete _sample_gens[i];
 
 }
@@ -61,10 +65,11 @@ Individual Population::getIndividual(int index) {
     // Calculate the location of the parts of the individual
     glm::vec4* header_loc = _individuals.data() + index * _individual_size;
     ind.header = header_loc;
+    ind.moHeader = header_loc + 1;
 
     // Account for the header
-    ind.path = header_loc + 1;
-    ind.genome = header_loc + 2;
+    ind.path = header_loc + 2;
+    ind.genome = header_loc + 3;
     
     ind.index = index;
 
@@ -84,6 +89,12 @@ void Population::step(const Pod& pod) {
     start = end;
 
     sortIndividuals();
+
+//    if (objectiveType == "single") {
+//        sortIndividuals();
+//    } else if (objectiveType == "multi") {
+//        sortIndividualsMo();
+//    }
 
     end = std::chrono::high_resolution_clock::now().time_since_epoch().count();
     //std::cout << "Sort took " << end - start << std::endl;
@@ -113,13 +124,25 @@ void Population::sortIndividuals() {
     // Sort the array of individual structs
     std::sort(_sorted_individuals.begin(), _sorted_individuals.end(), [](Individual a, Individual b){
 
+        glm::vec4 vecA = (*a.header);
+        glm::vec4 vecB = (*b.header);
+
+        double a_total_cost = totalFitness(vecA);
+        double b_total_cost = totalFitness(vecB);
+
+        //std::cout << "cost: " << a_total_cost << std::endl;
+
         // Compare costs in the header
-        return (*a.header).x < (*b.header).x;
+        return a_total_cost < b_total_cost;
 
     });
-    
+
+    glm::vec4* vecOfFit = _sorted_individuals[0].header;
+
+    double best_fitness = vecOfFit->x * 1.2 + vecOfFit->y + vecOfFit->z + vecOfFit->w * 2.0;
+
     // Save the fitness value of the best individual
-    _fitness_over_generations.push_back(_sorted_individuals[0].header->x);
+    _fitness_over_generations.push_back(best_fitness);
     
     // Copy the best samples into a sorted array
     for (int i = 0; i < _mu; i++)
@@ -127,28 +150,76 @@ void Population::sortIndividuals() {
 
 }
 
+//void Population::sortIndividualsMo() {
+//
+//    for (int i = 0; i < _pop_size; i++) {
+//        _sorted_individuals[i] = getIndividual(i);
+//    }
+//
+//    std::vector<std::vector<double>> input_f;
+//
+//    //convert moHeader to a vector of doubles
+//    for (int i = 0; i < _pop_size; i++) {
+//        double xComp = (double)(*(getIndividual(i).moHeader)).x;
+//        double yComp = (double)(*(getIndividual(i).moHeader)).y;
+//        double zComp = (double)(*(getIndividual(i).moHeader)).z;
+//        double wComp = (double)(*(getIndividual(i).moHeader)).w;
+//
+//        input_f.push_back({xComp, yComp, zComp, wComp});
+//    }
+//
+//    std::vector<pagmo::vector_double::size_type> result = pagmo::sort_population_mo(input_f);
+//
+//    for (int i = 0; i < _pop_size; i++) {
+//        _sorted_individuals[i] = getIndividual(result[i]);
+//    }
+//
+//    double xSorted = (double)(*(_sorted_individuals[0].moHeader)).x;
+//    double ySorted = (double)(*(_sorted_individuals[0].moHeader)).y;
+//    double zSorted = (double)(*(_sorted_individuals[0].moHeader)).z;
+//    double wSorted = (double)(*(_sorted_individuals[0].moHeader)).w;
+//
+//    // Save the fitness value of the best individual
+//    _mo_fitness_over_generations.push_back({xSorted, ySorted, zSorted, wSorted});
+//
+//    // Copy the best samples into a sorted array
+//    for (int i = 0; i < _mu; i++)
+//        _best_samples[i] = _samples[_sorted_individuals[i].index];
+//
+//}
+
 void Population::evaluateCost(const Pod& pod) {
 
     // Get stuff we need to execute a kernel on
     boost::compute::command_queue& queue = Kernel::getQueue();
 
+//    std::string kernelFunction;
+//
+//    if (objectiveType == "single") {
+//        kernelFunction = "cost";
+//    } else if (objectiveType == "multi") {
+//        kernelFunction = "mo";
+//    }
+
     // Create a temporary kernel and execute it
     static Kernel kernel = Kernel(std::ifstream("../opencl/kernel_cost.opencl"), "cost");
+
     kernel.setArgs(_data.getOpenCLImage(), _opencl_individuals.get_buffer(), _genome_size + 2,
                    MAX_SLOPE_GRADE, pod.minCurveRadius(), EXCAVATION_DEPTH, _data_size.x,
                    _data_size.y, _opencl_binomials.get_buffer(),
-                   _num_evaluation_points_1, _num_evaluation_points / NUM_ROUTE_WORKERS, _data_origin.x, _data_origin.y, glm::length(_direction));
+                   _num_evaluation_points_1, _num_evaluation_points / _num_route_workers, _data_origin.x, _data_origin.y, glm::length(_direction));
 
     // Upload the data
-    boost::compute::copy(_individuals.begin(), _individuals.end(), _opencl_individuals.begin(), queue);
+    boost::compute::copy(_individuals.begin(),_individuals.end(), _opencl_individuals.begin(), queue);
 
     // Execute the 2D kernel with a work size of NUM_ROUTE_WORKERS. NUM_ROUTE_WORKERS threads  will work on a single individual
     kernel.execute2D(glm::vec<2, size_t>(0, 0),
-                     glm::vec<2, size_t>(_pop_size, NUM_ROUTE_WORKERS),
-                     glm::vec<2, size_t>(1, NUM_ROUTE_WORKERS));
+                     glm::vec<2, size_t>(_pop_size, _num_route_workers),
+                     glm::vec<2, size_t>(1, _num_route_workers));
 
     // Download the data
     boost::compute::copy(_opencl_individuals.begin(), _opencl_individuals.end(), _individuals.begin(), queue);
+
 
 }
 
@@ -167,6 +238,19 @@ std::vector<glm::vec3> Population::getSolution() const {
     
 }
 
+glm::vec4 Population::getFitness() const {
+
+    return (*_sorted_individuals[0].header);
+
+}
+
+double Population::totalFitness(glm::vec4 costs) {
+
+    return costs.x * 1.2 + costs.y * 0.8 + costs.z + costs.w * 1.5;
+
+}
+
+
 void Population::calcGenomeSize() {
 
     // The genome size has a square root relationship with the length of the route
@@ -183,7 +267,7 @@ void Population::determineEvalPoints() {
     // We also make sure it is a multiple of workers
     _num_evaluation_points = glm::max((int)ceil(glm::max(_data_size.x / METERS_TO_POINT_CONVERSION,
                                                          _data_size.y / METERS_TO_POINT_CONVERSION)
-                                                                      / (float)NUM_ROUTE_WORKERS) * NUM_ROUTE_WORKERS,
+                                                                      / (float)_num_route_workers) * _num_route_workers,
                                                          2400);
     
     _num_evaluation_points_1 = (float)_num_evaluation_points - 1.0f;
@@ -225,10 +309,10 @@ void Population::initParams() {
 void Population::initSamplers() {
 
     // Create the standard normal samplers
-    _sample_gens = std::vector<SampleGenerator*>(NUM_SAMPLE_THREADS);
+    _sample_gens = std::vector<SampleGenerator*>(_num_sample_threads);
     
-    for (int i = 0; i < NUM_SAMPLE_THREADS; i++)
-        _sample_gens[i] = new SampleGenerator(_genome_size * 3, _pop_size / NUM_SAMPLE_THREADS);
+    for (int i = 0; i < _num_sample_threads; i++)
+        _sample_gens[i] = new SampleGenerator(_genome_size * 3, _pop_size / _num_sample_threads);
 
 }
 
@@ -317,9 +401,9 @@ void Population::calcInitialSigma() {
     _sigma = Eigen::VectorXf(_genome_size * 3);
 
     // First we figure out what the actual values should be
-    glm::vec3 sigma_parts = glm::vec3(INITIAL_SIGMA_XY,
-                                      INITIAL_SIGMA_XY,
-                                      (_data.getMaxElevation() - _data.getMinElevation()) / INITIAL_SIGMA_DIVISOR);
+    glm::vec3 sigma_parts = glm::vec3(_initial_sigma_xy,
+                                      _initial_sigma_xy,
+                                      (_data.getMaxElevation() - _data.getMinElevation()) / _initial_sigma_divisor);
 
     // Apply it to the X Y and Z for each point
     for (int i = 0; i < _genome_size; i++) {
@@ -356,10 +440,10 @@ void Population::samplePopulation() {
     
     // Convert the _samples over to a set of glm vectors and update the population
     // Do so with multiple threads
-    std::vector<std::thread> threads = std::vector<std::thread>(NUM_SAMPLE_THREADS);
-    int worker_size = _pop_size / NUM_SAMPLE_THREADS;
+    std::vector<std::thread> threads = std::vector<std::thread>(_num_sample_threads);
+    int worker_size = _pop_size / _num_sample_threads;
     
-    for (int thread = 0; thread < NUM_SAMPLE_THREADS; thread++) {
+    for (int thread = 0; thread < _num_sample_threads; thread++) {
         
         threads[thread] = std::thread([this, thread, worker_size] {
 
@@ -384,7 +468,7 @@ void Population::samplePopulation() {
     }
     
     // Make sure all of the threads finish
-    for (int i = 0; i < NUM_SAMPLE_THREADS; i++)
+    for (int i = 0; i < _num_sample_threads; i++)
         threads[i].join();
 
 }
@@ -451,7 +535,7 @@ void Population::updatePCovar() {
 
     // Figure out the indicator function
     float indicator = 0.0f;
-    if (_p_sigma.norm() <= sqrtf((float)_mean.size()) * ALPHA)
+    if (_p_sigma.norm() <= sqrtf((float)_mean.size()) * _alpha)
         indicator = 1.0;
 
     _p_covar = discount * _p_covar + indicator * discount_comp * _mu_weight_sqrt * _mean_displacement;
@@ -480,7 +564,7 @@ void Population::updateCovar() {
 
     // Calculate cs
     float indicator = 0.0f;
-    if (_p_sigma.norm() * _p_sigma.norm() <= sqrtf((float)_mean.size()) * ALPHA)
+    if (_p_sigma.norm() * _p_sigma.norm() <= sqrtf((float)_mean.size()) * _alpha)
         indicator = 1.0;
 
     float cs = (1.0f - indicator) * _c1 * _c_covar * (2.0f - _c_covar);
@@ -496,7 +580,7 @@ void Population::updateCovar() {
 void Population::updateSigma() {
 
     // Calculate ratio between the decay and the dampening
-    float ratio = _c_sigma / STEP_DAMPENING;
+    float ratio = _c_sigma / _step_dampening;
 
     // Get the magnitude of the sigma path
     float mag = _p_sigma.norm();

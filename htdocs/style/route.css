@@ -19,6 +19,7 @@ html {
 }
 
 #map-container {
+    position: absolute;
     width: 100%;
     height: 100%;    
 }
@@ -30,7 +31,48 @@ html {
     background-color: transparent;
 }
 
+#map-buttons {
+    position: absolute;
+    display: table;
+    margin-top: auto;
+    margin-bottom: auto;
+    width: 25%;
+    height: 10%;
+    top: 0;
+    left: 0;
+    white-space: nowrap;
+    background-color: transparent;
+}
+
 #see-stats-container {
+     -webkit-appearance: none;
+    position: absolute;
+    display: table;
+    width: 7%;
+    height: 4%;
+    margin-top: auto;
+    margin-bottom: auto;
+    top: 0;
+    left: 0;
+    white-space: nowrap;
+    background-color: transparent;
+}
+
+#dashboard-container {
+     -webkit-appearance: none;
+    position: absolute;
+    display: table;
+    width: 2%;
+    height: 3.2%;
+    margin-top: auto;
+    margin-bottom: auto;
+    top: 100%;
+    left: 0;
+    white-space: nowrap;
+    background-color: transparent;
+}
+
+#visualize-container {
     position: absolute;
     display: table;
     width: 7%;
@@ -124,11 +166,83 @@ html {
     
 }
 
+#left-map-graphs {
+    position: fixed;
+    display: table;
+    width: 25%;
+    height: 33%;
+    top: 30%;
+    left: 0;
+    z-index: 3;
+}
+
+#right-map-graphs {
+    position: fixed;
+    display: table;
+    width: 25%;
+    height: 100%;
+    top: 0;
+    right: 0;
+    z-index: 3;
+}
+
+#tot {
+    left: auto;
+    top: auto;
+    float: left;
+}
+
+#track {
+    right: 95%;
+    top: 0;
+    float: right;
+}
+
+#curve {
+    right: 95%;
+    top: 25%;
+    float: right;
+}
+
+#grade {
+    right: 95%;
+    top: 50%;
+    float: right;
+}
+
+#length {
+    right: 95%;
+    top: 75%;
+    float: right;
+}
+
+.fit-graphs {
+    position: absolute;
+    display: table;
+    width: 15%;
+    height: 10%;
+    white-space: nowrap;
+    background-color: transparent;
+}
+
+.small-fit-graphs {
+    position: absolute;
+    display: table;
+    width: 15%;
+    height: 4%;
+    white-space: nowrap;
+    background-color: transparent;
+}
+
 .graph-title {
     
     font-size: 15pt;
     margin: 10pt;
     
+}
+
+#see-graphs-text {
+    font-size: 23.2px;
 }
 
 

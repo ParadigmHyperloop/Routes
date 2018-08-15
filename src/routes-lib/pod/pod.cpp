@@ -12,7 +12,7 @@ Pod::Pod(float max_speed) {
 
 }
 
-float Pod::minCurveRadius() const { return pow (_max_speed, 2.0) / g; }
+float Pod::minCurveRadius() const { return pow (_max_speed, 2.0) / g_CONST; }
 
 float Pod::calcCentripetalAccel(glm::vec3 p0, glm::vec3 p1, glm::vec3 p2) const {
 
@@ -43,7 +43,7 @@ std::vector<float> Pod::getVelocities(const std::vector<glm::vec3>& points) {
 
     std::vector<float> accels(calcInitAccels(lengthMap, points, begin_accel_distance, end_accel_distance));
 
-    // This is a vector of the indices in the points and accels array where the acceleration is larger than g.
+    // This is a vector of the indices in the points and accels array where the acceleration is larger than g_CONST.
     std::vector<int> accels_too_high(calcAccelsTooHigh(points));
 
     std::vector<float> finalVels(fixVelocities(vels, lengthMap, accels_too_high, points));
@@ -100,19 +100,21 @@ std::vector<float> Pod::calcInitVelocities(std::unordered_map<int, float>& lengt
         }
     }
 
-    int accel_upto_index = count1 - 1;
+    count1 += -1;
+
+    int accel_upto_index = count1;
 
     //used for getting the first index that the pod is winding down at
     float newVel2 = 0.0;
 
     //set all values after ramping up to 0 for velocity so that we can work backwards in next loop
-    for (int i = accel_upto_index + 1; i < points.size(); i++) {
+    for (int i = accel_upto_index; i < points.size(); i++) {
         vels[i] = 0.0;
     }
 
     //calculate velocities during the winding down phase. Set all values in between
     //to max vel
-    for (int i = points.size() - 2; i > accel_upto_index; i--) {
+    for (int i = points.size() - 2; i > accel_upto_index - 1; i--) {
         if (vels[i + 1] < DEFAULT_POD_MAX_SPEED) {
             newVel2 = glm::sqrt(glm::pow(vels[i+1], 2) + (2 * END_ACCEL * (lengthMap[i+1] - lengthMap[i])));
             vels[i] = newVel2;
@@ -123,7 +125,7 @@ std::vector<float> Pod::calcInitVelocities(std::unordered_map<int, float>& lengt
 
     //get the index where you start winding down
     int count2 = 0;
-    for (int i = points.size() - 1; i > accel_upto_index; i--) {
+    for (int i = points.size() - 1; i > accel_upto_index - 1; i--) {
         if (vels[i] < DEFAULT_POD_MAX_SPEED) {
             count2 += 1;
         } else {
@@ -131,11 +133,13 @@ std::vector<float> Pod::calcInitVelocities(std::unordered_map<int, float>& lengt
         }
     }
 
+    count2 += -1;
+
 
     count2 = points.size() - count2;
 
-    _count1 = count1;
-    _count2 = count2;
+    _count1 = count1-1;
+    _count2 = count2+1;
 
     return vels;
 
@@ -162,15 +166,15 @@ std::vector<float> Pod::calcInitAccels(std::unordered_map<int, float>& lengthMap
 }
 
 std::vector<int> Pod::calcAccelsTooHigh(const std::vector<glm::vec3>& points) {
-    // This is a vector of the indices in the points and accels array where the acceleration is larger than g.
+    // This is a vector of the indices in the points and accels array where the acceleration is larger than g_CONST.
     std::vector<int> accels_too_high;
 
-    // Now we need to find all the points where the acceleration is larger than "g". For now we will ignore the
+    // Now we need to find all the points where the acceleration is larger than "g_CONST". For now we will ignore the
     // beginning and the end of the route.
     // ignore first and last points
     for (int i = _count1 + 1; i < _count2; i++) {
         float centrip = calcCentripetalAccel(points[i - 1], points[i], points[i + 1]);
-        if (centrip > g) {
+        if (centrip > g_CONST) {
             accels_too_high.push_back(i);
         }
     }
@@ -185,7 +189,7 @@ std::vector<float> Pod::fixVelocities(std::vector<float> vels, std::unordered_ma
         float radiusAtPoint = Bezier::radiusOfCurvature(points[accels_too_high[i] - 1],
                                                         points[accels_too_high[i]],
                                                         points[accels_too_high[i] + 1]);
-        float targetVel = glm::sqrt(g * radiusAtPoint);
+        float targetVel = glm::sqrt(g_CONST * radiusAtPoint);
         float distanceToAccel = (_max_speed - targetVel) / (2 * DE_ACCEL);
         float distanceFromStart = lengthMap[accels_too_high[i]];
         float distanceToStartAccel = distanceFromStart - distanceToAccel;

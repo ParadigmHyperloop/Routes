@@ -26,7 +26,10 @@ function compute() {
 
     window.location.href = "route.html";
         
-    
+}
+
+function learnMore() {
+    window.location.href = "info.html";
 }
 
 function supports_html5_storage() {
