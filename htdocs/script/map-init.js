@@ -3,6 +3,7 @@ function initMap() {
     map = new google.maps.Map(document.getElementById('map-container'), {
         zoom: 3,
         center: {lat: 34.0522, lng: -118.2437},
+        noClear: true,
         disableDefaultUI: true,
             mapTypeId: 'terrain',
         styles: [

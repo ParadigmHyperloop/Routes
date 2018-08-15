@@ -61,10 +61,11 @@ Individual Population::getIndividual(int index) {
     // Calculate the location of the parts of the individual
     glm::vec4* header_loc = _individuals.data() + index * _individual_size;
     ind.header = header_loc;
+    ind.moHeader = header_loc + 1;
 
     // Account for the header
-    ind.path = header_loc + 1;
-    ind.genome = header_loc + 2;
+    ind.path = header_loc + 2;
+    ind.genome = header_loc + 3;
     
     ind.index = index;
 
@@ -72,18 +73,22 @@ Individual Population::getIndividual(int index) {
 
 }
 
-void Population::step(const Pod& pod) {
+void Population::step(const Pod& pod, std::string objectiveType) {
 
     // Evaluate the cost and sort so the most fit solutions are in the front
     long long int start = std::chrono::high_resolution_clock::now().time_since_epoch().count();
 
-    evaluateCost(pod);
+    evaluateCost(pod, objectiveType);
 
     long long int end = std::chrono::high_resolution_clock::now().time_since_epoch().count();
     //std::cout << "Cost took " << end - start << std::endl;
     start = end;
 
-    sortIndividuals();
+    if (objectiveType == "single") {
+        sortIndividuals();
+    } else if (objectiveType == "multi") {
+        sortIndividualsMo();
+    }
 
     end = std::chrono::high_resolution_clock::now().time_since_epoch().count();
     //std::cout << "Sort took " << end - start << std::endl;
@@ -113,13 +118,25 @@ void Population::sortIndividuals() {
     // Sort the array of individual structs
     std::sort(_sorted_individuals.begin(), _sorted_individuals.end(), [](Individual a, Individual b){
 
+        glm::vec4 vecA = (*a.header);
+        glm::vec4 vecB = (*b.header);
+
+        double a_total_cost = totalFitness(vecA);
+        double b_total_cost = totalFitness(vecB);
+
+        //std::cout << "cost: " << a_total_cost << std::endl;
+
         // Compare costs in the header
-        return (*a.header).x < (*b.header).x;
+        return a_total_cost < b_total_cost;
 
     });
-    
+
+    glm::vec4* vecOfFit = _sorted_individuals[0].header;
+
+    double best_fitness = vecOfFit->x * 1.2 + vecOfFit->y + vecOfFit->z + vecOfFit->w * 2.0;
+
     // Save the fitness value of the best individual
-    _fitness_over_generations.push_back(_sorted_individuals[0].header->x);
+    _fitness_over_generations.push_back(best_fitness);
     
     // Copy the best samples into a sorted array
     for (int i = 0; i < _mu; i++)
@@ -127,20 +144,67 @@ void Population::sortIndividuals() {
 
 }
 
-void Population::evaluateCost(const Pod& pod) {
+void Population::sortIndividualsMo() {
+
+    for (int i = 0; i < _pop_size; i++) {
+        _sorted_individuals[i] = getIndividual(i);
+    }
+
+    std::vector<std::vector<double>> input_f;
+
+    //convert moHeader to a vector of doubles
+    for (int i = 0; i < _pop_size; i++) {
+        double xComp = (double)(*(getIndividual(i).moHeader)).x;
+        double yComp = (double)(*(getIndividual(i).moHeader)).y;
+        double zComp = (double)(*(getIndividual(i).moHeader)).z;
+        double wComp = (double)(*(getIndividual(i).moHeader)).w;
+
+        input_f.push_back({xComp, yComp, zComp, wComp});
+    }
+
+    std::vector<pagmo::vector_double::size_type> result = pagmo::sort_population_mo(input_f);
+
+    for (int i = 0; i < _pop_size; i++) {
+        _sorted_individuals[i] = getIndividual(result[i]);
+    }
+
+    double xSorted = (double)(*(_sorted_individuals[0].moHeader)).x;
+    double ySorted = (double)(*(_sorted_individuals[0].moHeader)).y;
+    double zSorted = (double)(*(_sorted_individuals[0].moHeader)).z;
+    double wSorted = (double)(*(_sorted_individuals[0].moHeader)).w;
+
+    // Save the fitness value of the best individual
+    _mo_fitness_over_generations.push_back({xSorted, ySorted, zSorted, wSorted});
+
+    // Copy the best samples into a sorted array
+    for (int i = 0; i < _mu; i++)
+        _best_samples[i] = _samples[_sorted_individuals[i].index];
+
+}
+
+void Population::evaluateCost(const Pod& pod, std::string objectiveType) {
 
     // Get stuff we need to execute a kernel on
     boost::compute::command_queue& queue = Kernel::getQueue();
 
+    std::string kernelFunction;
+
+    if (objectiveType == "single") {
+        kernelFunction = "cost";
+    } else if (objectiveType == "multi") {
+        kernelFunction = "mo";
+    }
+
     // Create a temporary kernel and execute it
-    static Kernel kernel = Kernel(std::ifstream("../opencl/kernel_cost.opencl"), "cost");
+    static Kernel kernel = Kernel(std::ifstream("../opencl/kernel_cost.opencl"), kernelFunction);
+
     kernel.setArgs(_data.getOpenCLImage(), _opencl_individuals.get_buffer(), _genome_size + 2,
                    MAX_SLOPE_GRADE, pod.minCurveRadius(), EXCAVATION_DEPTH, _data_size.x,
                    _data_size.y, _opencl_binomials.get_buffer(),
                    _num_evaluation_points_1, _num_evaluation_points / NUM_ROUTE_WORKERS, _data_origin.x, _data_origin.y, glm::length(_direction));
 
     // Upload the data
-    boost::compute::copy(_individuals.begin(), _individuals.end(), _opencl_individuals.begin(), queue);
+    boost::compute::copy(_individuals.begin(),_individuals.end(), _opencl_individuals.begin(), queue);
 
     // Execute the 2D kernel with a work size of NUM_ROUTE_WORKERS. NUM_ROUTE_WORKERS threads  will work on a single individual
     kernel.execute2D(glm::vec<2, size_t>(0, 0),
@@ -149,6 +213,7 @@ void Population::evaluateCost(const Pod& pod) {
 
     // Download the data
     boost::compute::copy(_opencl_individuals.begin(), _opencl_individuals.end(), _individuals.begin(), queue);
+
 
 }
 
@@ -165,6 +230,18 @@ std::vector<glm::vec3> Population::getSolution() const {
     
     return solution;
     
+}
+
+glm::vec4 Population::getFitness() const {
+
+    return (*_sorted_individuals[0].header);
+
+}
+
+double Population::totalFitness(glm::vec4 costs) {
+
+    return costs.x * 1.2 + costs.y * 0.8 + costs.z + costs.w * 1.5;
+
 }
 
 void Population::calcGenomeSize() {

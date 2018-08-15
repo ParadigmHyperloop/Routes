@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <meta charset="UTF-8">
 
@@ -48,7 +49,7 @@
                                          <br>
                                           Travel time: <div id="time" class="grad-text"></div></div>
             
-                <div class="button-container" id="learn-more-container" onclick="fadeOverlay()">
+                <div class="button-container" id="learn-more-container" onclick="showRoute()">
                     <div class="button">
                         <div class="button-text" id="learn-more-text">
                             See my route
@@ -70,25 +71,92 @@
                     <div class="graph-title"><div class="grad-text">Travel time</div> of Modes of Transportation</div>
                     <canvas id="graph-2" width="450" height="210"></canvas>
 
+                    
                 </div>
                 
                 <br>
                 <br>
-            
+                 
+            <div id="stats">
+                <div class="button-container-transparent" id="visualize-container" onclick="startVisualization()">
+                    <div class="button">
+                        <div class="button-text" id="stats-for-nerds">
+                            Dashboard
+                        </div>
+                    </div>
+                </div>
             </div>
             
+            </div>
+                    
         </div> 
-        <div id="not-overlay">
-             <div id="map-container">
+        <div id="not-overlay">         
+            
+           
+            
+            <div id="map-container">
+                
+                <div id="left-map-graphs">
 
-            </div> 
-            <div class="button-container-transparent" id="see-stats-container" onclick="showStats()">
-                <div class="button">
-                    <div class="button-test" id="see-stats-text">
-                        Show stats
-                    </div>                         
+                    <div id="tot" class="fit-graphs">
+                        <div class="graph-title"><div class="grad-text">Total</div> Cost over Time</div>
+                        <canvas id="tot-fit-graph" width="450" height="210"></canvas> 
+                    </div>
                 </div>
-            </div>           
+
+                <div id="right-map-graphs">
+                    <div id="track" class="small-fit-graphs">
+                        <div class="graph-title"><div class="grad-text">Track</div> Cost over Time</div>
+                        <canvas id="track-fit-graph" width="450" height="210"></canvas> 
+                    </div>
+
+                    <div id="curve" class="small-fit-graphs">
+                        <div class="graph-title"><div class="grad-text">Curve</div> Cost over Time</div>
+                        <canvas id="curve-fit-graph" width="450" height="210"></canvas> 
+                    </div>
+
+                    <div id="grade" class="small-fit-graphs">
+                        <div class="graph-title"><div class="grad-text">Grade</div> Cost over Time</div>
+                        <canvas id="grade-fit-graph" width="450" height="210"></canvas> 
+                    </div>
+
+                    <div id="length" class="small-fit-graphs">
+                        <div class="graph-title"><div class="grad-text">Length</div> Cost over Time</div>
+                        <canvas id="length-fit-graph" width="450" height="210"></canvas> 
+                    </div>
+                </div> 
+                
+            </div>
+            
+            
+            
+            <div id="map-buttons">
+            
+                <div class="button-container-transparent" id="see-stats-container" onclick="showStats()">
+                    <div class="button">
+                        <div class="button-text" id="see-stats-text">
+                            Show Stats
+                        </div>                         
+                    </div>
+                </div>
+
+                <div class="button-container-transparent" id="dashboard-container" onclick="showGraphs()">
+                    <div class="button">
+                        <div class="button-text" id="see-graphs-text">
+                            Show Graphs
+                        </div>                         
+                    </div>
+                </div>
+
+            </div>
+            
+
+            
+            
+           
+        
+            
+            
         </div>
         
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>

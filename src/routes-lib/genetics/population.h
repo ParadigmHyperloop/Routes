@@ -9,6 +9,7 @@
 #include <boost/compute/container/vector.hpp>
 #include <random>
 #include <time.h>
+#include <pagmo2/include/pagmo/utils/multi_objective.hpp>
 
 #include "../bezier/bezier.h"
 #include "../elevation/elevation.h"
@@ -38,7 +39,7 @@
  * This value is used to help calculate the initial step size of the population.
  * and the Z sigma is the max elevation delta / INITIAL_SIGMA_DIVISOR.
  */
-#define INITIAL_SIGMA_DIVISOR 20.0f
+#define INITIAL_SIGMA_DIVISOR 10.0f
 
 /**
  * This serves as the initial value for the X and Y of all the points for sigma.
@@ -47,7 +48,7 @@
 #define INITIAL_SIGMA_XY 2500.0f
 
 /** Represents the dampening parameter for the step size. This value should be close to 1 */
-#define STEP_DAMPENING 1.5f
+#define STEP_DAMPENING .75f
 
 /** The interval multiplier for the square root of _genome_size * 3 for the indicator function. */
 #define ALPHA 1.5f
@@ -68,9 +69,15 @@ struct Individual {
     /**
      * A reference to this individual's header.
      * The header contains the computed cost of the individual, so long as it has been downloaded from the GPU.
-     * Cost is stored in the X component and Y, Z and W are currently unused.
+     * Cost is stored in the X component, Z, Y and W are currently unused.
      */
     glm::vec4* header;
+
+    /**
+     * The reference to this individuals moHeader.
+     * The header contains doubles corresponding to the fitness functions' objective values
+     */
+    glm::vec4* moHeader;
 
     /**
      * The pointer to the genome of the individual. This is an array of glm::vec4 with length equal
@@ -161,13 +168,19 @@ public:
      * @param pod
      * The pod object containing the specs of the pod. Right now just uses max speed.
      */
-    void step(const Pod& pod);
+    void step(const Pod& pod, std::string objectiveType);
 
     /**
      * This function sorts the individuals in ascending order based on the cost. _individuals[0] becomes
      * the most fit individual. Currently this is done on the CPU, which is not optimal, but it is simpler.
      */
     void sortIndividuals();
+
+    /**
+     * This function sorts the individuals based off their objective function values. _individuals[0]
+     * becomes the most fit individual.
+     */
+    void sortIndividualsMo();
 
     /**
      * This function is what makes the genetic algorithm work.
@@ -178,7 +191,7 @@ public:
      * The pod object containing the specs of the pod. Right now just uses max speed.
      *
      */
-    void evaluateCost(const Pod& pod);
+    void evaluateCost(const Pod& pod, std::string objectiveType);
 
     /**
      * This returns the computed solution to the route (the mean).
@@ -187,6 +200,34 @@ public:
      * The control points of the completed route containing the start and destination.
      */
     std::vector<glm::vec3> getSolution() const;
+
+    /**
+     * Returns a vector of the fitness of each part of the fitness function.
+     * x: track_fitness
+     * y: curve_fitness
+     * z: grade_fitness
+     * w: length_fitness
+     *
+     * @return
+     * A vector of each component of the fitness of the best individual of this generation.
+     */
+    glm::vec4 getFitness() const;
+
+    /**
+     * Computes the total fitness of from the header of an individual
+     *
+     * @return
+     * The fitness of an individual
+     */
+    static double totalFitness(glm::vec4 costs);
+
+
+
+    /** The starting position of the path that this population is trying to "solve" */
+    glm::vec4 _start;
+
+    /** The ending position of the path that this population is trying to "solve" */
+    glm::vec4 _dest;
 
 private:
 
@@ -307,12 +348,6 @@ private:
      */
     int _individual_size;
 
-    /** The starting position of the path that this population is trying to "solve" */
-    glm::vec4 _start;
-
-    /** The ending position of the path that this population is trying to "solve" */
-    glm::vec4 _dest;
-
     /**
      * The direction vector of the path that this population is built for.
      * Measured in meters.
@@ -371,7 +406,7 @@ private:
 
     /**
      * This represents the current mean vector of the population. In other words, this is the favorite solution the the population.
-     * The vector is legnth _genome_size * 3, 3 components for each point in the bezier curve (X, Y, Z).
+     * The vector is length _genome_size * 3, 3 components for each point in the bezier curve (X, Y, Z).
      */
     Eigen::VectorXf _mean;
 
@@ -440,6 +475,12 @@ private:
      * for the fittest individual is saved
      */
     std::vector<float> _fitness_over_generations;
+
+    /**
+     * This vector contains the best fitness vectors of each generation. Every time step() is called, the vector of the cost function
+     * for the fittest individual is saved
+     */
+    std::vector<std::vector<double>> _mo_fitness_over_generations;
 
 };
 

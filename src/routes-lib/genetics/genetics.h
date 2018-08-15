@@ -7,7 +7,7 @@
 
 #include "population.h"
 
-/** */
+#include <pqxx/pqxx>
 
 /** A simple class to manage the genetic cycle of a population */
 class Genetics {
@@ -24,11 +24,49 @@ class Genetics {
          * @param pod
          * The information about the hyperloop pod. Determines how curved the track can be.
          *
+         * @param objectiveType
+         * The type of optimization, either "single" or "multi"
+         *
          * @return
          * The points of the calculated path in meters. This will need to be converted to latitude and longitude
          * to be properly displayed.
          */
-        static std::vector<glm::vec3> solve(Population& pop, Pod& pod, int generations);
+        static std::vector<glm::vec3> solve(Population& pop, Pod& pod, int generations, const glm::dvec2& start, const glm::dvec2& dest, std::string objectiveType);
+
+        /**
+         * This function returns the route id of this route for querying the database
+         *
+         * @return
+         * The primary key of the route table
+         */
+        static int getRouteId();
+
+    private:
+
+        /**
+         * The control points of the optimal solution at the current generation
+         */
+        static int _id;
+
+        /**
+         * The starting latitude
+         */
+        static double _lat_start;
+
+        /**
+         * The ending latitude
+         */
+        static double _lat_end;
+
+        /**
+         * The starting longitude
+         */
+        static double _long_start;
+
+        /**
+         * The ending longitude
+         */
+        static double _long_end;
 
 };
 

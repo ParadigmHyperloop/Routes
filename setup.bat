@@ -39,7 +39,7 @@ DEL /S /Q lib\*boost_test_exec_monitor*
 DEL /S /Q lib\*boost_timer*
 
 : Grab GLM
-git clone https://github.com/g-truc/glm.git
+git clone https://github.com/g_CONST-truc/glm.git
 set source="glm\glm"
 set destination="include\glm\"
 xcopy %source% %destination% /y /s

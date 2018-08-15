@@ -323,7 +323,7 @@ AUTOLINK_SUPPORT       = YES
 # If you use STL classes (i.e. std::string, std::vector, etc.) but do not want
 # to include (a tag file for) the STL sources as input, then you should set this
 # tag to YES in order to let doxygen match functions declarations and
-# definitions whose arguments contain STL classes (e.g. func(std::string);
+# definitions whose arguments contain STL classes (e.g_CONST. func(std::string);
 # versus func(std::string) {}). This also make the inheritance and collaboration
 # diagrams that involve STL classes more complete and accurate.
 # The default value is: NO.
@@ -371,7 +371,7 @@ GROUP_NESTED_COMPOUNDS = NO
 
 # Set the SUBGROUPING tag to YES to allow class member groups of the same type
 # (for instance a group of public functions) to be put as a subgroup of that
-# type (e.g. under the Public Functions section). Set it to NO to prevent
+# type (e.g_CONST. under the Public Functions section). Set it to NO to prevent
 # subgrouping. Alternatively, this can be done per class using the
 # \nosubgrouping command.
 # The default value is: YES.
@@ -379,7 +379,7 @@ GROUP_NESTED_COMPOUNDS = NO
 SUBGROUPING            = YES
 
 # When the INLINE_GROUPED_CLASSES tag is set to YES, classes, structs and unions
-# are shown inside the group in which they are included (e.g. using \ingroup)
+# are shown inside the group in which they are included (e.g_CONST. using \ingroup)
 # instead of on a separate page (for HTML and Man pages) or section (for LaTeX
 # and RTF).
 #
@@ -1125,7 +1125,7 @@ HTML_FILE_EXTENSION    = .html
 # standard header.
 #
 # To get valid HTML the header file that includes any scripts and style sheets
-# that doxygen needs, which is dependent on the configuration options used (e.g.
+# that doxygen needs, which is dependent on the configuration options used (e.g_CONST.
 # the setting GENERATE_TREEVIEW). It is highly recommended to start with a
 # default header using
 # doxygen -w html new_header.html new_footer.html new_stylesheet.css
@@ -1168,7 +1168,7 @@ HTML_STYLESHEET        =
 # This is preferred over using HTML_STYLESHEET since it does not replace the
 # standard style sheet and is therefore more robust against future updates.
 # Doxygen will copy the style sheet files to the output directory.
-# Note: The order of the extra style sheet files is of importance (e.g. the last
+# Note: The order of the extra style sheet files is of importance (e.g_CONST. the last
 # style sheet in the list overrules the setting of the previous ones in the
 # list). For an example see the documentation.
 # This tag requires that the tag GENERATE_HTML is set to YES.
@@ -1268,7 +1268,7 @@ GENERATE_DOCSET        = NO
 DOCSET_FEEDNAME        = "Doxygen generated docs"
 
 # This tag specifies a string that should uniquely identify the documentation
-# set bundle. This should be a reverse domain-name style string, e.g.
+# set bundle. This should be a reverse domain-name style string, e.g_CONST.
 # com.mycompany.MyDocSet. Doxygen will append .docset to the name.
 # The default value is: org.doxygen.Project.
 # This tag requires that the tag GENERATE_DOCSET is set to YES.
@@ -1277,7 +1277,7 @@ DOCSET_BUNDLE_ID       = org.doxygen.Project
 
 # The DOCSET_PUBLISHER_ID tag specifies a string that should uniquely identify
 # the documentation publisher. This should be a reverse domain-name style
-# string, e.g. com.mycompany.MyDocSet.documentation.
+# string, e.g_CONST. com.mycompany.MyDocSet.documentation.
 # The default value is: org.doxygen.Publisher.
 # This tag requires that the tag GENERATE_DOCSET is set to YES.
 
@@ -1735,7 +1735,7 @@ LATEX_FOOTER           =
 # LaTeX style sheets that are included after the standard style sheets created
 # by doxygen. Using this option one can overrule certain style aspects. Doxygen
 # will copy the style sheet files to the output directory.
-# Note: The order of the extra style sheet files is of importance (e.g. the last
+# Note: The order of the extra style sheet files is of importance (e.g_CONST. the last
 # style sheet in the list overrules the setting of the previous ones in the
 # list).
 # This tag requires that the tag GENERATE_LATEX is set to YES.
@@ -1794,7 +1794,7 @@ LATEX_HIDE_INDICES     = NO
 LATEX_SOURCE_CODE      = NO
 
 # The LATEX_BIB_STYLE tag can be used to specify the style to use for the
-# bibliography, e.g. plainnat, or ieeetr. See
+# bibliography, e.g_CONST. plainnat, or ieeetr. See
 # http://en.wikipedia.org/wiki/BibTeX and \cite for more info.
 # The default value is: plain.
 # This tag requires that the tag GENERATE_LATEX is set to YES.
@@ -2073,7 +2073,7 @@ INCLUDE_PATH           =
 INCLUDE_FILE_PATTERNS  =
 
 # The PREDEFINED tag can be used to specify one or more macro names that are
-# defined before the preprocessor is started (similar to the -D option of e.g.
+# defined before the preprocessor is started (similar to the -D option of e.g_CONST.
 # gcc). The argument of the tag is a list of macros of the form: name or
 # name=definition (no spaces). If the definition and the "=" are omitted, "=1"
 # is assumed. To prevent a macro definition from being undefined via #undef or
