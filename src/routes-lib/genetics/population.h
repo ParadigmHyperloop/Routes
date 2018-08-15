@@ -145,7 +145,7 @@ public:
      * @param pod
      * The pod object containing the specs of the pod. Right now just uses max speed.
      */
-    void step(const Pod& pod, std::string objectiveType);
+    void step(const Pod& pod);
 
     /**
      * This function sorts the individuals in ascending order based on the cost. _individuals[0] becomes
@@ -168,7 +168,7 @@ public:
      * The pod object containing the specs of the pod. Right now just uses max speed.
      *
      */
-    void evaluateCost(const Pod& pod, std::string objectiveType);
+    void evaluateCost(const Pod& pod);
 
     /**
      * This returns the computed solution to the route (the mean).

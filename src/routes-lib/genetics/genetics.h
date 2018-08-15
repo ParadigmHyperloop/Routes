@@ -31,7 +31,7 @@ class Genetics {
          * The points of the calculated path in meters. This will need to be converted to latitude and longitude
          * to be properly displayed.
          */
-        static std::vector<glm::vec3> solve(Population& pop, Pod& pod, int generations, const glm::dvec2& start, const glm::dvec2& dest, std::string objectiveType);
+        static std::vector<glm::vec3> solve(Population& pop, Pod& pod, int generations, const glm::dvec2& start, const glm::dvec2& dest);
 
         /**
          * This function returns the route id of this route for querying the database

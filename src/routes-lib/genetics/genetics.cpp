@@ -10,7 +10,7 @@ double Genetics::_lat_end;
 double Genetics::_long_end;
 int Genetics::_id;
 
-std::vector<glm::vec3> Genetics::solve(Population& pop, Pod& pod, int generations, const glm::dvec2& start, const glm::dvec2& dest, std::string objectiveType) {
+std::vector<glm::vec3> Genetics::solve(Population& pop, Pod& pod, int generations, const glm::dvec2& start, const glm::dvec2& dest) {
 
     ElevationData elev = ElevationData(start, dest);
 
@@ -30,10 +30,9 @@ std::vector<glm::vec3> Genetics::solve(Population& pop, Pod& pod, int generation
         pqxx::work w(c);
 
         //Insert the starting positions and the type of optimization
-        w.exec("INSERT INTO \"Route\" (lat_start, lat_end, long_start, long_end, objective_type) "
+        w.exec("INSERT INTO \"Route\" (lat_start, lat_end, long_start, long_end) "
                "values (" + std::to_string(_lat_start) + ", " + std::to_string(_lat_end) + ", "
-               + std::to_string(_long_start) + ", " + std::to_string(_long_end)
-               + ", " + "\'" + objectiveType + "\'" + ")");
+               + std::to_string(_long_start) + ", " + std::to_string(_long_end) + ")");
 
 
         //get all the route_ids
@@ -71,7 +70,7 @@ std::vector<glm::vec3> Genetics::solve(Population& pop, Pod& pod, int generation
             generation_id++;
 
             //Step through one generation
-            pop.step(pod, objectiveType);
+            pop.step(pod);
 
             Individual ind = pop.getIndividual(0);
             if (!ind.header->x)
