@@ -33,7 +33,7 @@ rm lib/*boost_test_exec_monitor*
 rm lib/*boost_timer*
 
 # Download GLM
-git clone https://github.com/g_CONST-truc/glm.git
+git clone https://github.com/g-truc/glm.git
 2>/dev/null 1>/dev/null cp -r glm/glm/ include/glm/
 rm -rf glm
 
@@ -42,7 +42,7 @@ git clone https://github.com/Corvusoft/restbed.git --recursive
 cd restbed
 mkdir build
 cd build
-cmake -DBUILD_SSL=NO .. -DCMAKE_CXX_COMPILER=/usr/bin/g_CONST++-7
+cmake -DBUILD_SSL=NO .. -DCMAKE_CXX_COMPILER=/usr/bin/g++-7
 make install
 cd ../../
 cp -r restbed/distribution/library/ lib/
