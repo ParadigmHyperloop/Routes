@@ -12,7 +12,7 @@ message(WARNING ${LIBRARIES})
 
 # Add the sources to the executables
 add_library(Routes STATIC ${HS}
-        ${SOURCES})
+        ${SOURCES} src/routes-lib/configure/configure.cpp src/routes-lib/configure/configure.h)
 
 IF (WIN32)
 
@@ -80,7 +80,7 @@ FILE(GLOB_RECURSE HS ${CMAKE_SOURCE_DIR}/src/routes-exec/*.h*)
 FILE(GLOB_RECURSE SOURCES ${CMAKE_SOURCE_DIR}/src/routes-exec/*.cpp)
 
 add_executable(Routes-Exec ${HS}
-        ${SOURCES})
+        ${SOURCES} src/routes-lib/configure/configure.cpp src/routes-lib/configure/configure.h)
 
 add_dependencies(Routes-Exec Routes)
 
@@ -112,7 +112,7 @@ FILE(GLOB_RECURSE HS ${CMAKE_SOURCE_DIR}/src/routes-server/*.h*)
 FILE(GLOB_RECURSE SOURCES ${CMAKE_SOURCE_DIR}/src/routes-server/*.cpp)
 
 add_executable(Routes-Server ${HS}
-        ${SOURCES})
+        ${SOURCES} src/routes-lib/configure/configure.cpp src/routes-lib/configure/configure.h)
 
 add_dependencies(Routes-Server Routes)
 
@@ -146,7 +146,7 @@ FILE(GLOB_RECURSE HS ${CMAKE_SOURCE_DIR}/src/routes-tests/*.h*)
 FILE(GLOB_RECURSE SOURCES ${CMAKE_SOURCE_DIR}/src/routes-tests/*.cpp)
 
 add_executable(Routes-Tests ${HS}
-        ${SOURCES})
+        ${SOURCES} src/routes-lib/configure/configure.cpp src/routes-lib/configure/configure.h)
 
 add_dependencies(Routes-Tests Routes)
 

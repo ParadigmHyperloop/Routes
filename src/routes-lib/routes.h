@@ -7,15 +7,7 @@
 
 #include "genetics/genetics.h"
 
-/** */
-
-/** The default size of the population for calculating a route */
-#define POP_SIZE 1000
-
-/** The default number of generations that the population should be bred for */
-#define NUM_GENERATIONS 600
-
-/** This is a simplelass to handle the complete calculation of a route. */
+/** This is a simple class to handle the complete calculation of a route. */
 class Routes {
 
     public:
@@ -150,6 +142,11 @@ class Routes {
     private:
 
         /**
+         * Reloads the paramaters if needed
+         */
+        static void configureParams();
+
+        /**
          * In some areas we have a no data value in the elevation data. In this case we have no idea what to compute
          * the Z of the route to be. For now we check for this case and throw a std::runtime_error if this happens.
          *
@@ -226,6 +223,16 @@ class Routes {
           */
          static std::string length_fitness;
 
+         /** The default size of the population for calculating a route */
+         static int _pop_size;
+
+         /** This is a simplelass to handle the complete calculation of a route. */
+         static int _num_generations;
+
+         /**
+          * The current configuration
+          */
+         static Configure _config;
 };
 
 #endif //ROUTES_ROUTES_H
