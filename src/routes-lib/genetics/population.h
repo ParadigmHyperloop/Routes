@@ -196,7 +196,7 @@ public:
      * @return
      * The fitness of an individual
      */
-    static double totalFitness(glm::vec4 costs);
+    double totalFitness(glm::vec4 costs);
 
 
 
@@ -494,6 +494,17 @@ private:
     /** The number of divisions that the route is split up into for evaluation on the GPU */
     const int _num_route_workers;
 
+    /** The constant that the track cost is multiplied by in the cost function*/
+    const float _track_weight;
+
+    /** The constant that the curve cost is multiplied by in the cost function*/
+    const float _curve_weight;
+
+    /** The constant that the grade cost is multiplied by in the cost function*/
+    const float _grade_weight;
+
+    /** The constant that the length cost is multiplied by in the cost function*/
+    const float _length_weight;
 };
 
 #endif //ROUTES_POPULATION_H

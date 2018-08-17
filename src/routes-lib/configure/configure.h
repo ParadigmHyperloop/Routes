@@ -74,6 +74,25 @@ struct Configuration {
      */
     int num_route_workers;
 
+    /**
+     * The constant that the track cost is multiplied by in the cost function
+     */
+    float track_weight;
+
+    /**
+     * The constant that the curve cost is multiplied by in the cost function
+     */
+    float curve_weight;
+
+    /**
+     * The constant that the grade cost is multiplied by in the cost function
+     */
+    float grade_weight;
+
+    /**
+     * The constant that the length cost is mulitplied by in the cost function
+     */
+    float length_weight;
 
 };
 
@@ -158,6 +177,38 @@ public:
      * returns the number of route workers
      */
     int getNumRouteWorkers();
+
+    /**
+     * Gets the constant to multiply the track cost by
+     *
+     * @return
+     * The track weight
+     */
+    float getTrackWeight();
+
+    /**
+     * Gets the constant to multiply the curve cost by
+     *
+     * @return
+     * The curve weight
+     */
+    float getCurveWeight();
+
+    /**
+     * Gets the constant to multiply the grade cost by
+     *
+     * @return
+     * The grade weight
+     */
+    float getGradeWeight();
+
+    /**
+     * Gets the constant to multiply the length cost by
+     *
+     * @return
+     * The length weight
+     */
+    float getLengthWeight();
 
 private:
 
