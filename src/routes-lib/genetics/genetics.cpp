@@ -4,19 +4,6 @@
 
 #include "genetics.h"
 
-<<<<<<< Updated upstream
-std::vector<glm::vec3> Genetics::solve(Population& pop, Pod& pod, int generations) {
-
-    // Run the simulation for then given amount of generations
-    for (int i = 0; i < generations; i++) {
-        
-        pop.step(pod);
-        
-        Individual ind = pop.getIndividual(0);
-        if (!ind.header->x)
-            break;
-        
-=======
 double Genetics::_lat_start;
 double Genetics::_long_start;
 double Genetics::_lat_end;
@@ -208,10 +195,15 @@ std::vector<glm::vec3> Genetics::solve(Population& pop, Pod& pod, int generation
 
     } catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;
->>>>>>> Stashed changes
     }
 
     // Transfer the bath over
     return pop.getSolution();
+
+}
+
+int Genetics::getRouteId() {
+
+    return _id;
 
 }

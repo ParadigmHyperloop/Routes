@@ -9,11 +9,13 @@
 #include <boost/compute/container/vector.hpp>
 #include <random>
 #include <time.h>
+//#include <pagmo2/include/pagmo/utils/multi_objective.hpp>
 
 #include "../bezier/bezier.h"
 #include "../elevation/elevation.h"
 #include "../normal/multinormal.h"
 #include "../pod/pod.h"
+#include "../configure/configure.h"
 
 // Ensure that E is defined on Windows
 #ifndef M_E
@@ -35,30 +37,6 @@
 #define LENGTH_TO_GENOME 0.0274360619f
 
 /**
- * This value is used to help calculate the initial step size of the population.
- * and the Z sigma is the max elevation delta / INITIAL_SIGMA_DIVISOR.
- */
-#define INITIAL_SIGMA_DIVISOR 20.0f
-
-/**
- * This serves as the initial value for the X and Y of all the points for sigma.
- * We use 5km as a pretty tight bounding around the straight line (initial mean)
- */
-#define INITIAL_SIGMA_XY 2500.0f
-
-/** Represents the dampening parameter for the step size. This value should be close to 1 */
-#define STEP_DAMPENING 1.5f
-
-/** The interval multiplier for the square root of _genome_size * 3 for the indicator function. */
-#define ALPHA 1.5f
-
-/** The number of threads that are used to sample from the multivariate normal distribution */
-#define NUM_SAMPLE_THREADS 10
-
-/** The number of divisions that the route is split up into for evaluation on the GPU */
-#define NUM_ROUTE_WORKERS 100
-
-/**
  * Individual is a convenience so that individuals can be treated as units rather than
  * as a single float vector, which is how they are stored.
  * Individual is not used to store any new data, but rather reference other data.
@@ -68,9 +46,15 @@ struct Individual {
     /**
      * A reference to this individual's header.
      * The header contains the computed cost of the individual, so long as it has been downloaded from the GPU.
-     * Cost is stored in the X component and Y, Z and W are currently unused.
+     * Cost is stored in the X component, Z, Y and W are currently unused.
      */
     glm::vec4* header;
+
+    /**
+     * The reference to this individuals moHeader.
+     * The header contains doubles corresponding to the fitness functions' objective values
+     */
+    glm::vec4* moHeader;
 
     /**
      * The pointer to the genome of the individual. This is an array of glm::vec4 with length equal
@@ -135,7 +119,7 @@ public:
      * @param data
      * The elevation data that this population is path-finding on
      */
-    Population(int pop_size, glm::vec4 start, glm::vec4 dest, const ElevationData& data);
+    Population(int pop_size, glm::vec4 start, glm::vec4 dest, const ElevationData& data, Configure conf);
 
     /** Simple destructor to delete heap allocated things */
     ~Population();
@@ -170,6 +154,12 @@ public:
     void sortIndividuals();
 
     /**
+     * This function sorts the individuals based off their objective function values. _individuals[0]
+     * becomes the most fit individual.
+     */
+    void sortIndividualsMo();
+
+    /**
      * This function is what makes the genetic algorithm work.
      * For every individual a cost is evaluated. This represents how good their genome is as a solution.
      * This function performs this, using OpenCL.
@@ -188,8 +178,6 @@ public:
      */
     std::vector<glm::vec3> getSolution() const;
 
-<<<<<<< Updated upstream
-=======
     /**
      * Returns a vector of the fitness of each part of the fitness function.
      * x: track_fitness
@@ -218,8 +206,12 @@ public:
     /** The ending position of the path that this population is trying to "solve" */
     glm::vec4 _dest;
 
->>>>>>> Stashed changes
 private:
+
+    /**
+     * Reloads the paramaters if needed
+     */
+    void configureParams();
 
     /**
      * This function calculates the size of the genome.
@@ -338,12 +330,6 @@ private:
      */
     int _individual_size;
 
-    /** The starting position of the path that this population is trying to "solve" */
-    glm::vec4 _start;
-
-    /** The ending position of the path that this population is trying to "solve" */
-    glm::vec4 _dest;
-
     /**
      * The direction vector of the path that this population is built for.
      * Measured in meters.
@@ -402,7 +388,7 @@ private:
 
     /**
      * This represents the current mean vector of the population. In other words, this is the favorite solution the the population.
-     * The vector is legnth _genome_size * 3, 3 components for each point in the bezier curve (X, Y, Z).
+     * The vector is length _genome_size * 3, 3 components for each point in the bezier curve (X, Y, Z).
      */
     Eigen::VectorXf _mean;
 
@@ -472,8 +458,6 @@ private:
      */
     std::vector<float> _fitness_over_generations;
 
-<<<<<<< Updated upstream
-=======
     /**
      * This vector contains the best fitness vectors of each generation. Every time step() is called, the vector of the cost function
      * for the fittest individual is saved
@@ -521,7 +505,6 @@ private:
 
     /** The constant that the length cost is multiplied by in the cost function*/
     const float _length_weight;
->>>>>>> Stashed changes
 };
 
 #endif //ROUTES_POPULATION_H
