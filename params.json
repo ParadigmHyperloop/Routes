@@ -13,5 +13,12 @@
     "alpha": 1.5,
     "num-sample-threads": 10,
     "num-route-workers": 100
+  },
+
+  "cost": {
+    "track-weight": 1.2,
+    "curve-weight": 0.8,
+    "grade-weight": 1,
+    "length-weight": 1.6
   }
 }

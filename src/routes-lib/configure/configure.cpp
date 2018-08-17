@@ -30,10 +30,16 @@ void Configure::loadConfig() {
     float alpha = root.get<float>("population.alpha", 0);
     int num_sample_threads = root.get<int>("population.num-sample-threads", 0);
     int num_route_workers = root.get<int>("population.num-route-workers", 0);
+    float track_weight = root.get<float>("cost.track-weight", 0);
+    float curve_weight = root.get<float>("cost.curve-weight", 0);
+    float grade_weight = root.get<float>("cost.grade-weight", 0);
+    float length_weight = root.get<float>("cost.length-weight", 0);
 
     _config = {reload, population_size, num_generations,
                initial_sigma_divisor, initial_sigma_xy,
-               step_dampening, alpha, num_sample_threads, num_route_workers};
+               step_dampening, alpha, num_sample_threads,
+               num_route_workers, track_weight, curve_weight,
+               grade_weight, length_weight};
 
 
 
@@ -75,3 +81,18 @@ int Configure::getNumRouteWorkers() {
     return _config.num_route_workers;
 }
 
+float Configure::getTrackWeight() {
+    return _config.track_weight;
+}
+
+float Configure::getCurveWeight() {
+    return _config.curve_weight;
+}
+
+float Configure::getGradeWeight() {
+    return _config.grade_weight;
+}
+
+float Configure::getLengthWeight() {
+    return _config.length_weight;
+}

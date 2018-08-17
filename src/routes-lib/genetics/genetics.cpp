@@ -139,7 +139,7 @@ std::vector<glm::vec3> Genetics::solve(Population& pop, Pod& pod, int generation
 
             glm::vec4 fitness = pop.getFitness();
 
-            double total = Population::totalFitness(fitness);
+            double total = pop.totalFitness(fitness);
 
             fitValsToInsert.push_back("(" + std::to_string(total) + ", "
                                           + std::to_string(fitness.x) + ","
