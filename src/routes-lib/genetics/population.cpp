@@ -4,8 +4,17 @@
 
 #include "population.h"
 
+<<<<<<< Updated upstream
 Population::Population(int pop_size, glm::vec4 start, glm::vec4 dest, const ElevationData& data) : _pop_size(pop_size), _start(start),
     _dest(dest), _direction(_dest - _start), _data(data) {
+=======
+Population::Population(int pop_size, glm::vec4 start, glm::vec4 dest, const ElevationData& data, Configure conf) : _pop_size(pop_size), _start(start),
+    _dest(dest), _direction(_dest - _start), _data(data), _reload(conf.getReload()), _initial_sigma_divisor(conf.getInitialSigmaDivisor()),
+    _initial_sigma_xy(conf.getInitialSigmaXY()), _step_dampening(conf.getStepDampening()), _alpha(conf.getAlpha()), _num_sample_threads(conf.getNumSampleThreads()),
+    _num_route_workers(conf.getNumRouteWorkers()), _track_weight(conf.getTrackWeight()), _curve_weight(conf.getCurveWeight()), _grade_weight(conf.getGradeWeight()),
+    _length_weight(conf.getLengthWeight()) {
+
+>>>>>>> Stashed changes
 
     // Figure out how many points we need for this route
     calcGenomeSize();
@@ -111,7 +120,7 @@ void Population::sortIndividuals() {
         _sorted_individuals[i] = getIndividual(i);
 
     // Sort the array of individual structs
-    std::sort(_sorted_individuals.begin(), _sorted_individuals.end(), [](Individual a, Individual b){
+    std::sort(_sorted_individuals.begin(), _sorted_individuals.end(), [&](Individual a, Individual b){
 
         // Compare costs in the header
         return (*a.header).x < (*b.header).x;
@@ -167,6 +176,24 @@ std::vector<glm::vec3> Population::getSolution() const {
     
 }
 
+<<<<<<< Updated upstream
+=======
+glm::vec4 Population::getFitness() const {
+
+    return (*_sorted_individuals[0].header);
+
+}
+
+double Population::totalFitness(glm::vec4 costs) {
+
+    //1.2, 0.8, 1, 1.6
+
+    return (costs.x * _track_weight) + (costs.y * _curve_weight) + (costs.z * _grade_weight) + (costs.w * _length_weight);
+
+}
+
+
+>>>>>>> Stashed changes
 void Population::calcGenomeSize() {
 
     // The genome size has a square root relationship with the length of the route

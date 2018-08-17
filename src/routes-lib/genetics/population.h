@@ -188,6 +188,37 @@ public:
      */
     std::vector<glm::vec3> getSolution() const;
 
+<<<<<<< Updated upstream
+=======
+    /**
+     * Returns a vector of the fitness of each part of the fitness function.
+     * x: track_fitness
+     * y: curve_fitness
+     * z: grade_fitness
+     * w: length_fitness
+     *
+     * @return
+     * A vector of each component of the fitness of the best individual of this generation.
+     */
+    glm::vec4 getFitness() const;
+
+    /**
+     * Computes the total fitness of from the header of an individual
+     *
+     * @return
+     * The fitness of an individual
+     */
+    double totalFitness(glm::vec4 costs);
+
+
+
+    /** The starting position of the path that this population is trying to "solve" */
+    glm::vec4 _start;
+
+    /** The ending position of the path that this population is trying to "solve" */
+    glm::vec4 _dest;
+
+>>>>>>> Stashed changes
 private:
 
     /**
@@ -441,6 +472,56 @@ private:
      */
     std::vector<float> _fitness_over_generations;
 
+<<<<<<< Updated upstream
+=======
+    /**
+     * This vector contains the best fitness vectors of each generation. Every time step() is called, the vector of the cost function
+     * for the fittest individual is saved
+     */
+    std::vector<std::vector<double>> _mo_fitness_over_generations;
+
+    /**
+     * 0: reload params
+     * 1: don't reload params
+     */
+    const int _reload;
+
+    /**
+     * This value is used to help calculate the initial step size of the population.
+     * and the Z sigma is the max elevation delta / INITIAL_SIGMA_DIVISOR.
+     */
+    const float _initial_sigma_divisor;
+
+    /**
+    * This serves as the initial value for the X and Y of all the points for sigma.
+    * We use 5km as a pretty tight bounding around the straight line (initial mean)
+    */
+    const float _initial_sigma_xy;
+
+    /** Represents the dampening parameter for the step size. This value should be close to 1 */
+    const float _step_dampening;
+
+    /** The interval multiplier for the square root of _genome_size * 3 for the indicator function. */
+    const float _alpha;
+
+    /** The number of threads that are used to sample from the multivariate normal distribution */
+    const int _num_sample_threads;
+
+    /** The number of divisions that the route is split up into for evaluation on the GPU */
+    const int _num_route_workers;
+
+    /** The constant that the track cost is multiplied by in the cost function*/
+    const float _track_weight;
+
+    /** The constant that the curve cost is multiplied by in the cost function*/
+    const float _curve_weight;
+
+    /** The constant that the grade cost is multiplied by in the cost function*/
+    const float _grade_weight;
+
+    /** The constant that the length cost is multiplied by in the cost function*/
+    const float _length_weight;
+>>>>>>> Stashed changes
 };
 
 #endif //ROUTES_POPULATION_H
