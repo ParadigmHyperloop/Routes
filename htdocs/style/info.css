@@ -1,0 +1,79 @@
+h1 {
+    font-weight: bold;
+    font-size: 128px;
+    text-align: center;
+    color: transparent;
+    background-image: linear-gradient(to bottom right, #FF5A43, #C00040);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+#contributors {
+    font-size: 28px;
+    text-align: center;
+            
+    color: white;
+/*
+    background-image: linear-gradient(to bottom right, #66a3ff, #005ce6);
+    -webkit-background-clip: text;
+    background-clip: text;
+*/
+    
+    margin-bottom: 200px;
+}
+
+#landing {
+    
+    text-align: center;
+    margin-top: 250px;
+    margin-bottom: 280px;
+}
+
+#sub-section3 {
+    margin-left: 3%;
+}
+
+h2 {
+    
+    font-weight: bold;
+    font-size: 48px;
+}
+
+h3 {
+    color: transparent;
+    background-image: linear-gradient(to bottom right, #66a3ff, #005ce6);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+.text-section {
+    margin-left: 25%;
+    margin-right: 25%;
+/*    text-align: center;*/
+    margin-bottom: 100px;
+    font-size: 24px;
+}
+
+li {
+    margin: 20px 0;
+}
+
+.arrow { 
+    transform: rotate(90deg);
+    transform: translate(-20,0);
+    display: flex;
+    fill: url(#button-gradient) #447799;
+    margin: 0 auto;
+    margin-bottom: 150px;
+}
+
+#link-button {
+    position: absolute;
+    display: table;
+    width: 7%;
+    height: 4%;
+    margin-top: 30px;
+    margin-bottom: auto;
+    white-space: nowrap;
+    background-color: transparent;
+}

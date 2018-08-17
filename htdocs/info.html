@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+
+<link rel="stylesheet" href="style/info.css">
+<link rel="stylesheet" href="style/shared.css">
+<link rel="stylesheet" href="style/navbar.css">
+<link rel="stylesheet" href="style/places.css">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="script/info.js"></script>
+<script src="script/jquery.particleground.min.js"></script>
+
+
+<html>
+
+    <head>
+            
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Paradigm Hyperloop: Routes</title>
+
+    </head>
+    
+    <body>
+        
+        <div id="background"></div>
+        
+<!--
+        <div id="navbar">
+            Routes
+            <a href="https://paradigmhyperloop.com/">
+                <img src="assets/image/paradigm-logo.svg" id="paradigm-logo">
+            </a>
+        </div>
+-->
+    
+        <div id="landing">
+            <h1>Routes</h1>
+
+            <p id="contributors">
+                Paradigm Hyperloop
+            </p>
+            
+            
+            
+        </div>
+        
+        <div>
+            
+            <svg width="64px" height="64px" viewBox="0 0 240.823 240.823" class="arrow" id="scroll-arrow">
+                <a href="#section1">
+                    <path id="Chevron_Right_1_" d="M183.189,111.816L74.892,3.555c-4.752-4.74-12.451-4.74-17.215,0c-4.752,4.74-4.752,12.439,0,17.179
+		l99.707,99.671l-99.695,99.671c-4.752,4.74-4.752,12.439,0,17.191c4.752,4.74,12.463,4.74,17.215,0l108.297-108.261
+		C187.881,124.315,187.881,116.495,183.189,111.816z"/>
+                </a>
+            </svg>
+            
+            <svg style="position:absolute;" aria-hidden="true" focusable="false">
+                <linearGradient id="button-gradient" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#C00040" />
+                    <stop offset="100%" stop-color="#FF5A43" />
+                 </linearGradient>
+            </svg>
+        </div>
+
+        
+        <div id="section1" class="text-section">
+            <h2>
+                <div class="grad-text">What</div> is Routes?
+            </h2>
+            
+            <p> Routes is a parallelized evolutionary algorithm built for computing hyperloop routes. We utilize the an algorithm called Covariance Matrix Adaptation Evolution Strateies, or CMA-ES. We strove to create a near real time platform for computing hyperloop routes. Given two locations in the United States, Routes will calculate the 
+            'best' route to get from point A to point B. It will also display useful statistics related to the computed route such as the estimated time to traverse this route and the length of the track.</p>
+   
+        </div> 
+        
+        <div id="section2" class="text-section">
+            <h2>
+                <div class="grad-text">Why</div> Build Routes?
+            </h2>
+            
+            <p>The computation of a hyperloop route is a high dimensional optimization problem, which makes it difficult for engineers and planners to propose building one. There are four main considerations when building a hyperloop route.</p>
+            
+            <ol>
+                <li>The curvature of the tube must be taking into consideration, since making turns would require the hyperloop pod to decrease its speed.</li>
+                <li>The changes in elevation, or the grade of the track is also an important consideration; if the route has too high of a grade, the pod risks crashing into the track.</li>
+                <li>The route would like to avoid mountains, or any other kind of terrain that would require tunneling, as tunneling would drive up costs. The tradeoffs between curvature, the grade of the track, and the cost of tunneling are what make this problem so complex.</li>
+                <li>The final consideration is the length of the route of the route, as longer routes would both cost more money to build, and would also increase the efficiency of traveling along the route.</li>
+            </ol>
+            
+            <p>The goal when building Routes was to design an algorithm that can efficiently compute the best potential Hyperloop Route between two give locations based on these considerations. This tool could be used both to help estimate the cost of building a Hyperloop track, as well a showcase of the merits of Hyperloop to everyone. Virgin Hyperloop One has already built a tool that allows consumers to compare estimated times of travel for a hyperloop track. However, they calculate this estimation by assuming a straight line distance between the two locations, completely ignoring all of the before mentioned constraints or the time needed to accelerate at the beginning and end of the route.. </p>
+            
+            <p>We believe that Routes improves on this estimation by taking into account the above considerations, as well as providing a visual for what the route would look like. In doing so, we hope that this brings us one step closer to having a Hyperloop built.</p>
+   
+        </div> 
+        
+        <div id="section3" class="text-section">
+            <h2>
+                <div class="grad-text">How</div> is Routes Calculating Hyperloop Routes?
+            </h2>
+            <div id="sub-section3">
+                <div class="sub-section">
+                    <h3>
+                        Infrastructure
+                    </h3>
+                    
+                    <ul>
+                        <li>In order to make our algorithm consider all of the necessary constraints, it needs to take data about the world around the route. To do so we use the Geospatial Data Abstraction Library (GDAL), which allows us to take data from the USGS and interpret it in a meaningful way.</li>
+                        <li>CMA-ES is highly parallelizable, allowing us to utilize a GPU to speed up computation by orders of magnitude. In order to leverage the GPU, we use the OpenCL library.</li>
+                        <li>We also make use of the following libraries: 
+                            <ol>
+                                <li>Boost</li>
+                                <li>OpenGL Mathematics</li>
+                                <li>Eigen</li>
+                            </ol>
+                        </li>
+                        <li>In order to reduce the number of computations, we have chosen to use Bézier curves to represent a route. Bézier curves use a fixed number of 'control points' to represent a larger line.</li>
+                    </ul>
+                </div>
+                
+                <div class="sub-section">
+                    <h3>
+                        CMA-ES
+                    </h3>
+                    
+                    <p>Since our problem is ill-conditioned and has a high dimensionality, we decided to use an evolutionary algorithm. We chose CMA-ES for a few reasons. First, it has a very large search space, so it avoids getting stuck on local optimam, and second, CMA-ES has two evolution paths, an isotropic and anisotropic path, which prevents the solution from converging prematurely. CMA-ES has four main steps:</p>
+                    
+                    <ol>
+                        <li>
+                            Generate a series of completely random candidate solutions. These are guaranteed to start at a desired position and end at a desired position.
+                        </li>
+                        <li>
+                            Each candidate solution is evaluated. In this step the curvature, pylon cost, tunneling cost, and route length are considered. The fitness function weighs these four considerations and outputs a numerical score for the candidate. This function is what CMA-ES is attempting to minimize.
+                        </li>
+                        <li>
+                            After each candidate is evaluated, the best performing candidates are used to adjust the random distribution that candidates are sampled from. This increases the likelihood that succesive generations' candidates will be closer to the absolute minimum of the fitness function.
+                        </li>
+                        <li>A new random collection of candidates is generated based on this updated distribution and steps two through four are repeated for the desired number of times.</li>
+                    </ol>
+                    <p>Using the isotropic and anisoptropic evolution paths, as well as step size control, we can ensure that the algorithm explores the entire space of possible solutions.</p>
+                        
+                    
+                    <p>VISUALIZATION OF ROUTE EVOLVING GOES HERE</p>
+                </div>
+                
+                <div class="sub-section">
+                    <h3>
+                        Interpreting the Results
+                    </h3>
+                    
+                    <p>Just knowing what an optimal route looks like is not quite enough to make this computation useful.</p>
+                    
+                    <p>We currently show the following measures of the calculated route:</p>
+                    
+                    <ul>
+                        <li>Length of the route</li>
+                        <li>Time to traverse the route</li>
+                        <li>Elevation of the track versus the terrain</li>
+                        <li>speed of the pod along the track</li>
+                        <li>A comparison of hyperloop with other modes of transportation</li>
+                    </ul>
+                    
+                    <p>We plan to display the following information in the future:</p>
+                    
+                    <ul>
+                        <li>Estimated cost of the Hyperloop route</li>
+                        <li>The ROI of the Route</li>
+                        <li>Information pertaining to the Hyperloop stations that would be used and how this would impact travel time and cost</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div id="section4" class="text-section">
+            <h2>
+                <div class="grad-text">Who</div> is Routes?
+            </h2>
+            
+            <p>Routes was developed by Logan Pazol and Isaac Walker from Northeastern University as a part of the Paradigm Hyperloop team.</p>
+            
+            <p>SOME PICTURES HERE MAYBE?</p>
+        </div>
+        
+        <div id="section5" class="text-section">
+            <h2>
+                <div class="grad-text">Where</div> is Routes?
+            </h2>
+            
+            <p>The Routes team, along with Paradigm Hyperloop are located at Northeastern University and Memorial University of Newfoundland. For more information on the Paradigm Hyperloop team, click the button below.</p>
+            
+            <div id="link-button" class="button-container" onclick="location.href='https://paradigmhyperloop.com/';">
+                <div class="button">
+                    <div class="button-text">
+                        Paradigm Hyperloop
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+    </body>
+    
+</html>

@@ -1,5 +1,4 @@
 function makeLineGraph(canvas, xAxis, yAxis) {
-    
     var ctx = document.getElementById(canvas).getContext('2d');
             
     return new Chart(ctx, {

@@ -28,21 +28,21 @@ else
 fi
 
 # Download boost
-curl -L https://dl.bintray.com/boostorg/beta/1.68.0.beta1/source/boost_1_68_0_b1.tar.bz2 --output boost.tar.gz
+curl -L https://dl.bintray.com/boostorg/release/1.65.1/source/boost_1_65_1.tar.gz --output boost.tar.gz
 tar -xzf boost.tar.gz
-rm -rf boost.tar.gz
 
 # Copy libraries
-cp -r boost*/boost/ include/boost/
+cp -r boost_1_65_1/boost/ include/boost/
 
 # Compile boost filesystem and program options
-cd boost*
+cd boost_1_65_1
 ./bootstrap.sh --with-libraries=program_options,filesystem,test
 ./b2 link=static
 cp -r stage/lib ../
 cd ..
 
-rm -rf boost*
+rm -rf boost_1_65_1
+rm -rf boost.tar.gz
 
 # Remove libraries that get built and we dont need
 rm lib/*boost_prg_exec_monitor*
@@ -60,9 +60,7 @@ cd restbed
 mkdir build
 cd build
 cmake -DBUILD_SSL=NO ..
-make restbed-static
-make restbed-shared
-make install/fast
+make install
 cd ../../
 cp -r restbed/distribution/library/* lib/
 cp -r restbed/distribution/include/* include/
@@ -82,6 +80,15 @@ make install
 cd ../../
 cp -r ei*/build/Ei/include/eigen3 include/eigen3
 rm -rf ei*
+
+# Download libpqxx
+cd include
+git clone https://github.com/jtv/libpqxx.git
+cd libpqxx
+./configure --disable-documentation
+make
+make install
+cd ../../
 
 sudo chmod -R 777 include
 sudo chmod -R 777 lib
