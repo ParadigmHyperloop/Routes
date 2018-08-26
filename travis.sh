@@ -79,7 +79,7 @@ make
 make install
 cd ../
 cp libpqxx-build/lib/*.a lib/
-cp -r libpqxx-build/include/ include/
+cp -r libpqxx-build/include/pqxx include/pqxx
 rm -rf libpqxx*
 
 cd include
