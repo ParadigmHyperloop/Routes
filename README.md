@@ -28,6 +28,7 @@ Routes are internally represented by n-degree bezier curves, where n is determin
 
 ### Linux / macOS
 If you are on Linux, download the OpenCL SDK from https://software.intel.com/en-us/intel-opencl. Also ensure your graphics card drivers are installed and up to date.
+[PostgreSQL](https://www.postgresql.org) is also required.
 
 Run these commands in the directory of your choice
 ```
@@ -48,6 +49,7 @@ The build directory will now contain built binaries, `Routes-Exec`, `Routes-Serv
 
 ### Windows
 Note: We had some issues getting the project to compile under Windows with the newest version of CMake. CMake 3.8.2 has been confirmed to work.
+[PostgreSQL](https://www.postgresql.org) is also required.
 
 Make sure Visual Studio 2017 for C++ development is installed. The Community edition is free and will suffice.
 1. Open up the Visual Studio 2017 Developer Command Prompt. If you search "Developer" in Cortana it should be one of the results.
