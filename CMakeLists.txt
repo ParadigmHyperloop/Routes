@@ -9,10 +9,13 @@ FILE(GLOB_RECURSE SOURCES ${CMAKE_SOURCE_DIR}/src/routes-lib/*.cpp)
 
 FILE(GLOB_RECURSE LIBRARIES ${CMAKE_SOURCE_DIR}/lib/*${CMAKE_STATIC_LIBRARY_SUFFIX})
 message(WARNING ${LIBRARIES})
-add_definitions(-DBOOST_ERROR_CODE_HEADER_ONLY)
 
 # Add the sources to the executables
 add_library(Routes STATIC ${HS} ${SOURCES})
+
+IF (APPLE)
+    add_definitions(-DBOOST_ERROR_CODE_HEADER_ONLY)
+ENDIF()
 
 IF (WIN32)
 
