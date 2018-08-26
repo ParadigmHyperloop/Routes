@@ -59,7 +59,8 @@ git clone https://github.com/Corvusoft/restbed.git --recursive
 cd restbed
 mkdir build
 cd build
-cmake -DBUILD_SSL=NO ..
+cmake -DBUILD_SSL=NO -DCMAKE_SKIP_INSTALL_ALL_DEPENDENCY=TRUE ..
+make restbed-static
 make install
 cd ../../
 cp -r restbed/distribution/library/* lib/
