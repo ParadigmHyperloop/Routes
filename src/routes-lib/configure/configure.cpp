@@ -24,6 +24,7 @@ void Configure::loadConfig() {
 
     int population_size = root.get<int>("routes.population-size", 0);
     int num_generations = root.get<int>("routes.num-generations", 0);
+    int use_db = root.get<int>("routes.use-db", 0);
     float initial_sigma_divisor = root.get<float>("population.initial-sigma-divisor", 0);
     float initial_sigma_xy = root.get<float>("population.initial-sigma-xy", 0);
     float step_dampening = root.get<float>("population.step-dampening", 0);
@@ -36,7 +37,7 @@ void Configure::loadConfig() {
     float length_weight = root.get<float>("cost.length-weight", 0);
 
     _config = {reload, population_size, num_generations,
-               initial_sigma_divisor, initial_sigma_xy,
+               use_db, initial_sigma_divisor, initial_sigma_xy,
                step_dampening, alpha, num_sample_threads,
                num_route_workers, track_weight, curve_weight,
                grade_weight, length_weight};
@@ -55,6 +56,10 @@ int Configure::getPopulationSize() {
 
 int Configure::getNumGenerations() {
     return _config.num_generations;
+}
+
+bool Configure::getUseDb() {
+    return _config.use_db == 1;
 }
 
 float Configure::getInitialSigmaDivisor() {

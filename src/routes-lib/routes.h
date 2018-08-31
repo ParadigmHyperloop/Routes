@@ -6,6 +6,7 @@
 #define ROUTES_ROUTES_H
 
 #include "genetics/genetics.h"
+#include "database/database.h"
 
 /** This is a simple class to handle the complete calculation of a route. */
 class Routes {
@@ -233,6 +234,11 @@ class Routes {
           * The current configuration
           */
          static Configure _config;
+
+         /** True if the database should be used */
+         static bool _useDb;
+
+         static Database _db;
 };
 
 #endif //ROUTES_ROUTES_H

@@ -9,7 +9,6 @@
 #include <boost/compute/container/vector.hpp>
 #include <random>
 #include <time.h>
-//#include <pagmo2/include/pagmo/utils/multi_objective.hpp>
 
 #include "../bezier/bezier.h"
 #include "../elevation/elevation.h"

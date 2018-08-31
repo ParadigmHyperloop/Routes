@@ -15,8 +15,11 @@ std::string Routes::_solutions;
 int Routes::_pop_size;
 int Routes::_num_generations;
 Configure Routes::_config;
+bool Routes::_useDb;
+Database Routes::_db = Database("routes", "isaac", "evolution");
 
 std::vector<glm::vec3> Routes::calculateRoute(glm::vec2 start, glm::vec2 dest) {
+
 
     configureParams();
 
@@ -43,11 +46,15 @@ std::vector<glm::vec3> Routes::calculateRoute(glm::vec2 start, glm::vec2 dest) {
     Population pop = Population(_pop_size, glm::vec4(start_meter.x, start_meter.y, start_meter.z + 10.0, 0.0),
                                           glm::vec4(dest_meter.x, dest_meter.y, dest_meter.z + 10.0, 0.0), data, _config);
 
+    _useDb = _config.getUseDb();
+
     // Solve!
     // These points will be in meters so we need to convert them
-    std::vector<glm::vec3> computed = Genetics::solve(pop, pod, _num_generations, start, dest);
+    std::vector<glm::vec3> computed = Genetics::solve(pop, pod, _num_generations, start, dest, _useDb);
 
     std::vector<glm::vec3> points = Bezier::evaluateEntireBezierCurve(computed, 100);
+
+    _solutions = Genetics::getEval();
 
     _time = pod.timeForCurve(points);
     _length = Bezier::bezierLength(points);
@@ -138,305 +145,124 @@ int Routes::getId() {
 
 std::string Routes::getSolutions() {
 
-    pqxx::result r;
+    std::string result;
 
-    try {
-        // Connect to the database
-        pqxx::connection c("dbname=routes user=isaac password=evolution");
+    if (_useDb) {
 
-        pqxx::work w(c);
-
-        // Get all the evaluated points with this iterations route_id
-        r = w.exec("SELECT \"Controls\".evaluated FROM \"Controls\" "
-                   "JOIN \"Generation\" ON (\"Controls\".controls_id = \"Generation\".controls_id) "
-                   "JOIN \"Route\" ON (\"Route\".route_id = \"Generation\".route_id) "
-                   "WHERE \"Route\".route_id = " + std::to_string(_route_id));
-
-        w.commit();
-
-    } catch (const std::exception &e) {
-        std::cerr << e.what() << std::endl;
+        std::string toExec = "SELECT \"Controls\".evaluated FROM \"Controls\" "
+                             "JOIN \"Generation\" ON (\"Controls\".controls_id = \"Generation\".controls_id) "
+                             "JOIN \"Route\" ON (\"Route\".route_id = \"Generation\".route_id) "
+                             "WHERE \"Route\".route_id = " + std::to_string(_route_id);
+        result = _db.selectSolutions(toExec);
+    } else {
+        result = "[[]]";
     }
 
-    std::vector<std::string> evaluatedStrings;
+    return result;
 
-
-    //add all the rows into a vector and turn them into strings
-    for (auto row : r) {
-        evaluatedStrings.push_back(row[0].c_str());
-    }
-
-    //wrap the vector in brackets and make it one string
-    std::string evaluatedResult = "[";
-
-    for (std::string s : evaluatedStrings) {
-
-        evaluatedResult.append(s);
-
-        //newline for readability when debugging
-        evaluatedResult.append(",\n");
-    }
-
-    evaluatedResult.append("]");
-
-    //get rid of the trailing comma
-    evaluatedResult.erase(evaluatedResult.size() - 3, 2);
-
-    //Since this is being passed to the front end through JSON, and curly braces
-    //indicate an object in JSON, change curly braces to brackets.
-    std::replace(evaluatedResult.begin(), evaluatedResult.end(), '{', '[');
-    std::replace(evaluatedResult.begin(), evaluatedResult.end(), '}', ']');
-
-    return evaluatedResult;
 }
 
 std::string Routes::getTotalFitness() {
 
-    pqxx::result r;
+    std::string result;
 
-    try {
-        pqxx::connection c("dbname=routes user=isaac password=evolution");
+    if (_useDb) {
 
-        pqxx::work w(c);
-
-        // Get all the evaluated points with this iterations route_id
-        r = w.exec("SELECT \"Fitness\".total_fitness FROM \"Fitness\" "
-                   "JOIN \"Generation\" ON (\"Fitness\".generation_id = \"Generation\".generation_id) "
-                   "JOIN \"Controls\" ON (\"Controls\".controls_id = \"Generation\".controls_id) "
-                   "JOIN \"Route\" ON (\"Route\".route_id = \"Generation\".route_id) "
-                   "WHERE \"Route\".route_id = " + std::to_string(_route_id)
-                   + " ORDER BY \"Generation\".generation");
-
-        w.commit();
-    } catch (const std::exception &e) {
-        std::cerr << e.what() << std::endl;
+        std::string toExec = "SELECT \"Fitness\".total_fitness FROM \"Fitness\" "
+                             "JOIN \"Generation\" ON (\"Fitness\".generation_id = \"Generation\".generation_id) "
+                             "JOIN \"Controls\" ON (\"Controls\".controls_id = \"Generation\".controls_id) "
+                             "JOIN \"Route\" ON (\"Route\".route_id = \"Generation\".route_id) "
+                             "WHERE \"Route\".route_id = " + std::to_string(_route_id)
+                             + " ORDER BY \"Generation\".generation";
+        result = _db.selectTotalFitness(toExec);
+    } else {
+        result = "[[]]";
     }
 
-    std::vector<std::string> evaluatedStrings;
-
-
-    //add all the rows into a vector and turn them into strings
-    for (auto row : r) {
-        evaluatedStrings.push_back(row[0].c_str());
-    }
-
-    //wrap the vector in brackets and make it one string
-    std::string evaluatedResult = "[";
-
-    for (std::string s : evaluatedStrings) {
-
-        evaluatedResult.append(s);
-
-        //newline for readability when debugging
-        evaluatedResult.append(",\n");
-    }
-
-    evaluatedResult.append("]");
-
-    //get rid of the trailing comma
-    evaluatedResult.erase(evaluatedResult.size() - 3, 2);
-
-    return evaluatedResult;
+    return result;
 
 }
 
 std::string Routes::getTrackFitness() {
 
-    pqxx::result r;
+    std::string result;
 
-    try {
-        pqxx::connection c("dbname=routes user=isaac password=evolution");
+    if (_useDb) {
 
-        pqxx::work w(c);
-
-        // Get all the evaluated points with this iterations route_id
-        r = w.exec("SELECT \"Fitness\".track_fitness FROM \"Fitness\" "
-                   "JOIN \"Generation\" ON (\"Fitness\".generation_id = \"Generation\".generation_id) "
-                   "JOIN \"Controls\" ON (\"Controls\".controls_id = \"Generation\".controls_id) "
-                   "JOIN \"Route\" ON (\"Route\".route_id = \"Generation\".route_id) "
-                   "WHERE \"Route\".route_id = " + std::to_string(_route_id)
-                   + " ORDER BY \"Generation\".generation");
-
-        w.commit();
-    } catch (const std::exception &e) {
-        std::cerr << e.what() << std::endl;
+        std::string toExec = "SELECT \"Fitness\".track_fitness FROM \"Fitness\" "
+                             "JOIN \"Generation\" ON (\"Fitness\".generation_id = \"Generation\".generation_id) "
+                             "JOIN \"Controls\" ON (\"Controls\".controls_id = \"Generation\".controls_id) "
+                             "JOIN \"Route\" ON (\"Route\".route_id = \"Generation\".route_id) "
+                             "WHERE \"Route\".route_id = " + std::to_string(_route_id)
+                             + " ORDER BY \"Generation\".generation";
+        result = _db.selectTrackFitness(toExec);
+    } else {
+        result = "[[]]";
     }
 
-    std::vector<std::string> evaluatedStrings;
-
-
-    //add all the rows into a vector and turn them into strings
-    for (auto row : r) {
-        evaluatedStrings.push_back(row[0].c_str());
-    }
-
-    //wrap the vector in brackets and make it one string
-    std::string evaluatedResult = "[";
-
-    for (std::string s : evaluatedStrings) {
-
-        evaluatedResult.append(s);
-
-        //newline for readability when debugging
-        evaluatedResult.append(",\n");
-    }
-
-    evaluatedResult.append("]");
-
-    //get rid of the trailing comma
-    evaluatedResult.erase(evaluatedResult.size() - 3, 2);
-
-    return evaluatedResult;
+    return result;
 
 }
 
 std::string Routes::getCurveFitness() {
 
-    pqxx::result r;
+    std::string result;
 
-    try {
-        pqxx::connection c("dbname=routes user=isaac password=evolution");
+    if (_useDb) {
 
-        pqxx::work w(c);
-
-        // Get all the evaluated points with this iterations route_id
-        r = w.exec("SELECT \"Fitness\".curve_fitness FROM \"Fitness\" "
-                   "JOIN \"Generation\" ON (\"Fitness\".generation_id = \"Generation\".generation_id) "
-                   "JOIN \"Controls\" ON (\"Controls\".controls_id = \"Generation\".controls_id) "
-                   "JOIN \"Route\" ON (\"Route\".route_id = \"Generation\".route_id) "
-                   "WHERE \"Route\".route_id = " + std::to_string(_route_id)
-                   + " ORDER BY \"Generation\".generation");
-
-        w.commit();
-    } catch (const std::exception &e) {
-        std::cerr << e.what() << std::endl;
+        std::string toExec = "SELECT \"Fitness\".curve_fitness FROM \"Fitness\" "
+                             "JOIN \"Generation\" ON (\"Fitness\".generation_id = \"Generation\".generation_id) "
+                             "JOIN \"Controls\" ON (\"Controls\".controls_id = \"Generation\".controls_id) "
+                             "JOIN \"Route\" ON (\"Route\".route_id = \"Generation\".route_id) "
+                             "WHERE \"Route\".route_id = " + std::to_string(_route_id)
+                             + " ORDER BY \"Generation\".generation";
+        result = _db.selectCurveFitness(toExec);
+    } else {
+        result = "[[]]";
     }
 
-    std::vector<std::string> evaluatedStrings;
-
-
-    //add all the rows into a vector and turn them into strings
-    for (auto row : r) {
-        evaluatedStrings.push_back(row[0].c_str());
-    }
-
-    //wrap the vector in brackets and make it one string
-    std::string evaluatedResult = "[";
-
-    for (std::string s : evaluatedStrings) {
-
-        evaluatedResult.append(s);
-
-        //newline for readability when debugging
-        evaluatedResult.append(",\n");
-    }
-
-    evaluatedResult.append("]");
-
-    //get rid of the trailing comma
-    evaluatedResult.erase(evaluatedResult.size() - 3, 2);
-
-    return evaluatedResult;
-
+    return result;
 }
 
 std::string Routes::getGradeFitness() {
 
-    pqxx::result r;
+    std::string result;
 
-    try {
-        pqxx::connection c("dbname=routes user=isaac password=evolution");
+    if (_useDb) {
 
-        pqxx::work w(c);
-
-        // Get all the evaluated points with this iterations route_id
-        r = w.exec("SELECT \"Fitness\".grade_fitness FROM \"Fitness\" "
-                   "JOIN \"Generation\" ON (\"Fitness\".generation_id = \"Generation\".generation_id) "
-                   "JOIN \"Controls\" ON (\"Controls\".controls_id = \"Generation\".controls_id) "
-                   "JOIN \"Route\" ON (\"Route\".route_id = \"Generation\".route_id) "
-                   "WHERE \"Route\".route_id = " + std::to_string(_route_id)
-                   + " ORDER BY \"Generation\".generation");
-
-        w.commit();
-    } catch (const std::exception &e) {
-        std::cerr << e.what() << std::endl;
+        std::string toExec = "SELECT \"Fitness\".grade_fitness FROM \"Fitness\" "
+                             "JOIN \"Generation\" ON (\"Fitness\".generation_id = \"Generation\".generation_id) "
+                             "JOIN \"Controls\" ON (\"Controls\".controls_id = \"Generation\".controls_id) "
+                             "JOIN \"Route\" ON (\"Route\".route_id = \"Generation\".route_id) "
+                             "WHERE \"Route\".route_id = " + std::to_string(_route_id)
+                             + " ORDER BY \"Generation\".generation";
+        result = _db.selectGradeFitness(toExec);
+    } else {
+        result = "[[]]";
     }
 
-    std::vector<std::string> evaluatedStrings;
-
-
-    //add all the rows into a vector and turn them into strings
-    for (auto row : r) {
-        evaluatedStrings.push_back(row[0].c_str());
-    }
-
-    //wrap the vector in brackets and make it one string
-    std::string evaluatedResult = "[";
-
-    for (std::string s : evaluatedStrings) {
-
-        evaluatedResult.append(s);
-
-        //newline for readability when debugging
-        evaluatedResult.append(",\n");
-    }
-
-    evaluatedResult.append("]");
-
-    //get rid of the trailing comma
-    evaluatedResult.erase(evaluatedResult.size() - 3, 2);
-
-    return evaluatedResult;
+    return result;
 
 }
 
 std::string Routes::getLengthFitness() {
 
-    pqxx::result r;
+    std::string result;
 
-    try {
-        pqxx::connection c("dbname=routes user=isaac password=evolution");
+    if (_useDb) {
 
-        pqxx::work w(c);
-
-        // Get all the evaluated points with this iterations route_id
-        r = w.exec("SELECT \"Fitness\".length_fitness FROM \"Fitness\" "
-                   "JOIN \"Generation\" ON (\"Fitness\".generation_id = \"Generation\".generation_id) "
-                   "JOIN \"Controls\" ON (\"Controls\".controls_id = \"Generation\".controls_id) "
-                   "JOIN \"Route\" ON (\"Route\".route_id = \"Generation\".route_id) "
-                   "WHERE \"Route\".route_id = " + std::to_string(_route_id)
-                   + " ORDER BY \"Generation\".generation");
-
-        w.commit();
-    } catch (const std::exception &e) {
-        std::cerr << e.what() << std::endl;
+        std::string toExec = "SELECT \"Fitness\".length_fitness FROM \"Fitness\" "
+                             "JOIN \"Generation\" ON (\"Fitness\".generation_id = \"Generation\".generation_id) "
+                             "JOIN \"Controls\" ON (\"Controls\".controls_id = \"Generation\".controls_id) "
+                             "JOIN \"Route\" ON (\"Route\".route_id = \"Generation\".route_id) "
+                             "WHERE \"Route\".route_id = " + std::to_string(_route_id)
+                             + " ORDER BY \"Generation\".generation";
+        result = _db.selectLengthFitness(toExec);
+    } else {
+        result = "[[]]";
     }
 
-    std::vector<std::string> evaluatedStrings;
-
-
-    //add all the rows into a vector and turn them into strings
-    for (auto row : r) {
-        evaluatedStrings.push_back(row[0].c_str());
-    }
-
-    //wrap the vector in brackets and make it one string
-    std::string evaluatedResult = "[";
-
-    for (std::string s : evaluatedStrings) {
-
-        evaluatedResult.append(s);
-
-        //newline for readability when debugging
-        evaluatedResult.append(",\n");
-    }
-
-    evaluatedResult.append("]");
-
-    //get rid of the trailing comma
-    evaluatedResult.erase(evaluatedResult.size() - 3, 2);
-
-    return evaluatedResult;
+    return result;
 
 }
 

@@ -56,9 +56,6 @@ window.onload = function() {
     
     initSayings()
     saying_timer = window.setTimeout(changeSaying, 500)
-    
-
-
         
     
 }
@@ -157,8 +154,14 @@ function gotFinishedRoute(result) {
     // Invalidate the timer and dismiss loading
     clearTimeout(saying_timer);
     
+    //console.log(result);
+    
     // Parse the JSON 
     JSON_result = JSON.parse(result);
+    
+    if (JSON.stringify(JSON_result.solutions) == "[[]]") {
+        $(".dash").hide();
+    }
     
     console.log(JSON_result);
     
@@ -447,6 +450,7 @@ function fancyLengthFormat(length) {
 }
 
 function startVisualization() {
+    
     fadeOverlay();
     generation = 0;
     updateMap();
@@ -455,10 +459,6 @@ function startVisualization() {
     $('#dashboard-container').prop('disabled', false);
     $('#see-stats-container').css({ "opacity" : "100"});
 
-
-
-//    $('#left-map-graphs').css({"display": "flex", "opacity" : "100"})
-//    $('#right-map-graphs').css({"display": "flex", "opacity" : "100"})
 }
 
 
@@ -637,8 +637,16 @@ function updateMap() {
     
     pathLine.setMap(null);
     
+    var newPath;
+    
+    if (JSON.stringify(JSON_result.solutions) == "[[]]") {
+        newPath = points;
+    } else {
+        newPath = sols[generation];
+    }
+    
     pathLine = new google.maps.Polyline({
-        path: sols[generation],
+        path: newPath,
         geodesic: true,
         strokeColor: '#FF0000',
         strokeOpacity: 1.0,

@@ -43,6 +43,11 @@ struct Configuration {
     int num_generations;
 
     /**
+     * The toggle for using the database
+     */
+    int use_db;
+
+    /**
      * This value is used to help calculate the initial step size of the population.
      * and the Z sigma is the max elevation delta / INITIAL_SIGMA_DIVISOR.
      */
@@ -129,6 +134,14 @@ public:
      * returns the number of generations
      */
     int getNumGenerations();
+
+    /**
+     * Gets the toggle for using the database
+     *
+     * @return
+     * returns the toggle for the database
+     */
+    bool getUseDb();
 
     /**
      * Gets the initial Sigma Divisor for calculating the step size

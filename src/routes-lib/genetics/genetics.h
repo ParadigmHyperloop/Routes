@@ -8,6 +8,7 @@
 #include "population.h"
 
 #include <pqxx/pqxx>
+#include "../database/database.h"
 
 /** A simple class to manage the genetic cycle of a population */
 class Genetics {
@@ -24,14 +25,14 @@ class Genetics {
          * @param pod
          * The information about the hyperloop pod. Determines how curved the track can be.
          *
-         * @param objectiveType
-         * The type of optimization, either "single" or "multi"
+         * @param useDb
+         * true if the database is being used
          *
          * @return
          * The points of the calculated path in meters. This will need to be converted to latitude and longitude
          * to be properly displayed.
          */
-        static std::vector<glm::vec3> solve(Population& pop, Pod& pod, int generations, const glm::dvec2& start, const glm::dvec2& dest);
+        static std::vector<glm::vec3> solve(Population& pop, Pod& pod, int generations, const glm::dvec2& start, const glm::dvec2& dest, bool useDb);
 
         /**
          * This function returns the route id of this route for querying the database
@@ -40,6 +41,14 @@ class Genetics {
          * The primary key of the route table
          */
         static int getRouteId();
+
+        /**
+         * Gets the evaluated points
+         *
+         * @return
+         * returns the evaluated points
+         */
+        static std::string getEval();
 
     private:
 
@@ -67,6 +76,11 @@ class Genetics {
          * The ending longitude
          */
         static double _long_end;
+
+        /**
+         * The evaluated points
+         */
+        static std::string _eval;
 
 };
 
