@@ -16,7 +16,7 @@ int Routes::_pop_size;
 int Routes::_num_generations;
 Configure Routes::_config;
 bool Routes::_useDb;
-Database Routes::_db = Database("routes", "isaac", "evolution");
+Database Routes::_db = Database("evie", "evie", "evolution");
 
 std::vector<glm::vec3> Routes::calculateRoute(glm::vec2 start, glm::vec2 dest) {
 

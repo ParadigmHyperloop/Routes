@@ -4,7 +4,7 @@
   "routes": {
     "population-size": 1000,
     "num-generations": 300,
-    "use-db": 0
+    "use-db": 1
   },
 
   "population": {

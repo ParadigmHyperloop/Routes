@@ -25,7 +25,7 @@ std::vector<glm::vec3> Genetics::solve(Population& pop, Pod& pod, int generation
     std::vector<std::string> fitValsToInsert;
 
     //Initialize database connection
-    Database db = Database("routes", "isaac", "evolution");
+    Database db = Database("evie", "evie", "evolution");
 
 
     //Insert the starting positions and the type of optimization

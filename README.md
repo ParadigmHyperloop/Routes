@@ -135,6 +135,34 @@ The resultant length is in meters.
 
 By editing the url field htdocs/scripts/config.js to `http://localhost` you can ensure that when using the website it will point to your own machine.
 
+## Database
+In order to use the database, the following instructions must be followed.
+
+```
+$ sudo apt-get update
+$ sudo apt-get install postgresql postgresql-contrib
+$ sudo -i -u postgres
+```
+Then, in the new postgresql interface, run the following
+```
+createuser evie --createdb --pwprompt --superuser
+```
+
+Set the password to be ```evolution```.
+
+Then run
+```
+createdb evie
+exit
+```
+
+Finally, run
+```
+$ PGPASSWORD=evolution psql -U evie -d evie -a -f ~/Routes/createRoutes.sql
+```
+
+to initialize the database.
+
 ## Data
 In order to run the algorithm, 1 Arc Second elevation data is required from the USGS. You can find all USGS data at https://viewer.nationalmap.gov/basic/
 
