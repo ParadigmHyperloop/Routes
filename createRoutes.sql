@@ -23,7 +23,7 @@ CREATE TABLE public."Controls" (
 );
 
 
-ALTER TABLE public."Controls" OWNER TO isaac;
+ALTER TABLE public."Controls" OWNER TO evie;
 
 CREATE SEQUENCE public."Controls_controls_id_seq"
     START WITH 1
@@ -33,7 +33,7 @@ CREATE SEQUENCE public."Controls_controls_id_seq"
     CACHE 1;
 
 
-ALTER TABLE public."Controls_controls_id_seq" OWNER TO isaac;
+ALTER TABLE public."Controls_controls_id_seq" OWNER TO evie;
 
 ALTER SEQUENCE public."Controls_controls_id_seq" OWNED BY public."Controls".controls_id;
 
@@ -48,7 +48,7 @@ CREATE TABLE public."Fitness" (
 );
 
 
-ALTER TABLE public."Fitness" OWNER TO isaac;
+ALTER TABLE public."Fitness" OWNER TO evie;
 
 CREATE SEQUENCE public."Fitness_fitness_id_seq"
     START WITH 1
@@ -58,7 +58,7 @@ CREATE SEQUENCE public."Fitness_fitness_id_seq"
     CACHE 1;
 
 
-ALTER TABLE public."Fitness_fitness_id_seq" OWNER TO isaac;
+ALTER TABLE public."Fitness_fitness_id_seq" OWNER TO evie;
 
 ALTER SEQUENCE public."Fitness_fitness_id_seq" OWNED BY public."Fitness".fitness_id;
 
@@ -70,7 +70,7 @@ CREATE TABLE public."Generation" (
 );
 
 
-ALTER TABLE public."Generation" OWNER TO isaac;
+ALTER TABLE public."Generation" OWNER TO evie;
 
 CREATE SEQUENCE public."Generation_generation_id_seq"
     START WITH 1
@@ -80,7 +80,7 @@ CREATE SEQUENCE public."Generation_generation_id_seq"
     CACHE 1;
 
 
-ALTER TABLE public."Generation_generation_id_seq" OWNER TO isaac;
+ALTER TABLE public."Generation_generation_id_seq" OWNER TO evie;
 
 ALTER SEQUENCE public."Generation_generation_id_seq" OWNED BY public."Generation".generation_id;
 
@@ -93,7 +93,7 @@ CREATE TABLE public."Route" (
 );
 
 
-ALTER TABLE public."Route" OWNER TO isaac;
+ALTER TABLE public."Route" OWNER TO evie;
 
 CREATE SEQUENCE public."Route_route_id_seq"
     START WITH 1
@@ -103,7 +103,7 @@ CREATE SEQUENCE public."Route_route_id_seq"
     CACHE 1;
 
 
-ALTER TABLE public."Route_route_id_seq" OWNER TO isaac;
+ALTER TABLE public."Route_route_id_seq" OWNER TO evie;
 
 ALTER SEQUENCE public."Route_route_id_seq" OWNED BY public."Route".route_id;
 
