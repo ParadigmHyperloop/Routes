@@ -138,11 +138,21 @@ By editing the url field htdocs/scripts/config.js to `http://localhost` you can 
 ## Database
 In order to use the database, the following instructions must be followed.
 
+On Linux: 
 ```
 $ sudo apt-get update
 $ sudo apt-get install postgresql postgresql-contrib
+```
+On Mac:
+```
+brew install postgres
+```
+
+Next, run
+```
 $ sudo -i -u postgres
 ```
+
 Then, in the new postgresql interface, run the following
 ```
 createuser evie --createdb --pwprompt --superuser
