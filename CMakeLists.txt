@@ -11,8 +11,11 @@ FILE(GLOB_RECURSE LIBRARIES ${CMAKE_SOURCE_DIR}/lib/*${CMAKE_STATIC_LIBRARY_SUFF
 message(WARNING ${LIBRARIES})
 
 # Add the sources to the executables
-add_library(Routes STATIC ${HS}
-        ${SOURCES} src/routes-lib/configure/configure.cpp src/routes-lib/configure/configure.h src/routes-lib/database/database.cpp src/routes-lib/database/database.h)
+add_library(Routes STATIC ${HS} ${SOURCES})
+
+IF (APPLE)
+    add_definitions(-DBOOST_ERROR_CODE_HEADER_ONLY)
+ENDIF()
 
 IF (WIN32)
 
@@ -53,6 +56,7 @@ IF (WIN32)
 
 ELSE()
 
+  message(Routes-lib ${LIBRARIES})
   target_link_libraries(Routes ${OPENCL_LIBRARIES}
           ${GDAL_LIBRARY}
           ${LIBRARIES}
@@ -79,8 +83,7 @@ add_dependencies(Routes copy)
 FILE(GLOB_RECURSE HS ${CMAKE_SOURCE_DIR}/src/routes-exec/*.h*)
 FILE(GLOB_RECURSE SOURCES ${CMAKE_SOURCE_DIR}/src/routes-exec/*.cpp)
 
-add_executable(Routes-Exec ${HS}
-        ${SOURCES} src/routes-lib/configure/configure.cpp src/routes-lib/configure/configure.h src/routes-lib/database/database.cpp src/routes-lib/database/database.h)
+add_executable(Routes-Exec ${HS} ${SOURCES})
 
 add_dependencies(Routes-Exec Routes)
 
@@ -92,17 +95,19 @@ target_link_libraries(Routes-Exec ${CMAKE_BINARY_DIR}/${CMAKE_STATIC_LIBRARY_PRE
 IF (WIN32)
 
   message(WARNING ${GDAL_LIBRARY})
-  target_link_libraries(Routes-Exec ${OpenCL_LIBRARIES}
+  target_link_libraries(Routes-Exec
+          ${OpenCL_LIBRARIES}
           ${GDAL_LIBRARY}
           ${LIBRARIES})
 
 ELSE()
 
-  target_link_libraries(Routes-Exec ${OPENCL_LIBRARIES}
+  message(Routes-exec ${LIBRARIES})
+  target_link_libraries(Routes-Exec
+          ${OPENCL_LIBRARIES}
           ${GDAL_LIBRARY}
           ${LIBRARIES}
           -lpthread
-          -lpqxx
           -lpq)
 
 ENDIF()
@@ -112,7 +117,7 @@ FILE(GLOB_RECURSE HS ${CMAKE_SOURCE_DIR}/src/routes-server/*.h*)
 FILE(GLOB_RECURSE SOURCES ${CMAKE_SOURCE_DIR}/src/routes-server/*.cpp)
 
 add_executable(Routes-Server ${HS}
-        ${SOURCES} src/routes-lib/configure/configure.cpp src/routes-lib/configure/configure.h src/routes-lib/database/database.cpp src/routes-lib/database/database.h)
+               ${SOURCES})
 
 add_dependencies(Routes-Server Routes)
 
@@ -134,7 +139,6 @@ ELSE()
           ${GDAL_LIBRARY}
           ${LIBRARIES}
           -lpthread
-          -lpqxx
           -lpq)
 
 ENDIF()
@@ -146,7 +150,7 @@ FILE(GLOB_RECURSE HS ${CMAKE_SOURCE_DIR}/src/routes-tests/*.h*)
 FILE(GLOB_RECURSE SOURCES ${CMAKE_SOURCE_DIR}/src/routes-tests/*.cpp)
 
 add_executable(Routes-Tests ${HS}
-        ${SOURCES} src/routes-lib/configure/configure.cpp src/routes-lib/configure/configure.h src/routes-lib/database/database.cpp src/routes-lib/database/database.h)
+               ${SOURCES})
 
 add_dependencies(Routes-Tests Routes)
 
@@ -168,7 +172,6 @@ ELSE()
           ${GDAL_LIBRARY}
           ${LIBRARIES}
           -lpthread
-          -lpqxx
           -lpq)
 
 ENDIF()

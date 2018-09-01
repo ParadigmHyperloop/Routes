@@ -11,20 +11,20 @@ else
 fi
 
 # Download boost
-curl -L https://dl.bintray.com/boostorg/release/1.65.1/source/boost_1_65_1.tar.gz --output boost.tar.gz
+curl -L https://dl.bintray.com/boostorg/release/1.68.0/source/boost_1_68_0.tar.gz --output boost.tar.gz
 2>/dev/null 1>/dev/null tar -xzf boost.tar.gz
 
 # Copy libraries
-cp -r boost_1_65_1/boost/ include/boost/
+cp -r boost_1_68_0/boost/ include/boost/
 
 # Compile boost filesystem and program options
-cd boost_1_65_1
+cd boost_1_68_0
 ./bootstrap.sh --with-libraries=program_options,filesystem,test
 ./b2 link=static
 cp -r stage/lib ../
 cd ..
 
-rm -rf boost_1_65_1
+rm -rf boost_1_68_0
 rm -rf boost.tar.gz
 
 # Remove libraries that get built and we dont need
@@ -42,7 +42,8 @@ git clone https://github.com/Corvusoft/restbed.git --recursive
 cd restbed
 mkdir build
 cd build
-cmake -DBUILD_SSL=NO .. -DCMAKE_CXX_COMPILER=/usr/bin/g++-7
+cmake -DBUILD_SSL=NO -DCMAKE_SKIP_INSTALL_ALL_DEPENDENCY=TRUE -DCMAKE_CXX_COMPILER=/usr/bin/g++-7 ..
+make restbed-static
 make install
 cd ../../
 cp -r restbed/distribution/library/ lib/
@@ -72,13 +73,15 @@ cp -r ei*/build/Ei/include/eigen3 include/eigen3
 rm -rf ei*
 
 # Download libpqxx
-cd include
 git clone https://github.com/jtv/libpqxx.git
 cd libpqxx
-./configure --disable-documentation
-sudo make
-sudo make install
-cd ../../
+./configure --disable-documentation --prefix=${PWD}/../libpqxx-build
+make
+make install
+cd ../
+cp libpqxx-build/lib/*.a lib/
+cp -r libpqxx-build/include/pqxx include/pqxx
+rm -rf libpqxx*
 
 cd include
 ls

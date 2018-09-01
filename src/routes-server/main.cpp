@@ -4,5 +4,4 @@
 
 #include "server/server.h"
 
-
 int main(const int argc, const char* argv[]) { RoutesServer::startServer(8080); }
