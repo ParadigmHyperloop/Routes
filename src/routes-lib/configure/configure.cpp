@@ -19,9 +19,6 @@ void Configure::loadConfig() {
 
     boost::property_tree::read_json(FILE_PATH, root);
 
-    // if 0, then reload, if 1 then don't
-    int reload = root.get<int>("reload", 0);
-
     int population_size = root.get<int>("routes.population-size", 0);
     int num_generations = root.get<int>("routes.num-generations", 0);
     int use_db = root.get<int>("routes.use-db", 0);
@@ -36,7 +33,7 @@ void Configure::loadConfig() {
     float grade_weight = root.get<float>("cost.grade-weight", 0);
     float length_weight = root.get<float>("cost.length-weight", 0);
 
-    _config = {reload, population_size, num_generations,
+    _config = {population_size, num_generations,
                use_db, initial_sigma_divisor, initial_sigma_xy,
                step_dampening, alpha, num_sample_threads,
                num_route_workers, track_weight, curve_weight,
@@ -44,10 +41,6 @@ void Configure::loadConfig() {
 
 
 
-}
-
-int Configure::getReload() {
-    return _config.reload;
 }
 
 int Configure::getPopulationSize() {

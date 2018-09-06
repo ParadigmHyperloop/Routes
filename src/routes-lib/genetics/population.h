@@ -464,12 +464,6 @@ private:
     std::vector<std::vector<double>> _mo_fitness_over_generations;
 
     /**
-     * 0: reload params
-     * 1: don't reload params
-     */
-    const int _reload;
-
-    /**
      * This value is used to help calculate the initial step size of the population.
      * and the Z sigma is the max elevation delta / INITIAL_SIGMA_DIVISOR.
      */
