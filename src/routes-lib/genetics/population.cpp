@@ -5,7 +5,7 @@
 #include "population.h"
 
 Population::Population(int pop_size, glm::vec4 start, glm::vec4 dest, const ElevationData& data, Configure conf) : _pop_size(pop_size), _start(start),
-    _dest(dest), _direction(_dest - _start), _data(data), _reload(conf.getReload()), _initial_sigma_divisor(conf.getInitialSigmaDivisor()),
+    _dest(dest), _direction(_dest - _start), _data(data), _initial_sigma_divisor(conf.getInitialSigmaDivisor()),
     _initial_sigma_xy(conf.getInitialSigmaXY()), _step_dampening(conf.getStepDampening()), _alpha(conf.getAlpha()), _num_sample_threads(conf.getNumSampleThreads()),
     _num_route_workers(conf.getNumRouteWorkers()), _track_weight(conf.getTrackWeight()), _curve_weight(conf.getCurveWeight()), _grade_weight(conf.getGradeWeight()),
     _length_weight(conf.getLengthWeight()) {

@@ -28,11 +28,6 @@
 struct Configuration {
 
     /**
-     * This is 0 if the data should be reloaded, and 1 if not
-     */
-    int reload;
-
-    /**
      * The default size of the population for calculating a route
      */
     int population_size;
@@ -109,14 +104,6 @@ public:
      * Construct the configuration for this run.
      */
     Configure();
-
-    /**
-     * Gets the reload flag
-     *
-     * @return
-     * returns the reload flag
-     */
-    int getReload();
 
     /**
      * Gets the population size
