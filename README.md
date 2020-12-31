@@ -202,3 +202,4 @@ Because the algorithm deals with large population sizes, it benefits from high l
 ## Reference
 - https://en.wikipedia.org/wiki/CMA-ES
 - https://www.lri.fr/~hansen/gecco2011-CMA-ES-tutorial.pdf
+- https://arxiv.org/abs/1503.01524
